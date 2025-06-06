@@ -1,8 +1,9 @@
-"use client";
+'use client';
 
-import * as React from "react";
+import * as React from 'react';
 
-// Simple tabs implementation without Radix UI dependency
+const TabsContext = React.createContext<string>('');
+
 interface TabsProps {
   value: string;
   onValueChange: (value: string) => void;
@@ -10,15 +11,68 @@ interface TabsProps {
   className?: string;
 }
 
+export function Tabs({ value, onValueChange, children, className = '' }: TabsProps) {
+  return (
+    <TabsContext.Provider value={value}>
+      <div className={className}>
+        {React.Children.map(children, (child) => {
+          if (React.isValidElement(child)) {
+            return React.cloneElement(child as React.ReactElement<any>, {
+              onValueChange,
+            });
+          }
+          return child;
+        })}
+      </div>
+    </TabsContext.Provider>
+  );
+}
+
 interface TabsListProps {
   children: React.ReactNode;
   className?: string;
+  onValueChange?: (value: string) => void;
+}
+
+export function TabsList({ children, className = '', onValueChange }: TabsListProps) {
+  return (
+    <div className={`flex space-x-1 rounded-lg bg-gray-100 p-1 ${className}`}>
+      {React.Children.map(children, (child) => {
+        if (React.isValidElement(child)) {
+          return React.cloneElement(child as React.ReactElement<any>, {
+            onValueChange,
+          });
+        }
+        return child;
+      })}
+    </div>
+  );
 }
 
 interface TabsTriggerProps {
   value: string;
   children: React.ReactNode;
   className?: string;
+  onValueChange?: (value: string) => void;
+}
+
+export function TabsTrigger({ value, children, className = '', onValueChange }: TabsTriggerProps) {
+  const activeTab = React.useContext(TabsContext);
+  const isActive = activeTab === value;
+  
+  return (
+    <button
+      className={`px-3 py-1.5 text-sm font-medium transition-all ${
+        isActive
+          ? 'bg-white text-primary-700 shadow-sm rounded-md'
+          : 'text-gray-600 hover:text-gray-900'
+      } ${className}`}
+      onClick={() => onValueChange?.(value)}
+      type="button"
+    >
+      {children}
+    </button>
+  );
 }
 
 interface TabsContentProps {
@@ -27,61 +81,14 @@ interface TabsContentProps {
   className?: string;
 }
 
-const TabsContext = React.createContext<{
-  value: string;
-  onValueChange: (value: string) => void;
-}>({
-  value: "",
-  onValueChange: () => {},
-});
-
-export function Tabs({ value, onValueChange, children, className = "" }: TabsProps) {
-  return (
-    <TabsContext.Provider value={{ value, onValueChange }}>
-      <div className={className}>{children}</div>
-    </TabsContext.Provider>
-  );
-}
-
-export function TabsList({ children, className = "" }: TabsListProps) {
-  return (
-    <div className={`inline-flex h-10 items-center justify-center rounded-md bg-gray-100 p-1 text-gray-500 ${className}`}>
-      {children}
-    </div>
-  );
-}
-
-export function TabsTrigger({ value, children, className = "" }: TabsTriggerProps) {
-  const { value: selectedValue, onValueChange } = React.useContext(TabsContext);
-  const isActive = selectedValue === value;
+export function TabsContent({ value, children, className = '' }: TabsContentProps) {
+  const activeTab = React.useContext(TabsContext);
   
-  return (
-    <button
-      type="button"
-      role="tab"
-      aria-selected={isActive}
-      onClick={() => onValueChange(value)}
-      className={`inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium transition-all focus:outline-none disabled:pointer-events-none disabled:opacity-50 ${
-        isActive 
-          ? "bg-white text-gray-950 shadow-sm" 
-          : "text-gray-500 hover:text-gray-900"
-      } ${className}`}
-    >
-      {children}
-    </button>
-  );
-}
-
-export function TabsContent({ value, children, className = "" }: TabsContentProps) {
-  const { value: selectedValue } = React.useContext(TabsContext);
-  
-  if (selectedValue !== value) {
+  if (activeTab !== value) {
     return null;
   }
   
-  return (
-    <div className={`mt-2 ${className}`}>
-      {children}
-    </div>
-  );
+  return <div className={className}>{children}</div>;
 }
+
+export { TabsContext };

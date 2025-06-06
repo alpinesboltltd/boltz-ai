@@ -2,6 +2,13 @@
 import { useState } from "react";
 import Link from "next/link";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
+import {
+  WebsiteCrawler,
+  TextTrainer,
+  WhatsAppTrainer,
+  SystemPromptEditor,
+  IntegrationSettings,
+} from "@/components/chatbot";
 
 // Mock data for AI models
 const aiModels = [
@@ -42,10 +49,21 @@ const platforms = [
   { id: "website", name: "Website", icon: "🌐" },
   { id: "whatsapp", name: "WhatsApp", icon: "📱" },
   { id: "slack", name: "Slack", icon: "💬" },
+  { id: "discord", name: "Discord", icon: "🎮" },
   { id: "facebook", name: "Facebook Messenger", icon: "👥" },
   { id: "shopify", name: "Shopify", icon: "🛒" },
   { id: "wordpress", name: "WordPress", icon: "📝" },
 ];
+
+// Default system prompt
+const defaultSystemPrompt = `You are a helpful AI assistant. Your goal is to provide accurate, helpful, and friendly responses to user queries.
+
+Instructions:
+- Be concise and clear in your responses
+- If you're unsure about something, acknowledge your uncertainty
+- Maintain a professional but friendly tone
+- Avoid making up information
+- Ask clarifying questions when needed`;
 
 export default function CreateChatbotPage() {
   const [step, setStep] = useState(1);
@@ -57,6 +75,21 @@ export default function CreateChatbotPage() {
     welcomeMessage: "Hello! How can I help you today?",
     primaryColor: "#6366F1",
     avatar: "default",
+    systemPrompt: defaultSystemPrompt,
+    trainingData: {
+      websites: [],
+      texts: [],
+      whatsappChats: [],
+    },
+    integrations: {
+      calendly: { enabled: false },
+      googleCalendar: { enabled: false },
+      cal: { enabled: false },
+      stripe: { enabled: false },
+      paystack: { enabled: false },
+      opay: { enabled: false },
+      moneypoint: { enabled: false },
+    },
   });
 
   const updateChatbotData = (field, value) => {
@@ -78,11 +111,40 @@ export default function CreateChatbotPage() {
     }
   };
 
+  const handleWebsiteTraining = (data) => {
+    updateChatbotData("trainingData", {
+      ...chatbotData.trainingData,
+      websites: [...chatbotData.trainingData.websites, data],
+    });
+  };
+
+  const handleTextTraining = (data) => {
+    updateChatbotData("trainingData", {
+      ...chatbotData.trainingData,
+      texts: [...chatbotData.trainingData.texts, data],
+    });
+  };
+
+  const handleWhatsAppTraining = (data) => {
+    updateChatbotData("trainingData", {
+      ...chatbotData.trainingData,
+      whatsappChats: [...chatbotData.trainingData.whatsappChats, data],
+    });
+  };
+
+  const handleSystemPromptUpdate = (prompt: string) => {
+    updateChatbotData("systemPrompt", prompt);
+  };
+
+  const handleIntegrationsUpdate = (integrations) => {
+    updateChatbotData("integrations", integrations);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     // In a real app, this would save the chatbot data
     // For now, we'll just simulate completion
-    if (step < 3) {
+    if (step < 5) {
       setStep(step + 1);
     } else {
       // Navigate to the chatbot list or the new chatbot page
@@ -144,13 +206,47 @@ export default function CreateChatbotPage() {
               </div>
             </li>
             <li
-              className={`relative ${step === 3 ? "text-primary-600" : "text-gray-500"}`}
+              className={`relative pr-8 sm:pr-20 ${step > 3 ? "text-primary-600" : step === 3 ? "text-primary-600" : "text-gray-500"}`}
             >
               <div className="flex items-center">
                 <div
                   className={`h-8 w-8 flex items-center justify-center rounded-full ${step >= 3 ? "bg-primary-600" : "bg-gray-300"}`}
                 >
                   <span className="text-white font-medium">3</span>
+                </div>
+                <span className="ml-2 text-sm font-medium">Training</span>
+              </div>
+              <div className="absolute top-4 right-0 h-0.5 w-full bg-gray-300">
+                <div
+                  className={`h-0.5 ${step > 3 ? "bg-primary-600 w-full" : "w-0"} transition-all duration-300`}
+                ></div>
+              </div>
+            </li>
+            <li
+              className={`relative pr-8 sm:pr-20 ${step > 4 ? "text-primary-600" : step === 4 ? "text-primary-600" : "text-gray-500"}`}
+            >
+              <div className="flex items-center">
+                <div
+                  className={`h-8 w-8 flex items-center justify-center rounded-full ${step >= 4 ? "bg-primary-600" : "bg-gray-300"}`}
+                >
+                  <span className="text-white font-medium">4</span>
+                </div>
+                <span className="ml-2 text-sm font-medium">Integrations</span>
+              </div>
+              <div className="absolute top-4 right-0 h-0.5 w-full bg-gray-300">
+                <div
+                  className={`h-0.5 ${step > 4 ? "bg-primary-600 w-full" : "w-0"} transition-all duration-300`}
+                ></div>
+              </div>
+            </li>
+            <li
+              className={`relative ${step === 5 ? "text-primary-600" : "text-gray-500"}`}
+            >
+              <div className="flex items-center">
+                <div
+                  className={`h-8 w-8 flex items-center justify-center rounded-full ${step >= 5 ? "bg-primary-600" : "bg-gray-300"}`}
+                >
+                  <span className="text-white font-medium">5</span>
                 </div>
                 <span className="ml-2 text-sm font-medium">Appearance</span>
               </div>
@@ -308,11 +404,115 @@ export default function CreateChatbotPage() {
                   </div>
                 ))}
               </div>
+
+              <div className="mt-8">
+                <SystemPromptEditor
+                  defaultPrompt={chatbotData.systemPrompt}
+                  onSave={handleSystemPromptUpdate}
+                />
+              </div>
             </div>
           )}
 
-          {/* Step 3: Appearance */}
+          {/* Step 3: Training */}
           {step === 3 && (
+            <div className="p-6">
+              <h2 className="text-lg font-medium text-gray-900 mb-4">
+                Train Your Agent
+              </h2>
+              <p className="text-sm text-gray-500 mb-6">
+                Provide data to train your agent. You can use website content,
+                text documents, or WhatsApp conversations.
+              </p>
+
+              <div className="space-y-8">
+                <WebsiteCrawler onSubmit={handleWebsiteTraining} />
+
+                <TextTrainer onSubmit={handleTextTraining} />
+
+                <WhatsAppTrainer onSubmit={handleWhatsAppTraining} />
+
+                {/* Training Data Summary */}
+                {(chatbotData.trainingData.websites.length > 0 ||
+                  chatbotData.trainingData.texts.length > 0 ||
+                  chatbotData.trainingData.whatsappChats.length > 0) && (
+                  <div className="bg-gray-50 p-4 rounded-md border border-gray-200">
+                    <h3 className="text-sm font-medium text-gray-700 mb-2">
+                      Training Data Summary
+                    </h3>
+
+                    {chatbotData.trainingData.websites.length > 0 && (
+                      <div className="mb-3">
+                        <h4 className="text-xs font-medium text-gray-600">
+                          Websites ({chatbotData.trainingData.websites.length})
+                        </h4>
+                        <ul className="mt-1 text-xs text-gray-500">
+                          {chatbotData.trainingData.websites.map(
+                            (website, index) => (
+                              <li key={index} className="truncate">
+                                {website.websiteUrl}
+                              </li>
+                            )
+                          )}
+                        </ul>
+                      </div>
+                    )}
+
+                    {chatbotData.trainingData.texts.length > 0 && (
+                      <div className="mb-3">
+                        <h4 className="text-xs font-medium text-gray-600">
+                          Text Content ({chatbotData.trainingData.texts.length})
+                        </h4>
+                        <ul className="mt-1 text-xs text-gray-500">
+                          {chatbotData.trainingData.texts.map((text, index) => (
+                            <li key={index} className="truncate">
+                              {text.title} ({text.type})
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    {chatbotData.trainingData.whatsappChats.length > 0 && (
+                      <div>
+                        <h4 className="text-xs font-medium text-gray-600">
+                          WhatsApp Chats (
+                          {chatbotData.trainingData.whatsappChats.length})
+                        </h4>
+                        <ul className="mt-1 text-xs text-gray-500">
+                          {chatbotData.trainingData.whatsappChats.map(
+                            (chat, index) => (
+                              <li key={index} className="truncate">
+                                {chat.chatName}
+                              </li>
+                            )
+                          )}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Step 4: Integrations */}
+          {step === 4 && (
+            <div className="p-6">
+              <h2 className="text-lg font-medium text-gray-900 mb-4">
+                Configure Integrations
+              </h2>
+              <p className="text-sm text-gray-500 mb-6">
+                Connect your agent with calendar and payment services to enable
+                appointment booking and payments.
+              </p>
+
+              <IntegrationSettings onSave={handleIntegrationsUpdate} />
+            </div>
+          )}
+
+          {/* Step 5: Appearance */}
+          {step === 5 && (
             <div className="p-6">
               <h2 className="text-lg font-medium text-gray-900 mb-4">
                 Customize Appearance
@@ -420,7 +620,7 @@ export default function CreateChatbotPage() {
               type="submit"
               className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
             >
-              {step < 3 ? "Continue" : "Create Chatbot"}
+              {step < 5 ? "Continue" : "Create Chatbot"}
             </button>
           </div>
         </form>

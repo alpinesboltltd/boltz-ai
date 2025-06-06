@@ -1,44 +1,44 @@
-import Link from 'next/link';
-import { PlusIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
+import Link from "next/link";
+import { PlusIcon, PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 
 export default function ChatbotsPage() {
   // Mock data for chatbots
   const chatbots = [
-    { 
-      id: 1, 
-      name: 'Customer Support Bot', 
-      status: 'active', 
-      messages: 1245, 
-      platform: 'Website',
-      model: 'Google Gemini',
-      lastUpdated: '2 days ago'
+    {
+      id: 1,
+      name: "Customer Support Bot",
+      status: "active",
+      messages: 1245,
+      platform: "Website",
+      model: "Google Gemini",
+      lastUpdated: "2 days ago",
     },
-    { 
-      id: 2, 
-      name: 'Sales Assistant', 
-      status: 'active', 
-      messages: 876, 
-      platform: 'WhatsApp',
-      model: 'GPT-4',
-      lastUpdated: '5 days ago'
+    {
+      id: 2,
+      name: "Sales Assistant",
+      status: "active",
+      messages: 876,
+      platform: "WhatsApp",
+      model: "GPT-4",
+      lastUpdated: "5 days ago",
     },
-    { 
-      id: 3, 
-      name: 'Product Recommender', 
-      status: 'draft', 
-      messages: 0, 
-      platform: 'Website',
-      model: 'Claude',
-      lastUpdated: 'Just now'
+    {
+      id: 3,
+      name: "Product Recommender",
+      status: "draft",
+      messages: 0,
+      platform: "Website",
+      model: "Claude",
+      lastUpdated: "Just now",
     },
-    { 
-      id: 4, 
-      name: 'FAQ Bot', 
-      status: 'inactive', 
-      messages: 523, 
-      platform: 'Slack',
-      model: 'Mistral',
-      lastUpdated: '2 weeks ago'
+    {
+      id: 4,
+      name: "FAQ Bot",
+      status: "inactive",
+      messages: 523,
+      platform: "Slack",
+      model: "Mistral",
+      lastUpdated: "2 weeks ago",
     },
   ];
 
@@ -48,7 +48,8 @@ export default function ChatbotsPage() {
         <div className="sm:flex-auto">
           <h1 className="text-2xl font-semibold text-gray-900">Chatbots</h1>
           <p className="mt-2 text-sm text-gray-700">
-            A list of all your chatbots including their status, platform, and performance metrics.
+            A list of all your chatbots including their status, platform, and
+            performance metrics.
           </p>
         </div>
         <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
@@ -68,25 +69,46 @@ export default function ChatbotsPage() {
               <table className="min-w-full divide-y divide-gray-300">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
+                    <th
+                      scope="col"
+                      className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+                    >
                       Name
                     </th>
-                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                    <th
+                      scope="col"
+                      className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                    >
                       Status
                     </th>
-                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                    <th
+                      scope="col"
+                      className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                    >
                       Platform
                     </th>
-                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                    <th
+                      scope="col"
+                      className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                    >
                       AI Model
                     </th>
-                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                    <th
+                      scope="col"
+                      className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                    >
                       Messages
                     </th>
-                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                    <th
+                      scope="col"
+                      className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                    >
                       Last Updated
                     </th>
-                    <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-6">
+                    <th
+                      scope="col"
+                      className="relative py-3.5 pl-3 pr-4 sm:pr-6"
+                    >
                       <span className="sr-only">Actions</span>
                     </th>
                   </tr>
@@ -95,34 +117,55 @@ export default function ChatbotsPage() {
                   {chatbots.map((chatbot) => (
                     <tr key={chatbot.id}>
                       <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
-                        <Link href={`/dashboard/chatbots/${chatbot.id}`} className="text-primary-600 hover:text-primary-900">
+                        <Link
+                          href={`/dashboard/chatbot/${chatbot.id}`}
+                          className="text-primary-600 hover:text-primary-900"
+                        >
                           {chatbot.name}
                         </Link>
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm">
-                        <span className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${
-                          chatbot.status === 'active' 
-                            ? 'bg-green-100 text-green-800' 
-                            : chatbot.status === 'draft' 
-                              ? 'bg-yellow-100 text-yellow-800'
-                              : 'bg-gray-100 text-gray-800'
-                        }`}>
+                        <span
+                          className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${
+                            chatbot.status === "active"
+                              ? "bg-green-100 text-green-800"
+                              : chatbot.status === "draft"
+                                ? "bg-yellow-100 text-yellow-800"
+                                : "bg-gray-100 text-gray-800"
+                          }`}
+                        >
                           {chatbot.status}
                         </span>
                       </td>
-                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{chatbot.platform}</td>
-                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{chatbot.model}</td>
-                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{chatbot.messages}</td>
-                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{chatbot.lastUpdated}</td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                        {chatbot.platform}
+                      </td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                        {chatbot.model}
+                      </td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                        {chatbot.messages}
+                      </td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                        {chatbot.lastUpdated}
+                      </td>
                       <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                         <div className="flex justify-end space-x-2">
-                          <Link href={`/dashboard/chatbots/${chatbot.id}/edit`} className="text-primary-600 hover:text-primary-900">
-                            <PencilIcon className="h-5 w-5" aria-hidden="true" />
+                          <Link
+                            href={`/dashboard/chatbot/${chatbot.id}`}
+                            className="text-primary-600 hover:text-primary-900"
+                          >
+                            <PencilIcon
+                              className="h-5 w-5"
+                              aria-hidden="true"
+                            />
                             <span className="sr-only">Edit {chatbot.name}</span>
                           </Link>
                           <button className="text-red-600 hover:text-red-900">
                             <TrashIcon className="h-5 w-5" aria-hidden="true" />
-                            <span className="sr-only">Delete {chatbot.name}</span>
+                            <span className="sr-only">
+                              Delete {chatbot.name}
+                            </span>
                           </button>
                         </div>
                       </td>

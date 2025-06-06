@@ -96,7 +96,7 @@ export function PricingSection() {
                 <span className="text-sm font-semibold leading-6 text-gray-600">/month</span>
               </p>
               <a
-                href={tier.mostPopular ? '/signup' : '#'}
+                href={tier.mostPopular ? '/auth/register' : tier.name === 'Business' ? '/enterprise' : '/auth/register'}
                 aria-describedby={tier.id}
                 className={`${
                   tier.mostPopular
@@ -119,7 +119,7 @@ export function PricingSection() {
         </div>
         <div className="mt-12 text-center">
           <p className="text-base text-gray-500">
-            Need a custom plan? <a href="/contact" className="font-semibold text-primary-600 hover:text-primary-500">Contact us</a> for enterprise pricing.
+            Need a custom plan? <a href="/enterprise" className="font-semibold text-primary-600 hover:text-primary-500">Contact us</a> for enterprise pricing.
           </p>
         </div>
       </div>

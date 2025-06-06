@@ -1,247 +1,239 @@
-"use client";
-import { useState } from "react";
+'use client';
 
-// Mock chart components - in a real app, you'd use Chart.js with React-Chartjs-2
-const LineChart = ({ data, options }) => (
-  <div className="h-full w-full flex items-center justify-center bg-gray-50 rounded-md">
-    <p className="text-gray-500 text-sm">
-      Line Chart: {data.datasets[0].label}
-    </p>
-  </div>
-);
+import { useState, useEffect } from 'react';
+import { Spinner } from '@/components/common/Spinner';
+import { 
+  ChatBubbleLeftRightIcon, 
+  UserIcon, 
+  ClockIcon, 
+  QuestionMarkCircleIcon 
+} from '@heroicons/react/24/outline';
 
-const BarChart = ({ data, options }) => (
-  <div className="h-full w-full flex items-center justify-center bg-gray-50 rounded-md">
-    <p className="text-gray-500 text-sm">Bar Chart: {data.datasets[0].label}</p>
-  </div>
-);
-
-const DoughnutChart = ({ data, options }) => (
-  <div className="h-full w-full flex items-center justify-center bg-gray-50 rounded-md">
-    <p className="text-gray-500 text-sm">
-      Doughnut Chart: {data.datasets[0].label}
-    </p>
-  </div>
-);
-
-// Mock data for analytics
-const messageData = {
-  labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-  datasets: [
-    {
-      label: "Messages",
-      data: [1200, 1900, 3000, 5000, 4200, 3800],
-      borderColor: "rgb(53, 162, 235)",
-      backgroundColor: "rgba(53, 162, 235, 0.5)",
-    },
-  ],
-};
-
-const userSatisfactionData = {
-  labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-  datasets: [
-    {
-      label: "Satisfaction Rate (%)",
-      data: [85, 87, 90, 89, 92, 95],
-      borderColor: "rgb(75, 192, 192)",
-      backgroundColor: "rgba(75, 192, 192, 0.5)",
-    },
-  ],
-};
-
-const platformDistributionData = {
-  labels: ["Website", "WhatsApp", "Slack", "Facebook", "Other"],
-  datasets: [
-    {
-      label: "Platform Distribution",
-      data: [45, 25, 15, 10, 5],
-      backgroundColor: [
-        "rgba(54, 162, 235, 0.6)",
-        "rgba(75, 192, 192, 0.6)",
-        "rgba(153, 102, 255, 0.6)",
-        "rgba(255, 159, 64, 0.6)",
-        "rgba(201, 203, 207, 0.6)",
-      ],
-    },
-  ],
-};
-
-const modelUsageData = {
-  labels: ["Google Gemini", "GPT-4", "Claude", "Mistral", "Llama 3"],
-  datasets: [
-    {
-      label: "Model Usage",
-      data: [40, 30, 15, 10, 5],
-      backgroundColor: [
-        "rgba(255, 99, 132, 0.6)",
-        "rgba(54, 162, 235, 0.6)",
-        "rgba(255, 206, 86, 0.6)",
-        "rgba(75, 192, 192, 0.6)",
-        "rgba(153, 102, 255, 0.6)",
-      ],
-    },
-  ],
+// Mock chart component - in a real app, you'd use a library like Chart.js or Recharts
+const Chart = ({ type, data, labels, height = 300 }: { type: string; data: number[]; labels: string[]; height?: number }) => {
+  return (
+    <div className="bg-white p-4 rounded-lg border border-gray-200" style={{ height }}>
+      <div className="flex items-center justify-center h-full">
+        <p className="text-gray-500 text-sm">Chart visualization would appear here ({type} chart with {data.length} data points)</p>
+      </div>
+    </div>
+  );
 };
 
 export default function AnalyticsPage() {
-  const [dateRange, setDateRange] = useState("last30Days");
-
-  const dateRangeOptions = [
-    { value: "last7Days", label: "Last 7 Days" },
-    { value: "last30Days", label: "Last 30 Days" },
-    { value: "last90Days", label: "Last 90 Days" },
-    { value: "lastYear", label: "Last Year" },
-    { value: "custom", label: "Custom Range" },
-  ];
-
+  const [loading, setLoading] = useState(true);
+  const [timeRange, setTimeRange] = useState('7d');
+  const [selectedChatbot, setSelectedChatbot] = useState('all');
+  const [chatbots, setChatbots] = useState<{id: string, name: string}[]>([]);
+  const [analytics, setAnalytics] = useState({
+    totalConversations: 0,
+    totalMessages: 0,
+    avgConversationLength: 0,
+    avgResponseTime: 0,
+    topQuestions: [] as {question: string, count: number}[],
+    conversationsByDay: [] as number[],
+    conversationsByHour: [] as number[],
+    messagesByDay: [] as number[],
+    userSatisfaction: [] as number[],
+    platformDistribution: [] as {platform: string, percentage: number}[]
+  });
+  
+  useEffect(() => {
+    async function loadAnalytics() {
+      try {
+        // In production, this would call the real API
+        // const response = await fetch(`/api/analytics?timeRange=${timeRange}&chatbotId=${selectedChatbot}`);
+        // const data = await response.json();
+        
+        // For development, use mock data
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        const mockChatbots = [
+          { id: 'bot1', name: 'Customer Support Bot' },
+          { id: 'bot2', name: 'Sales Assistant' },
+          { id: 'bot3', name: 'Product Recommender' }
+        ];
+        
+        // Generate some random data based on the time range
+        const days = timeRange === '7d' ? 7 : timeRange === '30d' ? 30 : 90;
+        const conversationsByDay = Array.from({ length: days }, () => Math.floor(Math.random() * 100) + 20);
+        const messagesByDay = conversationsByDay.map(c => c * (Math.floor(Math.random() * 5) + 3));
+        const totalConversations = conversationsByDay.reduce((sum, val) => sum + val, 0);
+        const totalMessages = messagesByDay.reduce((sum, val) => sum + val, 0);
+        
+        const mockAnalytics = {
+          totalConversations,
+          totalMessages,
+          avgConversationLength: +(totalMessages / totalConversations).toFixed(1),
+          avgResponseTime: +(Math.random() * 5 + 1).toFixed(1),
+          topQuestions: [
+            { question: "How do I reset my password?", count: Math.floor(Math.random() * 200) + 100 },
+            { question: "What are your business hours?", count: Math.floor(Math.random() * 150) + 80 },
+            { question: "How do I cancel my subscription?", count: Math.floor(Math.random() * 120) + 60 },
+            { question: "Where can I find pricing information?", count: Math.floor(Math.random() * 100) + 50 },
+            { question: "How do I contact customer support?", count: Math.floor(Math.random() * 80) + 40 }
+          ],
+          conversationsByDay,
+          conversationsByHour: Array.from({ length: 24 }, () => Math.floor(Math.random() * 50) + 5),
+          messagesByDay,
+          userSatisfaction: Array.from({ length: days }, () => +(Math.random() * 2 + 3).toFixed(1)),
+          platformDistribution: [
+            { platform: "Website", percentage: 65 },
+            { platform: "WhatsApp", percentage: 20 },
+            { platform: "Facebook", percentage: 10 },
+            { platform: "Slack", percentage: 5 }
+          ]
+        };
+        
+        setChatbots(mockChatbots);
+        setAnalytics(mockAnalytics);
+      } catch (error) {
+        console.error('Failed to load analytics:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    
+    loadAnalytics();
+  }, [timeRange, selectedChatbot]);
+  
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Spinner size="lg" />
+      </div>
+    );
+  }
+  
   return (
     <div className="px-4 sm:px-6 lg:px-8 py-8">
-      <div className="sm:flex sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold text-gray-900">Analytics</h1>
+      <div className="sm:flex sm:items-center">
+        <div className="sm:flex-auto">
+          <h1 className="text-2xl font-semibold text-gray-900">Analytics Dashboard</h1>
           <p className="mt-2 text-sm text-gray-700">
-            Track your chatbot performance, user engagement, and conversation
-            metrics.
+            View performance metrics and insights for your chatbots.
           </p>
         </div>
-        <div className="mt-4 sm:mt-0">
-          <select
-            id="dateRange"
-            name="dateRange"
-            className="block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm"
-            value={dateRange}
-            onChange={(e) => setDateRange(e.target.value)}
-          >
-            {dateRangeOptions.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </div>
       </div>
-
-      {/* Key Metrics */}
+      
+      {/* Filters */}
+      <div className="mt-6 flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
+        <div className="flex items-center space-x-4">
+          <div>
+            <label htmlFor="chatbot-filter" className="block text-sm font-medium text-gray-700">
+              Chatbot
+            </label>
+            <select
+              id="chatbot-filter"
+              name="chatbot-filter"
+              className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm rounded-md"
+              value={selectedChatbot}
+              onChange={(e) => setSelectedChatbot(e.target.value)}
+            >
+              <option value="all">All Chatbots</option>
+              {chatbots.map((bot) => (
+                <option key={bot.id} value={bot.id}>{bot.name}</option>
+              ))}
+            </select>
+          </div>
+          
+          <div>
+            <label htmlFor="time-range" className="block text-sm font-medium text-gray-700">
+              Time Range
+            </label>
+            <select
+              id="time-range"
+              name="time-range"
+              className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm rounded-md"
+              value={timeRange}
+              onChange={(e) => setTimeRange(e.target.value)}
+            >
+              <option value="7d">Last 7 Days</option>
+              <option value="30d">Last 30 Days</option>
+              <option value="90d">Last 90 Days</option>
+            </select>
+          </div>
+        </div>
+        
+        <button
+          type="button"
+          className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700"
+          onClick={() => {
+            // In a real app, this would download a report
+            alert('Downloading analytics report...');
+          }}
+        >
+          Export Report
+        </button>
+      </div>
+      
+      {/* Stats Cards */}
       <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
         <div className="bg-white overflow-hidden shadow rounded-lg">
-          <div className="p-5">
+          <div className="px-4 py-5 sm:p-6">
             <div className="flex items-center">
               <div className="flex-shrink-0 bg-primary-100 rounded-md p-3">
-                <svg
-                  className="h-6 w-6 text-primary-600"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
-                  />
-                </svg>
+                <ChatBubbleLeftRightIcon className="h-6 w-6 text-primary-600" aria-hidden="true" />
               </div>
               <div className="ml-5 w-0 flex-1">
                 <dl>
-                  <dt className="text-sm font-medium text-gray-500 truncate">
-                    Total Messages
-                  </dt>
-                  <dd className="text-3xl font-semibold text-gray-900">
-                    19,100
+                  <dt className="text-sm font-medium text-gray-500 truncate">Total Conversations</dt>
+                  <dd>
+                    <div className="text-lg font-medium text-gray-900">{analytics.totalConversations.toLocaleString()}</div>
                   </dd>
                 </dl>
               </div>
             </div>
           </div>
         </div>
-
+        
         <div className="bg-white overflow-hidden shadow rounded-lg">
-          <div className="p-5">
+          <div className="px-4 py-5 sm:p-6">
             <div className="flex items-center">
-              <div className="flex-shrink-0 bg-green-100 rounded-md p-3">
-                <svg
-                  className="h-6 w-6 text-green-600"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
+              <div className="flex-shrink-0 bg-primary-100 rounded-md p-3">
+                <UserIcon className="h-6 w-6 text-primary-600" aria-hidden="true" />
               </div>
               <div className="ml-5 w-0 flex-1">
                 <dl>
-                  <dt className="text-sm font-medium text-gray-500 truncate">
-                    Satisfaction Rate
-                  </dt>
-                  <dd className="text-3xl font-semibold text-gray-900">95%</dd>
-                </dl>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white overflow-hidden shadow rounded-lg">
-          <div className="p-5">
-            <div className="flex items-center">
-              <div className="flex-shrink-0 bg-blue-100 rounded-md p-3">
-                <svg
-                  className="h-6 w-6 text-blue-600"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
-                  />
-                </svg>
-              </div>
-              <div className="ml-5 w-0 flex-1">
-                <dl>
-                  <dt className="text-sm font-medium text-gray-500 truncate">
-                    Active Users
-                  </dt>
-                  <dd className="text-3xl font-semibold text-gray-900">
-                    3,842
+                  <dt className="text-sm font-medium text-gray-500 truncate">Total Messages</dt>
+                  <dd>
+                    <div className="text-lg font-medium text-gray-900">{analytics.totalMessages.toLocaleString()}</div>
                   </dd>
                 </dl>
               </div>
             </div>
           </div>
         </div>
-
+        
         <div className="bg-white overflow-hidden shadow rounded-lg">
-          <div className="p-5">
+          <div className="px-4 py-5 sm:p-6">
             <div className="flex items-center">
-              <div className="flex-shrink-0 bg-yellow-100 rounded-md p-3">
-                <svg
-                  className="h-6 w-6 text-yellow-600"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
-                  />
-                </svg>
+              <div className="flex-shrink-0 bg-primary-100 rounded-md p-3">
+                <ClockIcon className="h-6 w-6 text-primary-600" aria-hidden="true" />
               </div>
               <div className="ml-5 w-0 flex-1">
                 <dl>
-                  <dt className="text-sm font-medium text-gray-500 truncate">
-                    Conversion Rate
-                  </dt>
-                  <dd className="text-3xl font-semibold text-gray-900">
-                    12.5%
+                  <dt className="text-sm font-medium text-gray-500 truncate">Avg. Response Time</dt>
+                  <dd>
+                    <div className="text-lg font-medium text-gray-900">{analytics.avgResponseTime} seconds</div>
+                  </dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div className="bg-white overflow-hidden shadow rounded-lg">
+          <div className="px-4 py-5 sm:p-6">
+            <div className="flex items-center">
+              <div className="flex-shrink-0 bg-primary-100 rounded-md p-3">
+                <QuestionMarkCircleIcon className="h-6 w-6 text-primary-600" aria-hidden="true" />
+              </div>
+              <div className="ml-5 w-0 flex-1">
+                <dl>
+                  <dt className="text-sm font-medium text-gray-500 truncate">Avg. Conversation Length</dt>
+                  <dd>
+                    <div className="text-lg font-medium text-gray-900">{analytics.avgConversationLength} messages</div>
                   </dd>
                 </dl>
               </div>
@@ -249,85 +241,66 @@ export default function AnalyticsPage() {
           </div>
         </div>
       </div>
-
+      
       {/* Charts */}
       <div className="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-2">
-        <div className="bg-white p-6 shadow rounded-lg">
-          <h2 className="text-lg font-medium text-gray-900 mb-4">
-            Message Volume
-          </h2>
-          <div className="h-80">
-            <LineChart
-              options={{
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                  y: {
-                    beginAtZero: true,
-                  },
-                },
-              }}
-              data={messageData}
-            />
-          </div>
+        <div>
+          <h2 className="text-lg font-medium text-gray-900 mb-4">Conversations Over Time</h2>
+          <Chart 
+            type="line" 
+            data={analytics.conversationsByDay} 
+            labels={Array.from({ length: analytics.conversationsByDay.length }, (_, i) => `Day ${i + 1}`)} 
+          />
         </div>
-
-        <div className="bg-white p-6 shadow rounded-lg">
-          <h2 className="text-lg font-medium text-gray-900 mb-4">
-            User Satisfaction
-          </h2>
-          <div className="h-80">
-            <LineChart
-              options={{
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                  y: {
-                    min: 70,
-                    max: 100,
-                  },
-                },
-              }}
-              data={userSatisfactionData}
-            />
-          </div>
+        
+        <div>
+          <h2 className="text-lg font-medium text-gray-900 mb-4">Messages Over Time</h2>
+          <Chart 
+            type="line" 
+            data={analytics.messagesByDay} 
+            labels={Array.from({ length: analytics.messagesByDay.length }, (_, i) => `Day ${i + 1}`)} 
+          />
         </div>
-
-        <div className="bg-white p-6 shadow rounded-lg">
-          <h2 className="text-lg font-medium text-gray-900 mb-4">
-            Platform Distribution
-          </h2>
-          <div className="h-80 flex items-center justify-center">
-            <div style={{ width: "80%", height: "80%" }}>
-              <DoughnutChart
-                options={{
-                  responsive: true,
-                  maintainAspectRatio: false,
-                }}
-                data={platformDistributionData}
-              />
-            </div>
-          </div>
+        
+        <div>
+          <h2 className="text-lg font-medium text-gray-900 mb-4">Conversations by Hour</h2>
+          <Chart 
+            type="bar" 
+            data={analytics.conversationsByHour} 
+            labels={Array.from({ length: 24 }, (_, i) => `${i}:00`)} 
+          />
         </div>
-
-        <div className="bg-white p-6 shadow rounded-lg">
-          <h2 className="text-lg font-medium text-gray-900 mb-4">
-            AI Model Usage
-          </h2>
-          <div className="h-80">
-            <BarChart
-              options={{
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                  y: {
-                    beginAtZero: true,
-                  },
-                },
-              }}
-              data={modelUsageData}
-            />
-          </div>
+        
+        <div>
+          <h2 className="text-lg font-medium text-gray-900 mb-4">Platform Distribution</h2>
+          <Chart 
+            type="pie" 
+            data={analytics.platformDistribution.map(p => p.percentage)} 
+            labels={analytics.platformDistribution.map(p => p.platform)} 
+          />
+        </div>
+      </div>
+      
+      {/* Top Questions */}
+      <div className="mt-8">
+        <h2 className="text-lg font-medium text-gray-900 mb-4">Top Questions</h2>
+        <div className="bg-white shadow overflow-hidden sm:rounded-md">
+          <ul role="list" className="divide-y divide-gray-200">
+            {analytics.topQuestions.map((item, index) => (
+              <li key={index}>
+                <div className="px-4 py-4 sm:px-6">
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm font-medium text-primary-600 truncate">{item.question}</p>
+                    <div className="ml-2 flex-shrink-0 flex">
+                      <p className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                        {item.count} times
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </div>

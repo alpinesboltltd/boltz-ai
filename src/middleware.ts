@@ -24,13 +24,13 @@ export function middleware(request: NextRequest) {
   const token = request.cookies.get("auth_token")?.value;
 
   // If the path requires authentication and there's no token, redirect to login
-  if (!isPublicPath && !token) {
-    // Store the original URL to redirect back after login
-    const url = new URL("/auth/login", request.url);
-    url.searchParams.set("redirect", encodeURI(request.nextUrl.pathname));
+  // if (!isPublicPath && !token) {
+  //   // Store the original URL to redirect back after login
+  //   const url = new URL("/auth/login", request.url);
+  //   url.searchParams.set("redirect", encodeURI(request.nextUrl.pathname));
 
-    return NextResponse.redirect(url);
-  }
+  //   return NextResponse.redirect(url);
+  // }
 
   // If the user is logged in and trying to access auth pages, redirect to dashboard
   if (token && (path === "/auth/login" || path === "/auth/register")) {

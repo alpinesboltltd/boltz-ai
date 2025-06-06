@@ -1,6 +1,13 @@
 import { useState, useRef, useEffect } from 'react';
 import { PaperAirplaneIcon, XMarkIcon, SpeakerWaveIcon } from '@heroicons/react/24/outline';
 import { VoiceRecorder } from '@/components/chatbot';
+import { 
+  CalendarWidget, 
+  PaymentMethodWidget, 
+  ProductSearchWidget, 
+  SubscriptionWidget,
+  BankTransferWidget 
+} from './InteractiveWidgets';
 
 interface Message {
   id: number;
@@ -9,6 +16,10 @@ interface Message {
   timestamp: Date;
   audioUrl?: string;
   hasVoice?: boolean;
+  widget?: {
+    type: 'calendar' | 'payment' | 'products' | 'subscription' | 'bankTransfer';
+    data?: any;
+  };
 }
 
 interface ChatInterfaceProps {
@@ -22,6 +33,7 @@ interface ChatInterfaceProps {
   onClose?: () => void;
   darkMode?: boolean;
   fontFamily?: string;
+  position?: 'bottom-right' | 'bottom-left';
 }
 
 export default function ChatInterface({
@@ -35,6 +47,7 @@ export default function ChatInterface({
   onClose = () => {},
   darkMode = false,
   fontFamily = 'Inter, sans-serif',
+  position = 'bottom-right',
 }: ChatInterfaceProps) {
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -45,6 +58,7 @@ export default function ChatInterface({
       hasVoice: true,
     },
   ]);
+  const [activeWidget, setActiveWidget] = useState<string | null>(null);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
@@ -75,20 +89,27 @@ export default function ChatInterface({
 
     // Simulate bot response after a delay
     setTimeout(() => {
-      const botResponse = getBotResponse(inputValue);
+      const response = getBotResponse(inputValue);
       const botMessage: Message = {
         id: messages.length + 2,
-        text: botResponse,
+        text: response.text,
         sender: 'bot',
         timestamp: new Date(),
         hasVoice: true,
+        widget: response.widget,
       };
+      
       setMessages((prevMessages) => [...prevMessages, botMessage]);
       setIsTyping(false);
       
+      // Set active widget if present
+      if (response.widget) {
+        setActiveWidget(`${messages.length + 2}-${response.widget.type}`);
+      }
+      
       // Generate voice response if enabled
       if (voiceResponseEnabled) {
-        generateVoiceResponse(botResponse, messages.length + 2);
+        generateVoiceResponse(response.text, messages.length + 2);
       }
     }, 1000 + Math.random() * 2000); // Random delay between 1-3 seconds
   };
@@ -132,22 +153,116 @@ export default function ChatInterface({
     }, 2000);
   };
 
-  // Simple mock response function
-  const getBotResponse = (userInput: string): string => {
+  // Enhanced mock response function with widget support
+  const getBotResponse = (userInput: string): { text: string; widget?: any } => {
     const input = userInput.toLowerCase();
     
     if (input.includes('hello') || input.includes('hi')) {
-      return 'Hello there! How can I assist you today?';
+      return { text: 'Hello there! How can I assist you today?' };
     } else if (input.includes('help')) {
-      return 'I can help you with product information, troubleshooting, or answer general questions. What do you need help with?';
+      return { text: 'I can help you with product information, troubleshooting, or answer general questions. What do you need help with?' };
     } else if (input.includes('price') || input.includes('cost') || input.includes('pricing')) {
-      return 'We offer several pricing plans. Our Basic plan starts at $29/month, Pro at $99/month, and Enterprise with custom pricing. Would you like more details about any specific plan?';
+      return { text: 'We offer several pricing plans. Our Basic plan starts at $29/month, Pro at $99/month, and Enterprise with custom pricing. Would you like more details about any specific plan?' };
     } else if (input.includes('feature') || input.includes('capabilities')) {
-      return 'Our platform offers AI model selection, knowledge base integration, multi-channel deployment, analytics, and more. Which feature would you like to know more about?';
+      return { text: 'Our platform offers AI model selection, knowledge base integration, multi-channel deployment, analytics, and more. Which feature would you like to know more about?' };
     } else if (input.includes('thank')) {
-      return "You're welcome! Is there anything else I can help you with?";
+      return { text: "You're welcome! Is there anything else I can help you with?" };
+    } else if (input.includes('book') || input.includes('schedule') || input.includes('meeting') || input.includes('appointment')) {
+      return { 
+        text: "I'd be happy to help you schedule a meeting. Please select a date and time that works for you:",
+        widget: {
+          type: 'calendar',
+          data: {
+            availableTimes: ['9:00 AM', '10:00 AM', '11:00 AM', '1:00 PM', '2:00 PM', '3:00 PM', '4:00 PM']
+          }
+        }
+      };
+    } else if (input.includes('payment') || input.includes('card') || input.includes('credit card')) {
+      return { 
+        text: "You can manage your payment methods here:",
+        widget: {
+          type: 'payment',
+          data: {
+            savedCards: [
+              { id: 'card_1', last4: '4242', brand: 'visa', expMonth: 12, expYear: 2024 },
+              { id: 'card_2', last4: '5555', brand: 'mastercard', expMonth: 8, expYear: 2025 }
+            ]
+          }
+        }
+      };
+    } else if (input.includes('product') || input.includes('buy') || input.includes('purchase')) {
+      return { 
+        text: "Here are some products that might interest you:",
+        widget: {
+          type: 'products',
+          data: {
+            products: [
+              { 
+                id: 'prod_1', 
+                name: 'Premium Plan', 
+                price: 99.99, 
+                image: 'https://via.placeholder.com/150', 
+                description: 'Our most popular plan with all features included.' 
+              },
+              { 
+                id: 'prod_2', 
+                name: 'Basic Plan', 
+                price: 29.99, 
+                image: 'https://via.placeholder.com/150', 
+                description: 'Perfect for getting started with essential features.' 
+              },
+              { 
+                id: 'prod_3', 
+                name: 'Enterprise Plan', 
+                price: 299.99, 
+                image: 'https://via.placeholder.com/150', 
+                description: 'For large organizations with advanced needs.' 
+              }
+            ]
+          }
+        }
+      };
+    } else if (input.includes('upgrade') || input.includes('downgrade') || input.includes('subscription') || input.includes('plan')) {
+      return { 
+        text: "You can change your subscription plan here:",
+        widget: {
+          type: 'subscription',
+          data: {
+            currentPlan: 'Basic Plan ($29/month)',
+            availablePlans: [
+              {
+                id: 'free',
+                name: 'Free',
+                price: 0,
+                features: ['1,000 messages/month', 'Basic customization', 'Website integration']
+              },
+              {
+                id: 'pro',
+                name: 'Pro',
+                price: 29,
+                features: ['10,000 messages/month', 'Advanced customization', 'All integrations'],
+                popular: true
+              },
+              {
+                id: 'business',
+                name: 'Business',
+                price: 99,
+                features: ['Unlimited messages', 'Priority support', 'Custom AI training']
+              }
+            ]
+          }
+        }
+      };
+    } else if (input.includes('transfer') || input.includes('bank') || input.includes('money')) {
+      return { 
+        text: "I can help you with secure bank transfers. Please note that you'll need to authenticate with your bank:",
+        widget: {
+          type: 'bankTransfer',
+          data: {}
+        }
+      };
     } else {
-      return "I understand you're asking about " + userInput + ". Let me connect you with more information about that. Is there anything specific you'd like to know?";
+      return { text: "I understand you're asking about " + userInput + ". Let me connect you with more information about that. Is there anything specific you'd like to know?" };
     }
   };
 
@@ -224,7 +339,7 @@ export default function ChatInterface({
 
   return (
     <div 
-      className={`fixed bottom-4 right-4 w-80 sm:w-96 h-[500px] rounded-lg shadow-xl flex flex-col overflow-hidden border ${themeClass}`}
+      className={`fixed bottom-4 ${position === 'bottom-right' ? 'right-4' : 'left-4'} w-80 sm:w-96 h-[500px] rounded-lg shadow-xl flex flex-col overflow-hidden border ${themeClass}`}
       style={{ fontFamily }}
     >
       {/* Chat Header */}
@@ -293,6 +408,113 @@ export default function ChatInterface({
                   className="mt-2 max-w-full" 
                   ref={audioRef}
                 />
+              )}
+              
+              {message.widget && activeWidget === `${message.id}-${message.widget.type}` && (
+                <>
+                  {message.widget.type === 'calendar' && (
+                    <CalendarWidget 
+                      availableTimes={message.widget.data.availableTimes}
+                      onTimeSelected={(time) => {
+                        setMessages([...messages, {
+                          id: messages.length + 1,
+                          text: `Meeting booked for ${time}`,
+                          sender: 'bot',
+                          timestamp: new Date()
+                        }]);
+                        setActiveWidget(null);
+                      }}
+                      onClose={() => setActiveWidget(null)}
+                    />
+                  )}
+                  
+                  {message.widget.type === 'payment' && (
+                    <PaymentMethodWidget 
+                      savedCards={message.widget.data.savedCards}
+                      onAddCard={(cardDetails) => {
+                        setMessages([...messages, {
+                          id: messages.length + 1,
+                          text: `Card ending in ${cardDetails.cardNumber.slice(-4)} has been added`,
+                          sender: 'bot',
+                          timestamp: new Date()
+                        }]);
+                        setActiveWidget(null);
+                      }}
+                      onSelectCard={(cardId) => {
+                        const card = message.widget?.data.savedCards.find((c: any) => c.id === cardId);
+                        setMessages([...messages, {
+                          id: messages.length + 1,
+                          text: `You selected the card ending in ${card.last4}`,
+                          sender: 'bot',
+                          timestamp: new Date()
+                        }]);
+                        setActiveWidget(null);
+                      }}
+                      onClose={() => setActiveWidget(null)}
+                    />
+                  )}
+                  
+                  {message.widget.type === 'products' && (
+                    <ProductSearchWidget 
+                      products={message.widget.data.products}
+                      onAddToCart={(productId) => {
+                        const product = message.widget?.data.products.find((p: any) => p.id === productId);
+                        setMessages([...messages, {
+                          id: messages.length + 1,
+                          text: `Added ${product.name} to your cart`,
+                          sender: 'bot',
+                          timestamp: new Date()
+                        }]);
+                        setActiveWidget(null);
+                      }}
+                      onViewDetails={(productId) => {
+                        const product = message.widget?.data.products.find((p: any) => p.id === productId);
+                        setMessages([...messages, {
+                          id: messages.length + 1,
+                          text: `Here are the details for ${product.name}: ${product.description}`,
+                          sender: 'bot',
+                          timestamp: new Date()
+                        }]);
+                      }}
+                      onClose={() => setActiveWidget(null)}
+                    />
+                  )}
+                  
+                  {message.widget.type === 'subscription' && (
+                    <SubscriptionWidget 
+                      currentPlan={message.widget.data.currentPlan}
+                      availablePlans={message.widget.data.availablePlans}
+                      onChangePlan={(planId) => {
+                        const plan = message.widget?.data.availablePlans.find((p: any) => p.id === planId);
+                        setMessages([...messages, {
+                          id: messages.length + 1,
+                          text: `Your subscription has been changed to the ${plan.name} plan`,
+                          sender: 'bot',
+                          timestamp: new Date()
+                        }]);
+                        setActiveWidget(null);
+                      }}
+                      onClose={() => setActiveWidget(null)}
+                    />
+                  )}
+                  
+                  {message.widget.type === 'bankTransfer' && (
+                    <BankTransferWidget />
+                  )}
+                </>
+              )}
+              
+              {message.sender === 'bot' && message.widget && activeWidget !== `${message.id}-${message.widget.type}` && (
+                <button
+                  onClick={() => setActiveWidget(`${message.id}-${message.widget.type}`)}
+                  className="mt-2 inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+                >
+                  {message.widget.type === 'calendar' && 'View Available Times'}
+                  {message.widget.type === 'payment' && 'Manage Payment Methods'}
+                  {message.widget.type === 'products' && 'View Products'}
+                  {message.widget.type === 'subscription' && 'Change Subscription'}
+                  {message.widget.type === 'bankTransfer' && 'Make Transfer'}
+                </button>
               )}
               
               {message.sender === 'bot' && message.hasVoice && (

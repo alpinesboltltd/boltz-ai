@@ -11,13 +11,13 @@ export function CTASection() {
         </h2>
         <div className="mt-10 flex items-center gap-x-6 lg:mt-0 lg:flex-shrink-0">
           <Link
-            href="/signup"
+            href="/auth/register"
             className="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-primary-600 shadow-sm hover:bg-primary-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
           >
             Get started for free
           </Link>
-          <Link href="/demo" className="text-sm font-semibold leading-6 text-white">
-            View live demo <span aria-hidden="true">→</span>
+          <Link href="/dashboard/chatbots/create" className="text-sm font-semibold leading-6 text-white">
+            Create a chatbot <span aria-hidden="true">→</span>
           </Link>
         </div>
       </div>
