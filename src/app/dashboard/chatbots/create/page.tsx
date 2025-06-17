@@ -48,10 +48,7 @@ const aiModels = [
 const platforms = [
   { id: "website", name: "Website", icon: "🌐" },
   { id: "whatsapp", name: "WhatsApp", icon: "📱" },
-  { id: "slack", name: "Slack", icon: "💬" },
-  { id: "discord", name: "Discord", icon: "🎮" },
   { id: "facebook", name: "Facebook Messenger", icon: "👥" },
-  { id: "shopify", name: "Shopify", icon: "🛒" },
   { id: "wordpress", name: "WordPress", icon: "📝" },
 ];
 
@@ -144,7 +141,7 @@ export default function CreateChatbotPage() {
     e.preventDefault();
     // In a real app, this would save the chatbot data
     // For now, we'll just simulate completion
-    if (step < 5) {
+    if (step < 3) {
       setStep(step + 1);
     } else {
       // Navigate to the chatbot list or the new chatbot page
@@ -160,10 +157,10 @@ export default function CreateChatbotPage() {
           className="inline-flex items-center text-sm font-medium text-primary-600 hover:text-primary-500"
         >
           <ArrowLeftIcon className="mr-1 h-4 w-4" />
-          Back to Chatbots
+          Back to AI Agent
         </Link>
         <h1 className="mt-2 text-2xl font-semibold text-gray-900">
-          Create New Chatbot
+          Create New AI Agent
         </h1>
       </div>
 
@@ -188,6 +185,7 @@ export default function CreateChatbotPage() {
                 ></div>
               </div>
             </li>
+            
             <li
               className={`relative pr-8 sm:pr-20 ${step > 2 ? "text-primary-600" : step === 2 ? "text-primary-600" : "text-gray-500"}`}
             >
@@ -197,23 +195,6 @@ export default function CreateChatbotPage() {
                 >
                   <span className="text-white font-medium">2</span>
                 </div>
-                <span className="ml-2 text-sm font-medium">AI Model</span>
-              </div>
-              <div className="absolute top-4 right-0 h-0.5 w-full bg-gray-300">
-                <div
-                  className={`h-0.5 ${step > 2 ? "bg-primary-600 w-full" : "w-0"} transition-all duration-300`}
-                ></div>
-              </div>
-            </li>
-            <li
-              className={`relative pr-8 sm:pr-20 ${step > 3 ? "text-primary-600" : step === 3 ? "text-primary-600" : "text-gray-500"}`}
-            >
-              <div className="flex items-center">
-                <div
-                  className={`h-8 w-8 flex items-center justify-center rounded-full ${step >= 3 ? "bg-primary-600" : "bg-gray-300"}`}
-                >
-                  <span className="text-white font-medium">3</span>
-                </div>
                 <span className="ml-2 text-sm font-medium">Training</span>
               </div>
               <div className="absolute top-4 right-0 h-0.5 w-full bg-gray-300">
@@ -222,31 +203,15 @@ export default function CreateChatbotPage() {
                 ></div>
               </div>
             </li>
+            
             <li
-              className={`relative pr-8 sm:pr-20 ${step > 4 ? "text-primary-600" : step === 4 ? "text-primary-600" : "text-gray-500"}`}
+              className={`relative ${step === 3 ? "text-primary-600" : "text-gray-500"}`}
             >
               <div className="flex items-center">
                 <div
-                  className={`h-8 w-8 flex items-center justify-center rounded-full ${step >= 4 ? "bg-primary-600" : "bg-gray-300"}`}
+                  className={`h-8 w-8 flex items-center justify-center rounded-full ${step >= 3 ? "bg-primary-600" : "bg-gray-300"}`}
                 >
-                  <span className="text-white font-medium">4</span>
-                </div>
-                <span className="ml-2 text-sm font-medium">Integrations</span>
-              </div>
-              <div className="absolute top-4 right-0 h-0.5 w-full bg-gray-300">
-                <div
-                  className={`h-0.5 ${step > 4 ? "bg-primary-600 w-full" : "w-0"} transition-all duration-300`}
-                ></div>
-              </div>
-            </li>
-            <li
-              className={`relative ${step === 5 ? "text-primary-600" : "text-gray-500"}`}
-            >
-              <div className="flex items-center">
-                <div
-                  className={`h-8 w-8 flex items-center justify-center rounded-full ${step >= 5 ? "bg-primary-600" : "bg-gray-300"}`}
-                >
-                  <span className="text-white font-medium">5</span>
+                  <span className="text-white font-medium">3</span>
                 </div>
                 <span className="ml-2 text-sm font-medium">Appearance</span>
               </div>
@@ -269,7 +234,7 @@ export default function CreateChatbotPage() {
                     htmlFor="name"
                     className="block text-sm font-medium text-gray-700"
                   >
-                    Chatbot Name
+                    AI Agent Name
                   </label>
                   <div className="mt-1">
                     <input
@@ -342,80 +307,10 @@ export default function CreateChatbotPage() {
             </div>
           )}
 
-          {/* Step 2: AI Model Selection */}
+          
+
+          {/* Step 2: Training */}
           {step === 2 && (
-            <div className="p-6">
-              <h2 className="text-lg font-medium text-gray-900 mb-4">
-                Select AI Model
-              </h2>
-              <p className="text-sm text-gray-500 mb-6">
-                Choose the AI model that will power your chatbot. Different
-                models have different capabilities and pricing.
-              </p>
-              <div className="space-y-4">
-                {aiModels.map((model) => (
-                  <div key={model.id} className="relative">
-                    <input
-                      type="radio"
-                      id={`model-${model.id}`}
-                      name="aiModel"
-                      value={model.id}
-                      checked={chatbotData.aiModel === model.id}
-                      onChange={() => updateChatbotData("aiModel", model.id)}
-                      className="sr-only"
-                    />
-                    <label
-                      htmlFor={`model-${model.id}`}
-                      className={`flex items-center p-4 border rounded-md cursor-pointer ${
-                        chatbotData.aiModel === model.id
-                          ? "border-primary-500 bg-primary-50"
-                          : "border-gray-300 hover:bg-gray-50"
-                      }`}
-                    >
-                      <div className="flex-1">
-                        <div className="flex items-center">
-                          <h3 className="text-sm font-medium text-gray-900">
-                            {model.name}
-                          </h3>
-                          {model.isDefault && (
-                            <span className="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                              Default
-                            </span>
-                          )}
-                        </div>
-                        <p className="mt-1 text-sm text-gray-500">
-                          {model.description}
-                        </p>
-                      </div>
-                      <div className="ml-3 flex-shrink-0">
-                        <div
-                          className={`h-5 w-5 rounded-full border ${
-                            chatbotData.aiModel === model.id
-                              ? "border-primary-500 bg-primary-500"
-                              : "border-gray-300 bg-white"
-                          } flex items-center justify-center`}
-                        >
-                          {chatbotData.aiModel === model.id && (
-                            <div className="h-2.5 w-2.5 rounded-full bg-white"></div>
-                          )}
-                        </div>
-                      </div>
-                    </label>
-                  </div>
-                ))}
-              </div>
-
-              <div className="mt-8">
-                <SystemPromptEditor
-                  defaultPrompt={chatbotData.systemPrompt}
-                  onSave={handleSystemPromptUpdate}
-                />
-              </div>
-            </div>
-          )}
-
-          {/* Step 3: Training */}
-          {step === 3 && (
             <div className="p-6">
               <h2 className="text-lg font-medium text-gray-900 mb-4">
                 Train Your Agent
@@ -496,23 +391,10 @@ export default function CreateChatbotPage() {
             </div>
           )}
 
-          {/* Step 4: Integrations */}
-          {step === 4 && (
-            <div className="p-6">
-              <h2 className="text-lg font-medium text-gray-900 mb-4">
-                Configure Integrations
-              </h2>
-              <p className="text-sm text-gray-500 mb-6">
-                Connect your agent with calendar and payment services to enable
-                appointment booking and payments.
-              </p>
+          
 
-              <IntegrationSettings onSave={handleIntegrationsUpdate} />
-            </div>
-          )}
-
-          {/* Step 5: Appearance */}
-          {step === 5 && (
+          {/* Step 3: Appearance */}
+          {step === 3 && (
             <div className="p-6">
               <h2 className="text-lg font-medium text-gray-900 mb-4">
                 Customize Appearance

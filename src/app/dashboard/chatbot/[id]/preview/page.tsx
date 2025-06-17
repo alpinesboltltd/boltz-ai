@@ -64,7 +64,7 @@ export default function ChatbotPreviewPage({ params }: { params: Promise<{ id: s
           className="inline-flex items-center text-sm font-medium text-primary-600 hover:text-primary-500"
         >
           <ArrowLeftIcon className="mr-1 h-4 w-4" />
-          Back to Chatbot Details
+          Back to AI Agent Details
         </Link>
         <div className="mt-2 md:flex md:items-center md:justify-between">
           <div className="min-w-0 flex-1">

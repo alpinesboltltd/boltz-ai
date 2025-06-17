@@ -1,3 +1,4 @@
+// components/ChatbotPage.tsx (or wherever your component is located)
 'use client';
 
 import { useState } from 'react';
@@ -6,11 +7,17 @@ import Link from 'next/link';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import { ChatInterface, ModifiedCalendarWidget } from '@/components/chatbot';
 
-export default function ChatbotPage({ params }: { params: Promise<{ id: string }> }) {
-  // Unwrap params using React.use()
+// Add showHeader to your component's props interface
+export default function ChatbotPage({ 
+  params, 
+  showHeader = true // Set a default value of true, so it shows by default
+}: { 
+  params: Promise<{ id: string }>,
+  showHeader?: boolean // Make it optional
+}) {
   const resolvedParams = use(params);
   const id = resolvedParams.id;
-  
+
   const [messages, setMessages] = useState<any[]>([
     {
       role: 'assistant',
@@ -22,7 +29,6 @@ export default function ChatbotPage({ params }: { params: Promise<{ id: string }
   const [isTyping, setIsTyping] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
 
-  // Mock data for the chatbot
   const chatbot = {
     id,
     name: 'Customer Support Bot',
@@ -35,7 +41,6 @@ export default function ChatbotPage({ params }: { params: Promise<{ id: string }
     e.preventDefault();
     if (!inputValue.trim()) return;
 
-    // Add user message
     const userMessage = {
       role: 'user',
       content: inputValue,
@@ -45,11 +50,9 @@ export default function ChatbotPage({ params }: { params: Promise<{ id: string }
     setInputValue('');
     setIsTyping(true);
 
-    // Simulate AI response
     setTimeout(() => {
       let responseContent = '';
 
-      // Check for appointment booking intent
       if (inputValue.toLowerCase().includes('appointment') || 
           inputValue.toLowerCase().includes('book') || 
           inputValue.toLowerCase().includes('schedule')) {
@@ -72,7 +75,6 @@ export default function ChatbotPage({ params }: { params: Promise<{ id: string }
   const handleTimeSelected = (time: string, date: Date) => {
     setShowCalendar(false);
     
-    // Format the date and time
     const formattedDate = date.toLocaleDateString('en-US', { 
       weekday: 'long', 
       year: 'numeric', 
@@ -80,7 +82,6 @@ export default function ChatbotPage({ params }: { params: Promise<{ id: string }
       day: 'numeric' 
     });
     
-    // Add confirmation message
     const confirmationMessage = {
       role: 'assistant',
       content: `Great! Your appointment has been scheduled for ${formattedDate} at ${time}. You'll receive a confirmation email shortly. Is there anything else you need help with?`,
@@ -90,44 +91,43 @@ export default function ChatbotPage({ params }: { params: Promise<{ id: string }
     setMessages(prevMessages => [...prevMessages, confirmationMessage]);
   };
 
-  // Mock available times
   const availableTimes = ['9:00 AM', '10:00 AM', '11:00 AM', '1:00 PM', '2:00 PM', '3:00 PM', '4:00 PM'];
 
   return (
     <div className="flex flex-col h-screen bg-gray-100">
-      {/* Header */}
-      <header className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16 items-center">
-            <div className="flex items-center">
-              <Link href="/" className="flex-shrink-0">
-                <span className="text-2xl font-bold text-primary-600">Boltz.co</span>
-              </Link>
-            </div>
-            <div className="flex items-center">
-              <Link
-                href="/dashboard/chatbots"
-                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-primary-700 bg-primary-100 hover:bg-primary-200"
-              >
-                <ArrowLeftIcon className="mr-2 h-4 w-4" />
-                Back to Dashboard
-              </Link>
+      {/* Conditional Rendering of the Header */}
+      {showHeader && (
+        <header className="bg-white shadow-sm">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between h-16 items-center">
+              <div className="flex items-center">
+                <Link href="/" className="flex-shrink-0">
+                  <span className="text-2xl font-bold text-primary-600">Boltz.co</span>
+                </Link>
+              </div>
+              <div className="flex items-center">
+                <Link
+                  href="/dashboard/chatbots"
+                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-primary-700 bg-primary-100 hover:bg-primary-200"
+                >
+                  <ArrowLeftIcon className="mr-2 h-4 w-4" />
+                  Back to Dashboard
+                </Link>
+              </div>
             </div>
           </div>
-        </div>
-      </header>
+        </header>
+      )}
 
-      {/* Chat Interface */}
+      {/* Rest of your component remains the same */}
       <div className="flex-1 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 h-full">
           <div className="bg-white rounded-lg shadow h-full flex flex-col">
-            {/* Chat Header */}
             <div className="px-6 py-4 border-b border-gray-200">
               <h2 className="text-lg font-medium text-gray-900">{chatbot.name}</h2>
               <p className="text-sm text-gray-500">{chatbot.description}</p>
             </div>
 
-            {/* Chat Messages */}
             <div className="flex-1 overflow-y-auto p-6 space-y-4">
               {messages.map((message, index) => (
                 <div
@@ -165,7 +165,6 @@ export default function ChatbotPage({ params }: { params: Promise<{ id: string }
                 </div>
               )}
               
-              {/* Calendar Widget */}
               {showCalendar && (
                 <ModifiedCalendarWidget
                   availableTimes={availableTimes}
@@ -175,7 +174,6 @@ export default function ChatbotPage({ params }: { params: Promise<{ id: string }
               )}
             </div>
 
-            {/* Chat Input */}
             <div className="px-6 py-4 border-t border-gray-200">
               <form onSubmit={handleSendMessage} className="flex space-x-2">
                 <input

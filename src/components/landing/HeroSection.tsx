@@ -19,7 +19,7 @@ export function HeroSection() {
           <main className="mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28">
             <div className="sm:text-center lg:text-left">
               <h1 className="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
-                <span className="block">Build AI Chatbots</span>
+                <span className="block">Build AI Agents</span>
                 <span className="block text-primary-600">in Minutes, Not Months</span>
               </h1>
               <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
@@ -40,7 +40,7 @@ export function HeroSection() {
                     href="/dashboard/chatbots/create"
                     className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-primary-700 bg-primary-100 hover:bg-primary-200 md:py-4 md:text-lg md:px-10"
                   >
-                    Create a chatbot
+                    Create an AI Agent
                   </Link>
                 </div>
               </div>
