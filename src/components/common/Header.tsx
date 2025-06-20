@@ -9,44 +9,207 @@ export function Header() {
     <header className="bg-white shadow-sm">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
-          <div className="flex items-center">
-            <Link href="/" className="flex-shrink-0">
-              <span className="text-2xl font-bold text-primary-600">
-                Boltz.co
-              </span>
+          <Link href="/" className="flex-shrink-0">
+            <span className="text-2xl font-bold text-primary-600">
+              Boltz.co
+            </span>
+          </Link>
+          <nav className="hidden md:ml-10 md:flex md:space-x-8 justify-center flex-1">
+            <Link
+              href="/integrations"
+              className="text-gray-500 hover:text-gray-900"
+            >
+              Integrations
             </Link>
-            <nav className="hidden md:ml-10 md:flex md:space-x-8">
-              <Link
-                href="/features"
-                className="text-gray-500 hover:text-gray-900"
-              >
-                Features
-              </Link>
-              <Link
-                href="/integrations"
-                className="text-gray-500 hover:text-gray-900"
-              >
-                Integrations
-              </Link>
-              <Link
-                href="/pricing"
-                className="text-gray-500 hover:text-gray-900"
-              >
-                Pricing
-              </Link>
-              <Link href="/enterprise" className="text-gray-500 hover:text-gray-900">
-                Enterprise
-              </Link>
-              <Link href="/dashboard" className="text-gray-500 hover:text-gray-900">
-                Dashboard
-              </Link>
-            </nav>
-          </div>
+            <Link href="/pricing" className="text-gray-500 hover:text-gray-900">
+              Pricing
+            </Link>
+            <div className="relative group">
+              <button className="text-gray-500 hover:text-gray-900 inline-flex items-center">
+                Use Case
+                <svg
+                  className="ml-1 h-4 w-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </button>
+
+              <div className="absolute left-0 z-10 hidden w-60 rounded-md bg-white shadow-lg group-hover:block">
+                <Link
+                  href="/use-case/marketing"
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                >
+                  <div className="flex items-center">
+                    <svg
+                      className="mr-2 h-5 w-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M3 10v4m0 0a4 4 0 004 4h1l2 3v-3h5a2 2 0 002-2v-6a2 2 0 00-2-2h-5V7l-2 3H7a4 4 0 00-4 4z"
+                      />
+                    </svg>
+                    <div className="">
+                      <h6 className="font-bold">Marketing Agencies</h6>
+                      <p className="font-normal text-xs">
+                        For agencies managing clitet leads
+                      </p>
+                    </div>
+                  </div>
+                </Link>
+                <Link
+                  href="/use-case/b2b"
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                >
+                  <div className="flex items-center">
+                    <svg
+                      className="mr-2 h-5 w-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                      <circle
+                        cx="12"
+                        cy="12"
+                        r="6"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                      <circle cx="12" cy="12" r="2" fill="currentColor" />
+                    </svg>
+
+                    <div className="">
+                      <h6 className="font-bold">B2B Brands Running Ads</h6>
+                      <p className="font-normal text-xs">
+                        Optimize ad-driven lead conversion
+                      </p>
+                    </div>
+                  </div>
+                </Link>
+              </div>
+            </div>
+            <div className="relative group">
+              <button className="text-gray-500 hover:text-gray-900 inline-flex items-center">
+                Resoures
+                <svg
+                  className="ml-1 h-4 w-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </button>
+
+              <div className="absolute left-0 z-10 hidden w-60 rounded-md bg-white shadow-lg group-hover:block">
+                <Link
+                  href="/use-case/marketing"
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                >
+                  <div className="flex items-center">
+                    <svg
+                      className="mr-2 h-5 w-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M3 10v4m0 0a4 4 0 004 4h1l2 3v-3h5a2 2 0 002-2v-6a2 2 0 00-2-2h-5V7l-2 3H7a4 4 0 00-4 4z"
+                      />
+                    </svg>
+                    <div className="">
+                      <h6 className="font-bold">Marketing Agencies</h6>
+                      <p className="font-normal text-xs">
+                        For agencies managing clitet leads
+                      </p>
+                    </div>
+                  </div>
+                </Link>
+                <Link
+                  href="/use-case/b2b"
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                >
+                  <div className="flex items-center">
+                    <svg
+                      className="mr-2 h-5 w-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                      <circle
+                        cx="12"
+                        cy="12"
+                        r="6"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                      <circle cx="12" cy="12" r="2" fill="currentColor" />
+                    </svg>
+
+                    <div className="">
+                      <h6 className="font-bold">B2B Brands Running Ads</h6>
+                      <p className="font-normal text-xs">
+                        Optimize ad-driven lead conversion
+                      </p>
+                    </div>
+                  </div>
+                </Link>
+              </div>
+            </div>
+
+            {/* <Link href="/enterprise" className="text-gray-500 hover:text-gray-900">
+                  Enterprise
+                </Link>  */}
+          </nav>
           <div className="hidden md:flex md:items-center md:space-x-4">
-            <Link href="/auth/login" className="text-gray-500 hover:text-gray-900">
+            <Link
+              href="/auth/login"
+              className="text-gray-500 hover:text-gray-900"
+            >
               Log in
             </Link>
-            <Link href="/auth/register" className="inline-flex items-center justify-center rounded-md border border-transparent bg-primary-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary-700">
+            <Link
+              href="/auth/register"
+              className="inline-flex items-center justify-center rounded-md border border-transparent bg-primary-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary-700"
+            >
               Sign up free
             </Link>
           </div>
