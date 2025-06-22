@@ -6,8 +6,8 @@ import Link from 'next/link';
 import ChatbotPage from '@/app/chatbot/[id]/page';
 import Sources from '@/components/dashboard/Sources';
 import Activity from '@/components/dashboard/Activity';
-
 import { ArrowLeftIcon, PencilIcon, TrashIcon, ChartBarIcon, CogIcon, EyeIcon } from '@heroicons/react/24/outline';
+import Actions from '@/components/dashboard/Actions';
 
 export default function ChatbotDetailPage({ params }: { params: Promise<{ id: string }> }) {
   // Unwrap params using React.use()
@@ -34,6 +34,7 @@ export default function ChatbotDetailPage({ params }: { params: Promise<{ id: st
   };
 
   const [activeTab, setActiveTab] = useState('playground');
+
   
 
   return (
@@ -117,26 +118,8 @@ export default function ChatbotDetailPage({ params }: { params: Promise<{ id: st
           <Sources />
         )}
 
-        {activeTab === 'integrations' && (
-          <div className="bg-white shadow overflow-hidden sm:rounded-lg p-6">
-            <div className="flex items-center justify-center h-64 border-2 border-dashed border-gray-300 rounded-lg">
-              <div className="text-center">
-                <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-                <h3 className="mt-2 text-sm font-medium text-gray-900">Configure Integrations</h3>
-                <p className="mt-1 text-sm text-gray-500">Connect your chatbot with other services.</p>
-                <div className="mt-6">
-                  <Link
-                    href={`/dashboard/chatbots/create?step=4&edit=${id}`}
-                    className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
-                  >
-                    Manage Integrations
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </div>
+        {activeTab === 'action' && (
+            <Actions />
         )}
 
         {activeTab === 'settings' && (

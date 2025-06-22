@@ -1,11 +1,13 @@
-import { File, Upload, Search, X } from "lucide-react"
+import { File, Upload, Search, X, ChevronRight, Ellipsis  } from "lucide-react"
 import { formatBytes } from "@/utils/fileUtils"
 import { useState, ChangeEvent, useRef } from "react";
 import Image from "next/image";
+import TextEditor from "./TextEditor";
 
 export default function Sources() {
     const [uploadedFile, setUploadedFile] = useState<File | null>(null);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const [activeTab, setActiveTab] = useState('files')
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -14,7 +16,6 @@ export default function Sources() {
     const file = event.target.files?.[0]; // Get the first selected file
 
     if (file) {
-        
         const MAX_FILE_SIZE_MB = 5; 
         const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
 
@@ -25,7 +26,6 @@ export default function Sources() {
             return;
         }
 
-        
         const allowedTypes = ['application/pdf', 'text/plain'];
         if (!allowedTypes.includes(file.type)) {
             setErrorMessage('Only PDF, and TXT files are allowed.');
@@ -101,101 +101,178 @@ export default function Sources() {
     );
 
     return(
-        <div className="flex justify-evenly items-start space-x-2 w-full ">
-            <div className="flex flex-col w-3/4 space-y-6">
-                <div className="border border-gray-300 px-4 shadow-md rounded-lg py-3 ">
-                    <h1>Files</h1>
-                    <p className="text-wrap text-sm">The Files tab allows you to upload and manage various document 
-                        types to train your AI agent. <a href="">Learn more</a>
-                    </p>
-                    <div onClick={handleDivClick} className="flex flex-col border border-gray-500 border-dashed text-sm rounded-lg justify-center items-center py-20 w-full bg-gray-200 my-4 space-y-2">
-                        <Upload className="w-5" />
-                        <p className="text-center">Drag & drop files here, or click to select the files</p>
-                        <p className="text-center">Supported File Types: .pdf, .doc, .docx, .txt</p>
-                    </div>
-                    {/* Hidden File Input */}
-                    <input
-                        id="file-upload"
-                        type="file"
-                        ref={fileInputRef} 
-                        onChange={handleFileChange}
-                        className="hidden" 
-                    />
-
-                    {/* Error Message Div */}
-                    {errorMessage && (
-                        <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-md">
-                        <p className="text-sm">{errorMessage}</p>
-                        </div>
-                    )}
-                    <p className="text-sm text-center">If you are uploading a PDF, make sure you can select/highlight the text</p>
-                </div>
-                <div className="border border-gray-300 px-4 shadow-md rounded-lg py-5 space-y-4 ">
-                    <div className="flex justify-between">
-                        <h1>File Sources</h1>
-                        <div className='relative '>
-                            <Search className="absolute text-gray-400 ml-3 top-5 transform -translate-y-1/2 w-4" />
-                            <input 
-                            className="pl-8 placeholder:text-sm py-1.5 outline-[0.5px] rounded-lg w-[265px] border border-gray-500 " 
-                            type="text"
-                            placeholder='Search...'
-                            />
-                            <X className="absolute text-gray-400 left-60 cursor-pointer top-5 transform -translate-y-1/2 w-4"/>
-                        </div>
-                    </div>
-                    <div className="flex justify-between">
-                        <div className="flex items-center gap-x-1">
-                            <input type="checkbox" className="border rounded-lg shadow-md" />
-                            <label htmlFor="select" className="text-black text-sm font-medium">Select All</label>
-                        </div>
-                        <div className="flex items-center">
-                            <p className="text-sm">Sort by:</p>
-                            <select className="border-0 outline-none bg-gray-100 hover:bg-gray-200 rounded-lg p-1 text-sm font-medium">
-                                <option>Default</option>
-                                <option>Status</option>
-                                <option>Newest</option>
-                                <option>Oldest</option>
-                                <option>Alphabetical (A-Z)</option>
-                                <option>Alphabetical (Z-A)</option>
-                            </select>
-                        </div>
+        <div>
+            {/* Tabs */}
+            <div className="border-b border-gray-200">
+                <nav className="-mb-px flex space-x-8" aria-label="Tabs">
+                    <button
+                        onClick={() => setActiveTab('files')}
+                        className={`${
+                        activeTab === 'files'
+                            ? 'border-primary-500 text-primary-600'
+                            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                        } whitespace-nowrap py-4 px-1 border-b-2 font-medium flex items-center gap-x-1 text-sm`}
+                    >
                         
+                        Files
+                    </button>
+                    <button
+                        onClick={() => setActiveTab('text')}
+                        className={`${
+                        activeTab === 'text'
+                            ? 'border-primary-500 text-primary-600'
+                            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                        } whitespace-nowrap py-4 px-1 border-b-2 font-medium flex items-center gap-x-1 text-sm`}
+                    >
+                        
+                        Text
+                    </button>
+                    <button
+                        onClick={() => setActiveTab('website')}
+                        className={`${
+                        activeTab === 'website'
+                            ? 'border-primary-500 text-primary-600'
+                            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                        } whitespace-nowrap py-4 px-1 border-b-2 font-medium flex items-center gap-x-1 text-sm`}
+                    >
+                        
+                        Website
+                    </button>
+                    <button
+                        onClick={() => setActiveTab('q&a')}
+                        className={`${
+                        activeTab === 'q&a'
+                            ? 'border-primary-500 text-primary-600'
+                            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                        } whitespace-nowrap py-4 px-1 border-b-2 font-medium flex items-center gap-x-1 text-sm`}
+                    >
+                        
+                        Q & A
+                    </button>
+                </nav>
+            </div>
+             
+            <div className="flex justify-evenly items-start space-x-2 w-full mt-6">
+                {activeTab === 'files' &&
+                <div className="flex flex-col w-3/4 space-y-6">
+                    <div className="border border-gray-300 px-4 shadow-md rounded-lg py-3 ">
+                        <h1>Files</h1>
+                        <p className="text-wrap text-sm">The Files tab allows you to upload and manage various document 
+                            types to train your AI agent. <a href="">Learn more</a>
+                        </p>
+                        <div onClick={handleDivClick} className="flex flex-col border border-gray-500 border-dashed text-sm rounded-lg justify-center items-center py-20 w-full bg-gray-200 my-4 space-y-2">
+                            <Upload className="w-5" />
+                            <p className="text-center">Drag & drop files here, or click to select the files</p>
+                            <p className="text-center">Supported File Types: .pdf, .doc, .docx, .txt</p>
+                        </div>
+                        {/* Hidden File Input */}
+                        <input
+                            id="file-upload"
+                            type="file"
+                            ref={fileInputRef} 
+                            onChange={handleFileChange}
+                            className="hidden" 
+                        />
+
+                        {/* Error Message Div */}
+                        {errorMessage && (
+                            <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-md">
+                            <p className="text-sm">{errorMessage}</p>
+                            </div>
+                        )}
+                        <p className="text-sm text-center">If you are uploading a PDF, make sure you can select/highlight the text</p>
                     </div>
-                    <div className="w-full border border-gray-400"></div>
-                    {/* Uploaded File Information Div */}
-                    {uploadedFile && (
-                        <div className="mt-6 ">
-                        <div className="flex items-center space-x-3"> 
-                            {getFileIcon(uploadedFile.type, uploadedFile.name)} 
-                            <div>
-                                <p className="text-sm text-gray-600 mb-1">
-                                    <span className="font-sans text-gray-700">{uploadedFile.name}</span>
-                                </p>
-                                <p className="text-sm text-gray-600">
-                                    <span className="font-sans text-gray-700">{formatBytes(uploadedFile.size)}</span>
-                                </p>
+                    <div className="border border-gray-300 px-4 shadow-md rounded-lg py-5 space-y-4 ">
+                        <div className="flex justify-between">
+                            <h1>File Sources</h1>
+                            <div className='relative '>
+                                <Search className="absolute text-gray-400 ml-3 top-5 transform -translate-y-1/2 w-4" />
+                                <input 
+                                className="pl-8 placeholder:text-sm py-1.5 outline-[0.5px] rounded-lg w-[265px] border border-gray-500 " 
+                                type="text"
+                                placeholder='Search...'
+                                />
+                                <X className="absolute text-gray-400 left-60 cursor-pointer top-5 transform -translate-y-1/2 w-4"/>
                             </div>
                         </div>
+                        <div className="flex justify-between">
+                            <div className="flex items-center gap-x-1">
+                                <input type="checkbox" className="border rounded-lg shadow-md" />
+                                <label htmlFor="select" className="text-black text-sm font-medium">Select All</label>
+                            </div>
+                            <div className="flex items-center">
+                                <p className="text-sm">Sort by:</p>
+                                <select className="border-0 outline-none bg-gray-100 hover:bg-gray-200 rounded-lg p-1 text-sm font-medium">
+                                    <option>Default</option>
+                                    <option>Status</option>
+                                    <option>Newest</option>
+                                    <option>Oldest</option>
+                                    <option>Alphabetical (A-Z)</option>
+                                    <option>Alphabetical (Z-A)</option>
+                                </select>
+                            </div>
+                            
                         </div>
+                        <div className="w-full border border-gray-400"></div>
+                        {/* Uploaded File Information Div */}
+                        {uploadedFile && (
+                            <div className="mt-6 ">
+                            <div className="flex justify-between items-center">
+                                <div className="flex items-center space-x-3">
+                                    {getFileIcon(uploadedFile.type, uploadedFile.name)} 
+                                    <div>
+                                        <p className="text-sm text-gray-600 mb-1">
+                                            <span className="font-sans font-medium text-gray-950">{uploadedFile.name}</span>
+                                        </p>
+                                        <p className="text-xs text-gray-600">
+                                            <span className="font-sans text-gray-700">{formatBytes(uploadedFile.size)}</span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                    <Ellipsis className="cursor-pointer" />
+                                    <ChevronRight className="cursor-pointer" />
+                                </div>
+                            </div>
+                            </div>
 
-                    )}
-                </div>
-            </div>
-            <div className="border border-gray-300 px-4 shadow-md rounded-lg py-3 w-1/3 space-y-6">
-                <h2>Sources</h2>
-                <div className="flex justify-between">
-                    <p className="flex items-center text-sm "><File className="w-3" /> 1 File</p>
-                    <p className="text-sm">{uploadedFile ? formatBytes(uploadedFile.size) : `7 KB`}</p>
-                </div>
-                <div className="border border-dashed border-gray-500"></div>
-                <div className="flex justify-between text-sm">
-                    <p>Total Size:</p>
+                        )}
+                    </div>
+                </div>}
+                {activeTab === 'text' && 
+                    <div className="flex flex-col w-3/4">
+                        <div className="border border-gray-300 px-4 shadow-md rounded-lg py-3 space-y-5">
+                            <div>
+                                <h2>Text</h2>
+                                <p className="text-sm text-gray-500 mt-3">Add and process plain text-based sources to train your AI Agent with precise information. <a href="">Learn more</a></p>
+                            </div>
+                            <div className="flex flex-col gap-y-2">
+                                <label htmlFor="title">Title</label>
+                                <input type="text" placeholder="Ex: Refund Requests" className="rounded-lg bg-gray-100 border-[0.5px] px-3 py-1 outline-none text-md border-gray-400" />
+                            </div>
+                            <div className="gap-y-2">
+                                <p className="text-sm text-gray-500 font-medium">Text</p>
+                                <TextEditor />
+                            </div>
+                        </div>
+                    </div>
+                }
+                <div className="border border-gray-300 px-4 shadow-md rounded-lg py-3 w-1/3 space-y-6">
+                    <h2>Sources</h2>
+                    <div className="flex justify-between">
+                        <p className="flex items-center text-sm "><File className="w-3" /> 1 File</p>
+                        <p className="text-sm">{uploadedFile ? formatBytes(uploadedFile.size) : `7 KB`}</p>
+                    </div>
+                    <div className="border border-dashed border-gray-500"></div>
+                    <div className="flex justify-between text-sm">
+                        <p>Total Size:</p>
+                        
+                        <p className="text-wrap flex flex-col items-end">{uploadedFile ? formatBytes(uploadedFile.size) : `7 KB`} <p>/400 KB</p></p>
+                    </div>
                     
-                    <p className="text-wrap flex flex-col items-end">{uploadedFile ? formatBytes(uploadedFile.size) : `7 KB`} <p>/400 KB</p></p>
-                </div>
-                
-                <p className="bg-black text-white px-3 py-3 rounded-xl text-center border text-sm font-semibold">Retrain Agent</p>
-            </div> 
+                    <p className="bg-black text-white px-3 py-3 rounded-xl text-center border text-sm font-semibold">Retrain Agent</p>
+                </div> 
+            </div>
         </div>
     )
 }
