@@ -1,4 +1,4 @@
-import { File, Upload, Search, X, ChevronRight, Ellipsis  } from "lucide-react"
+import { File, Upload, Search, X, ChevronRight, Ellipsis, Text, Globe, ShieldQuestionIcon, Plus} from "lucide-react"
 import { formatBytes } from "@/utils/fileUtils"
 import { useState, ChangeEvent, useRef } from "react";
 import Image from "next/image";
@@ -8,6 +8,8 @@ export default function Sources() {
     const [uploadedFile, setUploadedFile] = useState<File | null>(null);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [activeTab, setActiveTab] = useState('files')
+    const [open, setOpen] = useState(false);
+
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -81,7 +83,7 @@ export default function Sources() {
         </svg>
     );
 
-    // Added icons for common document types (optional)
+    // Added icons for common document types
     const DocIcon = () => (
         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
         <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -113,7 +115,7 @@ export default function Sources() {
                             : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                         } whitespace-nowrap py-4 px-1 border-b-2 font-medium flex items-center gap-x-1 text-sm`}
                     >
-                        
+                        <File width={20} height={20} />
                         Files
                     </button>
                     <button
@@ -124,7 +126,7 @@ export default function Sources() {
                             : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                         } whitespace-nowrap py-4 px-1 border-b-2 font-medium flex items-center gap-x-1 text-sm`}
                     >
-                        
+                        <Text width={20} height={20} />
                         Text
                     </button>
                     <button
@@ -135,7 +137,7 @@ export default function Sources() {
                             : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                         } whitespace-nowrap py-4 px-1 border-b-2 font-medium flex items-center gap-x-1 text-sm`}
                     >
-                        
+                        <Globe width={20} height={20} />
                         Website
                     </button>
                     <button
@@ -146,6 +148,7 @@ export default function Sources() {
                             : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                         } whitespace-nowrap py-4 px-1 border-b-2 font-medium flex items-center gap-x-1 text-sm`}
                     >
+                        <ShieldQuestionIcon width={20} height={20} />
                         
                         Q & A
                     </button>
@@ -250,6 +253,39 @@ export default function Sources() {
                                 <label htmlFor="title">Title</label>
                                 <input type="text" placeholder="Ex: Refund Requests" className="rounded-lg bg-gray-100 border-[0.5px] px-3 py-1 outline-none text-md border-gray-400" />
                             </div>
+                            <div className="gap-y-2">
+                                <p className="text-sm text-gray-500 font-medium">Text</p>
+                                <TextEditor />
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                {activeTab === 'q&a' && 
+                    <div className="flex flex-col w-3/4">
+                        <div className="border border-gray-300 px-4 shadow-md rounded-lg py-3 space-y-5">
+                            <div>
+                                <h2>Q & A</h2>
+                                <p className="text-sm text-gray-500 mt-3">Craft responses for important questions, ensuring your AI Agent shares the most relevant info. Use Custom Answers to add images and videos for enhanced engagement. <a href="">Learn more</a></p>
+                            </div>
+                            <div className="flex flex-col gap-y-2">
+                                <label htmlFor="title">Title</label>
+                                <input type="text" placeholder="Ex: Refund Requests" className="rounded-lg bg-gray-100 border-[0.5px] px-3 py-1 outline-none text-md border-gray-400" />
+                            </div>
+                            <div className="flex flex-col gap-y-2">
+                                <label htmlFor="question">Question</label>
+                                <input type="text" placeholder="Ex: How do i request a refund ?" className="rounded-lg bg-gray-100 border-[0.5px] px-3 py-1 outline-none text-md border-gray-400" />
+                            </div>
+                            {open && 
+                                <div className="flex flex-col gap-y-2">
+                                    <label htmlFor="question">Question</label>
+                                    <input type="text" placeholder="Ex: How do i request a refund ?" className="rounded-lg bg-gray-100 border-[0.5px] px-3 py-1 outline-none text-md border-gray-400" />
+                                </div>
+                            }
+                            <button onClick={() => setOpen(!open)} className="flex items-center p-2 bg-gray-100 transition ease-in-out hover:bg-gray-400 hover:p-2 hover:rounded-lg">
+                                <Plus width={20} height={20} />
+                                <p className="text-md font-medium">Add another Question</p>
+                            </button>
                             <div className="gap-y-2">
                                 <p className="text-sm text-gray-500 font-medium">Text</p>
                                 <TextEditor />

@@ -14,24 +14,7 @@ export default function ChatbotDetailPage({ params }: { params: Promise<{ id: st
   const resolvedParams = use(params);
   const id = resolvedParams.id;
   
-  // Mock data for the chatbot
-  const chatbot = {
-    id,
-    name: 'Customer Support Bot',
-    description: 'A helpful assistant for customer inquiries',
-    status: 'active',
-    model: 'Google Gemini',
-    platforms: ['Website', 'WhatsApp'],
-    createdAt: '2023-10-15',
-    lastUpdated: '2 days ago',
-    messages: 1245,
-    uniqueUsers: 342,
-    avgResponseTime: '1.2s',
-    satisfactionRate: '95%',
-    primaryColor: '#6366F1',
-    welcomeMessage: 'Hello! How can I help you today?',
-    avatar: 'default',
-  };
+
 
   const [activeTab, setActiveTab] = useState('playground');
 
