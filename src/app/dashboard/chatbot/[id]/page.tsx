@@ -94,7 +94,7 @@ export default function ChatbotDetailPage({ params }: { params: Promise<{ id: st
           
 
         {activeTab === 'activity' && (
-          <Activity />
+          <Activity params={params} />
         )}
 
         {activeTab === 'sources' && (

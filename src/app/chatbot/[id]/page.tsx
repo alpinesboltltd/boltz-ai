@@ -1,32 +1,46 @@
-// components/ChatbotPage.tsx (or wherever your component is located)
-'use client';
+'use client'; 
 
-import { useState } from 'react';
-import { use } from 'react';
+import { useState, useEffect, useRef, use as useReact } from 'react';
 import Link from 'next/link';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import { ChatInterface, ModifiedCalendarWidget } from '@/components/chatbot';
 
-// Add showHeader to your component's props interface
+
+interface ChatMessage {
+  id: number;
+  role: 'user' | 'assistant';
+  content: string;
+  timestamp: string; 
+}
+
+interface GeminiChatHistoryItem {
+  role: 'user' | 'model';
+  parts: string;
+}
+
+
 export default function ChatbotPage({ 
-  params, 
-  showHeader = true // Set a default value of true, so it shows by default
+  params: initialParams, 
+  showHeader = true 
 }: { 
   params: Promise<{ id: string }>,
-  showHeader?: boolean // Make it optional
+  showHeader?: boolean 
 }) {
-  const resolvedParams = use(params);
-  const id = resolvedParams.id;
+  // Use React.use() to unwrap the params promise
+  const resolvedParams = useReact(initialParams); 
+  const id = resolvedParams.id; 
+  const chatWindowRef = useRef<HTMLDivElement>(null);
 
-  const [messages, setMessages] = useState<any[]>([
+  const [messages, setMessages] = useState<ChatMessage[]>(() => [
     {
+      id: 1,
       role: 'assistant',
       content: 'Hello! How can I help you today?',
       timestamp: new Date().toISOString(),
     },
   ]);
   const [inputValue, setInputValue] = useState('');
-  const [isTyping, setIsTyping] = useState(false);
+  const [isTyping, setIsTyping] = useState(false); 
   const [showCalendar, setShowCalendar] = useState(false);
 
   const chatbot = {
@@ -34,42 +48,97 @@ export default function ChatbotPage({
     name: 'Customer Support Bot',
     description: 'A helpful assistant for customer inquiries',
     primaryColor: '#6366F1',
-    welcomeMessage: 'Hello! How can I help you today?',
-  };
+    welcomeMessage: 'Hello! How can I help you today?', 
+  }
 
-  const handleSendMessage = (e: React.FormEvent) => {
+  useEffect(() => {
+    if (chatWindowRef.current) {
+      chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight;
+    }
+  }, [messages]); 
+
+  const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!inputValue.trim()) return;
 
-    const userMessage = {
+    const userMessage: ChatMessage = {
+      id: messages.length + 1,
       role: 'user',
       content: inputValue,
       timestamp: new Date().toISOString(),
     };
-    setMessages([...messages, userMessage]);
-    setInputValue('');
+    setMessages((prevMessages) => [...prevMessages, userMessage]); 
+    setInputValue(''); 
     setIsTyping(true);
 
-    setTimeout(() => {
-      let responseContent = '';
 
+    const historyForApi: GeminiChatHistoryItem[] = messages
+        .filter(msg => msg.id !== 1 && !msg.content.includes("Your appointment has been scheduled"))
+        .map(msg => ({
+            role: msg.role === 'user' ? 'user' : 'model',
+            parts: msg.content
+        }));
+    
+    historyForApi.push({ role: 'user', parts: inputValue }); 
+
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+          message: inputValue,
+          history: historyForApi 
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      const assistantResponseContent = data.reply;
+
+      
       if (inputValue.toLowerCase().includes('appointment') || 
           inputValue.toLowerCase().includes('book') || 
           inputValue.toLowerCase().includes('schedule')) {
-        responseContent = "I'd be happy to help you book an appointment. Let me show you the available dates.";
+        
+        // If keyword detected, show calendar and provide a specific response
         setShowCalendar(true);
+        const calendarTriggerMessage: ChatMessage = {
+          id: messages.length + 2,
+          role: 'assistant',
+          content: "I'd be happy to help you book an appointment. Let me show you the available dates.",
+          timestamp: new Date().toISOString(),
+        };
+        setMessages(prevMessages => [...prevMessages, calendarTriggerMessage]);
+
       } else {
-        responseContent = "I understand you're asking about " + inputValue.substring(0, 20) + "... How can I assist you further with this?";
+        // Otherwise, display the AI's response
+        const assistantMessage: ChatMessage = {
+          id: messages.length + 2, 
+          role: 'assistant',
+          content: assistantResponseContent,
+          timestamp: new Date().toISOString(),
+        };
+        setMessages(prevMessages => [...prevMessages, assistantMessage]);
       }
 
-      const assistantMessage = {
+    } catch (error) {
+      console.error('Error fetching AI response:', error);
+      const errorMessage: ChatMessage = {
+        id: messages.length + 2,
         role: 'assistant',
-        content: responseContent,
+        content: 'Sorry, I am having trouble connecting to the AI. Please try again later.',
         timestamp: new Date().toISOString(),
       };
-      setMessages(prevMessages => [...prevMessages, assistantMessage]);
+      setMessages(prevMessages => [...prevMessages, errorMessage]);
+    } finally {
       setIsTyping(false);
-    }, 1000);
+    }
   };
 
   const handleTimeSelected = (time: string, date: Date) => {
@@ -82,7 +151,8 @@ export default function ChatbotPage({
       day: 'numeric' 
     });
     
-    const confirmationMessage = {
+    const confirmationMessage: ChatMessage = {
+      id: messages.length + 1,
       role: 'assistant',
       content: `Great! Your appointment has been scheduled for ${formattedDate} at ${time}. You'll receive a confirmation email shortly. Is there anything else you need help with?`,
       timestamp: new Date().toISOString(),
@@ -119,7 +189,7 @@ export default function ChatbotPage({
         </header>
       )}
 
-      {/* Rest of your component remains the same */}
+      
       <div className="flex-1 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 h-full">
           <div className="bg-white rounded-lg shadow h-full flex flex-col">
@@ -128,10 +198,10 @@ export default function ChatbotPage({
               <p className="text-sm text-gray-500">{chatbot.description}</p>
             </div>
 
-            <div className="flex-1 overflow-y-auto p-6 space-y-4">
-              {messages.map((message, index) => (
+            <div ref={chatWindowRef} className="flex-1 overflow-y-auto p-6 space-y-4"> {/* Added ref here */}
+              {messages.map((message) => (
                 <div
-                  key={index}
+                  key={message.id} 
                   className={`flex ${
                     message.role === 'user' ? 'justify-end' : 'justify-start'
                   }`}
@@ -182,10 +252,12 @@ export default function ChatbotPage({
                   onChange={(e) => setInputValue(e.target.value)}
                   className="flex-1 rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
                   placeholder="Type your message..."
+                  disabled={isTyping} // Disable input while typing
                 />
                 <button
                   type="submit"
                   className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+                  disabled={isTyping || !inputValue.trim()} // Disable send button
                 >
                   Send
                 </button>

@@ -3,12 +3,16 @@ import { formatBytes } from "@/utils/fileUtils"
 import { useState, ChangeEvent, useRef } from "react";
 import Image from "next/image";
 import TextEditor from "./TextEditor";
+import UrlInputForm from "./UrlInputForm";
 
 export default function Sources() {
     const [uploadedFile, setUploadedFile] = useState<File | null>(null);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [activeTab, setActiveTab] = useState('files')
     const [open, setOpen] = useState(false);
+    const [websiteTab, setWebsiteTab] = useState('crawl');
+    const [protocol, setProtocol] = useState<string>('https://');
+      const [url, setUrl] = useState<string>('');
 
     const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -260,7 +264,96 @@ export default function Sources() {
                         </div>
                     </div>
                 }
+                {activeTab === 'website' && 
+                    <div className="flex flex-col w-3/4">
+                        <div className="border border-gray-300 px-4 shadow-md rounded-lg py-3 pb-16 space-y-5">
+                            <h2>Link</h2>
+                            <p className="text-sm text-gray-500 mt-3">Crawl specific web pages or submit sitemaps to continuously update your AI with the latest content. Configure included and excluded paths to refine what your AI learns.  <a href="">Learn more</a></p>
+                            {/* Website tabs */}
+                            <div className="border-b border-gray-200">
+                                <nav className="-mb-px flex items-center space-x-8" aria-label="Tabs">
+                                    <button
+                                        onClick={() => setWebsiteTab('crawl')}
+                                        className={`${
+                                        websiteTab === 'crawl'
+                                            ? 'border-primary-500 text-primary-600'
+                                            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                                        } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
+                                    >
+                                        Crawl Links
+                                    </button>
+                                    <button
+                                        onClick={() => setWebsiteTab('sitemap')}
+                                        className={`${
+                                        websiteTab === 'sitemap'
+                                            ? 'border-primary-500 text-primary-600'
+                                            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                                        } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
+                                    >
+                                        Sitemap
+                                    </button>
+                                    <button
+                                        onClick={() => setWebsiteTab('individual')}
+                                        className={`${
+                                        websiteTab === 'individual'
+                                            ? 'border-primary-500 text-primary-600'
+                                            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                                        } whitespace-nowrap py-4 px-1 border-b-2 flex items-center gap-x-1 font-medium text-sm`}
+                                    >
+                                        Individual Links
+                                    </button>
+                                </nav>
+                            </div>
 
+                            {websiteTab === 'crawl' && 
+                                <div className="flex flex-col gap-y-2 mt-4">
+                                    <h3>URL</h3>
+                                    <UrlInputForm />
+                                    <div className='flex justify-end mt-3'>
+                                        <button className='bg-gray-700 text-gray-100 text-sm font-medium px-2 py-1 rounded-lg'>Fetch Link</button>
+                                    </div>
+                                </div>
+                            }
+
+                            {websiteTab === 'sitemap' && 
+                                <div className="flex flex-col gap-y-2 mt-4">
+                                    <h3>URL</h3>
+                                    <UrlInputForm />
+                                    <div className='flex justify-end mt-3'>
+                                        <button className='bg-gray-700 text-gray-100 text-sm font-medium px-2 py-1 rounded-lg'>Fetch sitemap</button>
+                                    </div>
+                                </div>
+                            }
+
+                            {websiteTab === 'individual' && 
+                                <div className="flex flex-col gap-y-2 mt-4">
+                                    <h3>URL</h3>
+                                    <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden bg-gray-50">
+                                        <select
+                                            id="protocol-select"
+                                            value={protocol}
+                                            onChange={(e) => setProtocol(e.target.value)}
+                                            className="bg-gray-200 py-2.5 px-2 pr-4 text-gray-700 font-medium border-none outline-none cursor-pointer rounded-l-lg"
+                                        >
+                                            <option value="https://">https://</option>
+                                            <option value="http://">http://</option>
+                                        </select>
+                                        <input
+                                            type="text"
+                                            id="url-input"
+                                            name="url-input"
+                                            placeholder="www.example.com"
+                                            value={url}
+                                            onChange={(e) => setUrl(e.target.value)}
+                                            className="flex-grow py-2.5 px-4 border-none outline-none text-base bg-transparent text-gray-800 placeholder-gray-500 rounded-r-lg"
+                                        />
+                                    </div>
+                                </div>
+                            }
+
+                        </div>
+                    </div>
+                    }
                 {activeTab === 'q&a' && 
                     <div className="flex flex-col w-3/4">
                         <div className="border border-gray-300 px-4 shadow-md rounded-lg py-3 space-y-5">
