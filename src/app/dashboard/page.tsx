@@ -1,149 +1,95 @@
+"use client"
 import Link from 'next/link';
+import { useState } from 'react';
+import { MessageSquare } from "lucide-react"
 
 export default function Dashboard() {
   // Mock data for dashboard
   const chatbots = [
     { id: 1, name: 'Customer Support Bot', status: 'active', messages: 1245, platform: 'Website' },
-    { id: 2, name: 'Sales Assistant', status: 'active', messages: 876, platform: 'WhatsApp' },
-    { id: 3, name: 'Product Recommender', status: 'draft', messages: 0, platform: 'Website' },
+    { id: 2, name: 'Customer testing Bot', status: 'active', messages: 125, platform: 'facebook' },
+    { id: 3, name: 'Customer Support', status: 'not active', messages: 1245, platform: 'slack' },
   ];
 
+  const [activeTab, setActiveTab] = useState('agents');
+
   return (
-    <div className="px-4 sm:px-6 lg:px-8 py-8">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-semibold text-gray-900">Dashboard</h1>
-        <Link 
-          href="/dashboard/chatbots/create" 
-          className="inline-flex items-center justify-center rounded-md border border-transparent bg-primary-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
-        >
-          Create New Chatbot
-        </Link>
+    <>
+      {/* Tabs */}
+      <div className="border-b border-gray-200 py-2">
+          <nav className="-mb-px flex justify-center space-x-10 items-center" aria-label="tabs">
+              <button
+                  onClick={() => setActiveTab('agents')}
+                  className={`${
+                  activeTab === 'agents'
+                      ? 'border-primary-500 text-primary-600'
+                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  } whitespace-nowrap py-4 px-1 border-b-2 font-medium flex items-center gap-x-1 text-sm`}
+              >
+                  Agents
+              </button>
+              <button
+                  onClick={() => setActiveTab('usage')}
+                  className={`${
+                  activeTab === 'usage'
+                      ? 'border-primary-500 text-primary-600'
+                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  } whitespace-nowrap py-4 px-1 border-b-2 font-medium flex items-center gap-x-1 text-sm`}
+              >
+                  Usage
+              </button>
+              <button
+                  onClick={() => setActiveTab('settings')}
+                  className={`${
+                  activeTab === 'settings'
+                      ? 'border-primary-500 text-primary-600'
+                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  } whitespace-nowrap py-4 px-1 border-b-2 font-medium flex items-center gap-x-1 text-sm`}
+              >
+                  Settings
+              </button>
+          </nav>
       </div>
 
-      {/* Overview Cards */}
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        <div className="bg-white overflow-hidden shadow rounded-lg">
-          <div className="px-4 py-5 sm:p-6">
-            <div className="flex items-center">
-              <div className="flex-shrink-0 bg-primary-100 rounded-md p-3">
-                <svg className="h-6 w-6 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-                </svg>
-              </div>
-              <div className="ml-5 w-0 flex-1">
-                <dl>
-                  <dt className="text-sm font-medium text-gray-500 truncate">Total Messages</dt>
-                  <dd className="text-3xl font-semibold text-gray-900">2,121</dd>
-                </dl>
-              </div>
-            </div>
-          </div>
-          <div className="bg-gray-50 px-4 py-4 sm:px-6">
-            <div className="text-sm">
-              <Link href="/dashboard/analytics" className="font-medium text-primary-600 hover:text-primary-500">
-                View all analytics
-              </Link>
-            </div>
-          </div>
-        </div>
-        <div className="bg-white overflow-hidden shadow rounded-lg">
-          <div className="px-4 py-5 sm:p-6">
-            <div className="flex items-center">
-              <div className="flex-shrink-0 bg-primary-100 rounded-md p-3">
-                <svg className="h-6 w-6 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                </svg>
-              </div>
-              <div className="ml-5 w-0 flex-1">
-                <dl>
-                  <dt className="text-sm font-medium text-gray-500 truncate">Active Users</dt>
-                  <dd className="text-3xl font-semibold text-gray-900">342</dd>
-                </dl>
-              </div>
-            </div>
-          </div>
-          <div className="bg-gray-50 px-4 py-4 sm:px-6">
-            <div className="text-sm">
-              <Link href="/dashboard/users" className="font-medium text-primary-600 hover:text-primary-500">
-                View all users
-              </Link>
-            </div>
-          </div>
-        </div>
-        <div className="bg-white overflow-hidden shadow rounded-lg">
-          <div className="px-4 py-5 sm:p-6">
-            <div className="flex items-center">
-              <div className="flex-shrink-0 bg-primary-100 rounded-md p-3">
-                <svg className="h-6 w-6 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              <div className="ml-5 w-0 flex-1">
-                <dl>
-                  <dt className="text-sm font-medium text-gray-500 truncate">Satisfaction Rate</dt>
-                  <dd className="text-3xl font-semibold text-gray-900">95%</dd>
-                </dl>
-              </div>
-            </div>
-          </div>
-          <div className="bg-gray-50 px-4 py-4 sm:px-6">
-            <div className="text-sm">
-              <Link href="/dashboard/feedback" className="font-medium text-primary-600 hover:text-primary-500">
-                View all feedback
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Chatbots List */}
-      <div className="mt-8">
-        <div className="pb-5 border-b border-gray-200 flex justify-between items-center">
-          <h3 className="text-lg leading-6 font-medium text-gray-900">Your Chatbots</h3>
-          <Link href="/dashboard/chatbots" className="text-sm font-medium text-primary-600 hover:text-primary-500">
-            View all chatbots
+      {activeTab === 'agents' && 
+      <div className="px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-semibold text-gray-900">AI Agents</h1>
+          <Link 
+            href="/dashboard/chatbots/create" 
+            className="inline-flex items-center justify-center rounded-md border border-transparent bg-primary-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+          >
+             New Agents
           </Link>
         </div>
-        <div className="bg-white shadow overflow-hidden sm:rounded-md mt-4">
-          <ul className="divide-y divide-gray-200">
-            {chatbots.map((chatbot) => (
-              <li key={chatbot.id}>
-                <Link href={`/dashboard/chatbot/${chatbot.id}`} className="block hover:bg-gray-50">
-                  <div className="px-4 py-4 sm:px-6">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center">
-                        <p className="text-sm font-medium text-primary-600 truncate">{chatbot.name}</p>
-                        <div className={`ml-2 flex-shrink-0 flex`}>
-                          <p className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                            chatbot.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
-                          }`}>
-                            {chatbot.status}
-                          </p>
+        {/* Chatbots List */}
+        <div className="mt-8">
+          
+            <ul className="flex space-x-16">
+              {chatbots.map((chatbot) => (
+                <li key={chatbot.id}>
+                  <Link href={`/dashboard/chatbot/${chatbot.id}`} className="block hover:bg-gray-50 w-fit">
+                    <div className="h-60 border-gray-400 border rounded-lg flex flex-col hover:shadow-xl hover:scale-105 transition-all duration-300">
+                        <div className="flex-grow flex items-center justify-center bg-gray-200 p-4">
+                          <MessageSquare width={88} height={88} />
                         </div>
-                      </div>
-                      <div className="ml-2 flex-shrink-0 flex">
-                        <p className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
-                          {chatbot.platform}
-                        </p>
-                      </div>
+                        <div className=" p-4 flex-col flex-shrink-0 flex items-center justify-center">
+                          <p className="text-sm font-medium truncate text-center text-gray-800 break-words w-full px-2">{chatbot.name}</p>
+                          <div className={`ml-2 flex-shrink-0 flex`}>
+                            <p className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                              chatbot.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+                            }`}>
+                              {chatbot.status}
+                            </p>
+                          </div>
+                        </div>
                     </div>
-                    <div className="mt-2 sm:flex sm:justify-between">
-                      <div className="sm:flex">
-                        <p className="flex items-center text-sm text-gray-500">
-                          <svg className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-                          </svg>
-                          {chatbot.messages} messages
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </Link>
-              </li>
-            ))}
-          </ul>
+                  </Link>
+                </li>
+              ))}
+            </ul>
         </div>
-      </div>
-    </div>
+      </div>}
+    </>
   );
 }

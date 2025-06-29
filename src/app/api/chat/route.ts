@@ -1,7 +1,7 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { NextResponse } from 'next/server';
 
-// Define types for chat history consistent with Gemini's format
+
 interface ChatHistoryItem {
   role: 'user' | 'model';
   parts: string; 
