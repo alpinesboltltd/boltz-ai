@@ -21,7 +21,7 @@ export default function Home() {
   return (
     <main>
       <Header />
-      <div className="w-11/12 lg:w-9/12  mx-auto">
+      <div className="w-full xl:w-9/12  mx-auto">
         <HeroSection />
         <Highlights />
         <HowItWorks />
