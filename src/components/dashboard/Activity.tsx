@@ -1,11 +1,19 @@
 import ChatbotPage from "@/app/chatbot/[id]/page"
 import { RefreshCw, SlidersHorizontal, Download, Calendar } from "lucide-react";
-import { useState } from "react";
+import { useState, useMemo } from "react";
+import DOMPurify from 'isomorphic-dompurify';
 
 
 export default function Activity({ params }: { params: Promise<{ id: string }> }) {
     // Unwrap params using React.use()
     const [activeTab, setActiveTab] = useState('chat')
+    
+    // Sanitize static content to prevent XSS
+    const sanitizedContent = useMemo(() => ({
+        chatMessage: DOMPurify.sanitize("I dont have the ability to view files,..."),
+        chatSubtext: DOMPurify.sanitize("have you seen the content of the file"),
+        noLeadsMessage: DOMPurify.sanitize("No leads Found")
+    }), [])
     
     return(
         <>
@@ -57,8 +65,8 @@ export default function Activity({ params }: { params: Promise<{ id: string }> }
                 <div className="flex flex-row w-full items-start justify-center space-x-0 py-3">
                     <div className="w-3/5 flex bg-gray-200 p-2 justify-between">
                         <div className="flex flex-col">
-                            <p className="fomt-medium text-md text-black">I dont have the ability to view files,...</p>
-                            <p className="text-sm text-gray-500 font-sans">have you seen the content of the file</p>
+                            <p className="fomt-medium text-md text-black" dangerouslySetInnerHTML={{ __html: sanitizedContent.chatMessage }} />
+                            <p className="text-sm text-gray-500 font-sans" dangerouslySetInnerHTML={{ __html: sanitizedContent.chatSubtext }} />
                         </div>
                         <p className="text-sm">11 days ago</p>
                     </div>
@@ -85,7 +93,7 @@ export default function Activity({ params }: { params: Promise<{ id: string }> }
                     </div>
                     <div className="w-full border border-gray-200 my-4 z-50"></div>
                     <div className="h-full flex items-center justify-center">
-                        <p className="text-center">No leads Found</p>
+                        <p className="text-center" dangerouslySetInnerHTML={{ __html: sanitizedContent.noLeadsMessage }} />
                     </div>
                 </div>
             }
