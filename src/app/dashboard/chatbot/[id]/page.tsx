@@ -21,7 +21,6 @@ export default function ChatbotDetailPage({ params }: { params: Promise<{ id: st
   
 
   return (
-    <>
     <div className="px-4 sm:px-6 lg:px-8 py-8">
       <Link
           href="/dashboard/chatbots"
@@ -126,6 +125,5 @@ export default function ChatbotDetailPage({ params }: { params: Promise<{ id: st
         )}
       </div>
     </div>
-    </>
   );
 }
