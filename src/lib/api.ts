@@ -8,16 +8,17 @@ const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: true
 });
 
 // Add auth token to requests if available
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('auth_token');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
+// api.interceptors.request.use((config) => {
+//   const token = localStorage.getItem('auth_token');
+//   if (token) {
+//     config.headers.Authorization = `Bearer ${token}`;
+//   }
+//   return config;
+// });
 
 // Handle response errors
 api.interceptors.response.use(
@@ -25,7 +26,6 @@ api.interceptors.response.use(
   (error) => {
     // Handle authentication errors
     if (error.response?.status === 401) {
-      localStorage.removeItem('auth_token');
       window.location.href = '/auth/login?session_expired=true';
     }
     return Promise.reject(error);
