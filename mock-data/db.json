@@ -1,0 +1,59 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "name": "Demo User",
+      "email": "demo@example.com",
+      "role": "admin",
+      "avatar": "https://ui-avatars.com/api/?name=Demo+User&background=6366F1&color=fff",
+      "password": "password"
+    },
+    {
+      "id": "2",
+      "name": "Test User",
+      "email": "test@example.com",
+      "role": "user",
+      "avatar": "https://ui-avatars.com/api/?name=Test+User&background=6366F1&color=fff",
+      "password": "testpass"
+    }
+  ],
+  "chatbots": [
+    {
+      "id": "1",
+      "name": "SupportBot",
+      "ownerId": "1",
+      "model": "gpt-3.5-turbo",
+      "description": "Handles customer support queries.",
+      "createdAt": "2025-07-01T10:00:00Z",
+      "trainingData": [
+        { "type": "content", "content": "mytraining data" },
+        { "type": "document", "document": "my training data document" },
+        { "type": "website", "content": "mytraining data from my site" }
+      ]
+    },
+    {
+      "id": "2",
+      "name": "SalesBot",
+      "ownerId": "2",
+      "description": "Assists with sales inquiries.",
+      "trainingData": [
+        { "type": "content", "content": "mytraining data" },
+        { "type": "document", "document": "my training data document" },
+        { "type": "website", "content": "mytraining data from my site" }
+      ],
+      "createdAt": "2025-07-01T11:00:00Z"
+    }
+  ],
+  "messages": [
+    {
+      "id": "1",
+      "chatbotId": "1",
+      "userId": "1",
+      "content": [
+        { "role": "assistant", "text": "Hello, how can I help you?" },
+        { "role": "user", "text": "I need help with my order." }
+      ],
+      "timestamp": "2025-07-01T10:01:00Z"
+    }
+  ]
+}
