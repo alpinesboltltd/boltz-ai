@@ -1,12 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Spinner } from "@/components/common/Spinner";
 import { SigninFormInputs, signinSchema } from "@/types/schema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { AuthRequestMethods, AuthRequestMethodsType } from "@/types";
+import { AuthProvider, signInWithPopup } from "firebase/auth";
+import { handleFirebaseErrorMessage } from "@/lib/utils";
+import { FirebaseError } from "firebase/app";
+import { auth } from "@/configs/firebase";
+import Link from "next/link";
+import { Spinner } from "@/components/common/Spinner";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -20,6 +25,7 @@ export default function LoginPage() {
     defaultValues: {
       email: "",
       password: "",
+      method: "password",
     },
   });
 
@@ -45,13 +51,37 @@ export default function LoginPage() {
 
       const data = await response.json();
 
-      // For development, simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      // TODO: Store user session
       router.push("/dashboard");
     } catch (err) {
-      console.error("Login failed:", err);
+      // TODO display error in a toast
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleSocialSignin = async (method: AuthRequestMethods) => {
+    try {
+      if (
+        method === AuthRequestMethods.google ||
+        method === AuthRequestMethods.github
+      ) {
+        const provider = method as unknown as AuthProvider;
+        try {
+          const { user } = await signInWithPopup(auth, provider);
+          console.log(method);
+          // TODO: store user in session
+        } catch (error) {
+          if (error instanceof FirebaseError) {
+            const message = handleFirebaseErrorMessage(error.code);
+            throw Error(message);
+          }
+          throw error;
+        }
+      }
+    } catch (error) {
+      // TODO display error in a toast
+      console.log(error);
     }
   };
 
@@ -202,15 +232,8 @@ export default function LoginPage() {
             <div className="mt-6 grid grid-cols-2 gap-3">
               <div>
                 <button
-                  onClick={() => {
-                    // In production, this would redirect to Google OAuth
-                    // window.location.href = '/api/auth/google';
-
-                    // For development, show a message
-                    alert(
-                      "Google OAuth integration would be implemented in production"
-                    );
-                  }}
+                  disabled={loading}
+                  onClick={() => handleSocialSignin(AuthRequestMethods.google)}
                   className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
                 >
                   <svg
@@ -227,15 +250,8 @@ export default function LoginPage() {
 
               <div>
                 <button
-                  onClick={() => {
-                    // In production, this would redirect to GitHub OAuth
-                    // window.location.href = '/api/auth/github';
-
-                    // For development, show a message
-                    alert(
-                      "GitHub OAuth integration would be implemented in production"
-                    );
-                  }}
+                  disabled={loading}
+                  onClick={() => handleSocialSignin(AuthRequestMethods.github)}
                   className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
                 >
                   <svg

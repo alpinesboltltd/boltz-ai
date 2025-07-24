@@ -15,7 +15,7 @@ export interface Chatbot {
   name: string;
   description: string;
   aiModel: string;
-  status: 'active' | 'draft' | 'archived';
+  status: "active" | "draft" | "archived";
   createdAt: string;
   updatedAt: string;
   settings: ChatbotSettings;
@@ -54,7 +54,7 @@ export interface User {
   id: string;
   name: string;
   email: string;
-  plan: 'free' | 'pro' | 'business' | 'enterprise';
+  plan: "free" | "pro" | "business" | "enterprise";
   createdAt: string;
   company?: string;
   avatar?: string;
@@ -66,7 +66,7 @@ export interface Message {
   chatbotId: string;
   sessionId: string;
   content: string;
-  role: 'user' | 'bot';
+  role: "user" | "bot";
   timestamp: string;
   metadata?: Record<string, any>;
 }
@@ -75,10 +75,10 @@ export interface Message {
 export interface Integration {
   id: string;
   name: string;
-  category: 'messaging' | 'crm' | 'ecommerce' | 'knowledge' | 'analytics';
+  category: "messaging" | "crm" | "ecommerce" | "knowledge" | "analytics";
   description: string;
   icon: string;
-  availableInPlans: ('free' | 'pro' | 'business')[];
+  availableInPlans: ("free" | "pro" | "business")[];
 }
 
 // Knowledge Base Types
@@ -89,12 +89,12 @@ export interface KnowledgeBase {
   description: string;
   sources: KnowledgeSource[];
   lastTrainedAt: string;
-  status: 'trained' | 'training' | 'failed' | 'not_trained';
+  status: "trained" | "training" | "failed" | "not_trained";
 }
 
 export interface KnowledgeSource {
   id: string;
-  type: 'document' | 'website' | 'faq' | 'custom';
+  type: "document" | "website" | "faq" | "custom";
   name: string;
   content: string | null;
   url: string | null;
@@ -104,7 +104,7 @@ export interface KnowledgeSource {
 
 // Analytics Types
 export interface AnalyticsData {
-  period: 'day' | 'week' | 'month' | 'year';
+  period: "day" | "week" | "month" | "year";
   metrics: {
     totalMessages: number;
     uniqueUsers: number;
@@ -126,4 +126,25 @@ export interface AnalyticsData {
     neutral: number;
     unsatisfied: number;
   };
+}
+
+export enum AuthRequestMethods {
+  password = "password",
+  google = "google",
+  github = "github",
+}
+
+export type AuthRequestMethodsType = keyof typeof AuthRequestMethods;
+
+export enum FirebaseErrorMessage {
+  userNotFound = "auth/user-not-found",
+  wrongPassword = "auth/wrong-password",
+  tooManyRequests = "auth/too-many-requests",
+  userDisabled = "auth/user-disabled",
+  //Oauth
+  accountExistWithDifferentCredentials = "auth/account-exists-with-different-credential",
+  popUpClosedByUser = "auth/popup-closed-by-user",
+  cancelledPopupRequest = "auth/cancelled-popup-request",
+  popupBlocked = "auth/popup/blocked",
+  networkFailure = "auth/network-request-failed",
 }

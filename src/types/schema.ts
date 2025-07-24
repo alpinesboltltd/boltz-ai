@@ -15,6 +15,7 @@ const SignupSchema = z
     confirmPassword: z
       .string()
       .min(1, { message: "Confirm password is required" }),
+    method: z.string(),
     terms: z
       .boolean({
         required_error: "You must agree to the terms and conditions",
@@ -38,6 +39,7 @@ const signinSchema = z.object({
     .string()
     .min(1, { message: "password is required" })
     .min(8, { message: "password must be at least 8 characters" }),
+  method: z.string(),
 });
 
 export type SignupFormInputs = z.infer<typeof SignupSchema>;
