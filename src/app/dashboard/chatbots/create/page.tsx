@@ -46,7 +46,6 @@ const aiModels = [
 
 // Mock data for deployment platforms
 const platforms = [
-  { id: "website", name: "Website", icon: "🌐" },
   { id: "whatsapp", name: "WhatsApp", icon: "📱" },
   { id: "facebook", name: "Facebook Messenger", icon: "👥" },
   { id: "wordpress", name: "WordPress", icon: "📝" },
@@ -145,7 +144,7 @@ export default function CreateChatbotPage() {
       setStep(step + 1);
     } else {
       // Navigate to the chatbot list or the new chatbot page
-      window.location.href = "/dashboard/chatbots";
+      window.location.href = "/dashboard/chatbot/[id]";
     }
   };
 
@@ -502,7 +501,7 @@ export default function CreateChatbotPage() {
               type="submit"
               className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
             >
-              {step < 5 ? "Continue" : "Create Chatbot"}
+              {step < 3 ? "Continue" : "Create Chatbot"}
             </button>
           </div>
         </form>
