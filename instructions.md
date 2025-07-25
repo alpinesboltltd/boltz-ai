@@ -1,8 +1,9 @@
-# Boltz.co - AI Chatbot Platform
+# Chatboltz - AI Chatbot Platform
 
 ## Features & Specifications
 
 ### Core Features
+
 - **Custom AI Model Selection**: Support for Google Gemini, GPT-4, Claude, Mistral, and other AI models
 - **Knowledge Base Integration**: Upload documents, FAQs, and website data to train the chatbot
 - **Real-time Chatbot Training**: Dynamic training and updating of chatbot responses
@@ -13,6 +14,7 @@
 - **Multilingual Support**: Support for 80+ languages
 
 ### Technical Requirements
+
 - **Frontend**: Next.js v15
 - **Backend**: Golang and TypeScript
 - **AI Integration**: Google Gemini as core model with options for other AI providers
@@ -20,12 +22,14 @@
 - **Scalability**: Cloud-native architecture for handling high volumes of concurrent users
 
 ### Pricing Structure
+
 - **Free Tier**: Basic features, limited messages per month
 - **Pro Plan**: $29/month - Full features, higher message limits, priority support
 - **Business Plan**: $99/month - Advanced analytics, team collaboration, API access
 - **Enterprise Plan**: Custom pricing - Dedicated support, SLA, custom integrations
 
 ## Development Priorities
+
 1. Frontend development with mock data
 2. Backend API implementation
 3. AI model integration

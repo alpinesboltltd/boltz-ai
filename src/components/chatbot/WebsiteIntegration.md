@@ -14,10 +14,10 @@ Add the following code to your website's HTML, just before the closing `</body>`
     theme: "light", // Options: light, dark, auto (follows user's system preference)
     initialMessage: "Hello! How can I help you today?",
     avatar: true, // Show or hide the bot avatar
-    branding: true // Show or hide Boltz.co branding
-  }
+    branding: true, // Show or hide Chatboltz branding
+  };
 </script>
-<script src="https://cdn.boltz.co/widget.js" async></script>
+<script src="https://cdn.Chatboltz/widget.js" async></script>
 ```
 
 Replace `YOUR_CHATBOT_ID` with the unique ID of your chatbot from your dashboard.
@@ -26,22 +26,22 @@ Replace `YOUR_CHATBOT_ID` with the unique ID of your chatbot from your dashboard
 
 #### WordPress
 
-1. Install the Boltz.co WordPress plugin from the WordPress plugin directory
-2. Navigate to the Boltz.co settings page in your WordPress admin panel
+1. Install the Chatboltz WordPress plugin from the WordPress plugin directory
+2. Navigate to the Chatboltz settings page in your WordPress admin panel
 3. Enter your chatbot ID and customize appearance settings
 4. Save changes and the chatbot will appear on your site
 
 #### Shopify
 
-1. Visit the Shopify App Store and install the Boltz.co app
-2. Follow the setup wizard to connect your Boltz.co account
+1. Visit the Shopify App Store and install the Chatboltz app
+2. Follow the setup wizard to connect your Chatboltz account
 3. Select the chatbot you want to display on your store
 4. Customize appearance settings and save
 
 #### Wix
 
-1. Go to the Wix App Market and add the Boltz.co app
-2. Connect your Boltz.co account
+1. Go to the Wix App Market and add the Chatboltz app
+2. Connect your Chatboltz account
 3. Configure your chatbot settings
 4. Publish your site to make the changes live
 
@@ -57,32 +57,32 @@ For more advanced use cases, you can use our REST API to programmatically contro
 
 ```javascript
 // Initialize the chatbot
-const boltzChat = new BoltzChat('YOUR_API_KEY');
+const boltzChat = new BoltzChat("YOUR_API_KEY");
 
 // Open the chat programmatically
-document.querySelector('#support-button').addEventListener('click', () => {
+document.querySelector("#support-button").addEventListener("click", () => {
   boltzChat.open();
 });
 
 // Send a custom event
 boltzChat.sendEvent({
-  type: 'product_view',
+  type: "product_view",
   data: {
-    productId: '12345',
-    productName: 'Premium Plan',
-    price: 99.99
-  }
+    productId: "12345",
+    productName: "Premium Plan",
+    price: 99.99,
+  },
 });
 
 // Set user identity
 boltzChat.setUser({
-  id: 'user-123',
-  name: 'John Doe',
-  email: 'john@example.com',
+  id: "user-123",
+  name: "John Doe",
+  email: "john@example.com",
   custom: {
-    plan: 'premium',
-    signupDate: '2023-01-15'
-  }
+    plan: "premium",
+    signupDate: "2023-01-15",
+  },
 });
 ```
 
@@ -90,7 +90,7 @@ boltzChat.setUser({
 
 ### 1. Initial Website Crawling
 
-When you first connect your website to Boltz.co, our system performs an initial crawl of your site to:
+When you first connect your website to Chatboltz, our system performs an initial crawl of your site to:
 
 - Index all public pages
 - Extract product information
@@ -105,19 +105,19 @@ To improve the chatbot's ability to understand your products and content, we rec
 
 ```html
 <script type="application/ld+json">
-{
-  "@context": "https://schema.org/",
-  "@type": "Product",
-  "name": "Premium Plan",
-  "description": "Our most popular plan with all features included.",
-  "image": "https://example.com/images/premium-plan.jpg",
-  "offers": {
-    "@type": "Offer",
-    "price": "99.99",
-    "priceCurrency": "USD",
-    "availability": "https://schema.org/InStock"
+  {
+    "@context": "https://schema.org/",
+    "@type": "Product",
+    "name": "Premium Plan",
+    "description": "Our most popular plan with all features included.",
+    "image": "https://example.com/images/premium-plan.jpg",
+    "offers": {
+      "@type": "Offer",
+      "price": "99.99",
+      "priceCurrency": "USD",
+      "availability": "https://schema.org/InStock"
+    }
   }
-}
 </script>
 ```
 

@@ -1,11 +1,13 @@
-# Boltz.co - AI Chatbot Platform Project Structure
+# Chatboltz - AI Chatbot Platform Project Structure
 
 ## Overview
-This document outlines the structure and components of the Boltz.co AI chatbot platform, modeled after Chatbase.co. The platform allows users to create custom AI chatbots powered by various AI models including Google Gemini, GPT-4, Claude, and Mistral.
+
+This document outlines the structure and components of the Chatboltz AI chatbot platform, modeled after Chatbase.co. The platform allows users to create custom AI chatbots powered by various AI models including Google Gemini, GPT-4, Claude, and Mistral.
 
 ## Frontend Architecture
 
 ### Technology Stack
+
 - **Framework**: Next.js v15
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS
@@ -15,8 +17,9 @@ This document outlines the structure and components of the Boltz.co AI chatbot p
 - **Animations**: Framer Motion
 
 ### Directory Structure
+
 ```
-boltz.co/
+Chatboltz/
 ├── src/
 │   ├── app/                    # Next.js app directory
 │   │   ├── dashboard/          # Dashboard pages
@@ -81,6 +84,7 @@ boltz.co/
 ## Key Features
 
 ### 1. Landing Page
+
 - Modern, responsive design
 - Hero section with clear value proposition
 - Features section highlighting platform capabilities
@@ -89,6 +93,7 @@ boltz.co/
 - Call-to-action sections
 
 ### 2. Dashboard
+
 - Overview of chatbot performance
 - Quick access to all chatbots
 - Key metrics and statistics
@@ -96,6 +101,7 @@ boltz.co/
 - Quick actions for common tasks
 
 ### 3. Chatbot Management
+
 - List of all chatbots with status and metrics
 - Create, edit, and delete chatbots
 - Preview chatbots in action
@@ -103,6 +109,7 @@ boltz.co/
 - Customize chatbot appearance and behavior
 
 ### 4. Chatbot Builder
+
 - No-code interface for building chatbots
 - Drag-and-drop components
 - Visual conversation flow editor
@@ -110,6 +117,7 @@ boltz.co/
 - Save and publish functionality
 
 ### 5. Knowledge Base Management
+
 - Upload documents (PDF, DOCX, TXT)
 - Import website content
 - Create and manage FAQs
@@ -117,6 +125,7 @@ boltz.co/
 - Monitor training progress
 
 ### 6. AI Model Selection
+
 - Choose from multiple AI models:
   - Google Gemini (default)
   - OpenAI GPT-4
@@ -127,6 +136,7 @@ boltz.co/
 - Custom model settings
 
 ### 7. Analytics
+
 - Message volume metrics
 - User engagement statistics
 - Conversation quality metrics
@@ -135,6 +145,7 @@ boltz.co/
 - Exportable reports
 
 ### 8. Integrations
+
 - Website widget
 - WhatsApp Business
 - Slack
@@ -144,6 +155,7 @@ boltz.co/
 - Custom API integration
 
 ### 9. Settings
+
 - Account management
 - Billing and subscription
 - Team member management
@@ -154,6 +166,7 @@ boltz.co/
 ## User Flows
 
 ### 1. New User Onboarding
+
 1. Sign up for an account
 2. Select a plan (Free, Pro, Business)
 3. Create first chatbot
@@ -163,6 +176,7 @@ boltz.co/
 7. Deploy to website or other platform
 
 ### 2. Chatbot Creation
+
 1. Navigate to dashboard
 2. Click "Create New Chatbot"
 3. Enter name and description
@@ -174,6 +188,7 @@ boltz.co/
 9. Deploy chatbot
 
 ### 3. Knowledge Base Training
+
 1. Navigate to knowledge base section
 2. Upload documents or enter website URLs
 3. Create FAQs or custom training data
@@ -183,6 +198,7 @@ boltz.co/
 7. Publish updated chatbot
 
 ### 4. Analytics Review
+
 1. Navigate to analytics section
 2. Select chatbot to analyze
 3. Choose date range
@@ -194,6 +210,7 @@ boltz.co/
 ## Pricing Structure
 
 ### Free Tier
+
 - 1 chatbot
 - 1,000 messages per month
 - Basic customization
@@ -202,6 +219,7 @@ boltz.co/
 - Email support
 
 ### Pro Plan ($29/month)
+
 - 5 chatbots
 - 10,000 messages per month
 - Advanced customization
@@ -212,6 +230,7 @@ boltz.co/
 - Priority support
 
 ### Business Plan ($99/month)
+
 - 20 chatbots
 - 50,000 messages per month
 - Full customization
@@ -223,6 +242,7 @@ boltz.co/
 - Dedicated support
 
 ### Enterprise Plan (Custom pricing)
+
 - Unlimited chatbots
 - Custom message volume
 - Custom integrations
@@ -235,6 +255,7 @@ boltz.co/
 ## Backend Architecture (Planned)
 
 ### Technology Stack
+
 - **API Layer**: TypeScript with Express.js
 - **Core Services**: Golang
 - **Database**: PostgreSQL
@@ -245,6 +266,7 @@ boltz.co/
 - **Deployment**: Docker, Kubernetes
 
 ### Microservices
+
 1. **Authentication Service** - User management and authentication
 2. **Chatbot Service** - Chatbot configuration and management
 3. **Conversation Service** - Message handling and routing
@@ -256,6 +278,7 @@ boltz.co/
 ## Development Roadmap
 
 ### Phase 1: Frontend Development (Current)
+
 - Set up Next.js project with TypeScript
 - Implement landing page components
 - Create dashboard UI with mock data
@@ -263,6 +286,7 @@ boltz.co/
 - Develop no-code builder interface
 
 ### Phase 2: Backend API Development
+
 - Set up Golang and TypeScript services
 - Implement authentication and user management
 - Create chatbot configuration endpoints
@@ -270,6 +294,7 @@ boltz.co/
 - Build analytics data collection endpoints
 
 ### Phase 3: AI Model Integration
+
 - Integrate Google Gemini as core model
 - Add support for OpenAI GPT-4
 - Implement Claude and Mistral integrations
@@ -277,6 +302,7 @@ boltz.co/
 - Develop training pipeline for custom data
 
 ### Phase 4: Platform Integrations
+
 - Website widget implementation
 - WhatsApp Business integration
 - Slack app development
@@ -284,6 +310,7 @@ boltz.co/
 - Shopify and WordPress plugins
 
 ### Phase 5: Advanced Features
+
 - Team collaboration tools
 - Advanced analytics and reporting
 - Custom AI model fine-tuning

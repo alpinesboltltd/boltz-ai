@@ -1,18 +1,20 @@
-# Boltz.co Backend Architecture
+# Chatboltz Backend Architecture
 
 ## Overview
 
-The backend architecture for Boltz.co is designed to be scalable, maintainable, and performant. It follows a microservices approach with Golang for core services and TypeScript for API layers.
+The backend architecture for Chatboltz is designed to be scalable, maintainable, and performant. It follows a microservices approach with Golang for core services and TypeScript for API layers.
 
 ## Technology Stack
 
 ### Languages & Frameworks
+
 - **Golang**: For core services requiring high performance
 - **TypeScript**: For API layers and services requiring rapid development
 - **gRPC**: For internal service communication
 - **REST API**: For external client communication
 
 ### Data Storage
+
 - **PostgreSQL**: Primary relational database
 - **Redis**: Caching and session management
 - **MongoDB**: For storing conversation history and analytics data
@@ -21,6 +23,7 @@ The backend architecture for Boltz.co is designed to be scalable, maintainable, 
 - **Pinecone/Weaviate**: Vector database for embeddings storage
 
 ### Infrastructure
+
 - **Docker**: Containerization
 - **Kubernetes**: Container orchestration
 - **AWS**: Cloud infrastructure
@@ -29,28 +32,29 @@ The backend architecture for Boltz.co is designed to be scalable, maintainable, 
 
 ## Feature & Integration Table
 
-| Feature | Description | Integrated Platforms |
-|---------|-------------|----------------------|
-| Custom AI Selection | Users can choose from multiple AI models, including Gemini, GPT-4, Claude, and Mistral | Gemini, OpenAI GPT-4, Claude, Mistral |
-| AI-Powered Knowledge Retrieval | Retrieves company knowledge from uploaded documents, FAQs, and databases | Slack, MS Teams, Discord, Google Drive, Dropbox |
-| Advanced NLP & Machine Learning | AI learns from conversations and improves over time | Rasa Core, TensorFlow, Hugging Face, OpenAI API |
-| Real-Time Chatbot Training | Users can train and update their bot dynamically | Chatbase Web Platform, OpenAI Playground, Google Gemini Sandbox |
-| Multilingual Support | Supports 80+ languages for global accessibility | Google Translate API, Microsoft Translator, AWS Polly |
-| No-Code Chatbot Builder | Drag-and-drop interface for building AI assistants without technical expertise | Web Platform, Shopify, WordPress, Wix, Webflow |
-| Deep Analytics & User Insights | Provides chatbot performance data, user interactions, and conversion tracking | Google Analytics, HubSpot, Tableau, Mixpanel |
-| Omnichannel Integrations | Deploy chatbots on websites, WhatsApp, Slack, and social media | WhatsApp Business, Facebook Messenger, Telegram, Instagram, Twitter DMs |
-| Live Human Handoff | Routes conversations to human agents when AI assistance isn't enough | Intercom, Zendesk, Freshdesk, Salesforce |
-| Secure Transactions & Privacy Controls | Offers encrypted messaging and compliance with GDPR & HIPAA | AWS Cloud Security, Google Cloud Encryption, Microsoft Azure |
-| Customizable Pricing Plans | Offers flexible plans similar to Chatbase, including free, Pro, and Enterprise tiers | Stripe, PayPal, Razorpay, Coinbase Commerce |
-| Voice Capabilities | Support for voice input and output in conversations | Amazon Polly, Google Text-to-Speech, Microsoft Azure Speech Services |
-| Custom Avatar & Branding | Personalized chatbot appearance with custom avatars and brand colors | Web Platform, Custom CSS, Image Processing API |
-| Conversation Interface Customization | Fully customizable chat interface with themes and layouts | Web Components, React, Vue.js |
-| Enterprise SSO | Single sign-on for enterprise customers | Okta, Auth0, Microsoft Azure AD, Google Workspace |
-| API Access | RESTful API for custom integrations and extensions | Swagger/OpenAPI, GraphQL |
+| Feature                                | Description                                                                            | Integrated Platforms                                                    |
+| -------------------------------------- | -------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| Custom AI Selection                    | Users can choose from multiple AI models, including Gemini, GPT-4, Claude, and Mistral | Gemini, OpenAI GPT-4, Claude, Mistral                                   |
+| AI-Powered Knowledge Retrieval         | Retrieves company knowledge from uploaded documents, FAQs, and databases               | Slack, MS Teams, Discord, Google Drive, Dropbox                         |
+| Advanced NLP & Machine Learning        | AI learns from conversations and improves over time                                    | Rasa Core, TensorFlow, Hugging Face, OpenAI API                         |
+| Real-Time Chatbot Training             | Users can train and update their bot dynamically                                       | Chatbase Web Platform, OpenAI Playground, Google Gemini Sandbox         |
+| Multilingual Support                   | Supports 80+ languages for global accessibility                                        | Google Translate API, Microsoft Translator, AWS Polly                   |
+| No-Code Chatbot Builder                | Drag-and-drop interface for building AI assistants without technical expertise         | Web Platform, Shopify, WordPress, Wix, Webflow                          |
+| Deep Analytics & User Insights         | Provides chatbot performance data, user interactions, and conversion tracking          | Google Analytics, HubSpot, Tableau, Mixpanel                            |
+| Omnichannel Integrations               | Deploy chatbots on websites, WhatsApp, Slack, and social media                         | WhatsApp Business, Facebook Messenger, Telegram, Instagram, Twitter DMs |
+| Live Human Handoff                     | Routes conversations to human agents when AI assistance isn't enough                   | Intercom, Zendesk, Freshdesk, Salesforce                                |
+| Secure Transactions & Privacy Controls | Offers encrypted messaging and compliance with GDPR & HIPAA                            | AWS Cloud Security, Google Cloud Encryption, Microsoft Azure            |
+| Customizable Pricing Plans             | Offers flexible plans similar to Chatbase, including free, Pro, and Enterprise tiers   | Stripe, PayPal, Razorpay, Coinbase Commerce                             |
+| Voice Capabilities                     | Support for voice input and output in conversations                                    | Amazon Polly, Google Text-to-Speech, Microsoft Azure Speech Services    |
+| Custom Avatar & Branding               | Personalized chatbot appearance with custom avatars and brand colors                   | Web Platform, Custom CSS, Image Processing API                          |
+| Conversation Interface Customization   | Fully customizable chat interface with themes and layouts                              | Web Components, React, Vue.js                                           |
+| Enterprise SSO                         | Single sign-on for enterprise customers                                                | Okta, Auth0, Microsoft Azure AD, Google Workspace                       |
+| API Access                             | RESTful API for custom integrations and extensions                                     | Swagger/OpenAPI, GraphQL                                                |
 
 ## Microservices Architecture
 
 ### 1. API Gateway Service
+
 - **Language**: TypeScript (Node.js)
 - **Responsibilities**:
   - Request routing
@@ -60,6 +64,7 @@ The backend architecture for Boltz.co is designed to be scalable, maintainable, 
   - API documentation (Swagger/OpenAPI)
 
 ### 2. Authentication Service
+
 - **Language**: Golang
 - **Responsibilities**:
   - User registration & login
@@ -70,6 +75,7 @@ The backend architecture for Boltz.co is designed to be scalable, maintainable, 
   - Enterprise SSO integration
 
 ### 3. User Service
+
 - **Language**: Golang
 - **Responsibilities**:
   - User profile management
@@ -78,6 +84,7 @@ The backend architecture for Boltz.co is designed to be scalable, maintainable, 
   - User preferences
 
 ### 4. Chatbot Service
+
 - **Language**: Golang
 - **Responsibilities**:
   - Chatbot configuration management
@@ -88,6 +95,7 @@ The backend architecture for Boltz.co is designed to be scalable, maintainable, 
   - Interface customization
 
 ### 5. Conversation Service
+
 - **Language**: Golang
 - **Responsibilities**:
   - Message handling
@@ -98,6 +106,7 @@ The backend architecture for Boltz.co is designed to be scalable, maintainable, 
   - Voice processing & transcription
 
 ### 6. AI Service
+
 - **Language**: TypeScript (Node.js)
 - **Responsibilities**:
   - AI model integration (Gemini, GPT-4, Claude, Mistral)
@@ -108,6 +117,7 @@ The backend architecture for Boltz.co is designed to be scalable, maintainable, 
   - Multilingual processing
 
 ### 7. Knowledge Service
+
 - **Language**: Golang
 - **Responsibilities**:
   - Document processing & indexing
@@ -118,6 +128,7 @@ The backend architecture for Boltz.co is designed to be scalable, maintainable, 
   - Real-time training updates
 
 ### 8. Integration Service
+
 - **Language**: TypeScript (Node.js)
 - **Responsibilities**:
   - Third-party platform integrations
@@ -127,6 +138,7 @@ The backend architecture for Boltz.co is designed to be scalable, maintainable, 
   - Omnichannel deployment
 
 ### 9. Analytics Service
+
 - **Language**: Golang
 - **Responsibilities**:
   - Data collection
@@ -137,6 +149,7 @@ The backend architecture for Boltz.co is designed to be scalable, maintainable, 
   - User insights & conversion tracking
 
 ### 10. Notification Service
+
 - **Language**: TypeScript (Node.js)
 - **Responsibilities**:
   - Email notifications
@@ -145,6 +158,7 @@ The backend architecture for Boltz.co is designed to be scalable, maintainable, 
   - Scheduled notifications
 
 ### 11. Voice Processing Service
+
 - **Language**: TypeScript (Node.js)
 - **Responsibilities**:
   - Speech-to-text conversion
@@ -154,6 +168,7 @@ The backend architecture for Boltz.co is designed to be scalable, maintainable, 
   - Audio processing
 
 ### 12. Payment & Billing Service
+
 - **Language**: Golang
 - **Responsibilities**:
   - Subscription management
@@ -165,6 +180,7 @@ The backend architecture for Boltz.co is designed to be scalable, maintainable, 
 ## Database Schema
 
 ### Users Collection
+
 ```
 {
   id: string,
@@ -185,6 +201,7 @@ The backend architecture for Boltz.co is designed to be scalable, maintainable, 
 ```
 
 ### Teams Collection
+
 ```
 {
   id: string,
@@ -203,6 +220,7 @@ The backend architecture for Boltz.co is designed to be scalable, maintainable, 
 ```
 
 ### Chatbots Collection
+
 ```
 {
   id: string,
@@ -258,6 +276,7 @@ The backend architecture for Boltz.co is designed to be scalable, maintainable, 
 ```
 
 ### KnowledgeBases Collection
+
 ```
 {
   id: string,
@@ -272,6 +291,7 @@ The backend architecture for Boltz.co is designed to be scalable, maintainable, 
 ```
 
 ### KnowledgeSources Collection
+
 ```
 {
   id: string,
@@ -287,6 +307,7 @@ The backend architecture for Boltz.co is designed to be scalable, maintainable, 
 ```
 
 ### Conversations Collection
+
 ```
 {
   id: string,
@@ -307,6 +328,7 @@ The backend architecture for Boltz.co is designed to be scalable, maintainable, 
 ```
 
 ### Messages Collection
+
 ```
 {
   id: string,
@@ -326,6 +348,7 @@ The backend architecture for Boltz.co is designed to be scalable, maintainable, 
 ```
 
 ### Analytics Collection
+
 ```
 {
   id: string,
@@ -358,6 +381,7 @@ The backend architecture for Boltz.co is designed to be scalable, maintainable, 
 ```
 
 ### Subscriptions Collection
+
 ```
 {
   id: string,
@@ -382,6 +406,7 @@ The backend architecture for Boltz.co is designed to be scalable, maintainable, 
 ## API Endpoints
 
 ### Authentication API
+
 - `POST /api/auth/register` - Register a new user
 - `POST /api/auth/login` - Login user
 - `POST /api/auth/logout` - Logout user
@@ -392,6 +417,7 @@ The backend architecture for Boltz.co is designed to be scalable, maintainable, 
 - `GET /api/auth/sso/:provider/callback` - SSO callback
 
 ### User API
+
 - `GET /api/users/me` - Get current user profile
 - `PUT /api/users/me` - Update user profile
 - `GET /api/users/me/subscription` - Get subscription details
@@ -400,6 +426,7 @@ The backend architecture for Boltz.co is designed to be scalable, maintainable, 
 - `POST /api/users/me/teams` - Create a new team
 
 ### Chatbot API
+
 - `GET /api/chatbots` - List all chatbots
 - `POST /api/chatbots` - Create a new chatbot
 - `GET /api/chatbots/:id` - Get chatbot details
@@ -412,6 +439,7 @@ The backend architecture for Boltz.co is designed to be scalable, maintainable, 
 - `PUT /api/chatbots/:id/security` - Update security settings
 
 ### Knowledge API
+
 - `GET /api/chatbots/:id/knowledge` - List knowledge bases
 - `POST /api/chatbots/:id/knowledge` - Create knowledge base
 - `GET /api/knowledge/:id` - Get knowledge base details
@@ -424,6 +452,7 @@ The backend architecture for Boltz.co is designed to be scalable, maintainable, 
 - `DELETE /api/knowledge/:id/faqs/:faqId` - Remove FAQ
 
 ### Conversation API
+
 - `POST /api/conversation/:chatbotId` - Start a new conversation
 - `POST /api/conversation/:chatbotId/message` - Send a message
 - `GET /api/conversation/:id/history` - Get conversation history
@@ -433,6 +462,7 @@ The backend architecture for Boltz.co is designed to be scalable, maintainable, 
 - `GET /api/conversation/:id/voice/:messageId` - Get voice message
 
 ### Analytics API
+
 - `GET /api/analytics/chatbots/:id` - Get chatbot analytics
 - `GET /api/analytics/chatbots/:id/conversations` - Get conversation analytics
 - `GET /api/analytics/chatbots/:id/users` - Get user analytics
@@ -442,6 +472,7 @@ The backend architecture for Boltz.co is designed to be scalable, maintainable, 
 - `GET /api/analytics/chatbots/:id/platforms` - Get platform distribution
 
 ### Integration API
+
 - `GET /api/integrations` - List available integrations
 - `GET /api/chatbots/:id/integrations` - List chatbot integrations
 - `POST /api/chatbots/:id/integrations/:platform` - Add integration
@@ -450,12 +481,14 @@ The backend architecture for Boltz.co is designed to be scalable, maintainable, 
 - `PUT /api/chatbots/:id/integrations/:platform/config` - Update integration config
 
 ### Voice API
+
 - `POST /api/voice/text-to-speech` - Convert text to speech
 - `POST /api/voice/speech-to-text` - Convert speech to text
 - `GET /api/voice/voices` - List available voices
 - `POST /api/chatbots/:id/voice/settings` - Update voice settings
 
 ### Billing API
+
 - `GET /api/billing/plans` - List available plans
 - `POST /api/billing/subscribe` - Subscribe to a plan
 - `PUT /api/billing/subscription/:id` - Update subscription
@@ -466,6 +499,7 @@ The backend architecture for Boltz.co is designed to be scalable, maintainable, 
 ## Security Considerations
 
 ### Authentication & Authorization
+
 - JWT-based authentication
 - Role-based access control
 - API key authentication for integrations
@@ -473,6 +507,7 @@ The backend architecture for Boltz.co is designed to be scalable, maintainable, 
 - Enterprise SSO (Okta, Auth0, Azure AD)
 
 ### Data Protection
+
 - End-to-end encryption for sensitive data
 - Data encryption at rest
 - HTTPS for all API endpoints
@@ -480,6 +515,7 @@ The backend architecture for Boltz.co is designed to be scalable, maintainable, 
 - PII filtering and redaction
 
 ### Compliance
+
 - GDPR compliance
 - HIPAA compliance (for healthcare clients)
 - SOC 2 compliance
@@ -489,12 +525,14 @@ The backend architecture for Boltz.co is designed to be scalable, maintainable, 
 ## Scalability Considerations
 
 ### Horizontal Scaling
+
 - Stateless services for easy scaling
 - Load balancing across service instances
 - Database sharding for high-volume data
 - Auto-scaling based on traffic patterns
 
 ### Performance Optimization
+
 - Caching strategies for frequently accessed data
 - Asynchronous processing for non-critical operations
 - CDN for static assets

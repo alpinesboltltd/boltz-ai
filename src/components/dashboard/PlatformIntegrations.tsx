@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Spinner } from '@/components/common/Spinner';
-import { 
+import { useState } from "react";
+import { Spinner } from "@/components/common/Spinner";
+import {
   WhatsAppIntegrationModal,
   SlackIntegrationModal,
   FacebookIntegrationModal,
@@ -12,8 +12,8 @@ import {
   TelegramIntegrationModal,
   InstagramIntegrationModal,
   TwitterIntegrationModal,
-  DiscordIntegrationModal
-} from '@/components/dashboard';
+  DiscordIntegrationModal,
+} from "@/components/dashboard";
 
 interface PlatformIntegrationsProps {
   chatbotId: string;
@@ -42,94 +42,94 @@ interface Platform {
 }
 
 const platforms: Platform[] = [
-  { 
-    id: 'website', 
-    name: 'Website', 
-    icon: '🌐',
-    description: 'Embed your chatbot on your website',
-    setupType: 'code',
-    availableOnPlans: ['free', 'pro', 'business', 'enterprise']
+  {
+    id: "website",
+    name: "Website",
+    icon: "🌐",
+    description: "Embed your chatbot on your website",
+    setupType: "code",
+    availableOnPlans: ["free", "pro", "business", "enterprise"],
   },
-  { 
-    id: 'whatsapp', 
-    name: 'WhatsApp', 
-    icon: '📱',
-    description: 'Connect to WhatsApp Business API',
-    setupType: 'oauth',
-    availableOnPlans: ['pro', 'business', 'enterprise']
+  {
+    id: "whatsapp",
+    name: "WhatsApp",
+    icon: "📱",
+    description: "Connect to WhatsApp Business API",
+    setupType: "oauth",
+    availableOnPlans: ["pro", "business", "enterprise"],
   },
-  { 
-    id: 'slack', 
-    name: 'Slack', 
-    icon: '💬',
-    description: 'Add your chatbot to Slack workspaces',
-    setupType: 'oauth',
-    availableOnPlans: ['pro', 'business', 'enterprise']
+  {
+    id: "slack",
+    name: "Slack",
+    icon: "💬",
+    description: "Add your chatbot to Slack workspaces",
+    setupType: "oauth",
+    availableOnPlans: ["pro", "business", "enterprise"],
   },
-  { 
-    id: 'facebook', 
-    name: 'Facebook Messenger', 
-    icon: '👥',
-    description: 'Connect to Facebook Messenger',
-    setupType: 'oauth',
-    availableOnPlans: ['pro', 'business', 'enterprise']
+  {
+    id: "facebook",
+    name: "Facebook Messenger",
+    icon: "👥",
+    description: "Connect to Facebook Messenger",
+    setupType: "oauth",
+    availableOnPlans: ["pro", "business", "enterprise"],
   },
-  { 
-    id: 'shopify', 
-    name: 'Shopify', 
-    icon: '🛒',
-    description: 'Install on your Shopify store',
-    setupType: 'app',
-    availableOnPlans: ['business', 'enterprise']
+  {
+    id: "shopify",
+    name: "Shopify",
+    icon: "🛒",
+    description: "Install on your Shopify store",
+    setupType: "app",
+    availableOnPlans: ["business", "enterprise"],
   },
-  { 
-    id: 'wordpress', 
-    name: 'WordPress', 
-    icon: '📝',
-    description: 'Add to your WordPress site',
-    setupType: 'plugin',
-    availableOnPlans: ['pro', 'business', 'enterprise']
+  {
+    id: "wordpress",
+    name: "WordPress",
+    icon: "📝",
+    description: "Add to your WordPress site",
+    setupType: "plugin",
+    availableOnPlans: ["pro", "business", "enterprise"],
   },
-  { 
-    id: 'twilio', 
-    name: 'Twilio SMS/Voice', 
-    icon: '📞',
-    description: 'Connect to Twilio for SMS and voice',
-    setupType: 'api',
-    availableOnPlans: ['business', 'enterprise']
+  {
+    id: "twilio",
+    name: "Twilio SMS/Voice",
+    icon: "📞",
+    description: "Connect to Twilio for SMS and voice",
+    setupType: "api",
+    availableOnPlans: ["business", "enterprise"],
   },
-  { 
-    id: 'telegram', 
-    name: 'Telegram', 
-    icon: '✈️',
-    description: 'Create a Telegram bot',
-    setupType: 'api',
-    availableOnPlans: ['pro', 'business', 'enterprise']
+  {
+    id: "telegram",
+    name: "Telegram",
+    icon: "✈️",
+    description: "Create a Telegram bot",
+    setupType: "api",
+    availableOnPlans: ["pro", "business", "enterprise"],
   },
-  { 
-    id: 'instagram', 
-    name: 'Instagram DM', 
-    icon: '📸',
-    description: 'Connect to Instagram Direct Messages',
-    setupType: 'oauth',
-    availableOnPlans: ['business', 'enterprise']
+  {
+    id: "instagram",
+    name: "Instagram DM",
+    icon: "📸",
+    description: "Connect to Instagram Direct Messages",
+    setupType: "oauth",
+    availableOnPlans: ["business", "enterprise"],
   },
-  { 
-    id: 'twitter', 
-    name: 'Twitter DM', 
-    icon: '🐦',
-    description: 'Connect to Twitter Direct Messages',
-    setupType: 'oauth',
-    availableOnPlans: ['business', 'enterprise']
+  {
+    id: "twitter",
+    name: "Twitter DM",
+    icon: "🐦",
+    description: "Connect to Twitter Direct Messages",
+    setupType: "oauth",
+    availableOnPlans: ["business", "enterprise"],
   },
-  { 
-    id: 'discord', 
-    name: 'Discord', 
-    icon: '🎮',
-    description: 'Add your chatbot to Discord servers',
-    setupType: 'oauth',
-    availableOnPlans: ['business', 'enterprise']
-  }
+  {
+    id: "discord",
+    name: "Discord",
+    icon: "🎮",
+    description: "Add your chatbot to Discord servers",
+    setupType: "oauth",
+    availableOnPlans: ["business", "enterprise"],
+  },
 ];
 
 export default function PlatformIntegrations({
@@ -145,76 +145,89 @@ export default function PlatformIntegrations({
     telegram: false,
     instagram: false,
     twitter: false,
-    discord: false
-  }
+    discord: false,
+  },
 }: PlatformIntegrationsProps) {
   const [integrations, setIntegrations] = useState(initialIntegrations);
   const [loading, setLoading] = useState<Record<string, boolean>>({});
   const [activeModal, setActiveModal] = useState<string | null>(null);
-  
+
   // Current user plan - in a real app, this would come from the user's subscription
-  const currentPlan = 'pro'; // 'free', 'pro', 'business', or 'enterprise'
-  
+  const currentPlan = "pro"; // 'free', 'pro', 'business', or 'enterprise'
+
   const handleConnect = async (platformId: string) => {
-    setLoading(prev => ({ ...prev, [platformId]: true }));
-    
+    setLoading((prev) => ({ ...prev, [platformId]: true }));
+
     try {
       // In production, this would call the real API
       // await integrationsAPI.connect(chatbotId, platformId);
-      
+
       // For development, simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
       // For platforms that need OAuth or additional setup, show modal
-      if (['whatsapp', 'slack', 'facebook', 'shopify', 'wordpress', 'twilio', 'telegram', 'instagram', 'twitter', 'discord'].includes(platformId)) {
+      if (
+        [
+          "whatsapp",
+          "slack",
+          "facebook",
+          "shopify",
+          "wordpress",
+          "twilio",
+          "telegram",
+          "instagram",
+          "twitter",
+          "discord",
+        ].includes(platformId)
+      ) {
         setActiveModal(platformId);
       } else {
         // For simple integrations like website, just mark as connected
-        setIntegrations(prev => ({
+        setIntegrations((prev) => ({
           ...prev,
-          [platformId]: true
+          [platformId]: true,
         }));
       }
     } catch (error) {
       console.error(`Failed to connect to ${platformId}:`, error);
     } finally {
-      setLoading(prev => ({ ...prev, [platformId]: false }));
+      setLoading((prev) => ({ ...prev, [platformId]: false }));
     }
   };
-  
+
   const handleDisconnect = async (platformId: string) => {
-    setLoading(prev => ({ ...prev, [platformId]: true }));
-    
+    setLoading((prev) => ({ ...prev, [platformId]: true }));
+
     try {
       // In production, this would call the real API
       // await integrationsAPI.disconnect(chatbotId, platformId);
-      
+
       // For development, simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      setIntegrations(prev => ({
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      setIntegrations((prev) => ({
         ...prev,
-        [platformId]: false
+        [platformId]: false,
       }));
     } catch (error) {
       console.error(`Failed to disconnect from ${platformId}:`, error);
     } finally {
-      setLoading(prev => ({ ...prev, [platformId]: false }));
+      setLoading((prev) => ({ ...prev, [platformId]: false }));
     }
   };
-  
+
   const handleModalSuccess = (platformId: string) => {
-    setIntegrations(prev => ({
+    setIntegrations((prev) => ({
       ...prev,
-      [platformId]: true
+      [platformId]: true,
     }));
     setActiveModal(null);
   };
-  
+
   const isPlatformAvailable = (availableOnPlans: string[]) => {
     return availableOnPlans.includes(currentPlan);
   };
-  
+
   const getWebsiteEmbedCode = () => {
     return `<script>
   window.boltzConfig = {
@@ -223,36 +236,47 @@ export default function PlatformIntegrations({
   }
 </script>
 <script 
-  src="https://cdn.boltz.co/widget.js" 
+  src="https://cdn.Chatboltz/widget.js" 
   async>
 </script>`;
   };
-  
+
   return (
     <div className="bg-white shadow rounded-lg">
       <div className="px-4 py-5 sm:p-6">
-        <h3 className="text-lg font-medium leading-6 text-gray-900">Platform Integrations</h3>
+        <h3 className="text-lg font-medium leading-6 text-gray-900">
+          Platform Integrations
+        </h3>
         <p className="mt-1 text-sm text-gray-500">
-          Connect your chatbot to multiple platforms to reach your users wherever they are.
+          Connect your chatbot to multiple platforms to reach your users
+          wherever they are.
         </p>
-        
+
         <div className="mt-6 space-y-6">
           {platforms.map((platform) => {
             const isAvailable = isPlatformAvailable(platform.availableOnPlans);
-            const isConnected = integrations[platform.id as keyof typeof integrations];
-            
+            const isConnected =
+              integrations[platform.id as keyof typeof integrations];
+
             return (
-              <div key={platform.id} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+              <div
+                key={platform.id}
+                className="flex items-center justify-between p-4 border border-gray-200 rounded-lg"
+              >
                 <div className="flex items-center">
                   <div className="h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center">
                     <span className="text-xl">{platform.icon}</span>
                   </div>
                   <div className="ml-3">
-                    <h4 className="text-sm font-medium text-gray-900">{platform.name}</h4>
-                    <p className="text-xs text-gray-500">{platform.description}</p>
+                    <h4 className="text-sm font-medium text-gray-900">
+                      {platform.name}
+                    </h4>
+                    <p className="text-xs text-gray-500">
+                      {platform.description}
+                    </p>
                   </div>
                 </div>
-                
+
                 {isAvailable ? (
                   <div>
                     {isConnected ? (
@@ -260,12 +284,14 @@ export default function PlatformIntegrations({
                         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                           Connected
                         </span>
-                        {platform.id === 'website' && (
+                        {platform.id === "website" && (
                           <button
                             type="button"
                             onClick={() => {
-                              navigator.clipboard.writeText(getWebsiteEmbedCode());
-                              alert('Embed code copied to clipboard!');
+                              navigator.clipboard.writeText(
+                                getWebsiteEmbedCode()
+                              );
+                              alert("Embed code copied to clipboard!");
                             }}
                             className="inline-flex items-center px-2.5 py-1.5 border border-gray-300 text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50"
                           >
@@ -278,7 +304,11 @@ export default function PlatformIntegrations({
                           disabled={loading[platform.id]}
                           className="inline-flex items-center px-2.5 py-1.5 border border-gray-300 text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50"
                         >
-                          {loading[platform.id] ? <Spinner size="sm" /> : 'Disconnect'}
+                          {loading[platform.id] ? (
+                            <Spinner size="sm" />
+                          ) : (
+                            "Disconnect"
+                          )}
                         </button>
                       </div>
                     ) : (
@@ -288,14 +318,24 @@ export default function PlatformIntegrations({
                         disabled={loading[platform.id]}
                         className="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50"
                       >
-                        {loading[platform.id] ? <Spinner size="sm" color="white" /> : 'Connect'}
+                        {loading[platform.id] ? (
+                          <Spinner size="sm" color="white" />
+                        ) : (
+                          "Connect"
+                        )}
                       </button>
                     )}
                   </div>
                 ) : (
                   <div>
                     <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                      Available on {platform.availableOnPlans.slice(-1)[0].charAt(0).toUpperCase() + platform.availableOnPlans.slice(-1)[0].slice(1)} plan
+                      Available on{" "}
+                      {platform.availableOnPlans
+                        .slice(-1)[0]
+                        .charAt(0)
+                        .toUpperCase() +
+                        platform.availableOnPlans.slice(-1)[0].slice(1)}{" "}
+                      plan
                     </span>
                   </div>
                 )}
@@ -304,76 +344,76 @@ export default function PlatformIntegrations({
           })}
         </div>
       </div>
-      
+
       {/* Integration Modals */}
       <WhatsAppIntegrationModal
         chatbotId={chatbotId}
-        isOpen={activeModal === 'whatsapp'}
+        isOpen={activeModal === "whatsapp"}
         onClose={() => setActiveModal(null)}
-        onSuccess={() => handleModalSuccess('whatsapp')}
+        onSuccess={() => handleModalSuccess("whatsapp")}
       />
-      
+
       <SlackIntegrationModal
         chatbotId={chatbotId}
-        isOpen={activeModal === 'slack'}
+        isOpen={activeModal === "slack"}
         onClose={() => setActiveModal(null)}
-        onSuccess={() => handleModalSuccess('slack')}
+        onSuccess={() => handleModalSuccess("slack")}
       />
-      
+
       <FacebookIntegrationModal
         chatbotId={chatbotId}
-        isOpen={activeModal === 'facebook'}
+        isOpen={activeModal === "facebook"}
         onClose={() => setActiveModal(null)}
-        onSuccess={() => handleModalSuccess('facebook')}
+        onSuccess={() => handleModalSuccess("facebook")}
       />
-      
+
       <TwilioIntegrationModal
         chatbotId={chatbotId}
-        isOpen={activeModal === 'twilio'}
+        isOpen={activeModal === "twilio"}
         onClose={() => setActiveModal(null)}
-        onSuccess={() => handleModalSuccess('twilio')}
+        onSuccess={() => handleModalSuccess("twilio")}
       />
-      
+
       <ShopifyIntegrationModal
         chatbotId={chatbotId}
-        isOpen={activeModal === 'shopify'}
+        isOpen={activeModal === "shopify"}
         onClose={() => setActiveModal(null)}
-        onSuccess={() => handleModalSuccess('shopify')}
+        onSuccess={() => handleModalSuccess("shopify")}
       />
-      
+
       <WordPressIntegrationModal
         chatbotId={chatbotId}
-        isOpen={activeModal === 'wordpress'}
+        isOpen={activeModal === "wordpress"}
         onClose={() => setActiveModal(null)}
-        onSuccess={() => handleModalSuccess('wordpress')}
+        onSuccess={() => handleModalSuccess("wordpress")}
       />
-      
+
       <TelegramIntegrationModal
         chatbotId={chatbotId}
-        isOpen={activeModal === 'telegram'}
+        isOpen={activeModal === "telegram"}
         onClose={() => setActiveModal(null)}
-        onSuccess={() => handleModalSuccess('telegram')}
+        onSuccess={() => handleModalSuccess("telegram")}
       />
-      
+
       <InstagramIntegrationModal
         chatbotId={chatbotId}
-        isOpen={activeModal === 'instagram'}
+        isOpen={activeModal === "instagram"}
         onClose={() => setActiveModal(null)}
-        onSuccess={() => handleModalSuccess('instagram')}
+        onSuccess={() => handleModalSuccess("instagram")}
       />
-      
+
       <TwitterIntegrationModal
         chatbotId={chatbotId}
-        isOpen={activeModal === 'twitter'}
+        isOpen={activeModal === "twitter"}
         onClose={() => setActiveModal(null)}
-        onSuccess={() => handleModalSuccess('twitter')}
+        onSuccess={() => handleModalSuccess("twitter")}
       />
-      
+
       <DiscordIntegrationModal
         chatbotId={chatbotId}
-        isOpen={activeModal === 'discord'}
+        isOpen={activeModal === "discord"}
         onClose={() => setActiveModal(null)}
-        onSuccess={() => handleModalSuccess('discord')}
+        onSuccess={() => handleModalSuccess("discord")}
       />
     </div>
   );

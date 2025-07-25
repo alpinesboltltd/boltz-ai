@@ -1,30 +1,38 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { use } from 'react';
-import Link from 'next/link';
-import { ArrowLeftIcon, CodeBracketIcon, EyeIcon } from '@heroicons/react/24/outline';
-import { BotCustomizer } from '@/components/chatbot/BotCustomizer';
-import { BotPlayground } from '@/components/chatbot/BotPlayground';
-import { Tab } from '@headlessui/react';
+import { useState } from "react";
+import { use } from "react";
+import Link from "next/link";
+import {
+  ArrowLeftIcon,
+  CodeBracketIcon,
+  EyeIcon,
+} from "@heroicons/react/24/outline";
+import { BotCustomizer } from "@/components/chatbot/BotCustomizer";
+import { BotPlayground } from "@/components/chatbot/BotPlayground";
+import { Tab } from "@headlessui/react";
 
-export default function ChatbotPreviewPage({ params }: { params: Promise<{ id: string }> }) {
+export default function ChatbotPreviewPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   // Unwrap params using React.use()
   const resolvedParams = use(params);
   const id = resolvedParams.id;
-  
+
   // Mock data for the chatbot
   const chatbot = {
     id,
-    name: 'Customer Support Bot',
-    description: 'A helpful assistant for customer inquiries',
-    model: 'Google Gemini',
-    welcomeMessage: 'Hello! How can I help you today?',
-    primaryColor: '#6366F1',
-    avatar: 'robot',
-    position: 'bottom-right' as const,
-    iconSize: 'medium' as const,
-    bubbleStyle: 'rounded' as const,
+    name: "Customer Support Bot",
+    description: "A helpful assistant for customer inquiries",
+    model: "Google Gemini",
+    welcomeMessage: "Hello! How can I help you today?",
+    primaryColor: "#6366F1",
+    avatar: "robot",
+    position: "bottom-right" as const,
+    iconSize: "medium" as const,
+    bubbleStyle: "rounded" as const,
   };
 
   const [botConfig, setBotConfig] = useState({
@@ -54,7 +62,7 @@ export default function ChatbotPreviewPage({ params }: { params: Promise<{ id: s
     primaryColor: "${botConfig.primaryColor}"
   };
 </script>
-<script src="https://cdn.boltz.co/widget.js" async></script>`;
+<script src="https://cdn.Chatboltz/widget.js" async></script>`;
 
   return (
     <div className="px-4 sm:px-6 lg:px-8 py-8">
@@ -88,8 +96,17 @@ export default function ChatbotPreviewPage({ params }: { params: Promise<{ id: s
         <div className="mb-6 rounded-md bg-green-50 p-4">
           <div className="flex">
             <div className="flex-shrink-0">
-              <svg className="h-5 w-5 text-green-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+              <svg
+                className="h-5 w-5 text-green-400"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                  clipRule="evenodd"
+                />
               </svg>
             </div>
             <div className="ml-3">
@@ -106,9 +123,10 @@ export default function ChatbotPreviewPage({ params }: { params: Promise<{ id: s
           <Tab
             className={({ selected }) =>
               `w-full rounded-lg py-2.5 text-sm font-medium leading-5 
-              ${selected
-                ? 'bg-white text-primary-700 shadow'
-                : 'text-primary-600 hover:bg-white/[0.12] hover:text-primary-700'
+              ${
+                selected
+                  ? "bg-white text-primary-700 shadow"
+                  : "text-primary-600 hover:bg-white/[0.12] hover:text-primary-700"
               }`
             }
           >
@@ -117,9 +135,10 @@ export default function ChatbotPreviewPage({ params }: { params: Promise<{ id: s
           <Tab
             className={({ selected }) =>
               `w-full rounded-lg py-2.5 text-sm font-medium leading-5 
-              ${selected
-                ? 'bg-white text-primary-700 shadow'
-                : 'text-primary-600 hover:bg-white/[0.12] hover:text-primary-700'
+              ${
+                selected
+                  ? "bg-white text-primary-700 shadow"
+                  : "text-primary-600 hover:bg-white/[0.12] hover:text-primary-700"
               }`
             }
           >
@@ -128,9 +147,10 @@ export default function ChatbotPreviewPage({ params }: { params: Promise<{ id: s
           <Tab
             className={({ selected }) =>
               `w-full rounded-lg py-2.5 text-sm font-medium leading-5 
-              ${selected
-                ? 'bg-white text-primary-700 shadow'
-                : 'text-primary-600 hover:bg-white/[0.12] hover:text-primary-700'
+              ${
+                selected
+                  ? "bg-white text-primary-700 shadow"
+                  : "text-primary-600 hover:bg-white/[0.12] hover:text-primary-700"
               }`
             }
           >
@@ -139,18 +159,29 @@ export default function ChatbotPreviewPage({ params }: { params: Promise<{ id: s
         </Tab.List>
         <Tab.Panels>
           <Tab.Panel>
-            <BotCustomizer initialConfig={botConfig} onSave={handleSaveConfig} />
+            <BotCustomizer
+              initialConfig={botConfig}
+              onSave={handleSaveConfig}
+            />
           </Tab.Panel>
           <Tab.Panel>
-            <BotPlayground botId={id} botName={chatbot.name} model={chatbot.model} />
+            <BotPlayground
+              botId={id}
+              botName={chatbot.name}
+              model={chatbot.model}
+            />
           </Tab.Panel>
           <Tab.Panel>
             <div className="bg-white shadow rounded-lg overflow-hidden">
               <div className="px-4 py-5 sm:p-6">
-                <h3 className="text-lg leading-6 font-medium text-gray-900">Installation Instructions</h3>
+                <h3 className="text-lg leading-6 font-medium text-gray-900">
+                  Installation Instructions
+                </h3>
                 <div className="mt-2 max-w-xl text-sm text-gray-500">
                   <p>
-                    Add the following code snippet to your website to install your chatbot. Place it just before the closing <code>&lt;/body&gt;</code> tag.
+                    Add the following code snippet to your website to install
+                    your chatbot. Place it just before the closing{" "}
+                    <code>&lt;/body&gt;</code> tag.
                   </p>
                 </div>
                 <div className="mt-5">
@@ -162,7 +193,7 @@ export default function ChatbotPreviewPage({ params }: { params: Promise<{ id: s
                       type="button"
                       onClick={() => {
                         navigator.clipboard.writeText(embedCode);
-                        alert('Code copied to clipboard!');
+                        alert("Code copied to clipboard!");
                       }}
                       className="absolute top-2 right-2 inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-primary-700 bg-primary-100 hover:bg-primary-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
                     >
@@ -172,12 +203,25 @@ export default function ChatbotPreviewPage({ params }: { params: Promise<{ id: s
                   </div>
                 </div>
                 <div className="mt-5">
-                  <h4 className="text-md font-medium text-gray-900">Additional Options</h4>
+                  <h4 className="text-md font-medium text-gray-900">
+                    Additional Options
+                  </h4>
                   <ul className="mt-3 list-disc list-inside text-sm text-gray-500 space-y-1">
-                    <li>The script automatically adapts to your website's theme</li>
-                    <li>Your chatbot will use the customizations you've set in the Customize tab</li>
-                    <li>The chatbot will appear on all pages where you include this script</li>
-                    <li>You can update your chatbot's behavior and appearance anytime from this dashboard</li>
+                    <li>
+                      The script automatically adapts to your website's theme
+                    </li>
+                    <li>
+                      Your chatbot will use the customizations you've set in the
+                      Customize tab
+                    </li>
+                    <li>
+                      The chatbot will appear on all pages where you include
+                      this script
+                    </li>
+                    <li>
+                      You can update your chatbot's behavior and appearance
+                      anytime from this dashboard
+                    </li>
                   </ul>
                 </div>
               </div>
