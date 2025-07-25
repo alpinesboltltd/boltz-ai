@@ -7,10 +7,14 @@ import { Spinner } from "@/components/common/Spinner";
 import { useForm } from "react-hook-form";
 import { SignupFormInputs, SignupSchema } from "@/types/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { AuthRequestMethods, SubscriptionPlans, UserRoles } from "@/types";
+import { socialSignIn } from "@/lib/utils";
+import { useAuthStore } from "@/store/authStore";
 
 export default function RegisterPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const { setUser } = useAuthStore();
   const {
     register,
     handleSubmit,
@@ -20,6 +24,7 @@ export default function RegisterPage() {
     defaultValues: {
       email: "",
       password: "",
+      method: "password",
     },
   });
 
@@ -28,21 +33,34 @@ export default function RegisterPage() {
       const response = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: value.name }),
+        body: JSON.stringify(value),
       });
 
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || "Registration failed");
       }
-
-      const data = await response.json();
-
-      router.push("/dashboard");
+      router.push("/auth/login");
     } catch (err) {
       console.error("Registration failed:", err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleSocialSignup = async (method: AuthRequestMethods) => {
+    if (!method) {
+      // TODO: Toast new errors
+    }
+    try {
+      const u = await socialSignIn(method);
+      // TODO: Update user record from the db
+      const user = { ...u, role: UserRoles.user, plan: SubscriptionPlans.free };
+      setUser(user);
+
+      // TODO: Fetch user details from the db
+    } catch (error) {
+      // TODO: Toast error
     }
   };
 
@@ -214,15 +232,7 @@ export default function RegisterPage() {
             <div className="mt-6 grid grid-cols-2 gap-3">
               <div>
                 <button
-                  onClick={() => {
-                    // In production, this would redirect to Google OAuth
-                    // window.location.href = '/api/auth/google';
-
-                    // For development, show a message
-                    alert(
-                      "Google OAuth integration would be implemented in production"
-                    );
-                  }}
+                  onClick={() => handleSocialSignup(AuthRequestMethods.google)}
                   className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
                 >
                   <svg
@@ -239,15 +249,7 @@ export default function RegisterPage() {
 
               <div>
                 <button
-                  onClick={() => {
-                    // In production, this would redirect to GitHub OAuth
-                    // window.location.href = '/api/auth/github';
-
-                    // For development, show a message
-                    alert(
-                      "GitHub OAuth integration would be implemented in production"
-                    );
-                  }}
+                  onClick={() => handleSocialSignup(AuthRequestMethods.github)}
                   className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
                 >
                   <svg

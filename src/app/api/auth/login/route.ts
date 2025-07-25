@@ -2,12 +2,7 @@ import { auth } from "@/configs/firebase";
 import { handleFirebaseErrorMessage } from "@/lib/utils";
 import { AuthRequestMethods, FirebaseErrorMessage } from "@/types";
 import { FirebaseError } from "firebase/app";
-import {
-  EmailAuthProvider,
-  fetchSignInMethodsForEmail,
-  linkWithCredential,
-  signInWithEmailAndPassword,
-} from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
@@ -29,7 +24,7 @@ export async function POST(request: Request) {
           password
         );
 
-        return NextResponse.json({ success: true, data: user });
+        return NextResponse.json({ success: true, user });
       } catch (error) {
         if (error instanceof FirebaseError) {
           let message = handleFirebaseErrorMessage(error.code);
@@ -40,6 +35,8 @@ export async function POST(request: Request) {
     }
   } catch (error) {
     console.log(error);
-    NextResponse.json({ message: "Internal server error" }, { status: 500 });
+    const message =
+      error instanceof Error ? error.message : "Internal server error";
+    NextResponse.json({ message }, { status: 500 });
   }
 }

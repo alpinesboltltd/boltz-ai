@@ -1,3 +1,5 @@
+import { User } from "firebase/auth";
+
 // AI Model Types
 export interface AIModel {
   id: string;
@@ -50,12 +52,11 @@ export interface ChatbotStats {
 }
 
 // User Types
-export interface User {
-  id: string;
-  name: string;
-  email: string;
-  plan: "free" | "pro" | "business" | "enterprise";
-  createdAt: string;
+export interface Profile extends User {
+  id?: string;
+  plan: SubscriptionPlans;
+  role: UserRoles;
+  createdAt?: string;
   company?: string;
   avatar?: string;
 }
@@ -134,8 +135,17 @@ export enum AuthRequestMethods {
   github = "github",
 }
 
-export type AuthRequestMethodsType = keyof typeof AuthRequestMethods;
+export enum SubscriptionPlans {
+  free = "free",
+  pro = "pro",
+  business = "business",
+  enterprise = "enterprise",
+}
 
+export enum UserRoles {
+  admin = "admin",
+  user = "user",
+}
 export enum FirebaseErrorMessage {
   userNotFound = "auth/user-not-found",
   wrongPassword = "auth/wrong-password",
