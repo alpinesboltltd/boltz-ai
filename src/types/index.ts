@@ -11,44 +11,11 @@ export interface AIModel {
   isPopular: boolean;
 }
 
-// Chatbot Types
-export interface Chatbot {
-  id: string;
-  name: string;
-  description: string;
-  aiModel: string;
-  status: "active" | "draft" | "archived";
-  createdAt: string;
-  updatedAt: string;
-  settings: ChatbotSettings;
-  stats: ChatbotStats;
-}
-
-export interface ChatbotSettings {
-  appearance: {
-    primaryColor: string;
-    fontFamily: string;
-    chatIcon: string;
-    welcomeMessage: string;
-  };
-  behavior: {
-    initialMessages: string[];
-    fallbackMessage: string;
-    enableHumanHandoff: boolean;
-    offlineMessage: string;
-  };
-  integrations: {
-    platforms: string[];
-    apiKeys: Record<string, string>;
-  };
-}
-
-export interface ChatbotStats {
-  totalMessages: number;
-  uniqueUsers: number;
-  averageRating: number;
-  responseRate: number;
-  conversionsCount: number;
+// API Response types
+export interface ApiResponse<T> {
+  data: T;
+  message?: string;
+  status: "success" | "error";
 }
 
 // User Types

@@ -12,7 +12,6 @@ import { socialSignIn } from "@/lib/utils";
 import Link from "next/link";
 import { Spinner } from "@/components/common/Spinner";
 import { useAuthStore } from "@/store/authStore";
-import { User } from "firebase/auth";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -28,7 +27,7 @@ export default function LoginPage() {
     defaultValues: {
       email: "",
       password: "",
-      method: "password",
+      method: AuthRequestMethods.password,
     },
   });
 
