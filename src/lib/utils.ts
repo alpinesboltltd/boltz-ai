@@ -1,4 +1,11 @@
-import { FirebaseErrorMessage } from "@/types";
+import { auth } from "@/configs/firebase";
+import { AuthRequestMethods, FirebaseErrorMessage } from "@/types";
+import {
+  GithubAuthProvider,
+  GoogleAuthProvider,
+  signInWithPopup,
+  User,
+} from "firebase/auth";
 
 /**
  * Utility function to conditionally join class names
@@ -33,4 +40,41 @@ export function handleFirebaseErrorMessage(code: string): string {
     default:
       return "An unknown error occured";
   }
+}
+
+export async function socialSignIn(method: AuthRequestMethods): Promise<User> {
+  let user: User | undefined;
+  switch (method) {
+    case AuthRequestMethods.google:
+      {
+        const googleProvider = new GoogleAuthProvider();
+        try {
+          const { user: userdata } = await signInWithPopup(
+            auth,
+            googleProvider
+          );
+          user = userdata;
+        } catch (error) {}
+      }
+      break;
+    case AuthRequestMethods.github:
+      {
+        const githubProvider = new GithubAuthProvider();
+        try {
+          const { user: userdata } = await signInWithPopup(
+            auth,
+            githubProvider
+          );
+          user = userdata;
+        } catch (error) {}
+      }
+      break;
+    default:
+      user = undefined;
+      throw new Error("Authentication method not supported");
+  }
+  if (!user) {
+    throw new Error("Credentials not found");
+  }
+  return user;
 }

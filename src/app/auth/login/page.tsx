@@ -5,17 +5,20 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { SigninFormInputs, signinSchema } from "@/types/schema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AuthRequestMethods, AuthRequestMethodsType } from "@/types";
-import { AuthProvider, signInWithPopup } from "firebase/auth";
-import { handleFirebaseErrorMessage } from "@/lib/utils";
-import { FirebaseError } from "firebase/app";
-import { auth } from "@/configs/firebase";
+import { AuthRequestMethods, SubscriptionPlans, UserRoles } from "@/types";
+
+import { socialSignIn } from "@/lib/utils";
+
 import Link from "next/link";
 import { Spinner } from "@/components/common/Spinner";
+import { useAuthStore } from "@/store/authStore";
+import { User } from "firebase/auth";
 
 export default function LoginPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { setUser } = useAuthStore();
+
   const {
     register,
     handleSubmit,
@@ -49,7 +52,8 @@ export default function LoginPage() {
         throw new Error(errorData.message || "Login failed");
       }
 
-      const data = await response.json();
+      const { user } = await response.json();
+      setUser({ ...user, role: UserRoles.user, plan: SubscriptionPlans.free });
 
       // TODO: Store user session
       router.push("/dashboard");
@@ -59,28 +63,18 @@ export default function LoginPage() {
       setLoading(false);
     }
   };
-
+  console.time();
   const handleSocialSignin = async (method: AuthRequestMethods) => {
+    console.timeEnd();
+    if (!method) {
+      // TODO: toast error
+    }
     try {
-      if (
-        method === AuthRequestMethods.google ||
-        method === AuthRequestMethods.github
-      ) {
-        const provider = method as unknown as AuthProvider;
-        try {
-          const { user } = await signInWithPopup(auth, provider);
-          console.log(method);
-          // TODO: store user in session
-        } catch (error) {
-          if (error instanceof FirebaseError) {
-            const message = handleFirebaseErrorMessage(error.code);
-            throw Error(message);
-          }
-          throw error;
-        }
-      }
+      const u = await socialSignIn(method);
+      const user = { ...u, role: UserRoles.user, plan: SubscriptionPlans.free };
+      setUser(user);
     } catch (error) {
-      // TODO display error in a toast
+      // TODO: display error in a toast
       console.log(error);
     }
   };

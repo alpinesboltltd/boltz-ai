@@ -4,11 +4,12 @@ An AI-powered chatbot platform modeled after Chatbase.co, incorporating its pric
 
 ## Project Overview
 
-Boltz.co is a no-code AI chatbot builder that allows users to create custom chatbots powered by various AI models including Google Gemini, GPT-4, Claude, and Mistral. The platform enables businesses to train chatbots with their own knowledge base, deploy them across multiple channels, and track performance with advanced analytics.
+Chatboltz is a no-code AI chatbot builder that allows users to create custom chatbots powered by various AI models including Google Gemini, GPT-4, Claude, and Mistral. The platform enables businesses to train chatbots with their own knowledge base, deploy them across multiple channels, and track performance with advanced analytics.
 
 ## Tech Stack
 
 ### Frontend
+
 - Next.js v15
 - React 18
 - TypeScript
@@ -18,6 +19,7 @@ Boltz.co is a no-code AI chatbot builder that allows users to create custom chat
 - Zustand for state management
 
 ### Backend (Planned)
+
 - Golang for core services
 - TypeScript for API layers
 - PostgreSQL for relational data
@@ -27,6 +29,7 @@ Boltz.co is a no-code AI chatbot builder that allows users to create custom chat
 ## Features
 
 ### Core Features
+
 - **Custom AI Model Selection**: Support for Google Gemini, GPT-4, Claude, Mistral, and other AI models
 - **Knowledge Base Integration**: Upload documents, FAQs, and website data to train the chatbot
 - **Real-time Chatbot Training**: Dynamic training and updating of chatbot responses
@@ -39,7 +42,7 @@ Boltz.co is a no-code AI chatbot builder that allows users to create custom chat
 ## Project Structure
 
 ```
-boltz.co/
+Chatboltz/
 ├── src/
 │   ├── app/                    # Next.js app directory
 │   │   ├── dashboard/          # Dashboard pages
@@ -67,6 +70,7 @@ boltz.co/
 ## Pages
 
 ### Landing Pages
+
 - **Home**: Main landing page with hero section, features, pricing, and testimonials
 - **Features**: Detailed feature descriptions
 - **Pricing**: Pricing plans and comparison
@@ -74,6 +78,7 @@ boltz.co/
 - **Blog**: Articles and updates
 
 ### Dashboard Pages
+
 - **Dashboard**: Overview of chatbots, analytics, and recent activity
 - **Chatbot Builder**: No-code interface for building and customizing chatbots
 - **Knowledge Base**: Upload and manage training data
@@ -81,6 +86,7 @@ boltz.co/
 - **Settings**: Account and billing settings
 
 ### Chatbot Pages
+
 - **Chatbot Demo**: Live preview of the chatbot
 - **Chatbot Settings**: Configuration options for the chatbot
 - **Training**: Interface for training and improving the chatbot

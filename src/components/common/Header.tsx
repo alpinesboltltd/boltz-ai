@@ -11,7 +11,7 @@ export function Header() {
         <div className="flex h-16 items-center justify-between">
           <Link href="/" className="flex-shrink-0">
             <span className="text-2xl font-bold text-primary-600">
-              Boltz.co
+              Chatboltz
             </span>
           </Link>
           <nav className="hidden md:ml-10 md:flex md:space-x-8 justify-center flex-1">
