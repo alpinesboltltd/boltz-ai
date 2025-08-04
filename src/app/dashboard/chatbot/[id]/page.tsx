@@ -1,127 +1,137 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { use } from 'react';
-import Link from 'next/link';
-import ChatbotPage from '@/app/chatbot/[id]/page';
-import Sources from '@/components/dashboard/Sources';
-import Activity from '@/components/dashboard/Activity';
-import { ArrowLeftIcon, PencilIcon, TrashIcon, ChartBarIcon, CogIcon, EyeIcon } from '@heroicons/react/24/outline';
-import Actions from '@/components/dashboard/Actions';
+import { useEffect, useState } from "react";
+import { use } from "react";
+import Link from "next/link";
+import ChatbotPage from "@/app/chatbot/[id]/page";
+import Sources from "@/components/dashboard/Sources";
+import Activity from "@/components/dashboard/Activity";
+import {
+  ArrowLeftIcon,
+  PencilIcon,
+  TrashIcon,
+  ChartBarIcon,
+  CogIcon,
+  EyeIcon,
+} from "@heroicons/react/24/outline";
+import Actions from "@/components/dashboard/Actions";
+import { useParams, useRouter } from "next/navigation";
+import { BotCustomizer } from "@/components/chatbot";
+import { ChatbotData, useAgentStore } from "@/store/agentStore";
+import { Chatbot, ChatbotAppearance } from "@/types/chatbot";
+import { chatbotsAPI } from "@/lib/api";
 
-export default function ChatbotDetailPage({ params }: { params: Promise<{ id: string }> }) {
-  // Unwrap params using React.use()
-  const resolvedParams = use(params);
-  const id = resolvedParams.id;
-  
+enum DetailsTab {
+  PLAYGROUND = "playground",
+  ACTIVITY = "activity",
+  SOURCES = "sources",
+  ACTION = "action",
+  APPEARANCE = "appearance",
+}
 
+export default function ChatbotDetailPage() {
+  const router = useRouter();
+  const chatbotId = useParams().id as string;
+  const { getChatbot } = useAgentStore();
+  const [activeTab, setActiveTab] = useState(DetailsTab.PLAYGROUND);
+  const [chatbotData, setChatbotData] = useState<ChatbotData>();
+  const [appearance, setAppearance] = useState<ChatbotAppearance>();
+  const [chatbot, setChatbot] = useState<Chatbot>();
 
-  const [activeTab, setActiveTab] = useState('playground');
+  useEffect(() => {
+    const getBotData = async () => {
+      const { chatbot } = getChatbot(chatbotId);
+      if (chatbot) {
+        const { data } = await chatbotsAPI.getById(chatbot.id);
+        if (data) {
+          setChatbot(chatbot);
+          setChatbotData(data);
+        }
+      }
+    };
 
-  
+    getBotData();
+  }, [chatbotId]);
+
+  const [showSavedMessage, setShowSavedMessage] = useState(false);
+
+  // FIXME: SAVE CONFIG
+  const handleSaveConfig = (config: any) => {
+    setAppearance(config);
+    setShowSavedMessage(true);
+    setTimeout(() => setShowSavedMessage(false), 3000);
+  };
 
   return (
-    <div className="px-4 sm:px-6 lg:px-8 py-8">
-      <Link
-          href="/dashboard/chatbots"
-          className="inline-flex items-center text-sm font-medium text-primary-600 hover:text-primary-500"
-        >
-          <ArrowLeftIcon className="mr-1 h-4 w-4" />
-          Back to AI Agents
-        </Link>
-
+    <div className="px-4 sm:px-6 lg:px-8 pb-8">
+      {/* <div
+        onClick={() => router.back()}
+        className="flex w-fit items-center text-sm font-medium border border-primary-500 bg-primary-500/20 rounded-full p-2 text-primary-600 hover:text-primary-500"
+      >
+        <ArrowLeftIcon className="h-4 w-4" />
+      </div> */}
       {/* Tabs */}
       <div className="border-b border-gray-200">
         <nav className="-mb-px flex space-x-8" aria-label="Tabs">
-          <button
-            onClick={() => setActiveTab('playground')}
-            className={`${
-              activeTab === 'playground'
-                ? 'border-primary-500 text-primary-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-            } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
-          >
-            Playground
-          </button>
-          <button
-            onClick={() => setActiveTab('activity')}
-            className={`${
-              activeTab === 'activity'
-                ? 'border-primary-500 text-primary-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-            } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
-          >
-            Activity
-          </button>
-          <button
-            onClick={() => setActiveTab('sources')}
-            className={`${
-              activeTab === 'sources'
-                ? 'border-primary-500 text-primary-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-            } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
-          >
-            Sources
-          </button>
-          <button
-            onClick={() => setActiveTab('action')}
-            className={`${
-              activeTab === 'action'
-                ? 'border-primary-500 text-primary-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-            } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
-          >
-            Action
-          </button>
-          <button
-            onClick={() => setActiveTab('settings')}
-            className={`${
-              activeTab === 'settings'
-                ? 'border-primary-500 text-primary-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-            } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
-          >
-            Settings
-          </button>
+          {Object.values(DetailsTab).map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`${
+                activeTab === tab
+                  ? "border-primary-500 text-primary-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+              } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
+            >
+              {tab}
+            </button>
+          ))}
         </nav>
       </div>
-
-      
-      {/* Tab Content */}
-      <div className="mt-6">
-        {activeTab === 'playground' && (<ChatbotPage params={params} showHeader={false} />)}
-          
-
-        {activeTab === 'activity' && (
-          <Activity params={params} />
-        )}
-
-        {activeTab === 'sources' && (
-          <Sources />
-        )}
-
-        {activeTab === 'action' && (
-            <Actions />
-        )}
-
-        {activeTab === 'settings' && (
-          <div className="bg-white shadow overflow-hidden sm:rounded-lg p-6">
-            <div className="flex items-center justify-center h-64 border-2 border-dashed border-gray-300 rounded-lg">
-              <div className="text-center">
-                <CogIcon className="mx-auto h-12 w-12 text-gray-400" />
-                <h3 className="mt-2 text-sm font-medium text-gray-900">Chatbot Settings</h3>
-                <p className="mt-1 text-sm text-gray-500">Customize your chatbot's appearance and behavior.</p>
-                <div className="mt-6">
-                  <Link
-                    href={`/dashboard/chatbot/${id}/preview`}
-                    className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
-                  >
-                    Edit Settings
-                  </Link>
-                </div>
-              </div>
+      {/* // FIXME: Abtract into its own components */}
+      {showSavedMessage && (
+        <div className="mb-6 rounded-md bg-green-50 p-4">
+          <div className="flex">
+            <div className="flex-shrink-0">
+              <svg
+                className="h-5 w-5 text-green-400"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </div>
+            <div className="ml-3">
+              <p className="text-sm font-medium text-green-800">
+                Customization saved successfully!
+              </p>
             </div>
           </div>
+        </div>
+      )}
+      {/* Tab Content */}
+      <div className="mt-3">
+        {activeTab === DetailsTab.PLAYGROUND && <ChatbotPage />}
+
+        {activeTab === DetailsTab.ACTIVITY && (
+          <Activity chatbotId={chatbotId} />
+        )}
+
+        {activeTab === DetailsTab.SOURCES && <Sources />}
+
+        {activeTab === DetailsTab.ACTION && <Actions />}
+
+        {activeTab === DetailsTab.APPEARANCE && chatbotData && (
+          <BotCustomizer
+            data={chatbotData}
+            name={chatbot!.name}
+            onSave={handleSaveConfig}
+          />
         )}
       </div>
     </div>

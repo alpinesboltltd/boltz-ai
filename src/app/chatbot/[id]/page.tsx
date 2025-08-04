@@ -1,53 +1,72 @@
 "use client";
 
 import { useState, useEffect, useRef, use as useReact } from "react";
-import Link from "next/link";
-import { ArrowLeftIcon } from "@heroicons/react/24/outline";
-import { ChatInterface, ModifiedCalendarWidget } from "@/components/chatbot";
-
-interface ChatMessage {
-  id: number;
-  role: "user" | "assistant";
-  content: string;
-  timestamp: string;
-}
+import { PaperAirplaneIcon } from "@heroicons/react/24/outline";
+import { ModifiedCalendarWidget } from "@/components/chatbot";
+import { ChatbotData, useAgentStore } from "@/store/agentStore";
+import { Chatbot, MessageRoles } from "@/types/chatbot";
+import { useParams } from "next/navigation";
+import { AdminChatLogAPI, chatbotsAPI } from "@/lib/api";
+import { cn, getOptimalTextColor, sanitizedContent } from "@/lib/utils";
+import { ChatMessage } from "@/types/conversations";
 
 interface GeminiChatHistoryItem {
-  role: "user" | "model";
+  role: MessageRoles;
   parts: string;
 }
 
-export default function ChatbotPage({
-  params: initialParams,
-  showHeader = true,
-}: {
-  params: Promise<{ id: string }>;
-  showHeader?: boolean;
-}) {
-  // Use React.use() to unwrap the params promise
-  const resolvedParams = useReact(initialParams);
-  const id = resolvedParams.id;
-  const chatWindowRef = useRef<HTMLDivElement>(null);
+interface ChatBotPage {
+  convoId?: string;
+  agentId?: string;
+}
 
-  const [messages, setMessages] = useState<ChatMessage[]>(() => [
-    {
-      id: 1,
-      role: "assistant",
-      content: "Hello! How can I help you today?",
-      timestamp: new Date().toISOString(),
-    },
-  ]);
+export default function ChatbotPage({ convoId }: ChatBotPage) {
+  const chatbotId = useParams().id as string;
+  const chatWindowRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const { getChatbot } = useAgentStore();
   const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
+  const [chatbot, setChatbot] = useState<Chatbot | null>(null);
+  const [chatbotData, setChatbotData] = useState<ChatbotData | null>(null);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
 
-  const chatbot = {
-    id,
-    name: "Customer Support Bot",
-    description: "A helpful assistant for customer inquiries",
-    primaryColor: "#6366F1",
-    welcomeMessage: "Hello! How can I help you today?",
-  };
+  // FIXME: on chatbot opened, create conversation, on chatbot closed, or offline, close conversation
+  useEffect(() => {
+    const getBotData = async () => {
+      const { chatbot: bot } = getChatbot(chatbotId);
+      if (!bot) {
+        return;
+      }
+
+      if (convoId) {
+        const { data: chatLogMessages } =
+          await AdminChatLogAPI.getChatLogMessages(convoId);
+
+        if (chatLogMessages.length) {
+          setMessages(chatLogMessages);
+        }
+      } else {
+        // DOCS: retrieves the bot with the details we need
+        const { data } = await chatbotsAPI.getById(bot.id);
+        if (data) {
+          const welcomeMessage = {
+            id: 1,
+            convo_id: "convo_1",
+            role: MessageRoles.ASSISTANT,
+            text: data.appearance.welcome_message,
+            timestamp: new Date().toISOString(),
+          };
+          if (!messages.length) setMessages([welcomeMessage]);
+          setChatbot(bot);
+          setChatbotData(data);
+        }
+      }
+    };
+
+    getBotData();
+  }, [chatbotId]);
 
   useEffect(() => {
     if (chatWindowRef.current) {
@@ -58,11 +77,12 @@ export default function ChatbotPage({
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!inputValue.trim()) return;
-
+    let input = sanitizedContent(inputValue);
     const userMessage: ChatMessage = {
       id: messages.length + 1,
-      role: "user",
-      content: inputValue,
+      convo_id: "convo_1", //FIXME: uSE REAL CONVO_ID FROM BACKEND
+      role: MessageRoles.USER,
+      text: input,
       timestamp: new Date().toISOString(),
     };
     setMessages((prevMessages) => [...prevMessages, userMessage]);
@@ -73,15 +93,21 @@ export default function ChatbotPage({
       .filter(
         (msg) =>
           msg.id !== 1 &&
-          !msg.content.includes("Your appointment has been scheduled")
+          !msg.text.includes("Your appointment has been scheduled")
       )
       .map((msg) => ({
-        role: msg.role === "user" ? "user" : "model",
-        parts: msg.content,
+        role:
+          msg.role === MessageRoles.USER
+            ? MessageRoles.USER
+            : chatbot?.ai_model.includes("gemini")
+              ? MessageRoles.MODEL
+              : MessageRoles.ASSISTANT,
+        parts: msg.text,
       }));
 
-    historyForApi.push({ role: "user", parts: inputValue });
+    historyForApi.push({ role: MessageRoles.USER, parts: inputValue });
 
+    // FIXME: MOVE TO THE API FILE
     try {
       const response = await fetch("/api/chat", {
         method: "POST",
@@ -113,9 +139,9 @@ export default function ChatbotPage({
         setShowCalendar(true);
         const calendarTriggerMessage: ChatMessage = {
           id: messages.length + 2,
-          role: "assistant",
-          content:
-            "I'd be happy to help you book an appointment. Let me show you the available dates.",
+          convo_id: "convo_1", // FIXME: USE REAL CONVERSATION ID FROM DB
+          role: MessageRoles.ASSISTANT,
+          text: "I'd be happy to help you book an appointment. Let me show you the available dates.",
           timestamp: new Date().toISOString(),
         };
         setMessages((prevMessages) => [
@@ -126,8 +152,9 @@ export default function ChatbotPage({
         // Otherwise, display the AI's response
         const assistantMessage: ChatMessage = {
           id: messages.length + 2,
-          role: "assistant",
-          content: assistantResponseContent,
+          convo_id: "convo_id", // FIXME:USE REAL CONVERSATION ID FROM DB
+          role: MessageRoles.ASSISTANT,
+          text: assistantResponseContent,
           timestamp: new Date().toISOString(),
         };
         setMessages((prevMessages) => [...prevMessages, assistantMessage]);
@@ -136,9 +163,9 @@ export default function ChatbotPage({
       console.error("Error fetching AI response:", error);
       const errorMessage: ChatMessage = {
         id: messages.length + 2,
-        role: "assistant",
-        content:
-          "Sorry, I am having trouble connecting to the AI. Please try again later.",
+        convo_id: "convo_id", // FIXME:USE REAL CONVERSATION ID FROM DB
+        role: MessageRoles.ASSISTANT,
+        text: "Sorry, I am having trouble connecting to the AI. Please try again later.",
         timestamp: new Date().toISOString(),
       };
       setMessages((prevMessages) => [...prevMessages, errorMessage]);
@@ -159,8 +186,9 @@ export default function ChatbotPage({
 
     const confirmationMessage: ChatMessage = {
       id: messages.length + 1,
-      role: "assistant",
-      content: `Great! Your appointment has been scheduled for ${formattedDate} at ${time}. You'll receive a confirmation email shortly. Is there anything else you need help with?`,
+      convo_id: "convo_id", // FIXME:USE REAL CONVERSATION ID FROM DB
+      role: MessageRoles.ASSISTANT,
+      text: `Great! Your appointment has been scheduled for ${formattedDate} at ${time}. You'll receive a confirmation email shortly. Is there anything else you need help with?`,
       timestamp: new Date().toISOString(),
     };
 
@@ -177,74 +205,85 @@ export default function ChatbotPage({
     "4:00 PM",
   ];
 
+  if ((!chatbot || !chatbotData) && !convoId) {
+    return (
+      <div className="flex justify-start">
+        <div className="bg-gray-100 text-gray-800 px-4 py-2 rounded-lg">
+          <div className="flex space-x-1">
+            <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce"></div>
+            <div
+              className="w-2 h-2 bg-gray-500 rounded-full animate-bounce"
+              style={{ animationDelay: "0.2s" }}
+            ></div>
+            <div
+              className="w-2 h-2 bg-gray-500 rounded-full animate-bounce"
+              style={{ animationDelay: "0.4s" }}
+            ></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col h-screen bg-gray-100">
-      {/* Conditional Rendering of the Header */}
-      {showHeader && (
-        <header className="bg-white shadow-sm">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between h-16 items-center">
-              <div className="flex items-center">
-                <Link href="/" className="flex-shrink-0">
-                  <span className="text-2xl font-bold text-primary-600">
-                    Chatboltz
-                  </span>
-                </Link>
-              </div>
-              <div className="flex items-center">
-                <Link
-                  href="/dashboard/chatbots"
-                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-primary-700 bg-primary-100 hover:bg-primary-200"
-                >
-                  <ArrowLeftIcon className="mr-2 h-4 w-4" />
-                  Back to Dashboard
-                </Link>
-              </div>
-            </div>
-          </div>
-        </header>
-      )}
-
       <div className="flex-1 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 h-full">
-          <div className="bg-white rounded-lg shadow h-full flex flex-col">
-            <div className="px-6 py-4 border-b border-gray-200">
-              <h2 className="text-lg font-medium text-gray-900">
-                {chatbot.name}
-              </h2>
-              <p className="text-sm text-gray-500">{chatbot.description}</p>
+          <div
+            className={cn("bg-white rounded-lg shadow h-[500px] flex flex-col")}
+          >
+            <div
+              className="px-6 py-4 border-b border-gray-200 rounded-t-md"
+              style={{ backgroundColor: chatbotData?.appearance.primary_color }}
+            >
+              {/* TODO: Add bot Logo with fallback to chatboltz logo */}
             </div>
 
             <div
               ref={chatWindowRef}
               className="flex-1 overflow-y-auto p-6 space-y-4"
             >
-              {" "}
               {/* Added ref here */}
-              {messages.map((message) => (
-                <div
-                  key={message.id}
-                  className={`flex ${
-                    message.role === "user" ? "justify-end" : "justify-start"
-                  }`}
-                >
+              {messages.map((message) => {
+                const color = getOptimalTextColor(
+                  message.role === MessageRoles.USER
+                    ? chatbotData!.appearance.primary_color
+                    : "#f3f4f6"
+                );
+                return (
                   <div
-                    className={`max-w-xs sm:max-w-md px-4 py-2 rounded-lg ${
-                      message.role === "user"
-                        ? "bg-primary-600 text-white"
-                        : "bg-gray-100 text-gray-800"
+                    key={message.id}
+                    className={`flex ${
+                      message.role === MessageRoles.USER
+                        ? "justify-end"
+                        : "justify-start"
                     }`}
                   >
-                    <p className="text-sm">{message.content}</p>
-                    <p className="text-xs text-right mt-1 opacity-70">
-                      {new Date(message.timestamp).toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
-                    </p>
+                    <div
+                      className={`max-w-xs sm:max-w-md px-4 py-2 rounded-lg ${
+                        message.role !== MessageRoles.USER &&
+                        "bg-gray-100 text-gray-800"
+                      }`}
+                      style={{
+                        backgroundColor:
+                          message.role === MessageRoles.USER
+                            ? chatbotData?.appearance.primary_color
+                            : "",
+                        color:
+                          message.role === MessageRoles.USER ? "#ffffff" : "",
+                      }}
+                    >
+                      <p className="text-sm">{message.text}</p>
+                      <p className="text-xs text-right mt-1 opacity-70">
+                        {new Date(message.timestamp).toLocaleTimeString([], {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
               {isTyping && (
                 <div className="flex justify-start">
                   <div className="bg-gray-100 text-gray-800 px-4 py-2 rounded-lg">
@@ -271,22 +310,41 @@ export default function ChatbotPage({
               )}
             </div>
 
-            <div className="px-6 py-4 border-t border-gray-200">
+            <div className="px-4 py-4 border-t border-gray-200">
               <form onSubmit={handleSendMessage} className="flex space-x-2">
                 <input
+                  ref={inputRef}
                   type="text"
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
-                  className="flex-1 rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
+                  className={cn(
+                    "flex-1 rounded-md border-gray-300 shadow-sm focus:border-primary-500 px-3"
+                  )}
+                  onFocus={() => {
+                    inputRef.current!.style.border = `2px solid ${chatbotData?.appearance.primary_color}`;
+                    inputRef.current!.style.outline = "none";
+                  }}
+                  onBlur={() => {
+                    inputRef.current!.style.border = "none";
+                  }}
                   placeholder="Type your message..."
-                  disabled={isTyping} // Disable input while typing
+                  disabled={isTyping}
                 />
                 <button
                   type="submit"
-                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
-                  disabled={isTyping || !inputValue.trim()} // Disable send button
+                  className="inline-flex items-center p-2 border border-transparent text-sm font-medium rounded-full shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+                  disabled={isTyping || !inputValue.trim()}
+                  style={{
+                    backgroundColor: chatbotData!?.appearance.primary_color,
+                    color: getOptimalTextColor(
+                      chatbotData!?.appearance.primary_color
+                    ),
+                  }}
                 >
-                  Send
+                  <PaperAirplaneIcon
+                    title="send"
+                    className="text-white h-6 w-6"
+                  />
                 </button>
               </form>
             </div>

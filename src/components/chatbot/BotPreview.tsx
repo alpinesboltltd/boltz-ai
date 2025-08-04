@@ -1,26 +1,23 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { ChatBubbleLeftRightIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { useState } from "react";
+import {
+  ChatBubbleLeftRightIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
+import { ChatbotAppearance } from "@/types/chatbot";
 
 interface BotPreviewProps {
-  botConfig: {
-    name: string;
-    welcomeMessage: string;
-    primaryColor: string;
-    avatar: string;
-    position: 'bottom-right' | 'bottom-left';
-    iconSize: 'small' | 'medium' | 'large';
-    bubbleStyle: 'rounded' | 'square';
-  };
+  botConfig: Partial<ChatbotAppearance>;
+  name: string;
 }
 
-export function BotPreview({ botConfig }: BotPreviewProps) {
+export function BotPreview({ botConfig, name }: BotPreviewProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
-    { role: 'assistant', content: botConfig.welcomeMessage }
+    { role: "assistant", content: botConfig.welcome_message },
   ]);
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
 
   const toggleChat = () => {
@@ -32,49 +29,54 @@ export function BotPreview({ botConfig }: BotPreviewProps) {
     if (!inputValue.trim()) return;
 
     // Add user message
-    const userMessage = { role: 'user', content: inputValue };
+    const userMessage = { role: "user", content: inputValue };
     setMessages([...messages, userMessage]);
-    setInputValue('');
+    setInputValue("");
     setIsTyping(true);
 
     // Simulate bot response
     setTimeout(() => {
-      const botResponse = { 
-        role: 'assistant', 
-        content: `This is a preview of how your bot will respond to "${inputValue}". In the actual deployment, responses will be generated based on your training data and AI model.` 
+      const botResponse = {
+        role: "assistant",
+        content: `This is a preview of how your bot will respond to "${inputValue}". In the actual deployment, responses will be generated based on your training data and AI model.`,
       };
-      setMessages(prev => [...prev, botResponse]);
+      setMessages((prev) => [...prev, botResponse]);
       setIsTyping(false);
     }, 1000);
   };
 
   // Position styles
   const positionStyles = {
-    'bottom-right': 'bottom-4 right-4',
-    'bottom-left': 'bottom-4 left-4'
+    "bottom-right": "bottom-4 right-4",
+    "bottom-left": "bottom-4 left-4",
   };
 
   // Icon size styles
   const iconSizes = {
-    'small': 'h-12 w-12',
-    'medium': 'h-14 w-14',
-    'large': 'h-16 w-16'
+    small: "h-12 w-12",
+    medium: "h-14 w-14",
+    large: "h-16 w-16",
   };
 
   // Bubble style
   const bubbleStyles = {
-    'rounded': 'rounded-full',
-    'square': 'rounded-md'
+    rounded: "rounded-full",
+    square: "rounded-md",
   };
 
   // Avatar display
   const getAvatar = () => {
-    switch (botConfig.avatar) {
-      case 'default': return '😊';
-      case 'robot': return '🤖';
-      case 'human': return '👤';
-      case 'custom': return '📷';
-      default: return '🤖';
+    switch (botConfig.chat_icon) {
+      case "default":
+        return "😊";
+      case "robot":
+        return "🤖";
+      case "human":
+        return "👤";
+      case "custom":
+        return "📷";
+      default:
+        return "🤖";
     }
   };
 
@@ -97,9 +99,9 @@ export function BotPreview({ botConfig }: BotPreviewProps) {
           <div className="w-3/4 h-4 bg-gray-200 rounded-md mb-2"></div>
           <div className="w-5/6 h-4 bg-gray-200 rounded-md mb-2"></div>
           <div className="w-2/3 h-4 bg-gray-200 rounded-md mb-6"></div>
-          
+
           <div className="w-full h-32 bg-gray-200 rounded-md mb-6"></div>
-          
+
           <div className="w-full h-4 bg-gray-200 rounded-md mb-2"></div>
           <div className="w-5/6 h-4 bg-gray-200 rounded-md mb-2"></div>
           <div className="w-4/5 h-4 bg-gray-200 rounded-md mb-2"></div>
@@ -108,66 +110,82 @@ export function BotPreview({ botConfig }: BotPreviewProps) {
       </div>
 
       {/* Chat widget */}
-      <div className={`absolute ${positionStyles[botConfig.position]} z-10`}>
+      <div className={`absolute ${positionStyles[botConfig.position!]} z-10`}>
         {!isOpen ? (
-          <button 
+          <button
             onClick={toggleChat}
-            className={`${iconSizes[botConfig.iconSize]} ${bubbleStyles[botConfig.bubbleStyle]} flex items-center justify-center shadow-lg`}
-            style={{ backgroundColor: botConfig.primaryColor }}
+            className={`${iconSizes[botConfig.icon_size!]} ${bubbleStyles[botConfig.bubble_style!]} flex items-center justify-center shadow-lg`}
+            style={{ backgroundColor: botConfig.primary_color! }}
           >
             <span className="text-2xl text-white">{getAvatar()}</span>
           </button>
         ) : (
           <div className="w-80 h-96 flex flex-col bg-white rounded-lg shadow-xl border border-gray-200 overflow-hidden">
             {/* Chat header */}
-            <div 
+            <div
               className="px-4 py-3 flex justify-between items-center"
-              style={{ backgroundColor: botConfig.primaryColor }}
+              style={{ backgroundColor: botConfig.primary_color }}
             >
               <div className="flex items-center">
                 <span className="text-xl mr-2">{getAvatar()}</span>
-                <h3 className="font-medium text-white">{botConfig.name}</h3>
+                <h3 className="font-medium text-white">{name}</h3>
               </div>
-              <button onClick={toggleChat} className="text-white hover:text-gray-200">
+              <button
+                onClick={toggleChat}
+                className="text-white hover:text-gray-200"
+              >
                 <XMarkIcon className="h-5 w-5" />
               </button>
             </div>
-            
+
             {/* Chat messages */}
             <div className="flex-1 p-4 overflow-y-auto">
               {messages.map((message, index) => (
-                <div 
-                  key={index} 
-                  className={`mb-3 flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                <div
+                  key={index}
+                  className={`mb-3 flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
                 >
-                  <div 
+                  <div
                     className={`max-w-[80%] px-3 py-2 rounded-lg ${
-                      message.role === 'user' 
-                        ? 'bg-primary-600 text-white' 
-                        : 'bg-gray-100 text-gray-800'
+                      message.role === "user"
+                        ? "bg-primary-600 text-white"
+                        : "bg-gray-100 text-gray-800"
                     }`}
-                    style={message.role === 'user' ? { backgroundColor: botConfig.primaryColor } : {}}
+                    style={
+                      message.role === "user"
+                        ? { backgroundColor: botConfig.primary_color }
+                        : {}
+                    }
                   >
                     {message.content}
                   </div>
                 </div>
               ))}
-              
+
               {isTyping && (
                 <div className="flex justify-start mb-3">
                   <div className="bg-gray-100 px-3 py-2 rounded-lg">
                     <div className="flex space-x-1">
                       <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+                      <div
+                        className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                        style={{ animationDelay: "0.2s" }}
+                      ></div>
+                      <div
+                        className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                        style={{ animationDelay: "0.4s" }}
+                      ></div>
                     </div>
                   </div>
                 </div>
               )}
             </div>
-            
+
             {/* Chat input */}
-            <form onSubmit={handleSendMessage} className="border-t border-gray-200 p-3 flex">
+            <form
+              onSubmit={handleSendMessage}
+              className="border-t border-gray-200 p-3 flex"
+            >
               <input
                 type="text"
                 value={inputValue}
@@ -175,10 +193,10 @@ export function BotPreview({ botConfig }: BotPreviewProps) {
                 placeholder="Type a message..."
                 className="flex-1 border border-gray-300 rounded-l-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary-500"
               />
-              <button 
+              <button
                 type="submit"
                 className="px-4 py-2 rounded-r-md text-white"
-                style={{ backgroundColor: botConfig.primaryColor }}
+                style={{ backgroundColor: botConfig.primary_color }}
               >
                 Send
               </button>

@@ -68,6 +68,9 @@
       "font_family": "Inter",
       "chat_icon": "chat-bubble",
       "welcome_message": "Hi there! How can I help you today?",
+      "position": "bottom-right",
+      "icon_size": "small",
+      "bubble_style": "round",
       "created_at": "2023-11-15T10:30:00Z",
       "updated_at": "2023-12-05T14:22:00Z"
     },
@@ -78,6 +81,9 @@
       "font_family": "Lexend",
       "chat_icon": "shopping-cart",
       "welcome_message": "Hello! Looking for product recommendations?",
+      "position": "bottom-left",
+      "icon_size": "medium",
+      "bubble_style": "round",
       "created_at": "2023-10-20T09:15:00Z",
       "updated_at": "2023-12-01T11:45:00Z"
     },
@@ -88,6 +94,22 @@
       "font_family": "Inter",
       "chat_icon": "gift",
       "welcome_message": "Hi! I can help you find the perfect product. What are you looking for today?",
+      "position": "bottom-right",
+      "icon_size": "large",
+      "bubble_style": "round",
+      "created_at": "2023-12-01T15:20:00Z",
+      "updated_at": "2023-12-01T15:20:00Z"
+    },
+    {
+      "id": "4",
+      "chatbot_id": "4",
+      "primary_color": "#10ac81",
+      "font_family": "Inter",
+      "chat_icon": "gift",
+      "welcome_message": "Hi! I can help you find the perfect product. What are you looking for today?",
+      "position": "bottom-right",
+      "icon_size": "large",
+      "bubble_style": "round",
       "created_at": "2023-12-01T15:20:00Z",
       "updated_at": "2023-12-01T15:20:00Z"
     }
@@ -116,6 +138,16 @@
     {
       "id": "3",
       "chatbot_id": "3",
+      "initial_messages": "[\"Hi! I can help you find the perfect product. What are you looking for today?\"]",
+      "fallback_message": "I'm not sure I understand. Could you provide more details about what you're looking for?",
+      "enable_human_handoff": false,
+      "offline_message": "Our product specialists are currently unavailable. Please leave a message and we'll get back to you.",
+      "created_at": "2023-12-01T15:20:00Z",
+      "updated_at": "2023-12-01T15:20:00Z"
+    },
+    {
+      "id": "4",
+      "chatbot_id": "4",
       "initial_messages": "[\"Hi! I can help you find the perfect product. What are you looking for today?\"]",
       "fallback_message": "I'm not sure I understand. Could you provide more details about what you're looking for?",
       "enable_human_handoff": false,
@@ -484,16 +516,230 @@
       "updated_at": "2023-12-01T15:20:00Z"
     }
   ],
-  "messages": [
+  "conversations": [
     {
-      "id": "1",
-      "chatbotId": "1",
-      "userId": "1",
-      "content": [
-        { "role": "assistant", "text": "Hello, how can I help you?" },
-        { "role": "user", "text": "I need help with my order." }
-      ],
-      "timestamp": "2025-07-01T10:01:00Z"
+      "id": "convo_1",
+      "agent_id": "1",
+      "platform": "Website",
+      "client_id": null,
+      "title": "Product Return Policy",
+      "created_at": "2025-07-01T10:01:00Z"
+    },
+    {
+      "id": "convo_2",
+      "agent_id": "2",
+      "platform": "Website",
+      "client_id": "+2348161769197",
+      "title": "Product Specifications",
+      "created_at": "2025-07-01T10:01:00Z"
+    },
+    {
+      "id": "convo_3",
+      "agent_id": "3",
+      "platform": "Website",
+      "client_id": null,
+      "title": "Product Specifications",
+      "created_at": "2025-07-01T10:01:00Z"
+    },
+    {
+      "id": "convo_4",
+      "agent_id": "1",
+      "platform": "Website",
+      "client_id": null,
+      "title": "Shipping Information",
+      "created_at": "2025-07-01T10:01:00Z"
+    },
+    {
+      "id": "convo_5",
+      "agent_id": "2",
+      "platform": "Website",
+      "client_id": null,
+      "title": "Product Return Policy",
+      "created_at": "2025-07-06T10:01:00Z"
+    },
+    {
+      "id": "convo_6",
+      "agent_id": "3",
+      "platform": "Website",
+      "client_id": null,
+      "title": "Product Specifications",
+      "created_at": "2025-07-01T10:01:00Z"
+    },
+    {
+      "id": "convo_7",
+      "agent_id": "1",
+      "platform": "Website",
+      "client_id": null,
+      "title": "About Our Company",
+      "created_at": "2025-07-01T10:01:00Z"
+    }
+  ],
+  "messages": [
+    [
+      {
+        "id": "msg_001",
+        "convo_id": "convo_1",
+        "role": "assistant",
+        "text": "Hello, how can I help you?",
+        "timestamp": "2025-07-01T10:01:00Z"
+      },
+      {
+        "id": "msg_002",
+        "convo_id": "convo_1",
+        "role": "user",
+        "text": "I need help with my order.",
+        "timestamp": "2025-07-01T10:02:00Z"
+      },
+      {
+        "id": "msg_003",
+        "convo_id": "convo_1",
+        "role": "assistant",
+        "text": "please provide your order tracking number",
+        "timestamp": "2025-07-01T10:03:00Z"
+      },
+      {
+        "id": "msg_004",
+        "convo_id": "convo_1",
+        "role": "user",
+        "text": "21212332QC",
+        "timestamp": "2025-07-01T10:04:00Z"
+      }
+    ]
+  ],
+  "contacts": [
+    {
+      "id": "contact_001",
+      "platform": "WhatsApp",
+      "phone_number": "+2348011111111",
+      "email": null
+    },
+    {
+      "id": "contact_002",
+      "platform": "Website",
+      "phone_number": null,
+      "email": "user2@example.com"
+    },
+    {
+      "id": "contact_003",
+      "platform": "WhatsApp",
+      "phone_number": "+2348033333333",
+      "email": null
+    },
+    {
+      "id": "contact_004",
+      "platform": "Website",
+      "phone_number": null,
+      "email": null
+    },
+    {
+      "id": "contact_005",
+      "platform": "Email",
+      "phone_number": null,
+      "email": "user5@example.com"
+    },
+    {
+      "id": "contact_006",
+      "platform": "WhatsApp",
+      "phone_number": "+2348066666666",
+      "email": null
+    }
+  ],
+  "message_metadata": [
+    {
+      "id": "meta_001",
+      "msg_id": "msg_001",
+      "sentiment": "neutral",
+      "intent": "order_help",
+      "msg_type": "text",
+      "token_count": 8
+    },
+    {
+      "id": "meta_002",
+      "msg_id": "msg_002",
+      "sentiment": "helpful",
+      "intent": "request_info",
+      "msg_type": "text",
+      "token_count": 9
+    },
+    {
+      "id": "meta_003",
+      "msg_id": "msg_003",
+      "sentiment": "curious",
+      "intent": "discount_inquiry",
+      "msg_type": "text",
+      "token_count": 6
+    },
+    {
+      "id": "meta_004",
+      "msg_id": "msg_004",
+      "sentiment": "positive",
+      "intent": "promotion_reply",
+      "msg_type": "text",
+      "token_count": 7
+    },
+    {
+      "id": "meta_005",
+      "msg_id": "msg_005",
+      "sentiment": "frustrated",
+      "intent": "human_request",
+      "msg_type": "text",
+      "token_count": 6
+    },
+    {
+      "id": "meta_006",
+      "msg_id": "msg_006",
+      "sentiment": "neutral",
+      "intent": "transfer",
+      "msg_type": "text",
+      "token_count": 5
+    },
+    {
+      "id": "meta_007",
+      "msg_id": "msg_007",
+      "sentiment": "worried",
+      "intent": "delivery_status",
+      "msg_type": "text",
+      "token_count": 5
+    },
+    {
+      "id": "meta_008",
+      "msg_id": "msg_008",
+      "sentiment": "reassuring",
+      "intent": "delivery_update",
+      "msg_type": "text",
+      "token_count": 6
+    },
+    {
+      "id": "meta_009",
+      "msg_id": "msg_009",
+      "sentiment": "dissatisfied",
+      "intent": "return_request",
+      "msg_type": "text",
+      "token_count": 6
+    },
+    {
+      "id": "meta_010",
+      "msg_id": "msg_010",
+      "sentiment": "supportive",
+      "intent": "return_help",
+      "msg_type": "text",
+      "token_count": 7
+    },
+    {
+      "id": "meta_011",
+      "msg_id": "msg_011",
+      "sentiment": "neutral",
+      "intent": "quote_request",
+      "msg_type": "text",
+      "token_count": 5
+    },
+    {
+      "id": "meta_012",
+      "msg_id": "msg_012",
+      "sentiment": "engaging",
+      "intent": "quote_followup",
+      "msg_type": "text",
+      "token_count": 8
     }
   ]
 }

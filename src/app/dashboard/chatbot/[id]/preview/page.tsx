@@ -11,6 +11,11 @@ import {
 import { BotCustomizer } from "@/components/chatbot/BotCustomizer";
 import { BotPlayground } from "@/components/chatbot/BotPlayground";
 import { Tab } from "@headlessui/react";
+import {
+  ChatbotBubbleStyle,
+  ChatbotIconSize,
+  ChatbotPosition,
+} from "@/types/chatbot";
 
 export default function ChatbotPreviewPage({
   params,
@@ -30,9 +35,9 @@ export default function ChatbotPreviewPage({
     welcomeMessage: "Hello! How can I help you today?",
     primaryColor: "#6366F1",
     avatar: "robot",
-    position: "bottom-right" as const,
-    iconSize: "medium" as const,
-    bubbleStyle: "rounded" as const,
+    position: ChatbotPosition.BOTTOM_LEFT,
+    iconSize: ChatbotIconSize.LARGE,
+    bubbleStyle: ChatbotBubbleStyle.ROUNDED,
   };
 
   const [botConfig, setBotConfig] = useState({
@@ -154,13 +159,15 @@ export default function ChatbotPreviewPage({
               }`
             }
           >
+            {/* FIXME:  */}
             Installation
           </Tab>
         </Tab.List>
         <Tab.Panels>
           <Tab.Panel>
             <BotCustomizer
-              initialConfig={botConfig}
+              name="Kewnu"
+              appearance={botConfig}
               onSave={handleSaveConfig}
             />
           </Tab.Panel>
