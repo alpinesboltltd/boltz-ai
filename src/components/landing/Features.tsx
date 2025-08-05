@@ -26,29 +26,29 @@ export function Features() {
       <div>
         <div className="grid md:grid-cols-2 items-center mt-3">
           <Card className="my-2 sm:mx-2">
-            <CardHeader src="/images/logo.png" />
+            <CardHeader src="/img/logo.webp" />
             <CardTitle text="Sync with real-time data" />
             <CardDescription text="Connect your agent to systems like order management tools, CRMs, and more to seamlessly access data ranging from order details to active subscriptions and beyond." />
           </Card>
           <Card className="my-2 sm:mx-2">
-            <CardHeader src="/images/logo.png" />
+            <CardHeader src="/img/logo.webp" />
             <CardTitle text="Take actions on your systems" />
             <CardDescription text="Configure actions that your agent can perform within your systems or through one of our integrations, like updating a customer's subscription or changing their address." />
           </Card>
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-3 items-center mt-3">
           <Card className="my-2 sm:mx-2">
-            <CardHeader src="/images/logo.png" />
+            <CardHeader src="/img/logo.webp" />
             <CardTitle text="Compare AI models" />
             <CardDescription text="Connect your agent to systems like order management tools, CRMs, and more to seamlessly access data ranging from order details to active subscriptions and beyond." />
           </Card>
           <Card className="my-2 sm:mx-2">
-            <CardHeader src="/images/logo.png" />
+            <CardHeader src="/img/logo.webp" />
             <CardTitle text="Smart escalation" />
             <CardDescription text="Give your agent instructions in natural language on when to escalate queries to a human agents." />
           </Card>
           <Card className="my-2 sm:mx-2">
-            <CardHeader src="/images/logo.png" />
+            <CardHeader src="/img/logo.webp" />
             <CardTitle text="Advanced reporting" />
             <CardDescription text="Gain insights and optimize agent performance with detailed analytics." />
           </Card>

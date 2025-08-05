@@ -4,26 +4,26 @@ export const ExploreV = [
   {
     icon: SparklesIcon,
     title: "Playground",
-    src: "/images/logo.png",
+    src: "/img/logo.webp",
   },
   {
     icon: SparklesIcon,
     title: "Analytics",
-    src: "/images/logo.png",
+    src: "/img/logo.webp",
   },
   {
     icon: SparklesIcon,
     title: "Activity",
-    src: "/images/logo.png",
+    src: "/img/logo.webp",
   },
   {
     icon: SparklesIcon,
     title: "Sources",
-    src: "/images/logo.png",
+    src: "/img/logo.webp",
   },
   {
     icon: SparklesIcon,
     title: "Action",
-    src: "/images/logo.png",
+    src: "/img/logo.webp",
   },
 ];
