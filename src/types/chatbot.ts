@@ -18,6 +18,9 @@ export interface ChatbotAppearance {
   font_family: string;
   chat_icon: string;
   welcome_message: string;
+  position: ChatbotPosition;
+  icon_size: ChatbotIconSize;
+  bubble_style: ChatbotBubbleStyle;
   created_at: string;
   updated_at: string;
 }
@@ -36,7 +39,7 @@ export interface ChatbotBehavior {
 export interface ChatbotIntegration {
   id: number;
   chatbot_id: string;
-  platform: string;
+  platform: Platform;
   api_key: string | null;
   is_active: boolean;
   created_at: string;
@@ -129,6 +132,22 @@ export type ChatbotWithRelations = Chatbot & {
 };
 
 // Enums for better type safety
+export enum ChatbotPosition {
+  BOTTOM_RIGHT = "bottom-right",
+  BOTTOM_LEFT = "bottom-left",
+}
+
+export enum ChatbotIconSize {
+  SMALL = "small",
+  MEDIUM = "medium",
+  LARGE = "large",
+}
+
+export enum ChatbotBubbleStyle {
+  ROUNDED = "rounded",
+  SQUARE = "square",
+}
+
 export enum ChatbotStatus {
   ACTIVE = "active",
   DRAFT = "draft",
@@ -148,6 +167,14 @@ export enum Platform {
   TELEGRAM = "telegram",
   SLACK = "slack",
 }
+
+export enum MessageRoles {
+  USER = "user",
+  ASSISTANT = "assistant",
+  MODEL = "model",
+}
+
+export type messageRole = keyof MessageRoles[keyof MessageRoles];
 
 const statusEnum = [
   ChatbotStatus.ACTIVE,

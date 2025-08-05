@@ -12,7 +12,6 @@ export async function POST(request: Request) {
 
   try {
     // TODO: Replace with supabase data fetch
-    console.log("chatbot");
 
     const response = await fetch("http://localhost:3001/chatbots", {
       method: "GET",

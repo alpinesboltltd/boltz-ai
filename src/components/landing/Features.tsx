@@ -61,12 +61,12 @@ export function Features() {
             <CardDescription text="Integrate diverse data sources to enrich your agent's knowledge and capabilities." />
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 md:flex md:flex-wrap gap-3 ml-3">
-            <CompWork text="Stripe" src="/img/stripe.png" />
-            <CompWork text="Paystack" src="/img/paystack.png" />
-            <CompWork text="Whatsapp" src="/img/whatsapp.png" />
-            <CompWork text="Messenger" src="/img/messenger.png" />
-            <CompWork text="G-Calendar" src="/img/googlecalendar.png" />
-            <CompWork text="Cal" src="/img/cal.png" />
+            <CompWork text="Stripe" src="/images/stripe.png" />
+            <CompWork text="Paystack" src="/images/paystack.png" />
+            <CompWork text="Whatsapp" src="/images/whatsapp.png" />
+            <CompWork text="Messenger" src="/images/messenger.png" />
+            <CompWork text="G-Calendar" src="/images/googlecalendar.png" />
+            <CompWork text="Cal" src="/images/cal.png" />
           </div>
         </Card>
       </div>

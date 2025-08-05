@@ -1,6 +1,14 @@
 // API client for interacting with backend services
 
-import { Chatbot } from "@/types/chatbot";
+import {
+  Chatbot,
+  ChatbotAppearance,
+  ChatbotBehavior,
+  ChatbotIntegration,
+  ChatbotStats,
+  TrainingData,
+} from "@/types/chatbot";
+import { ChatMessage, Conversation } from "@/types/conversations";
 import axios from "axios";
 
 // Create axios instance with default config
@@ -69,7 +77,18 @@ export const chatbotsAPI = {
     return response.data;
   },
 
-  getById: async (id: string): Promise<Chatbot> => {
+  getById: async (
+    id: string
+  ): Promise<{
+    // data: Chatbot;
+    data: {
+      appearance: ChatbotAppearance;
+      behavior: ChatbotBehavior;
+      integrations: ChatbotIntegration;
+      stats: ChatbotStats;
+      training_data: TrainingData;
+    };
+  }> => {
     const response = await api.get(`/chatbots/${id}`);
     return response.data;
   },
@@ -270,4 +289,17 @@ export const analyticsAPI = {
   },
 };
 
+export const AdminChatLogAPI = {
+  getChatLog: async (agentId: string): Promise<{ data: Conversation[] }> => {
+    const response = await api.get(`/admin/chatlog/${agentId}`);
+    return response.data;
+  },
+
+  getChatLogMessages: async (
+    convoId: string
+  ): Promise<{ data: ChatMessage[] }> => {
+    const response = await api.get(`/admin/chatlog/messages/${convoId}`);
+    return response.data;
+  },
+};
 export default api;

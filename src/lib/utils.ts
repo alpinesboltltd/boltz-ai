@@ -6,6 +6,7 @@ import {
   signInWithPopup,
   User,
 } from "firebase/auth";
+import DOMPurify from "isomorphic-dompurify";
 
 /**
  * Utility function to conditionally join class names
@@ -78,3 +79,192 @@ export async function socialSignIn(method: AuthRequestMethods): Promise<User> {
   }
   return user;
 }
+
+/*
+function getLuminance(r: number, g: number, b: number): number {
+  const a = [r, g, b].map((v) => {
+    v /= 255;
+    return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+  });
+  return 0.2126 * a[0] + 0.7152 * a[1] + 0.0722 * a[2];
+}
+
+export function getTextColor(hex: string): string {
+  const r = parseInt(hex.slice(1, 2), 16);
+  const g = parseInt(hex.slice(3, 2), 16);
+  const b = parseInt(hex.slice(5, 2), 16);
+  const luminance = getLuminance(r, g, b);
+
+  return luminance > 0.5 ? "#000000" : "#FFFFFF";
+}
+
+function hexToRGB(hex: string): [number, number, number] {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return [r, g, b];
+}
+
+function getContrastRatio(bgHex: string, textHex: string): number {
+  const [r1, g1, b1] = hexToRGB(bgHex);
+  const [r2, g2, b2] = hexToRGB(textHex);
+  const lum1 = getLuminance(r1, g1, b1);
+  const lum2 = getLuminance(r2, g2, b2);
+  const lighter = Math.max(lum1, lum2);
+  const darker = Math.min(lum1, lum2);
+  return (lighter + 0.05) / (darker + 0.05);
+}
+
+// WCAG standards
+// TODO: implement at the backend
+export function getAccessibleTextColor(bgHex: string): string {
+  const white = "#FFFFFF";
+  const black = "#000000";
+  const contrastWhite = getContrastRatio(bgHex, white);
+  const contrastBlack = getContrastRatio(bgHex, black);
+  console.log(contrastWhite >= contrastBlack ? white : black);
+  console.log("BLACK: ", contrastBlack, "\nWHITE: ", contrastWhite);
+  // WCAG recommends at least 4.5:1 contrast ratio for normal text
+  return contrastWhite >= contrastBlack ? white : black;
+}
+*/
+
+function hexToRGB(hex: string): [number, number, number] {
+  console.log(hex);
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return [r, g, b];
+}
+
+function getLuminance(r: number, g: number, b: number): number {
+  // Convert RGB to relative luminance using WCAG formula
+  const rsRGB = r / 255;
+  const gsRGB = g / 255;
+  const bsRGB = b / 255;
+
+  const rLinear =
+    rsRGB <= 0.03928 ? rsRGB / 12.92 : Math.pow((rsRGB + 0.055) / 1.055, 2.4);
+  const gLinear =
+    gsRGB <= 0.03928 ? gsRGB / 12.92 : Math.pow((gsRGB + 0.055) / 1.055, 2.4);
+  const bLinear =
+    bsRGB <= 0.03928 ? bsRGB / 12.92 : Math.pow((bsRGB + 0.055) / 1.055, 2.4);
+
+  return 0.2126 * rLinear + 0.7152 * gLinear + 0.0722 * bLinear;
+}
+
+function getContrastRatio(bgHex: string, textHex: string): number {
+  const [r1, g1, b1] = hexToRGB(bgHex);
+  const [r2, g2, b2] = hexToRGB(textHex);
+  const lum1 = getLuminance(r1, g1, b1);
+  const lum2 = getLuminance(r2, g2, b2);
+  const lighter = Math.max(lum1, lum2);
+  const darker = Math.min(lum1, lum2);
+  return (lighter + 0.05) / (darker + 0.05);
+}
+
+export function getAccessibleTextColor(
+  bgHex: string,
+  targetRatio: number = 4.5
+): string {
+  const white = "#FFFFFF";
+  const black = "#000000";
+  const darkGray = "#333333";
+  const lightGray = "#CCCCCC";
+
+  const contrastWhite = getContrastRatio(bgHex, white);
+  const contrastBlack = getContrastRatio(bgHex, black);
+  const contrastDarkGray = getContrastRatio(bgHex, darkGray);
+  const contrastLightGray = getContrastRatio(bgHex, lightGray);
+
+  // Find all colors that meet the target contrast ratio
+  const validColors = [
+    { color: white, contrast: contrastWhite },
+    { color: black, contrast: contrastBlack },
+    { color: darkGray, contrast: contrastDarkGray },
+    { color: lightGray, contrast: contrastLightGray },
+  ].filter((item) => item.contrast >= targetRatio);
+
+  // If we have valid colors, return the one with highest contrast
+  if (validColors.length > 0) {
+    return validColors.reduce((best, current) =>
+      current.contrast > best.contrast ? current : best
+    ).color;
+  }
+
+  // Fallback: return the color with better contrast even if it doesn't meet target
+  console.warn(
+    `No color meets WCAG ${targetRatio}:1 ratio for background ${bgHex}`
+  );
+  console.log(
+    "Contrast ratios - BLACK:",
+    contrastBlack.toFixed(2),
+    "WHITE:",
+    contrastWhite.toFixed(2)
+  );
+
+  return contrastWhite >= contrastBlack ? white : black;
+}
+
+// Enhanced version that can generate custom colors if needed
+export function getOptimalTextColor(
+  bgHex: string,
+  targetRatio: number = 4.5
+): string {
+  const basicResult = getAccessibleTextColor(bgHex, targetRatio);
+
+  // If basic colors work, use them
+  const basicContrast = getContrastRatio(bgHex, basicResult);
+  if (basicContrast >= targetRatio) {
+    return basicResult;
+  }
+
+  // Otherwise, try to generate a better color
+  const [bgR, bgG, bgB] = hexToRGB(bgHex);
+  const bgLuminance = getLuminance(bgR, bgG, bgB);
+
+  // Calculate target luminance for desired contrast ratio
+  const targetLightLuminance = (bgLuminance + 0.05) * targetRatio - 0.05;
+  const targetDarkLuminance = (bgLuminance + 0.05) / targetRatio - 0.05;
+
+  // Choose the target that's within valid range [0, 1]
+  let targetLuminance: number;
+  if (targetLightLuminance <= 1) {
+    targetLuminance = targetLightLuminance;
+  } else if (targetDarkLuminance >= 0) {
+    targetLuminance = targetDarkLuminance;
+  } else {
+    // No valid solution exists, return best available
+    return basicResult;
+  }
+
+  // Convert target luminance back to RGB (simplified - uses grayscale)
+  const targetGray =
+    targetLuminance <= 0.0031308
+      ? targetLuminance * 12.92
+      : 1.055 * Math.pow(targetLuminance, 1 / 2.4) - 0.055;
+
+  const grayValue = Math.round(Math.max(0, Math.min(255, targetGray * 255)));
+  const hexGray = grayValue.toString(16).padStart(2, "0");
+
+  return `#${hexGray}${hexGray}${hexGray}`;
+}
+
+// Test the functions
+console.log(
+  "Deep Green (#006400) text color:",
+  getAccessibleTextColor("#006400")
+);
+console.log("Blue (#0000FF) text color:", getAccessibleTextColor("#0000FF"));
+console.log(
+  "Bright Yellow (#FFFF00) text color:",
+  getAccessibleTextColor("#FFFF00")
+);
+console.log(
+  "Light Blue (#87CEEB) text color:",
+  getAccessibleTextColor("#87CEEB")
+);
+
+// Sanitize static content to prevent XSS
+export const sanitizedContent = (content: string) =>
+  DOMPurify.sanitize(content);

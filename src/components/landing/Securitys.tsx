@@ -5,6 +5,7 @@ import Topic from "../ui/Topic";
 import clsx from "clsx";
 import { Card, CardDescription, CardHeader, CardTitle } from "../ui/Card";
 import { Privacy } from "../ui/AdvantagesV";
+import Image from "next/image";
 
 export function Securitys() {
   return (

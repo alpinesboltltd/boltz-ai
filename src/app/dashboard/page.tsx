@@ -3,8 +3,8 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { MessageSquare } from "lucide-react";
 import { chatbotsAPI } from "@/lib/api";
-import { Chatbot } from "@/types/chatbot";
 import { cn } from "@/lib/utils";
+import { useAgentStore } from "@/store/agentStore";
 
 enum ActiveTabs {
   AGENTS = "agents",
@@ -13,18 +13,19 @@ enum ActiveTabs {
 }
 
 export default function Dashboard() {
-  const [chatbots, setChatbots] = useState<Chatbot[] | null>(null);
+  const { chatbots, setChatBots } = useAgentStore();
   const [activeTab, setActiveTab] = useState(ActiveTabs.AGENTS);
 
   useEffect(() => {
     const getChatbot = async () => {
       // TODO: replace userId with actual user Id
-      const { data } = await chatbotsAPI.getAll("2");
-      setChatbots(data);
+      const { data } = await chatbotsAPI.getAll("1");
+      console.log(data);
+      if (data) setChatBots(data);
     };
 
     getChatbot();
-  }, [setChatbots]);
+  }, []);
 
   return (
     <>
@@ -36,6 +37,7 @@ export default function Dashboard() {
         >
           {Object.values(ActiveTabs).map((tab) => (
             <button
+              key={tab}
               onClick={() => setActiveTab(tab)}
               className={cn(
                 activeTab === tab
