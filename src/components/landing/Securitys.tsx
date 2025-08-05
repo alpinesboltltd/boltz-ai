@@ -25,8 +25,8 @@ export function Securitys() {
             secure and compliant AI Agents.
           </p>
           <div className="flex gap-3">
-            <img src="/img/logo10.png" className="w-32 h-32" />
-            <img src="/img/logo10.png" className="w-32 h-32" />
+            <img src="/img/logo.webp" className="w-32 h-32" />
+            <img src="/img/logo.webp" className="w-32 h-32" />
           </div>
         </div>
         <Card className="flex flex-col border-b-2">
@@ -42,7 +42,7 @@ export function Securitys() {
                 <CardTitle text="Your data stays yours" />
                 <CardDescription text="Your data is only accessible to your AI agent and is never used to train models." />
               </div>
-              <img src="/img/logo10.png" className="w-32 h-32 object-contain" />
+              <img src="/img/logo.webp" className="w-32 h-32 object-contain" />
             </div>
           ))}
         </Card>
