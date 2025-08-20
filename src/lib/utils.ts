@@ -130,7 +130,6 @@ export function getAccessibleTextColor(bgHex: string): string {
 */
 
 function hexToRGB(hex: string): [number, number, number] {
-  console.log(hex);
   const r = parseInt(hex.slice(1, 3), 16);
   const g = parseInt(hex.slice(3, 5), 16);
   const b = parseInt(hex.slice(5, 7), 16);
@@ -249,21 +248,6 @@ export function getOptimalTextColor(
 
   return `#${hexGray}${hexGray}${hexGray}`;
 }
-
-// Test the functions
-console.log(
-  "Deep Green (#006400) text color:",
-  getAccessibleTextColor("#006400")
-);
-console.log("Blue (#0000FF) text color:", getAccessibleTextColor("#0000FF"));
-console.log(
-  "Bright Yellow (#FFFF00) text color:",
-  getAccessibleTextColor("#FFFF00")
-);
-console.log(
-  "Light Blue (#87CEEB) text color:",
-  getAccessibleTextColor("#87CEEB")
-);
 
 // Sanitize static content to prevent XSS
 export const sanitizedContent = (content: string) =>

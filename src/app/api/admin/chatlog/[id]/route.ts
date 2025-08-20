@@ -6,7 +6,7 @@ export async function GET(
   request: Request,
   { params }: { params: { id: string } }
 ) {
-  const agent_id = params.id;
+  const { id: agent_id } = await params;
   try {
     // FIXME: Use api call to db
     const conversations = await fetch("http://localhost:3001/conversations", {

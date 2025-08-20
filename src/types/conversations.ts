@@ -6,6 +6,7 @@ export interface ChatMessage {
   role: MessageRoles;
   text: string;
   timestamp: string;
+  confidence_score?: number;
 }
 
 export interface Conversation {

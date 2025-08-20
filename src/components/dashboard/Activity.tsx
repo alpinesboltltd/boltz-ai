@@ -81,19 +81,19 @@ export default function Activity({ chatbotId }: { chatbotId: string }) {
             </div>
           </div>
           <div className="flex flex-row w-full items-start justify-center space-x-0 py-3">
-            <div className="w-full md:w-3/5 flex flex-col gap-3 p-2">
+            <div className="w-full md:w-3/5 flex flex-col gap-3 px-2">
               {/* TODO: Display conversations history */}
               {chatLog.map((log) => {
                 const date = new Date(log.created_at);
                 return (
                   <Button
                     key={log.id}
-                    className="p-3 bg-gray-300 rounded-md cursor-pointer flex flex-col items-start"
+                    className="p-3 bg-gray-300 rounded-md cursor-pointer flex flex-col items-start justify-start text-start"
                     onClick={() => setConvoId(log.id)}
                   >
-                    <h4>{log.title}</h4>
-                    <p>Platform: {log.platform}</p>
-                    <p className="text-gray-500 text-sm">
+                    <h4 className="text-sm">{log.title}</h4>
+                    <p className="text-xs">Platform: {log.platform}</p>
+                    <p className="text-gray-500 text-xs">
                       Date: {date.getDate().toString().padStart(2, "0")}:
                       {date.getMonth().toString().padStart(2, "0")}:
                       {date.getFullYear().toString().padStart(2, "0")}
