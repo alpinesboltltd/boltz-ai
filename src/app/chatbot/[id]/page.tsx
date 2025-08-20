@@ -9,6 +9,7 @@ import { useParams } from "next/navigation";
 import { AdminChatLogAPI, chatbotsAPI } from "@/lib/api";
 import { cn, getOptimalTextColor, sanitizedContent } from "@/lib/utils";
 import { ChatMessage } from "@/types/conversations";
+import { Button } from "@headlessui/react";
 
 interface GeminiChatHistoryItem {
   role: MessageRoles;
@@ -39,7 +40,27 @@ export default function ChatbotPage({ convoId }: ChatBotPage) {
       if (!bot) {
         return;
       }
+      // NOTE: retrieves the bot with the details we need
+      const { data } = await chatbotsAPI.getById(bot.id);
+      if (data) {
+        const welcomeMessage = {
+          id: 1,
+          convo_id: "convo_1",
+          role: MessageRoles.ASSISTANT,
+          text: data.appearance.welcome_message,
+          timestamp: new Date().toISOString(),
+        };
+        if (!messages.length && !convoId) setMessages([welcomeMessage]);
+        setChatbot(bot);
+        setChatbotData(data);
+      }
+    };
 
+    getBotData();
+  }, [chatbotId]);
+
+  useEffect(() => {
+    const getConvo = async () => {
       if (convoId) {
         const { data: chatLogMessages } =
           await AdminChatLogAPI.getChatLogMessages(convoId);
@@ -47,26 +68,12 @@ export default function ChatbotPage({ convoId }: ChatBotPage) {
         if (chatLogMessages.length) {
           setMessages(chatLogMessages);
         }
-      } else {
-        // DOCS: retrieves the bot with the details we need
-        const { data } = await chatbotsAPI.getById(bot.id);
-        if (data) {
-          const welcomeMessage = {
-            id: 1,
-            convo_id: "convo_1",
-            role: MessageRoles.ASSISTANT,
-            text: data.appearance.welcome_message,
-            timestamp: new Date().toISOString(),
-          };
-          if (!messages.length) setMessages([welcomeMessage]);
-          setChatbot(bot);
-          setChatbotData(data);
-        }
       }
     };
+    console.log(convoId, "HERO");
 
-    getBotData();
-  }, [chatbotId]);
+    getConvo();
+  }, [convoId]);
 
   useEffect(() => {
     if (chatWindowRef.current) {
@@ -228,7 +235,7 @@ export default function ChatbotPage({ convoId }: ChatBotPage) {
   return (
     <div className="flex flex-col h-screen bg-gray-100">
       <div className="flex-1 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 h-full">
+        <div className="max-w-lg mx-auto px-4 sm:px-6 lg:px-8 py-8 h-full">
           <div
             className={cn("bg-white rounded-lg shadow h-[500px] flex flex-col")}
           >
@@ -245,11 +252,6 @@ export default function ChatbotPage({ convoId }: ChatBotPage) {
             >
               {/* Added ref here */}
               {messages.map((message) => {
-                const color = getOptimalTextColor(
-                  message.role === MessageRoles.USER
-                    ? chatbotData!.appearance.primary_color
-                    : "#f3f4f6"
-                );
                 return (
                   <div
                     key={message.id}
@@ -260,7 +262,7 @@ export default function ChatbotPage({ convoId }: ChatBotPage) {
                     }`}
                   >
                     <div
-                      className={`max-w-xs sm:max-w-md px-4 py-2 rounded-lg ${
+                      className={`relative max-w-xs sm:max-w-md px-4 py-2 rounded-lg ${
                         message.role !== MessageRoles.USER &&
                         "bg-gray-100 text-gray-800"
                       }`}
@@ -280,6 +282,26 @@ export default function ChatbotPage({ convoId }: ChatBotPage) {
                           minute: "2-digit",
                         })}
                       </p>
+                      {convoId && message.confidence_score && (
+                        <div className="absolute bottom-0 flex justify-start items-center gap-3">
+                          <p
+                            className={cn(
+                              " px-1 py-0.5 rounded-xl text-xs",
+                              message.confidence_score > 0.75
+                                ? "bg-green-500 text-white"
+                                : message.confidence_score >= 0.5
+                                  ? "bg-yellow-300 text-black"
+                                  : "bg-red-500 text-white"
+                            )}
+                          >
+                            {message.confidence_score}
+                          </p>
+                          {/* TODO: Add an onclick event that helps to improve a response and update it as a faq */}
+                          <Button className="border border-black px-1.5 py-0.5 rounded-xl text-xs bg-transparent hover:bg-black hover:text-white focus:bg-black focus:text-white">
+                            improve response
+                          </Button>
+                        </div>
+                      )}
                     </div>
                   </div>
                 );
@@ -337,7 +359,7 @@ export default function ChatbotPage({ convoId }: ChatBotPage) {
                   style={{
                     backgroundColor: chatbotData!?.appearance.primary_color,
                     color: getOptimalTextColor(
-                      chatbotData!?.appearance.primary_color
+                      chatbotData?.appearance.primary_color || "#f3f4f6"
                     ),
                   }}
                 >

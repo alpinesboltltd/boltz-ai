@@ -20,15 +20,6 @@ const api = axios.create({
   withCredentials: true,
 });
 
-// Add auth token to requests if available
-// api.interceptors.request.use((config) => {
-//   const token = localStorage.getItem('auth_token');
-//   if (token) {
-//     config.headers.Authorization = `Bearer ${token}`;
-//   }
-//   return config;
-// });
-
 // Handle response errors
 api.interceptors.response.use(
   (response) => response,
@@ -298,7 +289,7 @@ export const AdminChatLogAPI = {
   getChatLogMessages: async (
     convoId: string
   ): Promise<{ data: ChatMessage[] }> => {
-    const response = await api.get(`/admin/chatlog/messages/${convoId}`);
+    const response = await api.get(`/admin/messages/${convoId}`);
     return response.data;
   },
 };

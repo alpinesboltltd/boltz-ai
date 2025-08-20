@@ -64,12 +64,6 @@ export default function ChatbotDetailPage() {
 
   return (
     <div className="px-4 sm:px-6 lg:px-8 pb-8">
-      {/* <div
-        onClick={() => router.back()}
-        className="flex w-fit items-center text-sm font-medium border border-primary-500 bg-primary-500/20 rounded-full p-2 text-primary-600 hover:text-primary-500"
-      >
-        <ArrowLeftIcon className="h-4 w-4" />
-      </div> */}
       {/* Tabs */}
       <div className="border-b border-gray-200">
         <nav className="-mb-px flex space-x-8" aria-label="Tabs">

@@ -522,7 +522,7 @@
       "agent_id": "1",
       "platform": "Website",
       "client_id": null,
-      "title": "Product Return Policy",
+      "title": "Laptop Return Request",
       "created_at": "2025-07-01T10:01:00Z"
     },
     {
@@ -530,7 +530,7 @@
       "agent_id": "2",
       "platform": "Website",
       "client_id": "+2348161769197",
-      "title": "Product Specifications",
+      "title": "Cardiology Appointment",
       "created_at": "2025-07-01T10:01:00Z"
     },
     {
@@ -538,7 +538,7 @@
       "agent_id": "3",
       "platform": "Website",
       "client_id": null,
-      "title": "Product Specifications",
+      "title": "Business Loan Application",
       "created_at": "2025-07-01T10:01:00Z"
     },
     {
@@ -546,7 +546,7 @@
       "agent_id": "1",
       "platform": "Website",
       "client_id": null,
-      "title": "Shipping Information",
+      "title": "Data Science Course Inquiry",
       "created_at": "2025-07-01T10:01:00Z"
     },
     {
@@ -554,7 +554,7 @@
       "agent_id": "2",
       "platform": "Website",
       "client_id": null,
-      "title": "Product Return Policy",
+      "title": "Employment Contract Dispute",
       "created_at": "2025-07-06T10:01:00Z"
     },
     {
@@ -562,7 +562,7 @@
       "agent_id": "3",
       "platform": "Website",
       "client_id": null,
-      "title": "Product Specifications",
+      "title": "House Purchase Inquiry",
       "created_at": "2025-07-01T10:01:00Z"
     },
     {
@@ -570,41 +570,270 @@
       "agent_id": "1",
       "platform": "Website",
       "client_id": null,
-      "title": "About Our Company",
+      "title": "Brake Inspection Appointment",
       "created_at": "2025-07-01T10:01:00Z"
     }
   ],
   "messages": [
-    [
-      {
-        "id": "msg_001",
-        "convo_id": "convo_1",
-        "role": "assistant",
-        "text": "Hello, how can I help you?",
-        "timestamp": "2025-07-01T10:01:00Z"
-      },
-      {
-        "id": "msg_002",
-        "convo_id": "convo_1",
-        "role": "user",
-        "text": "I need help with my order.",
-        "timestamp": "2025-07-01T10:02:00Z"
-      },
-      {
-        "id": "msg_003",
-        "convo_id": "convo_1",
-        "role": "assistant",
-        "text": "please provide your order tracking number",
-        "timestamp": "2025-07-01T10:03:00Z"
-      },
-      {
-        "id": "msg_004",
-        "convo_id": "convo_1",
-        "role": "user",
-        "text": "21212332QC",
-        "timestamp": "2025-07-01T10:04:00Z"
-      }
-    ]
+    {
+      "id": "msg_001",
+      "convo_id": "convo_1",
+      "role": "assistant",
+      "text": "Hello! Welcome to TechStore. I'm here to help you with any questions about our products or services. How can I assist you today?",
+      "timestamp": "2025-07-01T10:01:00Z"
+    },
+    {
+      "id": "msg_002",
+      "convo_id": "convo_1",
+      "role": "user",
+      "text": "I bought a laptop last week but it's not working properly. Can I return it?",
+      "timestamp": "2025-07-01T10:02:00Z"
+    },
+    {
+      "id": "msg_003",
+      "convo_id": "convo_1",
+      "role": "assistant",
+      "text": "I'm sorry to hear about the issue with your laptop. Yes, we have a 30-day return policy for all products. Since you purchased it last week, you're well within the return window. Could you please provide your order number so I can process this for you?",
+      "confidence_score": 0.95,
+      "timestamp": "2025-07-01T10:03:00Z"
+    },
+    {
+      "id": "msg_004",
+      "convo_id": "convo_1",
+      "role": "user",
+      "text": "The order number is TS-2024-001234",
+      "timestamp": "2025-07-01T10:04:00Z"
+    },
+    {
+      "id": "msg_005",
+      "convo_id": "convo_1",
+      "role": "assistant",
+      "text": "Perfect! I found your order for the Dell XPS 15 purchased on June 24th. I've initiated the return process. You'll receive a prepaid return label via email within 2 hours. Once we receive the laptop, your refund will be processed within 5-7 business days. Is there anything else I can help you with?",
+      "confidence_score": 0.92,
+      "timestamp": "2025-07-01T10:05:00Z"
+    },
+    {
+      "id": "msg_006",
+      "convo_id": "convo_2",
+      "role": "assistant",
+      "text": "Hi there! Welcome to HealthFirst Medical Center. I'm your virtual assistant and I'm here to help you with appointments, services, and general inquiries. What can I do for you today?",
+      "timestamp": "2025-07-01T10:01:00Z"
+    },
+    {
+      "id": "msg_007",
+      "convo_id": "convo_2",
+      "role": "user",
+      "text": "I need to schedule a consultation with a cardiologist",
+      "timestamp": "2025-07-01T10:02:00Z"
+    },
+    {
+      "id": "msg_008",
+      "convo_id": "convo_2",
+      "role": "assistant",
+      "text": "I'd be happy to help you schedule a cardiology consultation. We have Dr. Sarah Johnson and Dr. Michael Chen available. Dr. Johnson has availability next Tuesday at 2:30 PM or Thursday at 10:00 AM. Dr. Chen has slots on Wednesday at 3:00 PM or Friday at 9:30 AM. Which would work better for you?",
+      "confidence_score": 0.88,
+      "timestamp": "2025-07-01T10:03:00Z"
+    },
+    {
+      "id": "msg_009",
+      "convo_id": "convo_2",
+      "role": "user",
+      "text": "Tuesday at 2:30 PM with Dr. Johnson sounds perfect",
+      "timestamp": "2025-07-01T10:04:00Z"
+    },
+    {
+      "id": "msg_010",
+      "convo_id": "convo_2",
+      "role": "assistant",
+      "text": "Excellent! I've scheduled your appointment with Dr. Sarah Johnson for Tuesday, July 8th at 2:30 PM. Please arrive 15 minutes early for check-in and bring your insurance card and a valid ID. You'll receive a confirmation email shortly with all the details and pre-appointment instructions. Is there anything else I can help you with?",
+      "confidence_score": 0.94,
+      "timestamp": "2025-07-01T10:05:00Z"
+    },
+    {
+      "id": "msg_011",
+      "convo_id": "convo_3",
+      "role": "assistant",
+      "text": "Good day! Welcome to Premier Bank. I'm here to assist you with your banking needs, account inquiries, and financial services. How may I help you today?",
+      "timestamp": "2025-07-01T10:01:00Z"
+    },
+    {
+      "id": "msg_012",
+      "convo_id": "convo_3",
+      "role": "user",
+      "text": "I want to apply for a business loan for my restaurant",
+      "timestamp": "2025-07-01T10:02:00Z"
+    },
+    {
+      "id": "msg_013",
+      "convo_id": "convo_3",
+      "role": "assistant",
+      "text": "That's wonderful! I'd be happy to help you with your business loan application. For restaurant businesses, we offer competitive rates starting at 6.5% APR. You'll need your business license, tax returns for the last 2 years, financial statements, and a business plan. The typical loan amount ranges from $50,000 to $500,000. Would you like me to connect you with our business loan specialist to discuss your specific needs?",
+      "confidence_score": 0.91,
+      "timestamp": "2025-07-01T10:03:00Z"
+    },
+    {
+      "id": "msg_014",
+      "convo_id": "convo_3",
+      "role": "user",
+      "text": "Yes, that would be great. I'm looking for around $200,000",
+      "timestamp": "2025-07-01T10:04:00Z"
+    },
+    {
+      "id": "msg_015",
+      "convo_id": "convo_3",
+      "role": "assistant",
+      "text": "Perfect! $200,000 is well within our lending range for established restaurants. I'm scheduling you for a consultation with Maria Rodriguez, our senior business loan officer. She has availability tomorrow at 11:00 AM or Thursday at 3:00 PM. She'll review your documents and discuss terms, repayment options, and next steps. Which time works better for you?",
+      "confidence_score": 0.89,
+      "timestamp": "2025-07-01T10:05:00Z"
+    },
+    {
+      "id": "msg_016",
+      "convo_id": "convo_4",
+      "role": "assistant",
+      "text": "Hello! Welcome to EduLearn Online Academy. I'm here to help you with course information, enrollment, and academic support. What would you like to know today?",
+      "timestamp": "2025-07-01T10:01:00Z"
+    },
+    {
+      "id": "msg_017",
+      "convo_id": "convo_4",
+      "role": "user",
+      "text": "I'm interested in your data science certification program",
+      "timestamp": "2025-07-01T10:02:00Z"
+    },
+    {
+      "id": "msg_018",
+      "convo_id": "convo_4",
+      "role": "assistant",
+      "text": "Excellent choice! Our Data Science Certification is a comprehensive 6-month program covering Python, machine learning, statistics, and real-world projects. The program includes 120 hours of instruction, mentorship, and career support. The next cohort starts August 15th, and early bird pricing is $2,499 (regular price $2,999). We also offer payment plans. Would you like me to send you the detailed curriculum?",
+      "confidence_score": 0.93,
+      "timestamp": "2025-07-01T10:03:00Z"
+    },
+    {
+      "id": "msg_019",
+      "convo_id": "convo_4",
+      "role": "user",
+      "text": "Yes, please send the curriculum. Also, do you offer job placement assistance?",
+      "timestamp": "2025-07-01T10:04:00Z"
+    },
+    {
+      "id": "msg_020",
+      "convo_id": "convo_4",
+      "role": "assistant",
+      "text": "Absolutely! I'll email you the complete curriculum within the next 10 minutes. Yes, we provide comprehensive career support including resume review, interview preparation, and access to our partner network of 200+ hiring companies. Our job placement rate is 87% within 6 months of graduation. We also offer a job guarantee - if you don't find a position within 12 months, we'll refund 50% of your tuition. Would you like to schedule a call with our admissions counselor?",
+      "confidence_score": 0.96,
+      "timestamp": "2025-07-01T10:05:00Z"
+    },
+    {
+      "id": "msg_021",
+      "convo_id": "convo_5",
+      "role": "assistant",
+      "text": "Welcome to LegalAid Pro! I'm here to help you with legal information, consultation scheduling, and general legal guidance. Please note that I provide information only and this doesn't constitute legal advice. How can I assist you today?",
+      "timestamp": "2025-07-06T10:01:00Z"
+    },
+    {
+      "id": "msg_022",
+      "convo_id": "convo_5",
+      "role": "user",
+      "text": "I need help with a contract dispute with my former employer",
+      "timestamp": "2025-07-06T10:02:00Z"
+    },
+    {
+      "id": "msg_023",
+      "convo_id": "convo_5",
+      "role": "assistant",
+      "text": "I understand you're dealing with an employment contract dispute. This is a complex area that requires personalized legal advice. I'd recommend scheduling a consultation with one of our employment law specialists. Attorney Jennifer Walsh has 15 years of experience in employment disputes and is available Thursday at 2:00 PM or Friday at 10:30 AM. The initial consultation is $200 for 60 minutes. Would you like me to book one of these slots?",
+      "confidence_score": 0.87,
+      "timestamp": "2025-07-06T10:03:00Z"
+    },
+    {
+      "id": "msg_024",
+      "convo_id": "convo_5",
+      "role": "user",
+      "text": "Thursday at 2:00 PM works for me",
+      "timestamp": "2025-07-06T10:04:00Z"
+    },
+    {
+      "id": "msg_025",
+      "convo_id": "convo_5",
+      "role": "assistant",
+      "text": "Perfect! I've scheduled your consultation with Attorney Jennifer Walsh for Thursday, July 10th at 2:00 PM. Please bring all relevant documents including your employment contract, any correspondence with your employer, and termination paperwork if applicable. You'll receive a confirmation email with intake forms to complete before your appointment. The consultation fee of $200 is due at the time of service. Is there anything else I can help you with?",
+      "confidence_score": 0.92,
+      "timestamp": "2025-07-06T10:05:00Z"
+    },
+    {
+      "id": "msg_026",
+      "convo_id": "convo_6",
+      "role": "assistant",
+      "text": "Hi! Welcome to GreenThumb Real Estate. I'm here to help you with property searches, market information, and connecting you with our expert agents. Whether you're buying, selling, or renting, I'm here to assist. What are you looking for today?",
+      "timestamp": "2025-07-01T10:01:00Z"
+    },
+    {
+      "id": "msg_027",
+      "convo_id": "convo_6",
+      "role": "user",
+      "text": "I'm looking to buy a 3-bedroom house in the downtown area, budget around $400,000",
+      "timestamp": "2025-07-01T10:02:00Z"
+    },
+    {
+      "id": "msg_028",
+      "convo_id": "convo_6",
+      "role": "assistant",
+      "text": "Great! I found 12 properties matching your criteria in the downtown area. The average price for 3-bedroom homes there is $385,000, so you're right in the sweet spot. I can show you listings with modern kitchens, updated bathrooms, and some with parking included. Would you like me to email you the top 5 properties, or would you prefer to schedule a viewing tour with one of our agents this weekend?",
+      "confidence_score": 0.90,
+      "timestamp": "2025-07-01T10:03:00Z"
+    },
+    {
+      "id": "msg_029",
+      "convo_id": "convo_6",
+      "role": "user",
+      "text": "Please email me the top 5 and let's schedule viewings for this Saturday",
+      "timestamp": "2025-07-01T10:04:00Z"
+    },
+    {
+      "id": "msg_030",
+      "convo_id": "convo_6",
+      "role": "assistant",
+      "text": "Excellent! I'm sending you the top 5 properties right now, including photos, floor plans, and neighborhood details. I've also scheduled you with Sarah Mitchell, our downtown specialist, for Saturday starting at 10:00 AM. The tour will take about 3 hours to see all properties comfortably. Sarah will call you tomorrow to confirm and discuss any specific features you're looking for. You'll receive all the details via email within 5 minutes!",
+      "confidence_score": 0.94,
+      "timestamp": "2025-07-01T10:05:00Z"
+    },
+    {
+      "id": "msg_031",
+      "convo_id": "convo_7",
+      "role": "assistant",
+      "text": "Hello! Welcome to AutoCare Plus, your trusted automotive service center. I can help you with service appointments, maintenance reminders, warranty information, and general automotive questions. How can I help you today?",
+      "timestamp": "2025-07-01T10:01:00Z"
+    },
+    {
+      "id": "msg_032",
+      "convo_id": "convo_7",
+      "role": "user",
+      "text": "My car is making a strange noise when I brake. Can I get it checked?",
+      "timestamp": "2025-07-01T10:02:00Z"
+    },
+    {
+      "id": "msg_033",
+      "convo_id": "convo_7",
+      "role": "assistant",
+      "text": "That's definitely something we should check right away - brake issues are a safety priority. It could be worn brake pads, warped rotors, or low brake fluid. We have an opening tomorrow at 9:00 AM or 2:30 PM for a brake inspection. The diagnostic fee is $89, which gets applied toward any repairs needed. Our certified technicians will have you back on the road safely. Which time slot works better for you?",
+      "confidence_score": 0.91,
+      "timestamp": "2025-07-01T10:03:00Z"
+    },
+    {
+      "id": "msg_034",
+      "convo_id": "convo_7",
+      "role": "user",
+      "text": "9:00 AM tomorrow works perfect. What should I bring?",
+      "timestamp": "2025-07-01T10:04:00Z"
+    },
+    {
+      "id": "msg_035",
+      "convo_id": "convo_7",
+      "role": "assistant",
+      "text": "Perfect! You're all set for tomorrow at 9:00 AM. Please bring your driver's license, vehicle registration, and any maintenance records if you have them. If your car is still under warranty, bring those documents too. We'll provide a free shuttle service to nearby locations if you need to leave your car for repairs. You'll receive a confirmation text tonight with our address and contact information. Drive safely and we'll see you tomorrow!",
+      "confidence_score": 0.95,
+      "timestamp": "2025-07-01T10:05:00Z"
+    }
   ],
   "contacts": [
     {
