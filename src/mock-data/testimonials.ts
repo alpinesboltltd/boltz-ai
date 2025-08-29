@@ -13,7 +13,7 @@ export const testimonials: Testimonial[] = [
   {
     id: "1",
     content:
-      "Chatboltz has transformed our customer support. We've reduced response times by 80% and increased customer satisfaction scores by 35%. The ability to train the chatbot with our own knowledge base makes it incredibly accurate.",
+      "Helix has transformed our customer support. We've reduced response times by 80% and increased customer satisfaction scores by 35%. The ability to train the chatagent with our own knowledge base makes it incredibly accurate.",
     author: "Sarah Johnson",
     role: "Customer Success Manager",
     company: "TechCorp Inc.",
@@ -24,7 +24,7 @@ export const testimonials: Testimonial[] = [
   {
     id: "2",
     content:
-      "Setting up our AI chatbot took less than an hour. The no-code builder is incredibly intuitive, and the AI responses are impressively accurate. Our customers love getting instant answers 24/7.",
+      "Setting up our AI chatagent took less than an hour. The no-code builder is incredibly intuitive, and the AI responses are impressively accurate. Our customers love getting instant answers 24/7.",
     author: "Michael Chen",
     role: "E-commerce Director",
     company: "Retail Solutions",
@@ -35,7 +35,7 @@ export const testimonials: Testimonial[] = [
   {
     id: "3",
     content:
-      "The ability to train our chatbot with our own knowledge base has been game-changing. It now handles 70% of our customer inquiries without human intervention, freeing up our support team to focus on complex issues.",
+      "The ability to train our chatagent with our own knowledge base has been game-changing. It now handles 70% of our customer inquiries without human intervention, freeing up our support team to focus on complex issues.",
     author: "Jessica Patel",
     role: "Head of Support",
     company: "SaaS Platform",
@@ -46,7 +46,7 @@ export const testimonials: Testimonial[] = [
   {
     id: "4",
     content:
-      "We integrated Chatboltz with our WhatsApp Business account, and it's been a huge success. Our customers can now get support through their preferred channel, and we've seen a 45% increase in engagement.",
+      "We integrated Helix with our WhatsApp Business account, and it's been a huge success. Our customers can now get support through their preferred channel, and we've seen a 45% increase in engagement.",
     author: "David Rodriguez",
     role: "Digital Marketing Manager",
     company: "Global Retail",
@@ -68,7 +68,7 @@ export const testimonials: Testimonial[] = [
   {
     id: "6",
     content:
-      "As a small business, we couldn't afford a 24/7 support team. Chatboltz has allowed us to provide round-the-clock support to our global customers without breaking the bank. The ROI has been incredible.",
+      "As a small business, we couldn't afford a 24/7 support team. Helix has allowed us to provide round-the-clock support to our global customers without breaking the bank. The ROI has been incredible.",
     author: "James Thompson",
     role: "Founder & CEO",
     company: "Startup Innovations",

@@ -18,7 +18,7 @@ export function Benefits() {
           Works like the best customer service agents
         </h1>
         <p className="font-normal text-sm">
-          Chatbase is designed to work with your existing tools and workflows.
+          Helix is designed to work with your existing tools and workflows.
         </p>
       </div>
 

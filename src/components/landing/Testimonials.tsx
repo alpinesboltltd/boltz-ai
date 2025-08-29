@@ -24,8 +24,8 @@ export function Testimonials() {
       <div className="flex gap-4 overflow-hidden mb-4 p-2">
         <Card className="w-2/3">
           <p className="text-sm text-gray-600 mb-28">
-            "Chatbase is a strong signal of how customer support will evolve. It
-            is an early adopter of the agentic approach, which will become
+            "Helix is a strong signal of how customer support will evolve. It is
+            an early adopter of the agentic approach, which will become
             increasingly effective, trusted, and prominent."
           </p>
           <CompWork text="Marc Manara" work="OpenAI" src="/images/logo.webp" />
@@ -43,14 +43,14 @@ export function Testimonials() {
         <Card className="w-1/3">
           <CardHeader src="/images/logo.webp" />
           <CardTitle text="9000+" className="*text-5xl" />
-          <CardDescription text="businesses trust Chatbase" />
+          <CardDescription text="businesses trust Helix" />
         </Card>
       </div>
       <div className="flex gap-4 overflow-hidden mb-4 p-2">
         <Card className="w-1/3">
           <CardHeader src="/images/logo.webp" />
           <CardTitle text="9000+" className="*text-5xl" />
-          <CardDescription text="businesses trust Chatbase" />
+          <CardDescription text="businesses trust Helix" />
         </Card>
         <Card className="w-1/2">
           <p className="text-sm text-gray-600 mb-28">
@@ -60,8 +60,8 @@ export function Testimonials() {
         </Card>
         <Card className="w-2/3">
           <p className="text-sm text-gray-600 mb-28">
-            "Chatbase is a strong signal of how customer support will evolve. It
-            is an early adopter of the agentic approach, which will become
+            "Helix is a strong signal of how customer support will evolve. It is
+            an early adopter of the agentic approach, which will become
             increasingly effective, trusted, and prominent."
           </p>
           <CompWork text="Marc Manara" work="OpenAI" src="/images/logo.webp" />

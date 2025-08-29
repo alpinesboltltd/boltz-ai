@@ -280,7 +280,7 @@
       <div class="header">
         <h1>🗄️ Database Schema Normalizer</h1>
         <p>
-          Normalize chatbot data into proper database schemas with TypeScript
+          Normalize chatagent data into proper database schemas with TypeScript
           types and JSON Server format
         </p>
       </div>
@@ -295,23 +295,23 @@
           </p>
           <div class="grid">
             <div class="card">
-              <h3>🤖 chatbots</h3>
-              <p>Main chatbot entities with core properties</p>
+              <h3>🤖 chatagents</h3>
+              <p>Main chatagent entities with core properties</p>
             </div>
             <div class="card">
-              <h3>🎨 chatbot_appearance</h3>
+              <h3>🎨 chatagent_appearance</h3>
               <p>UI/UX settings and styling configurations</p>
             </div>
             <div class="card">
-              <h3>⚙️ chatbot_behavior</h3>
+              <h3>⚙️ chatagent_behavior</h3>
               <p>Behavior settings and message configurations</p>
             </div>
             <div class="card">
-              <h3>🔗 chatbot_integrations</h3>
+              <h3>🔗 chatagent_integrations</h3>
               <p>Platform integrations and API configurations</p>
             </div>
             <div class="card">
-              <h3>📊 chatbot_stats</h3>
+              <h3>📊 chatagent_stats</h3>
               <p>Performance metrics and analytics data</p>
             </div>
             <div class="card">
@@ -327,7 +327,7 @@
 
           <!-- Tabs -->
           <div class="tabs">
-            <button class="tab active" onclick="showTab('chatbots')">
+            <button class="tab active" onclick="showTab('chatagents')">
               Chatbots
             </button>
             <button class="tab" onclick="showTab('appearance')">
@@ -344,10 +344,10 @@
           </div>
 
           <!-- Chatbots Table -->
-          <div id="chatbots-tab" class="tab-content active">
-            <h3>chatbots</h3>
+          <div id="chatagents-tab" class="tab-content active">
+            <h3>chatagents</h3>
             <div class="table-container">
-              <table id="chatbotsTable">
+              <table id="chatagentsTable">
                 <thead>
                   <tr>
                     <th>id</th>
@@ -359,20 +359,20 @@
                     <th>updated_at</th>
                   </tr>
                 </thead>
-                <tbody id="chatbotsTableBody"></tbody>
+                <tbody id="chatagentsTableBody"></tbody>
               </table>
             </div>
           </div>
 
           <!-- Appearance Table -->
           <div id="appearance-tab" class="tab-content">
-            <h3>chatbot_appearance</h3>
+            <h3>chatagent_appearance</h3>
             <div class="table-container">
               <table id="appearanceTable">
                 <thead>
                   <tr>
                     <th>id</th>
-                    <th>chatbot_id</th>
+                    <th>chatagent_id</th>
                     <th>primary_color</th>
                     <th>font_family</th>
                     <th>chat_icon</th>
@@ -388,13 +388,13 @@
 
           <!-- Behavior Table -->
           <div id="behavior-tab" class="tab-content">
-            <h3>chatbot_behavior</h3>
+            <h3>chatagent_behavior</h3>
             <div class="table-container">
               <table id="behaviorTable">
                 <thead>
                   <tr>
                     <th>id</th>
-                    <th>chatbot_id</th>
+                    <th>chatagent_id</th>
                     <th>initial_messages</th>
                     <th>fallback_message</th>
                     <th>enable_human_handoff</th>
@@ -410,13 +410,13 @@
 
           <!-- Integrations Table -->
           <div id="integrations-tab" class="tab-content">
-            <h3>chatbot_integrations</h3>
+            <h3>chatagent_integrations</h3>
             <div class="table-container">
               <table id="integrationsTable">
                 <thead>
                   <tr>
                     <th>id</th>
-                    <th>chatbot_id</th>
+                    <th>chatagent_id</th>
                     <th>platform</th>
                     <th>api_key</th>
                     <th>is_active</th>
@@ -431,13 +431,13 @@
 
           <!-- Stats Table -->
           <div id="stats-tab" class="tab-content">
-            <h3>chatbot_stats</h3>
+            <h3>chatagent_stats</h3>
             <div class="table-container">
               <table id="statsTable">
                 <thead>
                   <tr>
                     <th>id</th>
-                    <th>chatbot_id</th>
+                    <th>chatagent_id</th>
                     <th>total_messages</th>
                     <th>unique_users</th>
                     <th>average_rating</th>
@@ -459,7 +459,7 @@
                 <thead>
                   <tr>
                     <th>id</th>
-                    <th>chatbot_id</th>
+                    <th>chatagent_id</th>
                     <th>content_type</th>
                     <th>category</th>
                     <th>title</th>
@@ -525,44 +525,44 @@
           <div class="grid">
             <div class="card">
               <h3>Chatbots</h3>
-              <code>GET /chatbots</code><br />
-              <code>GET /chatbots/:id</code><br />
-              <code>POST /chatbots</code><br />
-              <code>PUT /chatbots/:id</code><br />
-              <code>DELETE /chatbots/:id</code>
+              <code>GET /chatagents</code><br />
+              <code>GET /chatagents/:id</code><br />
+              <code>POST /chatagents</code><br />
+              <code>PUT /chatagents/:id</code><br />
+              <code>DELETE /chatagents/:id</code>
             </div>
             <div class="card">
               <h3>Appearance</h3>
-              <code>GET /chatbot_appearance</code><br />
-              <code>GET /chatbot_appearance?chatbot_id=:id</code><br />
-              <code>POST /chatbot_appearance</code><br />
-              <code>PUT /chatbot_appearance/:id</code>
+              <code>GET /chatagent_appearance</code><br />
+              <code>GET /chatagent_appearance?chatagent_id=:id</code><br />
+              <code>POST /chatagent_appearance</code><br />
+              <code>PUT /chatagent_appearance/:id</code>
             </div>
             <div class="card">
               <h3>Behavior</h3>
-              <code>GET /chatbot_behavior</code><br />
-              <code>GET /chatbot_behavior?chatbot_id=:id</code><br />
-              <code>POST /chatbot_behavior</code><br />
-              <code>PUT /chatbot_behavior/:id</code>
+              <code>GET /chatagent_behavior</code><br />
+              <code>GET /chatagent_behavior?chatagent_id=:id</code><br />
+              <code>POST /chatagent_behavior</code><br />
+              <code>PUT /chatagent_behavior/:id</code>
             </div>
             <div class="card">
               <h3>Integrations</h3>
-              <code>GET /chatbot_integrations</code><br />
-              <code>GET /chatbot_integrations?chatbot_id=:id</code><br />
-              <code>POST /chatbot_integrations</code><br />
-              <code>PUT /chatbot_integrations/:id</code>
+              <code>GET /chatagent_integrations</code><br />
+              <code>GET /chatagent_integrations?chatagent_id=:id</code><br />
+              <code>POST /chatagent_integrations</code><br />
+              <code>PUT /chatagent_integrations/:id</code>
             </div>
             <div class="card">
               <h3>Stats</h3>
-              <code>GET /chatbot_stats</code><br />
-              <code>GET /chatbot_stats?chatbot_id=:id</code><br />
-              <code>POST /chatbot_stats</code><br />
-              <code>PUT /chatbot_stats/:id</code>
+              <code>GET /chatagent_stats</code><br />
+              <code>GET /chatagent_stats?chatagent_id=:id</code><br />
+              <code>POST /chatagent_stats</code><br />
+              <code>PUT /chatagent_stats/:id</code>
             </div>
             <div class="card">
               <h3>Training Data</h3>
               <code>GET /training_data</code><br />
-              <code>GET /training_data?chatbot_id=:id</code><br />
+              <code>GET /training_data?chatagent_id=:id</code><br />
               <code>POST /training_data</code><br />
               <code>PUT /training_data/:id</code>
             </div>
@@ -577,7 +577,7 @@
         {
           id: "1",
           name: "Customer Support Bot",
-          description: "A chatbot for handling customer support inquiries",
+          description: "A chatagent for handling customer support inquiries",
           aiModel: "gemini-pro",
           status: "active",
           createdAt: "2023-11-15T10:30:00Z",
@@ -624,7 +624,7 @@
           id: "2",
           name: "Sales Assistant",
           description:
-            "A chatbot for helping with product recommendations and sales",
+            "A chatagent for helping with product recommendations and sales",
           aiModel: "gpt-4",
           status: "active",
           createdAt: "2023-10-20T09:15:00Z",
@@ -672,7 +672,7 @@
           id: "3",
           name: "Product Recommender",
           description:
-            "A chatbot for recommending products based on user preferences",
+            "A chatagent for recommending products based on user preferences",
           aiModel: "claude-2",
           status: "draft",
           createdAt: "2023-12-01T15:20:00Z",
@@ -717,11 +717,11 @@
 
       // Normalize data into separate tables
       function normalizeData() {
-        const chatbots = [];
-        const chatbotAppearance = [];
-        const chatbotBehavior = [];
-        const chatbotIntegrations = [];
-        const chatbotStats = [];
+        const chatagents = [];
+        const chatagentAppearance = [];
+        const chatagentBehavior = [];
+        const chatagentIntegrations = [];
+        const chatagentStats = [];
         const trainingData = [];
 
         let appearanceId = 1;
@@ -731,8 +731,8 @@
         let trainingId = 1;
 
         originalData.forEach((bot) => {
-          // Main chatbot table
-          chatbots.push({
+          // Main chatagent table
+          chatagents.push({
             id: parseInt(bot.id),
             name: bot.name,
             description: bot.description,
@@ -743,9 +743,9 @@
           });
 
           // Appearance table
-          chatbotAppearance.push({
+          chatagentAppearance.push({
             id: appearanceId++,
-            chatbot_id: parseInt(bot.id),
+            chatagent_id: parseInt(bot.id),
             primary_color: bot.settings.appearance.primaryColor,
             font_family: bot.settings.appearance.fontFamily,
             chat_icon: bot.settings.appearance.chatIcon,
@@ -755,9 +755,9 @@
           });
 
           // Behavior table
-          chatbotBehavior.push({
+          chatagentBehavior.push({
             id: behaviorId++,
-            chatbot_id: parseInt(bot.id),
+            chatagent_id: parseInt(bot.id),
             initial_messages: JSON.stringify(
               bot.settings.behavior.initialMessages
             ),
@@ -770,9 +770,9 @@
 
           // Integrations table
           bot.settings.integrations.platforms.forEach((platform) => {
-            chatbotIntegrations.push({
+            chatagentIntegrations.push({
               id: integrationId++,
-              chatbot_id: parseInt(bot.id),
+              chatagent_id: parseInt(bot.id),
               platform: platform,
               api_key: bot.settings.integrations.apiKeys[platform] || null,
               is_active: !!bot.settings.integrations.apiKeys[platform],
@@ -782,9 +782,9 @@
           });
 
           // Stats table
-          chatbotStats.push({
+          chatagentStats.push({
             id: statsId++,
-            chatbot_id: parseInt(bot.id),
+            chatagent_id: parseInt(bot.id),
             total_messages: bot.stats.totalMessages,
             unique_users: bot.stats.uniqueUsers,
             average_rating: bot.stats.averageRating,
@@ -798,7 +798,7 @@
           enhancedTrainingData.forEach((training) => {
             trainingData.push({
               id: trainingId++,
-              chatbot_id: parseInt(bot.id),
+              chatagent_id: parseInt(bot.id),
               content_type: training.type,
               category: training.category,
               title: training.title,
@@ -815,11 +815,11 @@
         });
 
         return {
-          chatbots,
-          chatbot_appearance: chatbotAppearance,
-          chatbot_behavior: chatbotBehavior,
-          chatbot_integrations: chatbotIntegrations,
-          chatbot_stats: chatbotStats,
+          chatagents,
+          chatagent_appearance: chatagentAppearance,
+          chatagent_behavior: chatagentBehavior,
+          chatagent_integrations: chatagentIntegrations,
+          chatagent_stats: chatagentStats,
           training_data: trainingData,
         };
       }
@@ -902,11 +902,11 @@
       function populateTables() {
         const normalizedData = normalizeData();
 
-        // Populate chatbots table
-        const chatbotsBody = document.getElementById("chatbotsTableBody");
-        chatbotsBody.innerHTML = "";
-        normalizedData.chatbots.forEach((bot) => {
-          const row = chatbotsBody.insertRow();
+        // Populate chatagents table
+        const chatagentsBody = document.getElementById("chatagentsTableBody");
+        chatagentsBody.innerHTML = "";
+        normalizedData.chatagents.forEach((bot) => {
+          const row = chatagentsBody.insertRow();
           row.innerHTML = `
                     <td><span class="highlight">${bot.id}</span></td>
                     <td><strong>${bot.name}</strong></td>
@@ -921,11 +921,11 @@
         // Populate appearance table
         const appearanceBody = document.getElementById("appearanceTableBody");
         appearanceBody.innerHTML = "";
-        normalizedData.chatbot_appearance.forEach((appearance) => {
+        normalizedData.chatagent_appearance.forEach((appearance) => {
           const row = appearanceBody.insertRow();
           row.innerHTML = `
                     <td><span class="highlight">${appearance.id}</span></td>
-                    <td>${appearance.chatbot_id}</td>
+                    <td>${appearance.chatagent_id}</td>
                     <td><div style="width:20px;height:20px;background:${appearance.primary_color};border-radius:4px;display:inline-block;margin-right:8px;"></div>${appearance.primary_color}</td>
                     <td>${appearance.font_family}</td>
                     <td>${appearance.chat_icon}</td>
@@ -938,11 +938,11 @@
         // Populate behavior table
         const behaviorBody = document.getElementById("behaviorTableBody");
         behaviorBody.innerHTML = "";
-        normalizedData.chatbot_behavior.forEach((behavior) => {
+        normalizedData.chatagent_behavior.forEach((behavior) => {
           const row = behaviorBody.insertRow();
           row.innerHTML = `
                     <td><span class="highlight">${behavior.id}</span></td>
-                    <td>${behavior.chatbot_id}</td>
+                    <td>${behavior.chatagent_id}</td>
                     <td>${behavior.initial_messages.length > 50 ? behavior.initial_messages.substring(0, 50) + "..." : behavior.initial_messages}</td>
                     <td>${behavior.fallback_message.length > 30 ? behavior.fallback_message.substring(0, 30) + "..." : behavior.fallback_message}</td>
                     <td>${behavior.enable_human_handoff ? "✅" : "❌"}</td>
@@ -957,11 +957,11 @@
           "integrationsTableBody"
         );
         integrationsBody.innerHTML = "";
-        normalizedData.chatbot_integrations.forEach((integration) => {
+        normalizedData.chatagent_integrations.forEach((integration) => {
           const row = integrationsBody.insertRow();
           row.innerHTML = `
                     <td><span class="highlight">${integration.id}</span></td>
-                    <td>${integration.chatbot_id}</td>
+                    <td>${integration.chatagent_id}</td>
                     <td><span class="data-type">${integration.platform}</span></td>
                     <td>${integration.api_key ? "🔐 " + integration.api_key.substring(0, 10) + "..." : "❌ Not configured"}</td>
                     <td>${integration.is_active ? "✅" : "❌"}</td>
@@ -973,11 +973,11 @@
         // Populate stats table
         const statsBody = document.getElementById("statsTableBody");
         statsBody.innerHTML = "";
-        normalizedData.chatbot_stats.forEach((stat) => {
+        normalizedData.chatagent_stats.forEach((stat) => {
           const row = statsBody.insertRow();
           row.innerHTML = `
                     <td><span class="highlight">${stat.id}</span></td>
-                    <td>${stat.chatbot_id}</td>
+                    <td>${stat.chatagent_id}</td>
                     <td><span class="data-type">${stat.total_messages.toLocaleString()}</span></td>
                     <td><span class="data-type">${stat.unique_users.toLocaleString()}</span></td>
                     <td><span class="data-type">${stat.average_rating}/5</span></td>
@@ -994,7 +994,7 @@
           const row = trainingBody.insertRow();
           row.innerHTML = `
                     <td><span class="highlight">${training.id}</span></td>
-                    <td>${training.chatbot_id}</td>
+                    <td>${training.chatagent_id}</td>
                     <td><span class="data-type">${training.content_type}</span></td>
                     <td>${training.category}</td>
                     <td><strong>${training.title}</strong></td>
@@ -1013,10 +1013,10 @@
       // Generate SQL Schema
       function generateSQLSchema() {
         const sqlSchema = `-- Chatbots Database Schema
--- Generated for normalized chatbot data structure
+-- Generated for normalized chatagent data structure
 
--- Main chatbots table
-CREATE TABLE chatbots (
+-- Main chatagents table
+CREATE TABLE chatagents (
     id INTEGER PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     description TEXT,
@@ -1029,9 +1029,9 @@ CREATE TABLE chatbots (
 );
 
 -- Chatbot appearance settings
-CREATE TABLE chatbot_appearance (
+CREATE TABLE chatagent_appearance (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    chatbot_id INTEGER NOT NULL,
+    chatagent_id INTEGER NOT NULL,
     primary_color VARCHAR(7) NOT NULL, -- Hex color code
     font_family VARCHAR(100) NOT NULL,
     chat_icon VARCHAR(100) NOT NULL,
@@ -1039,14 +1039,14 @@ CREATE TABLE chatbot_appearance (
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     
-    FOREIGN KEY (chatbot_id) REFERENCES chatbots(id) ON DELETE CASCADE,
-    UNIQUE(chatbot_id) -- One-to-one relationship
+    FOREIGN KEY (chatagent_id) REFERENCES chatagents(id) ON DELETE CASCADE,
+    UNIQUE(chatagent_id) -- One-to-one relationship
 );
 
 -- Chatbot behavior settings
-CREATE TABLE chatbot_behavior (
+CREATE TABLE chatagent_behavior (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    chatbot_id INTEGER NOT NULL,
+    chatagent_id INTEGER NOT NULL,
     initial_messages JSON NOT NULL, -- Array of initial messages
     fallback_message TEXT NOT NULL,
     enable_human_handoff BOOLEAN NOT NULL DEFAULT false,
@@ -1054,28 +1054,28 @@ CREATE TABLE chatbot_behavior (
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     
-    FOREIGN KEY (chatbot_id) REFERENCES chatbots(id) ON DELETE CASCADE,
-    UNIQUE(chatbot_id) -- One-to-one relationship
+    FOREIGN KEY (chatagent_id) REFERENCES chatagents(id) ON DELETE CASCADE,
+    UNIQUE(chatagent_id) -- One-to-one relationship
 );
 
 -- Chatbot platform integrations
-CREATE TABLE chatbot_integrations (
+CREATE TABLE chatagent_integrations (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    chatbot_id INTEGER NOT NULL,
+    chatagent_id INTEGER NOT NULL,
     platform VARCHAR(100) NOT NULL,
     api_key VARCHAR(500), -- Encrypted API key
     is_active BOOLEAN NOT NULL DEFAULT false,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     
-    FOREIGN KEY (chatbot_id) REFERENCES chatbots(id) ON DELETE CASCADE,
-    UNIQUE(chatbot_id, platform) -- One chatbot can have one config per platform
+    FOREIGN KEY (chatagent_id) REFERENCES chatagents(id) ON DELETE CASCADE,
+    UNIQUE(chatagent_id, platform) -- One chatagent can have one config per platform
 );
 
 -- Chatbot performance statistics
-CREATE TABLE chatbot_stats (
+CREATE TABLE chatagent_stats (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    chatbot_id INTEGER NOT NULL,
+    chatagent_id INTEGER NOT NULL,
     total_messages INTEGER NOT NULL DEFAULT 0,
     unique_users INTEGER NOT NULL DEFAULT 0,
     average_rating DECIMAL(3,2) DEFAULT 0.00, -- 0.00 to 5.00
@@ -1083,8 +1083,8 @@ CREATE TABLE chatbot_stats (
     conversions_count INTEGER NOT NULL DEFAULT 0,
     last_calculated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     
-    FOREIGN KEY (chatbot_id) REFERENCES chatbots(id) ON DELETE CASCADE,
-    UNIQUE(chatbot_id), -- One-to-one relationship
+    FOREIGN KEY (chatagent_id) REFERENCES chatagents(id) ON DELETE CASCADE,
+    UNIQUE(chatagent_id), -- One-to-one relationship
     CONSTRAINT chk_rating CHECK (average_rating >= 0 AND average_rating <= 5),
     CONSTRAINT chk_response_rate CHECK (response_rate >= 0 AND response_rate <= 1)
 );
@@ -1092,7 +1092,7 @@ CREATE TABLE chatbot_stats (
 -- Enhanced training data for vectorization
 CREATE TABLE training_data (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    chatbot_id INTEGER NOT NULL,
+    chatagent_id INTEGER NOT NULL,
     content_type VARCHAR(50) NOT NULL, -- faq, knowledge_base, procedure, external_link, website_content
     category VARCHAR(100) NOT NULL,
     title VARCHAR(255) NOT NULL,
@@ -1105,20 +1105,20 @@ CREATE TABLE training_data (
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     
-    FOREIGN KEY (chatbot_id) REFERENCES chatbots(id) ON DELETE CASCADE,
+    FOREIGN KEY (chatagent_id) REFERENCES chatagents(id) ON DELETE CASCADE,
     CONSTRAINT chk_content_type CHECK (content_type IN ('faq', 'knowledge_base', 'procedure', 'external_link', 'website_content')),
     CONSTRAINT chk_confidence CHECK (confidence_score >= 0 AND confidence_score <= 1)
 );
 
 -- Indexes for better performance
-CREATE INDEX idx_chatbots_status ON chatbots(status);
-CREATE INDEX idx_chatbots_ai_model ON chatbots(ai_model);
-CREATE INDEX idx_chatbot_appearance_chatbot_id ON chatbot_appearance(chatbot_id);
-CREATE INDEX idx_chatbot_behavior_chatbot_id ON chatbot_behavior(chatbot_id);
-CREATE INDEX idx_chatbot_integrations_chatbot_id ON chatbot_integrations(chatbot_id);
-CREATE INDEX idx_chatbot_integrations_platform ON chatbot_integrations(platform);
-CREATE INDEX idx_chatbot_stats_chatbot_id ON chatbot_stats(chatbot_id);
-CREATE INDEX idx_training_data_chatbot_id ON training_data(chatbot_id);
+CREATE INDEX idx_chatagents_status ON chatagents(status);
+CREATE INDEX idx_chatagents_ai_model ON chatagents(ai_model);
+CREATE INDEX idx_chatagent_appearance_chatagent_id ON chatagent_appearance(chatagent_id);
+CREATE INDEX idx_chatagent_behavior_chatagent_id ON chatagent_behavior(chatagent_id);
+CREATE INDEX idx_chatagent_integrations_chatagent_id ON chatagent_integrations(chatagent_id);
+CREATE INDEX idx_chatagent_integrations_platform ON chatagent_integrations(platform);
+CREATE INDEX idx_chatagent_stats_chatagent_id ON chatagent_stats(chatagent_id);
+CREATE INDEX idx_training_data_chatagent_id ON training_data(chatagent_id);
 CREATE INDEX idx_training_data_content_type ON training_data(content_type);
 CREATE INDEX idx_training_data_category ON training_data(category);
 CREATE INDEX idx_training_data_intent ON training_data(intent);
@@ -1152,7 +1152,7 @@ END;`;
 
       // Generate TypeScript Types
       function generateTypeScriptTypes() {
-        const tsTypes = `// TypeScript type definitions for normalized chatbot data
+        const tsTypes = `// TypeScript type definitions for normalized chatagent data
 // Generated from normalized database schema
 
 export interface Chatbot {
@@ -1167,7 +1167,7 @@ export interface Chatbot {
 
 export interface ChatbotAppearance {
   id: number;
-  chatbot_id: number;
+  chatagent_id: number;
   primary_color: string; // Hex color code
   font_family: string;
   chat_icon: string;
@@ -1178,7 +1178,7 @@ export interface ChatbotAppearance {
 
 export interface ChatbotBehavior {
   id: number;
-  chatbot_id: number;
+  chatagent_id: number;
   initial_messages: string; // JSON string array
   fallback_message: string;
   enable_human_handoff: boolean;
@@ -1189,7 +1189,7 @@ export interface ChatbotBehavior {
 
 export interface ChatbotIntegration {
   id: number;
-  chatbot_id: number;
+  chatagent_id: number;
   platform: string;
   api_key: string | null;
   is_active: boolean;
@@ -1199,7 +1199,7 @@ export interface ChatbotIntegration {
 
 export interface ChatbotStats {
   id: number;
-  chatbot_id: number;
+  chatagent_id: number;
   total_messages: number;
   unique_users: number;
   average_rating: number;
@@ -1210,7 +1210,7 @@ export interface ChatbotStats {
 
 export interface TrainingData {
   id: number;
-  chatbot_id: number;
+  chatagent_id: number;
   content_type: 'faq' | 'knowledge_base' | 'procedure' | 'external_link' | 'website_content';
   category: string;
   title: string;
@@ -1263,7 +1263,7 @@ export interface UpdateChatbotRequest extends Partial<CreateChatbotRequest> {
 }
 
 export interface CreateTrainingDataRequest {
-  chatbot_id: number;
+  chatagent_id: number;
   content_type: TrainingData['content_type'];
   category: string;
   title: string;

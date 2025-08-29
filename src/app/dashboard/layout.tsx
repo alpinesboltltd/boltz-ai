@@ -20,7 +20,7 @@ export default function DashboardLayout({
     },
     // {
     //   name: "Chatbots",
-    //   href: "/dashboard/chatbots",
+    //   href: "/dashboard/chatagents",
     //   icon: "M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z",
     // },
     {
@@ -94,9 +94,7 @@ export default function DashboardLayout({
           </div>
           <div className="flex flex-shrink-0 items-center px-4">
             <Link href="/" className="flex items-center">
-              <span className="text-xl font-bold text-primary-600">
-                Chatboltz
-              </span>
+              <span className="text-xl font-bold text-primary-600">Helix</span>
             </Link>
           </div>
           <div className="mt-5 h-0 flex-1 overflow-y-auto">
@@ -143,7 +141,7 @@ export default function DashboardLayout({
             <div className="flex flex-shrink-0 items-center px-4">
               <Link href="/" className="flex items-center">
                 <span className="text-xl font-bold text-primary-600">
-                  Chatboltz
+                  Helix
                 </span>
               </Link>
             </div>
@@ -202,7 +200,7 @@ export default function DashboardLayout({
       {/* Main content */}
       <div className="md:pl-64">
         <div className="mx-auto flex flex-col">
-          <div className="sticky top-0 z-10 flex h-16 flex-shrink-0 border-b border-gray-200 bg-white">
+          <div className="sticky top-0 z-10 flex md:hidden h-16 flex-shrink-0 border-b border-gray-200 bg-white">
             <button
               type="button"
               className="border-r border-gray-200 px-4 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500 md:hidden"

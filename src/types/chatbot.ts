@@ -13,7 +13,7 @@ export interface Chatbot {
 
 export interface ChatbotAppearance {
   id: number;
-  chatbot_id: string;
+  chatagent_id: string;
   primary_color: string; // Hex color code
   font_family: string;
   chat_icon: string;
@@ -27,7 +27,7 @@ export interface ChatbotAppearance {
 
 export interface ChatbotBehavior {
   id: number;
-  chatbot_id: string;
+  chatagent_id: string;
   initial_messages: string; // JSON string array
   fallback_message: string;
   enable_human_handoff: boolean;
@@ -38,7 +38,7 @@ export interface ChatbotBehavior {
 
 export interface ChatbotIntegration {
   id: number;
-  chatbot_id: string;
+  chatagent_id: string;
   platform: Platform;
   api_key: string | null;
   is_active: boolean;
@@ -48,7 +48,7 @@ export interface ChatbotIntegration {
 
 export interface ChatbotStats {
   id: number;
-  chatbot_id: string;
+  chatagent_id: string;
   total_messages: number;
   unique_users: number;
   average_rating: number;
@@ -59,7 +59,7 @@ export interface ChatbotStats {
 
 export interface TrainingData {
   id: number;
-  chatbot_id: string;
+  chatagent_id: string;
   content_type:
     | "faq"
     | "knowledge_base"
@@ -111,7 +111,7 @@ export interface UpdateChatbotRequest extends Partial<CreateChatbotRequest> {
   id: number;
 }
 export interface CreateTrainingDataRequest {
-  chatbot_id: string;
+  chatagent_id: string;
   content_type: TrainingData["content_type"];
   category: string;
   title: string;

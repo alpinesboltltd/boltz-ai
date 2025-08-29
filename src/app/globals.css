@@ -6,7 +6,12 @@
   body {
     @apply text-gray-900 antialiased;
   }
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     @apply font-display font-semibold;
   }
 }
@@ -29,5 +34,11 @@
   }
   .input {
     @apply block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm;
+  }
+}
+
+@layer utilities {
+  .rounded {
+    @apply rounded-full;
   }
 }

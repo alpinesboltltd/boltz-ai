@@ -14,8 +14,6 @@ export async function GET(
     }).then((res) => res.json() as unknown as Conversation[]);
 
     const result = conversations.filter((convo) => convo.agent_id === agent_id);
-
-    console.log(result);
     return NextResponse.json({ success: true, data: result }, { status: 200 });
   } catch (error) {
     return NextResponse.json(

@@ -17,7 +17,7 @@ export function middleware(request: NextRequest) {
     path === "/contact" ||
     path === "/privacy" ||
     path === "/terms" ||
-    path.startsWith("/chatbot/") ||
+    path.startsWith("/chatagent/") ||
     path.startsWith("/api/public/");
 
   // Get the token from cookies

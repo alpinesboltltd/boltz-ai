@@ -26,8 +26,8 @@ export default function ChatbotPreviewPage({
   const resolvedParams = use(params);
   const id = resolvedParams.id;
 
-  // Mock data for the chatbot
-  const chatbot = {
+  // Mock data for the chatagent
+  const chatagent = {
     id,
     name: "Customer Support Bot",
     description: "A helpful assistant for customer inquiries",
@@ -41,13 +41,13 @@ export default function ChatbotPreviewPage({
   };
 
   const [botConfig, setBotConfig] = useState({
-    name: chatbot.name,
-    welcomeMessage: chatbot.welcomeMessage,
-    primaryColor: chatbot.primaryColor,
-    avatar: chatbot.avatar,
-    position: chatbot.position,
-    iconSize: chatbot.iconSize,
-    bubbleStyle: chatbot.bubbleStyle,
+    name: chatagent.name,
+    welcomeMessage: chatagent.welcomeMessage,
+    primaryColor: chatagent.primaryColor,
+    avatar: chatagent.avatar,
+    position: chatagent.position,
+    iconSize: chatagent.iconSize,
+    bubbleStyle: chatagent.bubbleStyle,
   });
 
   const [showSavedMessage, setShowSavedMessage] = useState(false);
@@ -67,13 +67,13 @@ export default function ChatbotPreviewPage({
     primaryColor: "${botConfig.primaryColor}"
   };
 </script>
-<script src="https://cdn.Chatboltz/widget.js" async></script>`;
+<script src="https://cdn.Helix/widget.js" async></script>`;
 
   return (
     <div className="px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
         <Link
-          href={`/dashboard/chatbot/${id}`}
+          href={`/dashboard/chatagent/${id}`}
           className="inline-flex items-center text-sm font-medium text-primary-600 hover:text-primary-500"
         >
           <ArrowLeftIcon className="mr-1 h-4 w-4" />
@@ -82,12 +82,12 @@ export default function ChatbotPreviewPage({
         <div className="mt-2 md:flex md:items-center md:justify-between">
           <div className="min-w-0 flex-1">
             <h1 className="text-2xl font-semibold text-gray-900 sm:truncate">
-              {chatbot.name} - Preview & Customize
+              {chatagent.name} - Preview & Customize
             </h1>
           </div>
           <div className="mt-4 flex md:mt-0 md:ml-4 space-x-3">
             <Link
-              href={`/chatbot/${id}`}
+              href={`/chatagent/${id}`}
               className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
             >
               <EyeIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
@@ -167,15 +167,17 @@ export default function ChatbotPreviewPage({
           <Tab.Panel>
             <BotCustomizer
               name="Kewnu"
-              appearance={botConfig}
+              data={botConfig}
               onSave={handleSaveConfig}
             />
           </Tab.Panel>
           <Tab.Panel>
             <BotPlayground
               botId={id}
-              botName={chatbot.name}
-              model={chatbot.model}
+              botName={chatagent.name}
+              model={chatagent.model}
+              // fix me, add actual appearance
+              appearance={botConfig}
             />
           </Tab.Panel>
           <Tab.Panel>
@@ -187,7 +189,7 @@ export default function ChatbotPreviewPage({
                 <div className="mt-2 max-w-xl text-sm text-gray-500">
                   <p>
                     Add the following code snippet to your website to install
-                    your chatbot. Place it just before the closing{" "}
+                    your chatagent. Place it just before the closing{" "}
                     <code>&lt;/body&gt;</code> tag.
                   </p>
                 </div>
@@ -218,15 +220,15 @@ export default function ChatbotPreviewPage({
                       The script automatically adapts to your website's theme
                     </li>
                     <li>
-                      Your chatbot will use the customizations you've set in the
-                      Customize tab
+                      Your chatagent will use the customizations you've set in
+                      the Customize tab
                     </li>
                     <li>
-                      The chatbot will appear on all pages where you include
+                      The chatagent will appear on all pages where you include
                       this script
                     </li>
                     <li>
-                      You can update your chatbot's behavior and appearance
+                      You can update your chatagent's behavior and appearance
                       anytime from this dashboard
                     </li>
                   </ul>

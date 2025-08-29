@@ -8,7 +8,7 @@ export const Card = ({
   className?: string;
 }) => (
   <div
-    className={`p-6 bg-white rounded-3xl shadow-lg space-y-2  overflow-hidden break-words whitespace-normal ${className}`}
+    className={`p-6 bg-white rounded-2xl shadow-lg space-y-2 ${className}`}
   >
     {children}
   </div>
@@ -22,7 +22,7 @@ export const CardHeader = ({
   className?: string;
 }) => (
   <div className={`flex items-center gap-2 ${className}`}>
-    <img src={src} alt="icon" className="w-full h-94 object-contain" />
+    <img src={src} alt="icon" className="w-12 h-12 object-contain" />
   </div>
 );
 

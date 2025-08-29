@@ -1,14 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import {
-  ChatBubbleLeftRightIcon,
-  XMarkIcon,
-} from "@heroicons/react/24/outline";
-import { ChatbotAppearance } from "@/types/chatbot";
+import { XMarkIcon } from "@heroicons/react/24/outline";
+import { AgentAppearance } from "@/types/agent";
 
 interface BotPreviewProps {
-  botConfig: Partial<ChatbotAppearance>;
+  botConfig: any;
   name: string;
 }
 
@@ -60,8 +57,9 @@ export function BotPreview({ botConfig, name }: BotPreviewProps) {
 
   // Bubble style
   const bubbleStyles = {
-    rounded: "rounded-full",
+    round: "rounded-full",
     square: "rounded-md",
+    rounded: "rounded-full",
   };
 
   // Avatar display
@@ -110,12 +108,14 @@ export function BotPreview({ botConfig, name }: BotPreviewProps) {
       </div>
 
       {/* Chat widget */}
-      <div className={`absolute ${positionStyles[botConfig.position!]} z-10`}>
+      <div
+        className={`absolute ${positionStyles[botConfig.position || "bottom-right"]} z-10`}
+      >
         {!isOpen ? (
           <button
             onClick={toggleChat}
-            className={`${iconSizes[botConfig.icon_size!]} ${bubbleStyles[botConfig.bubble_style!]} flex items-center justify-center shadow-lg`}
-            style={{ backgroundColor: botConfig.primary_color! }}
+            className={`${iconSizes[botConfig.icon_size || "medium"]} ${bubbleStyles[botConfig.bubble_style || "round"]} flex items-center justify-center shadow-lg`}
+            style={{ backgroundColor: botConfig.primary_color || "#6366f1" }}
           >
             <span className="text-2xl text-white">{getAvatar()}</span>
           </button>

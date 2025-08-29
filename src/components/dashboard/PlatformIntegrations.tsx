@@ -16,7 +16,7 @@ import {
 } from "@/components/dashboard";
 
 interface PlatformIntegrationsProps {
-  chatbotId: string;
+  chatagentId: string;
   initialIntegrations?: {
     website: boolean;
     whatsapp: boolean;
@@ -46,7 +46,7 @@ const platforms: Platform[] = [
     id: "website",
     name: "Website",
     icon: "🌐",
-    description: "Embed your chatbot on your website",
+    description: "Embed your chatagent on your website",
     setupType: "code",
     availableOnPlans: ["free", "pro", "business", "enterprise"],
   },
@@ -62,7 +62,7 @@ const platforms: Platform[] = [
     id: "slack",
     name: "Slack",
     icon: "💬",
-    description: "Add your chatbot to Slack workspaces",
+    description: "Add your chatagent to Slack workspaces",
     setupType: "oauth",
     availableOnPlans: ["pro", "business", "enterprise"],
   },
@@ -126,14 +126,14 @@ const platforms: Platform[] = [
     id: "discord",
     name: "Discord",
     icon: "🎮",
-    description: "Add your chatbot to Discord servers",
+    description: "Add your chatagent to Discord servers",
     setupType: "oauth",
     availableOnPlans: ["business", "enterprise"],
   },
 ];
 
 export default function PlatformIntegrations({
-  chatbotId,
+  chatagentId,
   initialIntegrations = {
     website: true,
     whatsapp: false,
@@ -160,7 +160,7 @@ export default function PlatformIntegrations({
 
     try {
       // In production, this would call the real API
-      // await integrationsAPI.connect(chatbotId, platformId);
+      // await integrationsAPI.connect(chatagentId, platformId);
 
       // For development, simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -200,7 +200,7 @@ export default function PlatformIntegrations({
 
     try {
       // In production, this would call the real API
-      // await integrationsAPI.disconnect(chatbotId, platformId);
+      // await integrationsAPI.disconnect(chatagentId, platformId);
 
       // For development, simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -231,12 +231,12 @@ export default function PlatformIntegrations({
   const getWebsiteEmbedCode = () => {
     return `<script>
   window.boltzConfig = {
-    chatbotId: "${chatbotId}",
+    chatagentId: "${chatagentId}",
     position: "bottom-right",
   }
 </script>
 <script 
-  src="https://cdn.Chatboltz/widget.js" 
+  src="https://cdn.Helix/widget.js" 
   async>
 </script>`;
   };
@@ -248,7 +248,7 @@ export default function PlatformIntegrations({
           Platform Integrations
         </h3>
         <p className="mt-1 text-sm text-gray-500">
-          Connect your chatbot to multiple platforms to reach your users
+          Connect your chatagent to multiple platforms to reach your users
           wherever they are.
         </p>
 
@@ -347,70 +347,70 @@ export default function PlatformIntegrations({
 
       {/* Integration Modals */}
       <WhatsAppIntegrationModal
-        chatbotId={chatbotId}
+        chatagentId={chatagentId}
         isOpen={activeModal === "whatsapp"}
         onClose={() => setActiveModal(null)}
         onSuccess={() => handleModalSuccess("whatsapp")}
       />
 
       <SlackIntegrationModal
-        chatbotId={chatbotId}
+        chatagentId={chatagentId}
         isOpen={activeModal === "slack"}
         onClose={() => setActiveModal(null)}
         onSuccess={() => handleModalSuccess("slack")}
       />
 
       <FacebookIntegrationModal
-        chatbotId={chatbotId}
+        chatagentId={chatagentId}
         isOpen={activeModal === "facebook"}
         onClose={() => setActiveModal(null)}
         onSuccess={() => handleModalSuccess("facebook")}
       />
 
       <TwilioIntegrationModal
-        chatbotId={chatbotId}
+        chatagentId={chatagentId}
         isOpen={activeModal === "twilio"}
         onClose={() => setActiveModal(null)}
         onSuccess={() => handleModalSuccess("twilio")}
       />
 
       <ShopifyIntegrationModal
-        chatbotId={chatbotId}
+        chatagentId={chatagentId}
         isOpen={activeModal === "shopify"}
         onClose={() => setActiveModal(null)}
         onSuccess={() => handleModalSuccess("shopify")}
       />
 
       <WordPressIntegrationModal
-        chatbotId={chatbotId}
+        chatagentId={chatagentId}
         isOpen={activeModal === "wordpress"}
         onClose={() => setActiveModal(null)}
         onSuccess={() => handleModalSuccess("wordpress")}
       />
 
       <TelegramIntegrationModal
-        chatbotId={chatbotId}
+        chatagentId={chatagentId}
         isOpen={activeModal === "telegram"}
         onClose={() => setActiveModal(null)}
         onSuccess={() => handleModalSuccess("telegram")}
       />
 
       <InstagramIntegrationModal
-        chatbotId={chatbotId}
+        chatagentId={chatagentId}
         isOpen={activeModal === "instagram"}
         onClose={() => setActiveModal(null)}
         onSuccess={() => handleModalSuccess("instagram")}
       />
 
       <TwitterIntegrationModal
-        chatbotId={chatbotId}
+        chatagentId={chatagentId}
         isOpen={activeModal === "twitter"}
         onClose={() => setActiveModal(null)}
         onSuccess={() => handleModalSuccess("twitter")}
       />
 
       <DiscordIntegrationModal
-        chatbotId={chatbotId}
+        chatagentId={chatagentId}
         isOpen={activeModal === "discord"}
         onClose={() => setActiveModal(null)}
         onSuccess={() => handleModalSuccess("discord")}

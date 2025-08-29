@@ -18,7 +18,7 @@ export function HowItWorks() {
           An end-to-end solution for conversational AI
         </h1>
         <p className="font-normal text-sm">
-          With Chatbase, your customers can effortlessly find answers, resolve
+          With Helix, your customers can effortlessly find answers, resolve
           issues, and take meaningful actions through seamless and engaging
           AI-driven conversations.
         </p>

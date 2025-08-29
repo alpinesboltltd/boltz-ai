@@ -126,7 +126,7 @@ export default function KnowledgePage() {
             Knowledge Base
           </h1>
           <p className="mt-2 text-sm text-gray-700">
-            Manage the knowledge sources that power your chatbots.
+            Manage the knowledge sources that power your chatagents.
           </p>
         </div>
         <div className="mt-4 sm:mt-0 space-x-3">

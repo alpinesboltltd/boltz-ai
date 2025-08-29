@@ -1,66 +1,57 @@
 import {
-  Chatbot,
-  ChatbotAppearance,
-  ChatbotBehavior,
-  ChatbotIntegration,
-  ChatbotStats,
+  Agent,
+  AgentAppearance,
+  AgentBehavior,
+  AgentIntegration,
+  AgentStats,
   TrainingData,
-} from "@/types/chatbot";
-import { MenuItem } from "@headlessui/react";
+} from "@/types/agent";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-export interface ChatbotData {
-  appearance: ChatbotAppearance;
-  behavior: ChatbotBehavior;
-  integrations: ChatbotIntegration;
-  stats: ChatbotStats;
+export interface AgentData {
+  appearance: AgentAppearance;
+  behavior: AgentBehavior;
+  integrations: AgentIntegration;
+  stats: AgentStats;
   training_data: TrainingData;
 }
+
 interface AgentState {
-  chatbots: Chatbot[];
-  chatbotData: ChatbotData[];
-  setChatBots: (Chatbot: Chatbot[]) => void;
-  getChatbot: (id: string) => {
-    chatbot: Chatbot | undefined;
-    data:
-      | {
-          appearance: ChatbotAppearance;
-          behavior: ChatbotBehavior;
-          integrations: ChatbotIntegration;
-          stats: ChatbotStats;
-          training_data: TrainingData;
-        }
-      | undefined;
+  agents: Agent[];
+  agentData: AgentData[];
+  setAgents: (agents: Agent[]) => void;
+  getAgent: (id: string) => {
+    agent: Agent | undefined;
+    data: AgentData | undefined;
   };
-  // TODO: filter and search
 }
 
 export const useAgentStore = create<AgentState>()(
   persist(
     (set, get) => ({
-      chatbots: [],
-      chatbotData: [],
-      setChatBots: (chatbots) => {
-        set({ chatbots });
+      agents: [],
+      agentData: [],
+      setAgents: (agents) => {
+        set({ agents });
       },
-      getChatbot: (id) => {
-        const { chatbots, chatbotData } = get();
-        const bot = chatbots.find((b) => b.id === id);
-        if (!bot) {
-          return { chatbot: undefined, data: undefined };
+      getAgent: (id) => {
+        const { agents, agentData } = get();
+        const agent = agents.find((a) => a.id === id);
+        if (!agent) {
+          return { agent: undefined, data: undefined };
         }
-        const data = chatbotData.find(
-          (item) => item.appearance.chatbot_id === bot.id
+        const data = agentData.find(
+          (item) => item.appearance.agent_id === agent.id
         );
-        return { chatbot: bot, data };
+        return { agent, data };
       },
     }),
     {
-      name: "chatboltz-agent-storage",
+      name: "boltz-agent-storage",
       partialize: (state) => ({
-        chatbots: state.chatbots,
-        chatbotData: state.chatbotData,
+        agents: state.agents,
+        agentData: state.agentData,
       }),
     }
   )

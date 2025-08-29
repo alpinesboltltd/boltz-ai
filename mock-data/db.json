@@ -17,14 +17,16 @@
       "password": "testpass"
     }
   ],
-
-  "chatbots": [
+  "agents": [
     {
       "id": "1",
       "user_id": "1",
-      "name": "Customer Support Bot",
-      "description": "A chatbot for handling customer support inquiries",
-      "ai_model": "gemini-pro",
+      "name": "Customer Support Agent",
+      "description": "Multimodal AI agent for handling customer support with text, images, and voice",
+      "agent_type": "multimodal",
+      "ai_model": "GPT-4o",
+      "ai_provider": "OpenAI",
+      "credits_per_1k": 30,
       "status": "active",
       "created_at": "2023-11-15T10:30:00Z",
       "updated_at": "2023-12-05T14:22:00Z"
@@ -32,38 +34,102 @@
     {
       "id": "2",
       "user_id": "1",
-      "name": "Sales Assistant",
-      "description": "A chatbot for helping with product recommendations and sales",
-      "ai_model": "gpt-4",
-      "status": "archived",
+      "name": "Sales Chat Assistant",
+      "description": "Text-based AI agent for product recommendations and sales inquiries",
+      "agent_type": "text",
+      "ai_model": "GPT-4 Turbo",
+      "ai_provider": "OpenAI",
+      "credits_per_1k": 25,
+      "status": "active",
       "created_at": "2023-10-20T09:15:00Z",
       "updated_at": "2023-12-01T11:45:00Z"
     },
     {
       "id": "3",
-      "user_id": "2",
-      "name": "Product Recommender",
-      "description": "A chatbot for recommending products based on user preferences",
-      "ai_model": "claude-2",
-      "status": "draft",
+      "user_id": "1",
+      "name": "Voice Support Agent",
+      "description": "Voice AI agent for phone-based customer support and inquiries",
+      "agent_type": "voice",
+      "ai_model": "Claude Haiku 3.5",
+      "ai_provider": "Anthropic",
+      "credits_per_1k": 15,
+      "status": "active",
       "created_at": "2023-12-01T15:20:00Z",
       "updated_at": "2023-12-01T15:20:00Z"
     },
     {
       "id": "4",
       "user_id": "1",
-      "name": "Product Recommender",
-      "description": "A chatbot for recommending products based on user preferences",
-      "ai_model": "claude-2",
+      "name": "E-commerce Helper",
+      "description": "Multimodal agent for product recommendations with image analysis",
+      "agent_type": "multimodal",
+      "ai_model": "gpt-4-vision",
       "status": "draft",
       "created_at": "2023-12-01T15:20:00Z",
       "updated_at": "2023-12-01T15:20:00Z"
+    },
+    {
+      "id": "5",
+      "user_id": "1",
+      "name": "FAQ Bot",
+      "description": "Simple text agent for answering frequently asked questions",
+      "agent_type": "text",
+      "ai_model": "gemini-pro",
+      "status": "active",
+      "created_at": "2023-12-10T10:30:00Z",
+      "updated_at": "2023-12-15T14:22:00Z"
+    },
+    {
+      "id": "6",
+      "user_id": "2",
+      "name": "Medical Assistant",
+      "description": "Voice agent for medical appointment scheduling and basic health queries",
+      "agent_type": "voice",
+      "ai_model": "claude-2",
+      "status": "active",
+      "created_at": "2023-12-01T15:20:00Z",
+      "updated_at": "2023-12-01T15:20:00Z"
+    },
+    {
+      "id": "7",
+      "user_id": "2",
+      "name": "Document Analyzer",
+      "description": "Multimodal agent for analyzing documents, images, and providing insights",
+      "agent_type": "multimodal",
+      "ai_model": "gpt-4-vision",
+      "status": "draft",
+      "created_at": "2023-12-05T09:15:00Z",
+      "updated_at": "2023-12-08T11:45:00Z"
+    },
+    {
+      "id": "8",
+      "user_id": "2",
+      "name": "Live Chat Support",
+      "description": "Text agent for real-time customer support and troubleshooting",
+      "agent_type": "text",
+      "ai_model": "gpt-4",
+      "status": "active",
+      "created_at": "2023-12-12T15:20:00Z",
+      "updated_at": "2023-12-12T15:20:00Z"
+    },
+    {
+      "id": "civ9326zf",
+      "user_id": "1",
+      "name": "Graceie",
+      "description": "My name is gracies",
+      "agent_type": "multimodal",
+      "ai_model": "GPT-4o mini",
+      "ai_provider": "OpenAI",
+      "credits_per_1k": 15,
+      "status": "active",
+      "created_at": "2025-08-28T07:15:16.968Z",
+      "updated_at": "2025-08-28T07:33:53.824Z"
     }
   ],
-  "chatbot_appearance": [
+  "agent_appearance": [
     {
       "id": "1",
-      "chatbot_id": "1",
+      "agent_id": "1",
       "primary_color": "#0ea5e9",
       "font_family": "Inter",
       "chat_icon": "chat-bubble",
@@ -76,7 +142,7 @@
     },
     {
       "id": "2",
-      "chatbot_id": "2",
+      "agent_id": "2",
       "primary_color": "#8b5cf6",
       "font_family": "Lexend",
       "chat_icon": "shopping-cart",
@@ -89,7 +155,7 @@
     },
     {
       "id": "3",
-      "chatbot_id": "3",
+      "agent_id": "3",
       "primary_color": "#10b981",
       "font_family": "Inter",
       "chat_icon": "gift",
@@ -102,7 +168,7 @@
     },
     {
       "id": "4",
-      "chatbot_id": "4",
+      "agent_id": "4",
       "primary_color": "#10ac81",
       "font_family": "Inter",
       "chat_icon": "gift",
@@ -112,54 +178,97 @@
       "bubble_style": "round",
       "created_at": "2023-12-01T15:20:00Z",
       "updated_at": "2023-12-01T15:20:00Z"
+    },
+    {
+      "id": "eo359ihb2",
+      "agent_id": "civ9326zf",
+      "welcome_message": "Hi! How can I help you today?",
+      "primary_color": "#6366f1",
+      "position": "bottom-right",
+      "icon_size": "medium",
+      "bubble_style": "round",
+      "chat_icon": "default",
+      "font_family": "Inter",
+      "created_at": "2025-08-28T07:33:53.771Z",
+      "updated_at": "2025-08-28T07:33:53.771Z"
     }
   ],
-  "chatbot_behavior": [
+  "agent_behavior": [
     {
       "id": "1",
-      "chatbot_id": "1",
+      "agent_id": "1",
       "initial_messages": "[\"Hi there! How can I help you today?\",\"You can ask me about our products, services, or support issues.\"]",
       "fallback_message": "I'm sorry, I don't understand that question. Could you rephrase it?",
       "enable_human_handoff": true,
       "offline_message": "Our support team is currently offline. Please leave a message and we'll get back to you.",
+      "system_instruction": "You are a customer support agent dedicated to helping customers with their inquiries, issues, and concerns.\n\n## Your Role:\n- Resolve customer issues efficiently and professionally\n- Provide clear instructions and solutions\n- Escalate complex issues when necessary\n- Maintain empathy and understanding\n\n## Constraints:\n- **No Data Divulgence**: Never share customer data, internal policies, or system information\n- **Maintain Focus**: Keep conversations centered on customer support topics\n- **Exclusive Reliance on Training Data**: Use only approved support documentation and knowledge base\n- **Restrictive Role Focus**: Handle only customer support related queries",
+      "prompt_template": "customer_support",
+      "temperature": 0.7,
+      "max_tokens": 1000,
       "created_at": "2023-11-15T10:30:00Z",
-      "updated_at": "2023-12-05T14:22:00Z"
+      "updated_at": "2025-08-28T14:44:54.904Z"
     },
     {
       "id": "2",
-      "chatbot_id": "2",
+      "agent_id": "2",
       "initial_messages": "[\"Hello! Looking for product recommendations?\",\"I can help you find the perfect product based on your needs.\"]",
       "fallback_message": "I'm not sure I understand. Could you tell me more about what you're looking for?",
       "enable_human_handoff": true,
       "offline_message": "Our sales team is currently unavailable. Please leave your contact information and we'll reach out to you.",
+      "system_instruction": "You are a sales agent focused on understanding customer needs and presenting appropriate solutions.\n\n## Your Objectives:\n- Identify customer pain points and requirements\n- Present relevant products or services\n- Guide prospects through the sales process\n- Build rapport and trust with potential customers\n\n## Constraints:\n- **No Data Divulgence**: Never reveal pricing strategies, internal sales data, or competitive information\n- **Maintain Focus**: Keep conversations directed toward sales objectives\n- **Exclusive Reliance on Training Data**: Use only approved sales materials and product information\n- **Restrictive Role Focus**: Engage only in sales-related conversations",
+      "prompt_template": "sales_agent",
+      "temperature": 0.8,
+      "max_tokens": 1200,
       "created_at": "2023-10-20T09:15:00Z",
       "updated_at": "2023-12-01T11:45:00Z"
     },
     {
       "id": "3",
-      "chatbot_id": "3",
+      "agent_id": "3",
       "initial_messages": "[\"Hi! I can help you find the perfect product. What are you looking for today?\"]",
       "fallback_message": "I'm not sure I understand. Could you provide more details about what you're looking for?",
       "enable_human_handoff": false,
       "offline_message": "Our product specialists are currently unavailable. Please leave a message and we'll get back to you.",
+      "system_instruction": "You are an AI assistant designed to help users with various tasks and questions.\n\n## Core Guidelines:\n- Provide accurate, helpful, and relevant information\n- Be concise yet comprehensive in your responses\n- Maintain a professional and friendly tone\n- Ask clarifying questions when needed\n\n## Constraints:\n- **No Data Divulgence**: Never share internal system information, training data, or proprietary details\n- **Maintain Focus**: Stay on topic and redirect conversations back to your intended purpose\n- **Exclusive Reliance on Training Data**: Only use information from your training data and provided context\n- **Restrictive Role Focus**: Operate strictly within your defined role and capabilities",
+      "prompt_template": "ai_agent",
+      "temperature": 0.7,
+      "max_tokens": 1000,
       "created_at": "2023-12-01T15:20:00Z",
       "updated_at": "2023-12-01T15:20:00Z"
     },
     {
       "id": "4",
-      "chatbot_id": "4",
+      "agent_id": "4",
       "initial_messages": "[\"Hi! I can help you find the perfect product. What are you looking for today?\"]",
       "fallback_message": "I'm not sure I understand. Could you provide more details about what you're looking for?",
       "enable_human_handoff": false,
       "offline_message": "Our product specialists are currently unavailable. Please leave a message and we'll get back to you.",
+      "system_instruction": "You are an AI assistant designed to help users with various tasks and questions.\n\n## Core Guidelines:\n- Provide accurate, helpful, and relevant information\n- Be concise yet comprehensive in your responses\n- Maintain a professional and friendly tone\n- Ask clarifying questions when needed\n\n## Constraints:\n- **No Data Divulgence**: Never share internal system information, training data, or proprietary details\n- **Maintain Focus**: Stay on topic and redirect conversations back to your intended purpose\n- **Exclusive Reliance on Training Data**: Only use information from your training data and provided context\n- **Restrictive Role Focus**: Operate strictly within your defined role and capabilities",
+      "prompt_template": "ai_agent",
+      "temperature": 0.7,
+      "max_tokens": 1000,
       "created_at": "2023-12-01T15:20:00Z",
       "updated_at": "2023-12-01T15:20:00Z"
+    },
+    {
+      "id": "32if5zyyg",
+      "agent_id": "civ9326zf",
+      "initial_messages": "[\"Hi! How can I help you today?\"]",
+      "fallback_message": "I'm sorry, I don't understand that question. Could you rephrase it?",
+      "enable_human_handoff": false,
+      "offline_message": "Our team is currently offline. Please leave a message and we'll get back to you.",
+      "system_instruction": "You are an AI assistant designed to help users with various tasks and questions.\n\n## Core Guidelines:\n- Provide accurate, helpful, and relevant information\n- Be concise yet comprehensive in your responses\n- Maintain a professional and friendly tone\n- Ask clarifying questions when needed\n\n## Constraints:\n- **No Data Divulgence**: Never share internal system information, training data, or proprietary details\n- **Maintain Focus**: Stay on topic and redirect conversations back to your intended purpose\n- **Exclusive Reliance on Training Data**: Only use information from your training data and provided context\n- **Restrictive Role Focus**: Operate strictly within your defined role and capabilities",
+      "prompt_template": "ai_agent",
+      "temperature": 0.7,
+      "max_tokens": 1000,
+      "created_at": "2025-08-28T07:33:53.789Z",
+      "updated_at": "2025-08-28T07:33:53.789Z"
     }
   ],
-  "chatbot_integrations": [
+  "agent_integrations": [
     {
       "id": "1",
-      "chatbot_id": "1",
+      "agent_id": "1",
       "platform": "website",
       "api_key": null,
       "is_active": false,
@@ -168,7 +277,7 @@
     },
     {
       "id": "2",
-      "chatbot_id": "1",
+      "agent_id": "1",
       "platform": "whatsapp",
       "api_key": "wa_api_key_123",
       "is_active": true,
@@ -177,7 +286,7 @@
     },
     {
       "id": "3",
-      "chatbot_id": "2",
+      "agent_id": "2",
       "platform": "website",
       "api_key": null,
       "is_active": false,
@@ -186,7 +295,7 @@
     },
     {
       "id": "4",
-      "chatbot_id": "2",
+      "agent_id": "2",
       "platform": "whatsapp",
       "api_key": "wa_api_key_456",
       "is_active": true,
@@ -195,7 +304,7 @@
     },
     {
       "id": "5",
-      "chatbot_id": "2",
+      "agent_id": "2",
       "platform": "shopify",
       "api_key": "shopify_api_key_789",
       "is_active": true,
@@ -204,18 +313,45 @@
     },
     {
       "id": "6",
-      "chatbot_id": "3",
+      "agent_id": "3",
       "platform": "website",
+      "api_key": null,
+      "is_active": false,
+      "created_at": "2023-12-01T15:20:00Z",
+      "updated_at": "2023-12-01T15:20:00Z"
+    },
+    {
+      "id": "7",
+      "agent_id": "4",
+      "platform": "website",
+      "api_key": null,
+      "is_active": false,
+      "created_at": "2023-12-01T15:20:00Z",
+      "updated_at": "2023-12-01T15:20:00Z"
+    },
+    {
+      "id": "8",
+      "agent_id": "4",
+      "platform": "shopify",
+      "api_key": null,
+      "is_active": false,
+      "created_at": "2023-12-01T15:20:00Z",
+      "updated_at": "2023-12-01T15:20:00Z"
+    },
+    {
+      "id": "9",
+      "agent_id": "4",
+      "platform": "whatsapp",
       "api_key": null,
       "is_active": false,
       "created_at": "2023-12-01T15:20:00Z",
       "updated_at": "2023-12-01T15:20:00Z"
     }
   ],
-  "chatbot_stats": [
+  "agent_stats": [
     {
       "id": "1",
-      "chatbot_id": "1",
+      "agent_id": "1",
       "total_messages": 1245,
       "unique_users": 342,
       "average_rating": 4.7,
@@ -225,7 +361,7 @@
     },
     {
       "id": "2",
-      "chatbot_id": "2",
+      "agent_id": "2",
       "total_messages": 876,
       "unique_users": 215,
       "average_rating": 4.5,
@@ -235,19 +371,118 @@
     },
     {
       "id": "3",
-      "chatbot_id": "3",
+      "agent_id": "3",
       "total_messages": 0,
       "unique_users": 0,
       "average_rating": 0,
       "response_rate": 0,
       "conversions_count": 0,
       "last_calculated_at": "2025-07-26T00:40:46.092Z"
+    },
+    {
+      "id": "4",
+      "agent_id": "4",
+      "total_messages": 100,
+      "unique_users": 10,
+      "average_rating": 5,
+      "response_rate": 0.77,
+      "conversions_count": 0,
+      "last_calculated_at": "2025-07-26T00:40:46.092Z"
+    },
+    {
+      "id": "97wz7umd2",
+      "agent_id": "civ9326zf",
+      "total_messages": 0,
+      "unique_users": 0,
+      "average_rating": 0,
+      "response_rate": 0,
+      "conversions_count": 0,
+      "last_calculated_at": "2025-08-28T07:33:53.809Z"
+    }
+  ],
+  "training_files": [
+    {
+      "id": "1",
+      "agent_id": "1",
+      "filename": "customer_support_guide.pdf",
+      "file_type": "pdf",
+      "file_size": 2048576,
+      "file_path": "/uploads/agents/1/customer_support_guide.pdf",
+      "processing_status": "completed",
+      "extracted_text_length": 15420,
+      "created_at": "2023-11-15T10:30:00Z",
+      "updated_at": "2023-12-05T14:22:00Z"
+    }
+  ],
+  "training_websites": [
+    {
+      "id": "1",
+      "agent_id": "1",
+      "url": "https://example.com/support",
+      "crawl_type": "single",
+      "crawl_status": "completed",
+      "pages_crawled": 1,
+      "last_crawled_at": "2023-12-05T14:22:00Z",
+      "created_at": "2023-11-15T10:30:00Z",
+      "updated_at": "2023-12-05T14:22:00Z"
+    }
+  ],
+  "training_texts": [
+    {
+      "id": "1",
+      "agent_id": "1",
+      "title": "Refund Policy",
+      "content": "Our return policy allows customers to return products within 30 days of purchase. Items must be in original condition with tags attached. Refunds are processed within 5-7 business days.",
+      "content_length": 156,
+      "created_at": "2023-11-15T10:30:00Z",
+      "updated_at": "2023-12-05T14:22:00Z"
+    }
+  ],
+  "training_qas": [
+    {
+      "id": "1",
+      "agent_id": "1",
+      "title": "Return Questions",
+      "questions": "[\"How do I return a product?\", \"What is your return policy?\", \"Can I get a refund?\"]",
+      "answer": "You can return products within 30 days of purchase. Items must be in original condition with tags attached. Refunds are processed within 5-7 business days. To initiate a return, please contact our support team.",
+      "created_at": "2023-11-15T10:30:00Z",
+      "updated_at": "2023-12-05T14:22:00Z"
     }
   ],
   "training_data": [
     {
       "id": "1",
-      "chatbot_id": "1",
+      "agent_id": "1",
+      "content_type": "faq",
+      "category": "Customer Support",
+      "title": "Product Return Policy",
+      "content": "Our return policy allows customers to return products within 30 days of purchase. Items must be in original condition with tags attached. Refunds are processed within 5-7 business days.",
+      "intent": "return_policy_inquiry",
+      "keywords": "return,refund,policy,30 days,original condition",
+      "confidence_score": 0.95,
+      "source_url": null,
+      "is_active": true,
+      "created_at": "2023-11-15T10:30:00Z",
+      "updated_at": "2023-12-05T14:22:00Z"
+    },
+    {
+      "id": "3",
+      "agent_id": "3",
+      "content_type": "faq",
+      "category": "Customer Support",
+      "title": "Shipping Information",
+      "content": "We offer free shipping on orders over $50. Standard shipping takes 3-5 business days, express shipping takes 1-2 business days. International shipping is available to select countries.",
+      "intent": "shipping_inquiry",
+      "keywords": "shipping,delivery,free shipping,express,international",
+      "confidence_score": 0.92,
+      "source_url": null,
+      "is_active": true,
+      "created_at": "2023-11-15T10:30:00Z",
+      "updated_at": "2023-12-05T14:22:00Z"
+    },
+    {
+      "id": "4",
+      "agent_id": "4",
       "content_type": "faq",
       "category": "Customer Support",
       "title": "Product Return Policy",
@@ -262,7 +497,7 @@
     },
     {
       "id": "2",
-      "chatbot_id": "1",
+      "agent_id": "2",
       "content_type": "faq",
       "category": "Customer Support",
       "title": "Shipping Information",
@@ -274,246 +509,6 @@
       "is_active": true,
       "created_at": "2023-11-15T10:30:00Z",
       "updated_at": "2023-12-05T14:22:00Z"
-    },
-    {
-      "id": "3",
-      "chatbot_id": "1",
-      "content_type": "knowledge_base",
-      "category": "Product Information",
-      "title": "Product Specifications",
-      "content": "Our premium headphones feature noise-cancelling technology, 20-hour battery life, wireless Bluetooth 5.0 connectivity, and come with a carrying case.",
-      "intent": "product_specifications",
-      "keywords": "headphones,noise-cancelling,battery,bluetooth,wireless",
-      "confidence_score": 0.88,
-      "source_url": null,
-      "is_active": true,
-      "created_at": "2023-11-15T10:30:00Z",
-      "updated_at": "2023-12-05T14:22:00Z"
-    },
-    {
-      "id": "4",
-      "chatbot_id": "1",
-      "content_type": "procedure",
-      "category": "Support Process",
-      "title": "Troubleshooting Steps",
-      "content": "If experiencing connectivity issues: 1) Check device compatibility 2) Reset network settings 3) Update firmware 4) Contact support if issues persist",
-      "intent": "troubleshooting_guide",
-      "keywords": "troubleshooting,connectivity,reset,firmware,support",
-      "confidence_score": 0.9,
-      "source_url": null,
-      "is_active": true,
-      "created_at": "2023-11-15T10:30:00Z",
-      "updated_at": "2023-12-05T14:22:00Z"
-    },
-    {
-      "id": "5",
-      "chatbot_id": "1",
-      "content_type": "external_link",
-      "category": "Documentation",
-      "title": "User Manual",
-      "content": "Complete user manual with setup instructions, troubleshooting guides, and warranty information.",
-      "intent": "documentation_access",
-      "keywords": "manual,setup,instructions,warranty,guide",
-      "confidence_score": 0.85,
-      "source_url": "https://docs.example.com/user-manual",
-      "is_active": true,
-      "created_at": "2023-11-15T10:30:00Z",
-      "updated_at": "2023-12-05T14:22:00Z"
-    },
-    {
-      "id": "6",
-      "chatbot_id": "1",
-      "content_type": "website_content",
-      "category": "Company Information",
-      "title": "About Our Company",
-      "content": "We are a leading technology company specializing in innovative AI solutions and customer service automation. Founded in 2020, we serve over 10,000 businesses worldwide.",
-      "intent": "company_information",
-      "keywords": "company,about,technology,AI,automation,founded",
-      "confidence_score": 0.87,
-      "source_url": "https://example.com/about",
-      "is_active": true,
-      "created_at": "2023-11-15T10:30:00Z",
-      "updated_at": "2023-12-05T14:22:00Z"
-    },
-    {
-      "id": "7",
-      "chatbot_id": "2",
-      "content_type": "faq",
-      "category": "Customer Support",
-      "title": "Product Return Policy",
-      "content": "Our return policy allows customers to return products within 30 days of purchase. Items must be in original condition with tags attached. Refunds are processed within 5-7 business days.",
-      "intent": "return_policy_inquiry",
-      "keywords": "return,refund,policy,30 days,original condition",
-      "confidence_score": 0.95,
-      "source_url": null,
-      "is_active": true,
-      "created_at": "2023-10-20T09:15:00Z",
-      "updated_at": "2023-12-01T11:45:00Z"
-    },
-    {
-      "id": "8",
-      "chatbot_id": "2",
-      "content_type": "faq",
-      "category": "Customer Support",
-      "title": "Shipping Information",
-      "content": "We offer free shipping on orders over $50. Standard shipping takes 3-5 business days, express shipping takes 1-2 business days. International shipping is available to select countries.",
-      "intent": "shipping_inquiry",
-      "keywords": "shipping,delivery,free shipping,express,international",
-      "confidence_score": 0.92,
-      "source_url": null,
-      "is_active": true,
-      "created_at": "2023-10-20T09:15:00Z",
-      "updated_at": "2023-12-01T11:45:00Z"
-    },
-    {
-      "id": "9",
-      "chatbot_id": "2",
-      "content_type": "knowledge_base",
-      "category": "Product Information",
-      "title": "Product Specifications",
-      "content": "Our premium headphones feature noise-cancelling technology, 20-hour battery life, wireless Bluetooth 5.0 connectivity, and come with a carrying case.",
-      "intent": "product_specifications",
-      "keywords": "headphones,noise-cancelling,battery,bluetooth,wireless",
-      "confidence_score": 0.88,
-      "source_url": null,
-      "is_active": true,
-      "created_at": "2023-10-20T09:15:00Z",
-      "updated_at": "2023-12-01T11:45:00Z"
-    },
-    {
-      "id": "10",
-      "chatbot_id": "2",
-      "content_type": "procedure",
-      "category": "Support Process",
-      "title": "Troubleshooting Steps",
-      "content": "If experiencing connectivity issues: 1) Check device compatibility 2) Reset network settings 3) Update firmware 4) Contact support if issues persist",
-      "intent": "troubleshooting_guide",
-      "keywords": "troubleshooting,connectivity,reset,firmware,support",
-      "confidence_score": 0.9,
-      "source_url": null,
-      "is_active": true,
-      "created_at": "2023-10-20T09:15:00Z",
-      "updated_at": "2023-12-01T11:45:00Z"
-    },
-    {
-      "id": "11",
-      "chatbot_id": "2",
-      "content_type": "external_link",
-      "category": "Documentation",
-      "title": "User Manual",
-      "content": "Complete user manual with setup instructions, troubleshooting guides, and warranty information.",
-      "intent": "documentation_access",
-      "keywords": "manual,setup,instructions,warranty,guide",
-      "confidence_score": 0.85,
-      "source_url": "https://docs.example.com/user-manual",
-      "is_active": true,
-      "created_at": "2023-10-20T09:15:00Z",
-      "updated_at": "2023-12-01T11:45:00Z"
-    },
-    {
-      "id": "12",
-      "chatbot_id": "2",
-      "content_type": "website_content",
-      "category": "Company Information",
-      "title": "About Our Company",
-      "content": "We are a leading technology company specializing in innovative AI solutions and customer service automation. Founded in 2020, we serve over 10,000 businesses worldwide.",
-      "intent": "company_information",
-      "keywords": "company,about,technology,AI,automation,founded",
-      "confidence_score": 0.87,
-      "source_url": "https://example.com/about",
-      "is_active": true,
-      "created_at": "2023-10-20T09:15:00Z",
-      "updated_at": "2023-12-01T11:45:00Z"
-    },
-    {
-      "id": "13",
-      "chatbot_id": "3",
-      "content_type": "faq",
-      "category": "Customer Support",
-      "title": "Product Return Policy",
-      "content": "Our return policy allows customers to return products within 30 days of purchase. Items must be in original condition with tags attached. Refunds are processed within 5-7 business days.",
-      "intent": "return_policy_inquiry",
-      "keywords": "return,refund,policy,30 days,original condition",
-      "confidence_score": 0.95,
-      "source_url": null,
-      "is_active": true,
-      "created_at": "2023-12-01T15:20:00Z",
-      "updated_at": "2023-12-01T15:20:00Z"
-    },
-    {
-      "id": "14",
-      "chatbot_id": "3",
-      "content_type": "faq",
-      "category": "Customer Support",
-      "title": "Shipping Information",
-      "content": "We offer free shipping on orders over $50. Standard shipping takes 3-5 business days, express shipping takes 1-2 business days. International shipping is available to select countries.",
-      "intent": "shipping_inquiry",
-      "keywords": "shipping,delivery,free shipping,express,international",
-      "confidence_score": 0.92,
-      "source_url": null,
-      "is_active": true,
-      "created_at": "2023-12-01T15:20:00Z",
-      "updated_at": "2023-12-01T15:20:00Z"
-    },
-    {
-      "id": "15",
-      "chatbot_id": "3",
-      "content_type": "knowledge_base",
-      "category": "Product Information",
-      "title": "Product Specifications",
-      "content": "Our premium headphones feature noise-cancelling technology, 20-hour battery life, wireless Bluetooth 5.0 connectivity, and come with a carrying case.",
-      "intent": "product_specifications",
-      "keywords": "headphones,noise-cancelling,battery,bluetooth,wireless",
-      "confidence_score": 0.88,
-      "source_url": null,
-      "is_active": true,
-      "created_at": "2023-12-01T15:20:00Z",
-      "updated_at": "2023-12-01T15:20:00Z"
-    },
-    {
-      "id": "16",
-      "chatbot_id": "3",
-      "content_type": "procedure",
-      "category": "Support Process",
-      "title": "Troubleshooting Steps",
-      "content": "If experiencing connectivity issues: 1) Check device compatibility 2) Reset network settings 3) Update firmware 4) Contact support if issues persist",
-      "intent": "troubleshooting_guide",
-      "keywords": "troubleshooting,connectivity,reset,firmware,support",
-      "confidence_score": 0.9,
-      "source_url": null,
-      "is_active": true,
-      "created_at": "2023-12-01T15:20:00Z",
-      "updated_at": "2023-12-01T15:20:00Z"
-    },
-    {
-      "id": "17",
-      "chatbot_id": "3",
-      "content_type": "external_link",
-      "category": "Documentation",
-      "title": "User Manual",
-      "content": "Complete user manual with setup instructions, troubleshooting guides, and warranty information.",
-      "intent": "documentation_access",
-      "keywords": "manual,setup,instructions,warranty,guide",
-      "confidence_score": 0.85,
-      "source_url": "https://docs.example.com/user-manual",
-      "is_active": true,
-      "created_at": "2023-12-01T15:20:00Z",
-      "updated_at": "2023-12-01T15:20:00Z"
-    },
-    {
-      "id": "18",
-      "chatbot_id": "3",
-      "content_type": "website_content",
-      "category": "Company Information",
-      "title": "About Our Company",
-      "content": "We are a leading technology company specializing in innovative AI solutions and customer service automation. Founded in 2020, we serve over 10,000 businesses worldwide.",
-      "intent": "company_information",
-      "keywords": "company,about,technology,AI,automation,founded",
-      "confidence_score": 0.87,
-      "source_url": "https://example.com/about",
-      "is_active": true,
-      "created_at": "2023-12-01T15:20:00Z",
-      "updated_at": "2023-12-01T15:20:00Z"
     }
   ],
   "conversations": [
@@ -523,54 +518,9 @@
       "platform": "Website",
       "client_id": null,
       "title": "Laptop Return Request",
-      "created_at": "2025-07-01T10:01:00Z"
-    },
-    {
-      "id": "convo_2",
-      "agent_id": "2",
-      "platform": "Website",
-      "client_id": "+2348161769197",
-      "title": "Cardiology Appointment",
-      "created_at": "2025-07-01T10:01:00Z"
-    },
-    {
-      "id": "convo_3",
-      "agent_id": "3",
-      "platform": "Website",
-      "client_id": null,
-      "title": "Business Loan Application",
-      "created_at": "2025-07-01T10:01:00Z"
-    },
-    {
-      "id": "convo_4",
-      "agent_id": "1",
-      "platform": "Website",
-      "client_id": null,
-      "title": "Data Science Course Inquiry",
-      "created_at": "2025-07-01T10:01:00Z"
-    },
-    {
-      "id": "convo_5",
-      "agent_id": "2",
-      "platform": "Website",
-      "client_id": null,
-      "title": "Employment Contract Dispute",
-      "created_at": "2025-07-06T10:01:00Z"
-    },
-    {
-      "id": "convo_6",
-      "agent_id": "3",
-      "platform": "Website",
-      "client_id": null,
-      "title": "House Purchase Inquiry",
-      "created_at": "2025-07-01T10:01:00Z"
-    },
-    {
-      "id": "convo_7",
-      "agent_id": "1",
-      "platform": "Website",
-      "client_id": null,
-      "title": "Brake Inspection Appointment",
+      "status": "closed",
+      "escalated_to_human": false,
+      "escalation_reason": null,
       "created_at": "2025-07-01T10:01:00Z"
     }
   ],
@@ -581,258 +531,6 @@
       "role": "assistant",
       "text": "Hello! Welcome to TechStore. I'm here to help you with any questions about our products or services. How can I assist you today?",
       "timestamp": "2025-07-01T10:01:00Z"
-    },
-    {
-      "id": "msg_002",
-      "convo_id": "convo_1",
-      "role": "user",
-      "text": "I bought a laptop last week but it's not working properly. Can I return it?",
-      "timestamp": "2025-07-01T10:02:00Z"
-    },
-    {
-      "id": "msg_003",
-      "convo_id": "convo_1",
-      "role": "assistant",
-      "text": "I'm sorry to hear about the issue with your laptop. Yes, we have a 30-day return policy for all products. Since you purchased it last week, you're well within the return window. Could you please provide your order number so I can process this for you?",
-      "confidence_score": 0.95,
-      "timestamp": "2025-07-01T10:03:00Z"
-    },
-    {
-      "id": "msg_004",
-      "convo_id": "convo_1",
-      "role": "user",
-      "text": "The order number is TS-2024-001234",
-      "timestamp": "2025-07-01T10:04:00Z"
-    },
-    {
-      "id": "msg_005",
-      "convo_id": "convo_1",
-      "role": "assistant",
-      "text": "Perfect! I found your order for the Dell XPS 15 purchased on June 24th. I've initiated the return process. You'll receive a prepaid return label via email within 2 hours. Once we receive the laptop, your refund will be processed within 5-7 business days. Is there anything else I can help you with?",
-      "confidence_score": 0.92,
-      "timestamp": "2025-07-01T10:05:00Z"
-    },
-    {
-      "id": "msg_006",
-      "convo_id": "convo_2",
-      "role": "assistant",
-      "text": "Hi there! Welcome to HealthFirst Medical Center. I'm your virtual assistant and I'm here to help you with appointments, services, and general inquiries. What can I do for you today?",
-      "timestamp": "2025-07-01T10:01:00Z"
-    },
-    {
-      "id": "msg_007",
-      "convo_id": "convo_2",
-      "role": "user",
-      "text": "I need to schedule a consultation with a cardiologist",
-      "timestamp": "2025-07-01T10:02:00Z"
-    },
-    {
-      "id": "msg_008",
-      "convo_id": "convo_2",
-      "role": "assistant",
-      "text": "I'd be happy to help you schedule a cardiology consultation. We have Dr. Sarah Johnson and Dr. Michael Chen available. Dr. Johnson has availability next Tuesday at 2:30 PM or Thursday at 10:00 AM. Dr. Chen has slots on Wednesday at 3:00 PM or Friday at 9:30 AM. Which would work better for you?",
-      "confidence_score": 0.88,
-      "timestamp": "2025-07-01T10:03:00Z"
-    },
-    {
-      "id": "msg_009",
-      "convo_id": "convo_2",
-      "role": "user",
-      "text": "Tuesday at 2:30 PM with Dr. Johnson sounds perfect",
-      "timestamp": "2025-07-01T10:04:00Z"
-    },
-    {
-      "id": "msg_010",
-      "convo_id": "convo_2",
-      "role": "assistant",
-      "text": "Excellent! I've scheduled your appointment with Dr. Sarah Johnson for Tuesday, July 8th at 2:30 PM. Please arrive 15 minutes early for check-in and bring your insurance card and a valid ID. You'll receive a confirmation email shortly with all the details and pre-appointment instructions. Is there anything else I can help you with?",
-      "confidence_score": 0.94,
-      "timestamp": "2025-07-01T10:05:00Z"
-    },
-    {
-      "id": "msg_011",
-      "convo_id": "convo_3",
-      "role": "assistant",
-      "text": "Good day! Welcome to Premier Bank. I'm here to assist you with your banking needs, account inquiries, and financial services. How may I help you today?",
-      "timestamp": "2025-07-01T10:01:00Z"
-    },
-    {
-      "id": "msg_012",
-      "convo_id": "convo_3",
-      "role": "user",
-      "text": "I want to apply for a business loan for my restaurant",
-      "timestamp": "2025-07-01T10:02:00Z"
-    },
-    {
-      "id": "msg_013",
-      "convo_id": "convo_3",
-      "role": "assistant",
-      "text": "That's wonderful! I'd be happy to help you with your business loan application. For restaurant businesses, we offer competitive rates starting at 6.5% APR. You'll need your business license, tax returns for the last 2 years, financial statements, and a business plan. The typical loan amount ranges from $50,000 to $500,000. Would you like me to connect you with our business loan specialist to discuss your specific needs?",
-      "confidence_score": 0.91,
-      "timestamp": "2025-07-01T10:03:00Z"
-    },
-    {
-      "id": "msg_014",
-      "convo_id": "convo_3",
-      "role": "user",
-      "text": "Yes, that would be great. I'm looking for around $200,000",
-      "timestamp": "2025-07-01T10:04:00Z"
-    },
-    {
-      "id": "msg_015",
-      "convo_id": "convo_3",
-      "role": "assistant",
-      "text": "Perfect! $200,000 is well within our lending range for established restaurants. I'm scheduling you for a consultation with Maria Rodriguez, our senior business loan officer. She has availability tomorrow at 11:00 AM or Thursday at 3:00 PM. She'll review your documents and discuss terms, repayment options, and next steps. Which time works better for you?",
-      "confidence_score": 0.89,
-      "timestamp": "2025-07-01T10:05:00Z"
-    },
-    {
-      "id": "msg_016",
-      "convo_id": "convo_4",
-      "role": "assistant",
-      "text": "Hello! Welcome to EduLearn Online Academy. I'm here to help you with course information, enrollment, and academic support. What would you like to know today?",
-      "timestamp": "2025-07-01T10:01:00Z"
-    },
-    {
-      "id": "msg_017",
-      "convo_id": "convo_4",
-      "role": "user",
-      "text": "I'm interested in your data science certification program",
-      "timestamp": "2025-07-01T10:02:00Z"
-    },
-    {
-      "id": "msg_018",
-      "convo_id": "convo_4",
-      "role": "assistant",
-      "text": "Excellent choice! Our Data Science Certification is a comprehensive 6-month program covering Python, machine learning, statistics, and real-world projects. The program includes 120 hours of instruction, mentorship, and career support. The next cohort starts August 15th, and early bird pricing is $2,499 (regular price $2,999). We also offer payment plans. Would you like me to send you the detailed curriculum?",
-      "confidence_score": 0.93,
-      "timestamp": "2025-07-01T10:03:00Z"
-    },
-    {
-      "id": "msg_019",
-      "convo_id": "convo_4",
-      "role": "user",
-      "text": "Yes, please send the curriculum. Also, do you offer job placement assistance?",
-      "timestamp": "2025-07-01T10:04:00Z"
-    },
-    {
-      "id": "msg_020",
-      "convo_id": "convo_4",
-      "role": "assistant",
-      "text": "Absolutely! I'll email you the complete curriculum within the next 10 minutes. Yes, we provide comprehensive career support including resume review, interview preparation, and access to our partner network of 200+ hiring companies. Our job placement rate is 87% within 6 months of graduation. We also offer a job guarantee - if you don't find a position within 12 months, we'll refund 50% of your tuition. Would you like to schedule a call with our admissions counselor?",
-      "confidence_score": 0.96,
-      "timestamp": "2025-07-01T10:05:00Z"
-    },
-    {
-      "id": "msg_021",
-      "convo_id": "convo_5",
-      "role": "assistant",
-      "text": "Welcome to LegalAid Pro! I'm here to help you with legal information, consultation scheduling, and general legal guidance. Please note that I provide information only and this doesn't constitute legal advice. How can I assist you today?",
-      "timestamp": "2025-07-06T10:01:00Z"
-    },
-    {
-      "id": "msg_022",
-      "convo_id": "convo_5",
-      "role": "user",
-      "text": "I need help with a contract dispute with my former employer",
-      "timestamp": "2025-07-06T10:02:00Z"
-    },
-    {
-      "id": "msg_023",
-      "convo_id": "convo_5",
-      "role": "assistant",
-      "text": "I understand you're dealing with an employment contract dispute. This is a complex area that requires personalized legal advice. I'd recommend scheduling a consultation with one of our employment law specialists. Attorney Jennifer Walsh has 15 years of experience in employment disputes and is available Thursday at 2:00 PM or Friday at 10:30 AM. The initial consultation is $200 for 60 minutes. Would you like me to book one of these slots?",
-      "confidence_score": 0.87,
-      "timestamp": "2025-07-06T10:03:00Z"
-    },
-    {
-      "id": "msg_024",
-      "convo_id": "convo_5",
-      "role": "user",
-      "text": "Thursday at 2:00 PM works for me",
-      "timestamp": "2025-07-06T10:04:00Z"
-    },
-    {
-      "id": "msg_025",
-      "convo_id": "convo_5",
-      "role": "assistant",
-      "text": "Perfect! I've scheduled your consultation with Attorney Jennifer Walsh for Thursday, July 10th at 2:00 PM. Please bring all relevant documents including your employment contract, any correspondence with your employer, and termination paperwork if applicable. You'll receive a confirmation email with intake forms to complete before your appointment. The consultation fee of $200 is due at the time of service. Is there anything else I can help you with?",
-      "confidence_score": 0.92,
-      "timestamp": "2025-07-06T10:05:00Z"
-    },
-    {
-      "id": "msg_026",
-      "convo_id": "convo_6",
-      "role": "assistant",
-      "text": "Hi! Welcome to GreenThumb Real Estate. I'm here to help you with property searches, market information, and connecting you with our expert agents. Whether you're buying, selling, or renting, I'm here to assist. What are you looking for today?",
-      "timestamp": "2025-07-01T10:01:00Z"
-    },
-    {
-      "id": "msg_027",
-      "convo_id": "convo_6",
-      "role": "user",
-      "text": "I'm looking to buy a 3-bedroom house in the downtown area, budget around $400,000",
-      "timestamp": "2025-07-01T10:02:00Z"
-    },
-    {
-      "id": "msg_028",
-      "convo_id": "convo_6",
-      "role": "assistant",
-      "text": "Great! I found 12 properties matching your criteria in the downtown area. The average price for 3-bedroom homes there is $385,000, so you're right in the sweet spot. I can show you listings with modern kitchens, updated bathrooms, and some with parking included. Would you like me to email you the top 5 properties, or would you prefer to schedule a viewing tour with one of our agents this weekend?",
-      "confidence_score": 0.90,
-      "timestamp": "2025-07-01T10:03:00Z"
-    },
-    {
-      "id": "msg_029",
-      "convo_id": "convo_6",
-      "role": "user",
-      "text": "Please email me the top 5 and let's schedule viewings for this Saturday",
-      "timestamp": "2025-07-01T10:04:00Z"
-    },
-    {
-      "id": "msg_030",
-      "convo_id": "convo_6",
-      "role": "assistant",
-      "text": "Excellent! I'm sending you the top 5 properties right now, including photos, floor plans, and neighborhood details. I've also scheduled you with Sarah Mitchell, our downtown specialist, for Saturday starting at 10:00 AM. The tour will take about 3 hours to see all properties comfortably. Sarah will call you tomorrow to confirm and discuss any specific features you're looking for. You'll receive all the details via email within 5 minutes!",
-      "confidence_score": 0.94,
-      "timestamp": "2025-07-01T10:05:00Z"
-    },
-    {
-      "id": "msg_031",
-      "convo_id": "convo_7",
-      "role": "assistant",
-      "text": "Hello! Welcome to AutoCare Plus, your trusted automotive service center. I can help you with service appointments, maintenance reminders, warranty information, and general automotive questions. How can I help you today?",
-      "timestamp": "2025-07-01T10:01:00Z"
-    },
-    {
-      "id": "msg_032",
-      "convo_id": "convo_7",
-      "role": "user",
-      "text": "My car is making a strange noise when I brake. Can I get it checked?",
-      "timestamp": "2025-07-01T10:02:00Z"
-    },
-    {
-      "id": "msg_033",
-      "convo_id": "convo_7",
-      "role": "assistant",
-      "text": "That's definitely something we should check right away - brake issues are a safety priority. It could be worn brake pads, warped rotors, or low brake fluid. We have an opening tomorrow at 9:00 AM or 2:30 PM for a brake inspection. The diagnostic fee is $89, which gets applied toward any repairs needed. Our certified technicians will have you back on the road safely. Which time slot works better for you?",
-      "confidence_score": 0.91,
-      "timestamp": "2025-07-01T10:03:00Z"
-    },
-    {
-      "id": "msg_034",
-      "convo_id": "convo_7",
-      "role": "user",
-      "text": "9:00 AM tomorrow works perfect. What should I bring?",
-      "timestamp": "2025-07-01T10:04:00Z"
-    },
-    {
-      "id": "msg_035",
-      "convo_id": "convo_7",
-      "role": "assistant",
-      "text": "Perfect! You're all set for tomorrow at 9:00 AM. Please bring your driver's license, vehicle registration, and any maintenance records if you have them. If your car is still under warranty, bring those documents too. We'll provide a free shuttle service to nearby locations if you need to leave your car for repairs. You'll receive a confirmation text tonight with our address and contact information. Drive safely and we'll see you tomorrow!",
-      "confidence_score": 0.95,
-      "timestamp": "2025-07-01T10:05:00Z"
     }
   ],
   "contacts": [
@@ -840,36 +538,6 @@
       "id": "contact_001",
       "platform": "WhatsApp",
       "phone_number": "+2348011111111",
-      "email": null
-    },
-    {
-      "id": "contact_002",
-      "platform": "Website",
-      "phone_number": null,
-      "email": "user2@example.com"
-    },
-    {
-      "id": "contact_003",
-      "platform": "WhatsApp",
-      "phone_number": "+2348033333333",
-      "email": null
-    },
-    {
-      "id": "contact_004",
-      "platform": "Website",
-      "phone_number": null,
-      "email": null
-    },
-    {
-      "id": "contact_005",
-      "platform": "Email",
-      "phone_number": null,
-      "email": "user5@example.com"
-    },
-    {
-      "id": "contact_006",
-      "platform": "WhatsApp",
-      "phone_number": "+2348066666666",
       "email": null
     }
   ],
@@ -881,94 +549,95 @@
       "intent": "order_help",
       "msg_type": "text",
       "token_count": 8
+    }
+  ],
+  "message_feedback": [
+    {
+      "id": "feedback_001",
+      "message_id": "msg_003",
+      "feedback_type": "positive",
+      "user_comment": null,
+      "created_at": "2025-07-01T10:06:00Z"
+    }
+  ],
+  "message_improvements": [
+    {
+      "id": "improve_001",
+      "original_message_id": "msg_008",
+      "improved_text": "I'd be happy to help you schedule a cardiology consultation.",
+      "improvement_reason": "Corrected doctor name from Johnson to Smith",
+      "created_at": "2025-07-01T10:09:00Z"
+    }
+  ],
+  "escalation_points": [
+    {
+      "id": "escalation_001",
+      "conversation_id": "convo_2",
+      "message_id": "msg_010",
+      "escalation_reason": "Complex medical scheduling request",
+      "escalated_at": "2025-07-01T10:05:30Z"
+    }
+  ],
+  "test_queries": [
+    {
+      "id": "1",
+      "agent_id": "1",
+      "prompt_template": "customer_support",
+      "queries": [
+        "How do I return a product?",
+        "What is your refund policy?",
+        "I need help with my order",
+        "Can you track my shipment?",
+        "How do I contact customer service?"
+      ]
     },
     {
-      "id": "meta_002",
-      "msg_id": "msg_002",
-      "sentiment": "helpful",
-      "intent": "request_info",
-      "msg_type": "text",
-      "token_count": 9
+      "id": "2",
+      "agent_id": "2",
+      "prompt_template": "sales_agent",
+      "queries": [
+        "What products do you recommend?",
+        "Can you help me find the right solution?",
+        "What are your pricing options?",
+        "Do you have any special offers?",
+        "How does your product compare to competitors?"
+      ]
     },
     {
-      "id": "meta_003",
-      "msg_id": "msg_003",
-      "sentiment": "curious",
-      "intent": "discount_inquiry",
-      "msg_type": "text",
-      "token_count": 6
+      "id": "3",
+      "agent_id": "3",
+      "prompt_template": "ai_agent",
+      "queries": [
+        "Tell me about your services",
+        "How can I contact support?",
+        "What are your business hours?",
+        "Do you offer refunds?",
+        "How do I book an appointment?"
+      ]
     },
     {
-      "id": "meta_004",
-      "msg_id": "msg_004",
-      "sentiment": "positive",
-      "intent": "promotion_reply",
-      "msg_type": "text",
-      "token_count": 7
+      "id": "4",
+      "agent_id": "4",
+      "prompt_template": "ai_agent",
+      "queries": [
+        "Tell me about your services",
+        "How can I contact support?",
+        "What are your business hours?",
+        "Do you offer refunds?",
+        "How do I book an appointment?"
+      ]
     },
     {
-      "id": "meta_005",
-      "msg_id": "msg_005",
-      "sentiment": "frustrated",
-      "intent": "human_request",
-      "msg_type": "text",
-      "token_count": 6
-    },
-    {
-      "id": "meta_006",
-      "msg_id": "msg_006",
-      "sentiment": "neutral",
-      "intent": "transfer",
-      "msg_type": "text",
-      "token_count": 5
-    },
-    {
-      "id": "meta_007",
-      "msg_id": "msg_007",
-      "sentiment": "worried",
-      "intent": "delivery_status",
-      "msg_type": "text",
-      "token_count": 5
-    },
-    {
-      "id": "meta_008",
-      "msg_id": "msg_008",
-      "sentiment": "reassuring",
-      "intent": "delivery_update",
-      "msg_type": "text",
-      "token_count": 6
-    },
-    {
-      "id": "meta_009",
-      "msg_id": "msg_009",
-      "sentiment": "dissatisfied",
-      "intent": "return_request",
-      "msg_type": "text",
-      "token_count": 6
-    },
-    {
-      "id": "meta_010",
-      "msg_id": "msg_010",
-      "sentiment": "supportive",
-      "intent": "return_help",
-      "msg_type": "text",
-      "token_count": 7
-    },
-    {
-      "id": "meta_011",
-      "msg_id": "msg_011",
-      "sentiment": "neutral",
-      "intent": "quote_request",
-      "msg_type": "text",
-      "token_count": 5
-    },
-    {
-      "id": "meta_012",
-      "msg_id": "msg_012",
-      "sentiment": "engaging",
-      "intent": "quote_followup",
-      "msg_type": "text",
-      "token_count": 8
+      "id": "5",
+      "agent_id": "civ9326zf",
+      "prompt_template": "ai_agent",
+      "queries": [
+        "Tell me about your services",
+        "How can I contact support?",
+        "What are your business hours?",
+        "Do you offer refunds?",
+        "How do I book an appointment?"
+      ]
     }
   ]
 }

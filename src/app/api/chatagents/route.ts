@@ -1,4 +1,4 @@
-import { Chatbot } from "@/types/chatbot";
+import { Agent } from "@/types/agent";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
@@ -13,11 +13,11 @@ export async function POST(request: Request) {
   try {
     // TODO: Replace with supabase data fetch
 
-    const response = await fetch("http://localhost:3001/chatbots", {
+    const response = await fetch("http://localhost:3001/agents", {
       method: "GET",
     });
-    const chatbot = (await response.json()) as Chatbot[];
-    const data = chatbot.filter((cb) => cb.user_id === userId);
+    const agents = (await response.json()) as Agent[];
+    const data = agents.filter((agent) => agent.user_id === userId);
     return NextResponse.json(
       { success: true, message: "Request successful", data },
       { status: 200 }

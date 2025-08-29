@@ -1,0 +1,294 @@
+"use client";
+
+import { useState } from "react";
+import { Upload, FileText, Globe, MessageSquare, Plus, X } from "lucide-react";
+
+interface TrainingSourcesProps {
+  agentId?: string | null;
+  onDataAdded?: (data: any) => void;
+}
+
+export function TrainingSources({ agentId, onDataAdded }: TrainingSourcesProps) {
+  const [activeTab, setActiveTab] = useState("files");
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  const [textData, setTextData] = useState({ title: "", content: "" });
+  const [urlData, setUrlData] = useState("");
+  const [qaData, setQaData] = useState({ question: "", answer: "" });
+
+  const saveTrainingData = async (data: any) => {
+    if (!agentId) return;
+    
+    try {
+      const response = await fetch("http://localhost:3001/training_data", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: Math.random().toString(36).substr(2, 9),
+          agent_id: agentId,
+          ...data,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        }),
+      });
+      
+      if (response.ok) {
+        onDataAdded?.(data);
+      }
+    } catch (error) {
+      console.error("Error saving training data:", error);
+    }
+  };
+
+  const handleFileUpload = async (files: FileList) => {
+    setIsUploading(true);
+    for (const file of Array.from(files)) {
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        const content = e.target?.result as string;
+        await saveTrainingData({
+          content_type: "knowledge_base",
+          category: "File Upload",
+          title: file.name,
+          content: content.substring(0, 10000), // Limit content
+          intent: "file_knowledge",
+          keywords: file.name.split('.')[0],
+          confidence_score: 0.9,
+          is_active: true,
+        });
+      };
+      reader.readAsText(file);
+      setUploadedFiles(prev => [...prev, file]);
+    }
+    setIsUploading(false);
+  };
+
+  const handleTextSubmit = async () => {
+    if (!textData.title || !textData.content) return;
+    
+    await saveTrainingData({
+      content_type: "faq",
+      category: "Manual Entry",
+      title: textData.title,
+      content: textData.content,
+      intent: "manual_knowledge",
+      keywords: textData.title.toLowerCase().replace(/\s+/g, ','),
+      confidence_score: 0.95,
+      is_active: true,
+    });
+    
+    setTextData({ title: "", content: "" });
+  };
+
+  const handleUrlSubmit = async () => {
+    if (!urlData) return;
+    
+    await saveTrainingData({
+      content_type: "website_content",
+      category: "Website",
+      title: `Website: ${urlData}`,
+      content: `Content from ${urlData}`,
+      intent: "website_knowledge",
+      keywords: new URL(urlData).hostname,
+      confidence_score: 0.8,
+      source_url: urlData,
+      is_active: true,
+    });
+    
+    setUrlData("");
+  };
+
+  const handleQASubmit = async () => {
+    if (!qaData.question || !qaData.answer) return;
+    
+    await saveTrainingData({
+      content_type: "faq",
+      category: "Q&A",
+      title: qaData.question,
+      content: qaData.answer,
+      intent: "qa_knowledge",
+      keywords: qaData.question.toLowerCase().replace(/\s+/g, ','),
+      confidence_score: 1.0,
+      is_active: true,
+    });
+    
+    setQaData({ question: "", answer: "" });
+  };
+
+  const tabs = [
+    { id: "files", label: "Files", icon: FileText },
+    { id: "text", label: "Text", icon: MessageSquare },
+    { id: "website", label: "Website", icon: Globe },
+    { id: "qa", label: "Q&A", icon: MessageSquare },
+  ];
+
+  return (
+    <div className="space-y-6">
+      {/* Tab Navigation */}
+      <div className="border-b border-gray-200">
+        <nav className="flex space-x-8">
+          {tabs.map((tab) => {
+            const Icon = tab.icon;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`flex items-center space-x-2 py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+                  activeTab === tab.id
+                    ? "border-indigo-500 text-indigo-600"
+                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                }`}
+              >
+                <Icon className="w-4 h-4" />
+                <span>{tab.label}</span>
+              </button>
+            );
+          })}
+        </nav>
+      </div>
+
+      {/* Tab Content */}
+      <div className="min-h-[400px]">
+        {activeTab === "files" && (
+          <div className="space-y-4">
+            <div
+              className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-gray-400 transition-colors cursor-pointer"
+              onDrop={(e) => {
+                e.preventDefault();
+                handleFileUpload(e.dataTransfer.files);
+              }}
+              onDragOver={(e) => e.preventDefault()}
+              onClick={() => document.getElementById("file-input")?.click()}
+            >
+              <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+              <p className="text-lg font-medium text-gray-900 mb-2">
+                Drop files here or click to upload
+              </p>
+              <p className="text-sm text-gray-500">
+                Supports PDF, TXT, DOC, DOCX files up to 10MB
+              </p>
+            </div>
+            
+            <input
+              id="file-input"
+              type="file"
+              multiple
+              accept=".pdf,.txt,.doc,.docx"
+              className="hidden"
+              onChange={(e) => e.target.files && handleFileUpload(e.target.files)}
+            />
+
+            {uploadedFiles.length > 0 && (
+              <div className="space-y-2">
+                <h4 className="font-medium text-gray-900">Uploaded Files</h4>
+                {uploadedFiles.map((file, index) => (
+                  <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div className="flex items-center space-x-3">
+                      <FileText className="w-5 h-5 text-gray-400" />
+                      <span className="text-sm font-medium">{file.name}</span>
+                      <span className="text-xs text-gray-500">
+                        {(file.size / 1024).toFixed(1)} KB
+                      </span>
+                    </div>
+                    <button
+                      onClick={() => setUploadedFiles(prev => prev.filter((_, i) => i !== index))}
+                      className="text-red-500 hover:text-red-700"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {activeTab === "text" && (
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Title</label>
+              <input
+                type="text"
+                value={textData.title}
+                onChange={(e) => setTextData(prev => ({ ...prev, title: e.target.value }))}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                placeholder="e.g., Return Policy"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Content</label>
+              <textarea
+                value={textData.content}
+                onChange={(e) => setTextData(prev => ({ ...prev, content: e.target.value }))}
+                rows={8}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 resize-none"
+                placeholder="Enter the text content you want your agent to learn from..."
+              />
+            </div>
+            <button
+              onClick={handleTextSubmit}
+              disabled={!textData.title || !textData.content}
+              className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Add Text Content
+            </button>
+          </div>
+        )}
+
+        {activeTab === "website" && (
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Website URL</label>
+              <input
+                type="url"
+                value={urlData}
+                onChange={(e) => setUrlData(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                placeholder="https://example.com"
+              />
+            </div>
+            <button
+              onClick={handleUrlSubmit}
+              disabled={!urlData}
+              className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Add Website
+            </button>
+          </div>
+        )}
+
+        {activeTab === "qa" && (
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Question</label>
+              <input
+                type="text"
+                value={qaData.question}
+                onChange={(e) => setQaData(prev => ({ ...prev, question: e.target.value }))}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                placeholder="What is your return policy?"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Answer</label>
+              <textarea
+                value={qaData.answer}
+                onChange={(e) => setQaData(prev => ({ ...prev, answer: e.target.value }))}
+                rows={4}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 resize-none"
+                placeholder="We offer a 30-day return policy..."
+              />
+            </div>
+            <button
+              onClick={handleQASubmit}
+              disabled={!qaData.question || !qaData.answer}
+              className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Add Q&A Pair
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

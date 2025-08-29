@@ -21,7 +21,7 @@ export function Securitys() {
             Enterprise-grade security & privacy
           </h1>
           <p>
-            We take security and compliance seriously. Chatbase is SOC 2 Type II
+            We take security and compliance seriously. Helix is SOC 2 Type II
             and GDPR compliant, trusted by thousands of businesses to build
             secure and compliant AI Agents.
           </p>

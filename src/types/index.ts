@@ -31,7 +31,7 @@ export interface Profile extends User {
 // Message Types
 export interface Message {
   id: string;
-  chatbotId: string;
+  chatagentId: string;
   sessionId: string;
   content: string;
   role: "user" | "bot";
@@ -52,7 +52,7 @@ export interface Integration {
 // Knowledge Base Types
 export interface KnowledgeBase {
   id: string;
-  chatbotId: string;
+  chatagentId: string;
   name: string;
   description: string;
   sources: KnowledgeSource[];
@@ -125,3 +125,7 @@ export enum FirebaseErrorMessage {
   popupBlocked = "auth/popup/blocked",
   networkFailure = "auth/network-request-failed",
 }
+
+// Re-export new types
+export * from "./sources";
+export * from "./actions";

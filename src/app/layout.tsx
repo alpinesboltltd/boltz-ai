@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Chatboltz - AI Chatbot Platform",
+  title: "Helix - AI Chatbot Platform",
   description:
-    "Create custom AI chatbots with no-code builder, powered by Google Gemini, GPT-4, Claude, and more.",
+    "Create custom AI agents with no-code builder, powered by Google Gemini, GPT-4, Claude, and more.",
 };
 
 export default function RootLayout({

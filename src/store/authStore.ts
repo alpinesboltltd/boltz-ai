@@ -61,7 +61,7 @@ export const useAuthStore = create<AuthState>()(
       },
     }),
     {
-      name: "chatboltz-auth-storage",
+      name: "helix-auth-storage",
       partialize: (state) => ({
         user: state.user,
         token: state.token,

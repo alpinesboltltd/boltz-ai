@@ -1,13 +1,13 @@
 // API client for interacting with backend services
 
 import {
-  Chatbot,
-  ChatbotAppearance,
-  ChatbotBehavior,
-  ChatbotIntegration,
-  ChatbotStats,
+  Agent,
+  AgentAppearance,
+  AgentBehavior,
+  AgentIntegration,
+  AgentStats,
   TrainingData,
-} from "@/types/chatbot";
+} from "@/types/agent";
 import { ChatMessage, Conversation } from "@/types/conversations";
 import axios from "axios";
 
@@ -61,83 +61,129 @@ export const authAPI = {
   },
 };
 
-// Chatbots API
-export const chatbotsAPI = {
-  getAll: async (userId = "1"): Promise<{ data: Chatbot[] }> => {
-    const response = await api.post("/chatbots", { userId });
+// Agents API
+export const agentsAPI = {
+  getAll: async (userId = "1"): Promise<{ data: Agent[] }> => {
+    const response = await api.post("/chatagents", { userId });
     return response.data;
   },
 
   getById: async (
     id: string
   ): Promise<{
-    // data: Chatbot;
     data: {
-      appearance: ChatbotAppearance;
-      behavior: ChatbotBehavior;
-      integrations: ChatbotIntegration;
-      stats: ChatbotStats;
+      appearance: AgentAppearance;
+      behavior: AgentBehavior;
+      integrations: AgentIntegration;
+      stats: AgentStats;
       training_data: TrainingData;
     };
   }> => {
-    const response = await api.get(`/chatbots/${id}`);
+    const response = await api.get(`/chatagents/${id}`);
+    console.log(response);
     return response.data;
   },
 
   create: async (data: any) => {
-    const response = await api.post("/chatbots", data);
+    const response = await api.post("/chatagents", data);
     return response.data;
   },
 
   update: async (id: string, data: any) => {
-    const response = await api.put(`/chatbots/${id}`, data);
+    const response = await api.put(`/chatagents/${id}`, data);
     return response.data;
   },
 
   delete: async (id: string) => {
-    const response = await api.delete(`/chatbots/${id}`);
+    const response = await api.delete(`/chatagents/${id}`);
     return response.data;
   },
 
   regenerateApiKey: async (id: string) => {
-    const response = await api.post(`/chatbots/${id}/regenerate-key`);
+    const response = await api.post(`/chatagents/${id}/regenerate-key`);
+    return response.data;
+  },
+
+  // Specific data endpoints
+  getAppearance: async (id: string) => {
+    const response = await api.get(`/chatagents/${id}/appearance`);
+    return response.data;
+  },
+
+  updateAppearance: async (id: string, data: any) => {
+    const response = await api.put(`/chatagents/${id}/appearance`, data);
+    return response.data;
+  },
+
+  getActivity: async (id: string) => {
+    const response = await api.get(`/chatagents/${id}/activity`);
+    return response.data;
+  },
+
+  getSources: async (id: string) => {
+    const response = await api.get(`/chatagents/${id}/sources`);
+    return response.data;
+  },
+
+  addSource: async (id: string, data: any) => {
+    const response = await api.post(`/chatagents/${id}/sources`, data);
+    return response.data;
+  },
+
+  getActions: async (id: string) => {
+    const response = await api.get(`/chatagents/${id}/actions`);
+    return response.data;
+  },
+
+  updateActions: async (id: string, data: any) => {
+    const response = await api.put(`/chatagents/${id}/actions`, data);
+    return response.data;
+  },
+
+  getPlaygroundConfig: async (id: string) => {
+    const response = await api.get(`/chatagents/${id}/playground`);
+    return response.data;
+  },
+
+  updatePlaygroundConfig: async (id: string, data: any) => {
+    const response = await api.put(`/chatagents/${id}/playground`, data);
     return response.data;
   },
 };
 
 // Integrations API
 export const integrationsAPI = {
-  connect: async (chatbotId: string, platform: string, data: any = {}) => {
+  connect: async (chatagentId: string, platform: string, data: any = {}) => {
     const response = await api.post(
-      `/chatbots/${chatbotId}/integrations/${platform}`,
+      `/chatagents/${chatagentId}/integrations/${platform}`,
       data
     );
     return response.data;
   },
 
-  disconnect: async (chatbotId: string, platform: string) => {
+  disconnect: async (chatagentId: string, platform: string) => {
     const response = await api.delete(
-      `/chatbots/${chatbotId}/integrations/${platform}`
+      `/chatagents/${chatagentId}/integrations/${platform}`
     );
     return response.data;
   },
 
-  getStatus: async (chatbotId: string, platform: string) => {
+  getStatus: async (chatagentId: string, platform: string) => {
     const response = await api.get(
-      `/chatbots/${chatbotId}/integrations/${platform}`
+      `/chatagents/${chatagentId}/integrations/${platform}`
     );
     return response.data;
   },
 
   // Twilio specific integration
   configureTwilio: async (
-    chatbotId: string,
+    chatagentId: string,
     phoneNumber: string,
     accountSid: string,
     authToken: string
   ) => {
     const response = await api.post(
-      `/chatbots/${chatbotId}/integrations/twilio/configure`,
+      `/chatagents/${chatagentId}/integrations/twilio/configure`,
       {
         phoneNumber,
         accountSid,
@@ -149,12 +195,12 @@ export const integrationsAPI = {
 
   // WhatsApp specific integration
   configureWhatsApp: async (
-    chatbotId: string,
+    chatagentId: string,
     phoneNumberId: string,
     accessToken: string
   ) => {
     const response = await api.post(
-      `/chatbots/${chatbotId}/integrations/whatsapp/configure`,
+      `/chatagents/${chatagentId}/integrations/whatsapp/configure`,
       {
         phoneNumberId,
         accessToken,
@@ -164,24 +210,26 @@ export const integrationsAPI = {
   },
 
   // Slack specific integration
-  getSlackOAuthUrl: (chatbotId: string) => {
-    return `${process.env.NEXT_PUBLIC_API_URL || "/api"}/chatbots/${chatbotId}/integrations/slack/oauth-url`;
+  getSlackOAuthUrl: (chatagentId: string) => {
+    return `${process.env.NEXT_PUBLIC_API_URL || "/api"}/chatagents/${chatagentId}/integrations/slack/oauth-url`;
   },
 };
 
 // Knowledge Base API
 export const knowledgeAPI = {
-  getSources: async (chatbotId: string) => {
-    const response = await api.get(`/chatbots/${chatbotId}/knowledge/sources`);
+  getSources: async (chatagentId: string) => {
+    const response = await api.get(
+      `/chatagents/${chatagentId}/knowledge/sources`
+    );
     return response.data;
   },
 
-  uploadDocument: async (chatbotId: string, file: File) => {
+  uploadDocument: async (chatagentId: string, file: File) => {
     const formData = new FormData();
     formData.append("file", file);
 
     const response = await api.post(
-      `/chatbots/${chatbotId}/knowledge/documents`,
+      `/chatagents/${chatagentId}/knowledge/documents`,
       formData,
       {
         headers: {
@@ -192,30 +240,33 @@ export const knowledgeAPI = {
     return response.data;
   },
 
-  addWebsite: async (chatbotId: string, url: string) => {
+  addWebsite: async (chatagentId: string, url: string) => {
     const response = await api.post(
-      `/chatbots/${chatbotId}/knowledge/websites`,
+      `/chatagents/${chatagentId}/knowledge/websites`,
       { url }
     );
     return response.data;
   },
 
-  getFaqs: async (chatbotId: string) => {
-    const response = await api.get(`/chatbots/${chatbotId}/knowledge/faqs`);
+  getFaqs: async (chatagentId: string) => {
+    const response = await api.get(`/chatagents/${chatagentId}/knowledge/faqs`);
     return response.data;
   },
 
-  addFaq: async (chatbotId: string, question: string, answer: string) => {
-    const response = await api.post(`/chatbots/${chatbotId}/knowledge/faqs`, {
-      question,
-      answer,
-    });
+  addFaq: async (chatagentId: string, question: string, answer: string) => {
+    const response = await api.post(
+      `/chatagents/${chatagentId}/knowledge/faqs`,
+      {
+        question,
+        answer,
+      }
+    );
     return response.data;
   },
 
-  deleteFaq: async (chatbotId: string, faqId: string) => {
+  deleteFaq: async (chatagentId: string, faqId: string) => {
     const response = await api.delete(
-      `/chatbots/${chatbotId}/knowledge/faqs/${faqId}`
+      `/chatagents/${chatagentId}/knowledge/faqs/${faqId}`
     );
     return response.data;
   },
@@ -223,9 +274,9 @@ export const knowledgeAPI = {
 
 // Analytics API
 export const analyticsAPI = {
-  getOverview: async (chatbotId: string, period: string = "last30Days") => {
+  getOverview: async (chatagentId: string, period: string = "last30Days") => {
     const response = await api.get(
-      `/chatbots/${chatbotId}/analytics/overview`,
+      `/chatagents/${chatagentId}/analytics/overview`,
       {
         params: { period },
       }
@@ -234,11 +285,11 @@ export const analyticsAPI = {
   },
 
   getMessageVolume: async (
-    chatbotId: string,
+    chatagentId: string,
     period: string = "last30Days"
   ) => {
     const response = await api.get(
-      `/chatbots/${chatbotId}/analytics/messages`,
+      `/chatagents/${chatagentId}/analytics/messages`,
       {
         params: { period },
       }
@@ -247,11 +298,11 @@ export const analyticsAPI = {
   },
 
   getUserSatisfaction: async (
-    chatbotId: string,
+    chatagentId: string,
     period: string = "last30Days"
   ) => {
     const response = await api.get(
-      `/chatbots/${chatbotId}/analytics/satisfaction`,
+      `/chatagents/${chatagentId}/analytics/satisfaction`,
       {
         params: { period },
       }
@@ -260,11 +311,11 @@ export const analyticsAPI = {
   },
 
   getPlatformDistribution: async (
-    chatbotId: string,
+    chatagentId: string,
     period: string = "last30Days"
   ) => {
     const response = await api.get(
-      `/chatbots/${chatbotId}/analytics/platforms`,
+      `/chatagents/${chatagentId}/analytics/platforms`,
       {
         params: { period },
       }
@@ -272,10 +323,13 @@ export const analyticsAPI = {
     return response.data;
   },
 
-  getModelUsage: async (chatbotId: string, period: string = "last30Days") => {
-    const response = await api.get(`/chatbots/${chatbotId}/analytics/models`, {
-      params: { period },
-    });
+  getModelUsage: async (chatagentId: string, period: string = "last30Days") => {
+    const response = await api.get(
+      `/chatagents/${chatagentId}/analytics/models`,
+      {
+        params: { period },
+      }
+    );
     return response.data;
   },
 };
@@ -293,4 +347,20 @@ export const AdminChatLogAPI = {
     return response.data;
   },
 };
+
+export const Chat = {
+  sendMessage: async (
+    message: string,
+    history: { role: string; parts: string }[],
+    agentId: string
+  ): Promise<{ reply: string }> => {
+    const response = await api.post("/chat", {
+      message,
+      history,
+      agentId,
+    });
+    return response.data;
+  },
+};
+
 export default api;
