@@ -140,6 +140,42 @@ export const agentsAPI = {
     return response.data;
   },
 
+  // Create custom action
+  createCustomAction: async (id: string, action: any) => {
+    const response = await api.post(`/chatagents/${id}/actions/custom`, action);
+    return response.data;
+  },
+
+  // Create API function
+  createApiFunction: async (id: string, apiFunction: any) => {
+    const response = await api.post(`/chatagents/${id}/actions/api-functions`, apiFunction);
+    return response.data;
+  },
+
+  // Create sequential workflow
+  createSequentialWorkflow: async (id: string, workflow: any) => {
+    const response = await api.post(`/chatagents/${id}/actions/workflows`, workflow);
+    return response.data;
+  },
+
+  // Get API functions
+  getApiFunctions: async (id: string) => {
+    const response = await api.get(`/chatagents/${id}/actions/api-functions`);
+    return response.data;
+  },
+
+  // Toggle action status
+  toggleActionStatus: async (id: string, actionId: string) => {
+    const response = await api.patch(`/chatagents/${id}/actions/${actionId}/toggle`);
+    return response.data;
+  },
+
+  // Delete custom action
+  deleteCustomAction: async (id: string, actionId: string) => {
+    const response = await api.delete(`/chatagents/${id}/actions/${actionId}`);
+    return response.data;
+  },
+
   getPlaygroundConfig: async (id: string) => {
     const response = await api.get(`/chatagents/${id}/playground`);
     return response.data;

@@ -1,8 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { gsap } from "gsap";
+import { useGSAP } from "@gsap/react";
+import { ChevronLeftIcon, ChevronRightIcon, Bars3Icon } from "@heroicons/react/24/outline";
 
 export default function DashboardLayout({
   children,
@@ -11,6 +14,10 @@ export default function DashboardLayout({
 }) {
   const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const sidebarRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const container = useRef<HTMLDivElement>(null);
 
   const navigation = [
     {
@@ -53,8 +60,46 @@ export default function DashboardLayout({
     return pathname.startsWith(href) && href !== "/dashboard";
   };
 
+  // Handle sidebar collapse animation using GSAP hooks
+  const toggleSidebar = () => {
+    setSidebarCollapsed(!sidebarCollapsed);
+  };
+
+  useGSAP(() => {
+    // Only run animations on desktop (md breakpoint and above)
+    const isDesktop = window.matchMedia('(min-width: 768px)').matches;
+    
+    if (isDesktop && sidebarRef.current && contentRef.current) {
+      const tl = gsap.timeline();
+      
+      if (sidebarCollapsed) {
+        tl.to(sidebarRef.current, {
+          width: "4rem",
+          duration: 0.3,
+          ease: "power2.out"
+        })
+        .to(contentRef.current, {
+          paddingLeft: "4rem",
+          duration: 0.3,
+          ease: "power2.out"
+        }, "<");
+      } else {
+        tl.to(sidebarRef.current, {
+          width: "16rem",
+          duration: 0.3,
+          ease: "power2.out"
+        })
+        .to(contentRef.current, {
+          paddingLeft: "16rem",
+          duration: 0.3,
+          ease: "power2.out"
+        }, "<");
+      }
+    }
+  }, { dependencies: [sidebarCollapsed], scope: container });
+
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div ref={container} className="min-h-screen bg-gray-100">
       {/* Mobile sidebar */}
       <div
         className={`fixed inset-0 z-40 flex md:hidden ${sidebarOpen ? "" : "pointer-events-none"}`}
@@ -135,14 +180,34 @@ export default function DashboardLayout({
       </div>
 
       {/* Static sidebar for desktop */}
-      <div className="hidden md:fixed md:inset-y-0 md:flex md:w-64 md:flex-col">
-        <div className="flex min-h-0 flex-1 flex-col border-r border-gray-200 bg-white">
+      <div 
+        ref={sidebarRef}
+        className="hidden md:fixed md:inset-y-0 md:flex md:w-64 md:flex-col z-30"
+      >
+        <div className="flex min-h-0 flex-1 flex-col border-r border-gray-200 bg-white relative">
+          {/* Collapse Toggle Button */}
+          <button
+            onClick={toggleSidebar}
+            className="absolute -right-3 top-6 z-40 flex h-6 w-6 items-center justify-center rounded-full bg-white border border-gray-300 shadow-sm hover:bg-gray-50 transition-colors"
+          >
+            {sidebarCollapsed ? (
+              <ChevronRightIcon className="h-4 w-4 text-gray-600" />
+            ) : (
+              <ChevronLeftIcon className="h-4 w-4 text-gray-600" />
+            )}
+          </button>
+
           <div className="flex flex-1 flex-col overflow-y-auto pt-5 pb-4">
             <div className="flex flex-shrink-0 items-center px-4">
               <Link href="/" className="flex items-center">
-                <span className="text-xl font-bold text-primary-600">
+                <span className={`text-xl font-bold text-primary-600 transition-opacity duration-300 ${
+                  sidebarCollapsed ? "opacity-0" : "opacity-100"
+                }`}>
                   Helix
                 </span>
+                {sidebarCollapsed && (
+                  <span className="text-xl font-bold text-primary-600">H</span>
+                )}
               </Link>
             </div>
             <nav className="mt-5 flex-1 space-y-1 bg-white px-2">
@@ -150,18 +215,19 @@ export default function DashboardLayout({
                 <Link
                   key={item.name}
                   href={item.href}
-                  className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md ${
+                  className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-all duration-200 ${
                     isActive(item.href)
                       ? "bg-primary-100 text-primary-900"
                       : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                  }`}
+                  } ${sidebarCollapsed ? "justify-center" : ""}`}
+                  title={sidebarCollapsed ? item.name : ""}
                 >
                   <svg
-                    className={`mr-3 h-6 w-6 ${
+                    className={`h-6 w-6 transition-all duration-200 ${
                       isActive(item.href)
                         ? "text-primary-600"
                         : "text-gray-400 group-hover:text-gray-500"
-                    }`}
+                    } ${sidebarCollapsed ? "mr-0" : "mr-3"}`}
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -173,32 +239,43 @@ export default function DashboardLayout({
                       d={item.icon}
                     />
                   </svg>
-                  {item.name}
+                  <span className={`transition-opacity duration-300 ${
+                    sidebarCollapsed ? "opacity-0 w-0 overflow-hidden" : "opacity-100"
+                  }`}>
+                    {item.name}
+                  </span>
                 </Link>
               ))}
             </nav>
           </div>
-          <div className="flex flex-shrink-0 border-t border-gray-200 p-4">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <div className="h-8 w-8 rounded-full bg-gray-300"></div>
-              </div>
-              <div className="ml-3">
-                <p className="text-sm font-medium text-gray-700">John Doe</p>
-                <Link
-                  href="/dashboard/settings"
-                  className="text-xs font-medium text-gray-500 hover:text-gray-700"
-                >
-                  View profile
-                </Link>
+          {!sidebarCollapsed && (
+            <div className="flex flex-shrink-0 border-t border-gray-200 p-4 transition-opacity duration-300">
+              <div className="flex items-center">
+                <div className="flex-shrink-0">
+                  <div className="h-8 w-8 rounded-full bg-gray-300"></div>
+                </div>
+                <div className="ml-3">
+                  <p className="text-sm font-medium text-gray-700">John Doe</p>
+                  <Link
+                    href="/dashboard/settings"
+                    className="text-xs font-medium text-gray-500 hover:text-gray-700"
+                  >
+                    View profile
+                  </Link>
+                </div>
               </div>
             </div>
-          </div>
+          )}
+          {sidebarCollapsed && (
+            <div className="flex flex-shrink-0 border-t border-gray-200 p-2 justify-center">
+              <div className="h-8 w-8 rounded-full bg-gray-300"></div>
+            </div>
+          )}
         </div>
       </div>
 
       {/* Main content */}
-      <div className="md:pl-64">
+      <div ref={contentRef} className="md:pl-64">
         <div className="mx-auto flex flex-col">
           <div className="sticky top-0 z-10 flex md:hidden h-16 flex-shrink-0 border-b border-gray-200 bg-white">
             <button
@@ -207,19 +284,7 @@ export default function DashboardLayout({
               onClick={() => setSidebarOpen(true)}
             >
               <span className="sr-only">Open sidebar</span>
-              <svg
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16M4 18h7"
-                />
-              </svg>
+              <Bars3Icon className="h-6 w-6" />
             </button>
             <div className="flex flex-1 justify-end px-4">
               <div className="ml-4 flex items-center md:ml-6">

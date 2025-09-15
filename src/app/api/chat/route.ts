@@ -9,14 +9,16 @@ interface VectorStore {
   };
 }
 
+// Import the vector store directly from embeddings module
+import { getVectorStore as getGlobalVectorStore } from '../embeddings/route';
+
 // Get vector store from embeddings route
-async function getVectorStore(agentId: string): Promise<VectorStore> {
+function getVectorStore(agentId: string): VectorStore {
   try {
-    const response = await fetch(`http://localhost:3000/api/embeddings?agentId=${agentId}`);
-    const data = await response.json();
-    return data.vectorStore || {};
+    const globalStore = getGlobalVectorStore();
+    return globalStore[agentId] || {};
   } catch (error) {
-    console.error('Error fetching vector store:', error);
+    console.error('Error accessing vector store:', error);
     return {};
   }
 }
@@ -57,8 +59,8 @@ async function retrieveRelevantContext(
   const queryEmbedding = await generateEmbedding(query);
   if (queryEmbedding.length === 0) return [];
 
-  const agentVectorStore = await getVectorStore(agentId);
-  if (!agentVectorStore) return [];
+  const agentVectorStore = getVectorStore(agentId);
+  if (!agentVectorStore || Object.keys(agentVectorStore).length === 0) return [];
 
   const similarities: { chunk: string; similarity: number }[] = [];
 

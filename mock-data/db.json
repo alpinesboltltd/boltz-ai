@@ -2,128 +2,26 @@
   "users": [
     {
       "id": "1",
-      "name": "Demo User",
-      "email": "demo@example.com",
+      "name": "Grace Ajayi",
+      "email": "grace@ajayi.com",
       "role": "admin",
-      "avatar": "https://ui-avatars.com/api/?name=Demo+User&background=6366F1&color=fff",
+      "avatar": "https://ui-avatars.com/api/?name=Grace+Ajayi&background=6366F1&color=fff",
       "password": "password"
-    },
-    {
-      "id": "2",
-      "name": "Test User",
-      "email": "test@example.com",
-      "role": "user",
-      "avatar": "https://ui-avatars.com/api/?name=Test+User&background=6366F1&color=fff",
-      "password": "testpass"
     }
   ],
   "agents": [
     {
-      "id": "1",
+      "id": "4k8afeknd",
       "user_id": "1",
-      "name": "Customer Support Agent",
-      "description": "Multimodal AI agent for handling customer support with text, images, and voice",
-      "agent_type": "multimodal",
-      "ai_model": "GPT-4o",
-      "ai_provider": "OpenAI",
-      "credits_per_1k": 30,
-      "status": "active",
-      "created_at": "2023-11-15T10:30:00Z",
-      "updated_at": "2023-12-05T14:22:00Z"
-    },
-    {
-      "id": "2",
-      "user_id": "1",
-      "name": "Sales Chat Assistant",
-      "description": "Text-based AI agent for product recommendations and sales inquiries",
+      "name": "Besty",
+      "description": "Besty helps us improve sales",
       "agent_type": "text",
       "ai_model": "GPT-4 Turbo",
       "ai_provider": "OpenAI",
       "credits_per_1k": 25,
       "status": "active",
-      "created_at": "2023-10-20T09:15:00Z",
-      "updated_at": "2023-12-01T11:45:00Z"
-    },
-    {
-      "id": "3",
-      "user_id": "1",
-      "name": "Voice Support Agent",
-      "description": "Voice AI agent for phone-based customer support and inquiries",
-      "agent_type": "voice",
-      "ai_model": "Claude Haiku 3.5",
-      "ai_provider": "Anthropic",
-      "credits_per_1k": 15,
-      "status": "active",
-      "created_at": "2023-12-01T15:20:00Z",
-      "updated_at": "2023-12-01T15:20:00Z"
-    },
-    {
-      "id": "4",
-      "user_id": "1",
-      "name": "E-commerce Helper",
-      "description": "Multimodal agent for product recommendations with image analysis",
-      "agent_type": "multimodal",
-      "ai_model": "gpt-4-vision",
-      "status": "draft",
-      "created_at": "2023-12-01T15:20:00Z",
-      "updated_at": "2023-12-01T15:20:00Z"
-    },
-    {
-      "id": "5",
-      "user_id": "1",
-      "name": "FAQ Bot",
-      "description": "Simple text agent for answering frequently asked questions",
-      "agent_type": "text",
-      "ai_model": "gemini-pro",
-      "status": "active",
-      "created_at": "2023-12-10T10:30:00Z",
-      "updated_at": "2023-12-15T14:22:00Z"
-    },
-    {
-      "id": "6",
-      "user_id": "2",
-      "name": "Medical Assistant",
-      "description": "Voice agent for medical appointment scheduling and basic health queries",
-      "agent_type": "voice",
-      "ai_model": "claude-2",
-      "status": "active",
-      "created_at": "2023-12-01T15:20:00Z",
-      "updated_at": "2023-12-01T15:20:00Z"
-    },
-    {
-      "id": "7",
-      "user_id": "2",
-      "name": "Document Analyzer",
-      "description": "Multimodal agent for analyzing documents, images, and providing insights",
-      "agent_type": "multimodal",
-      "ai_model": "gpt-4-vision",
-      "status": "draft",
-      "created_at": "2023-12-05T09:15:00Z",
-      "updated_at": "2023-12-08T11:45:00Z"
-    },
-    {
-      "id": "8",
-      "user_id": "2",
-      "name": "Live Chat Support",
-      "description": "Text agent for real-time customer support and troubleshooting",
-      "agent_type": "text",
-      "ai_model": "gpt-4",
-      "status": "active",
-      "created_at": "2023-12-12T15:20:00Z",
-      "updated_at": "2023-12-12T15:20:00Z"
-    },
-    {
-      "id": "civ9326zf",
-      "user_id": "1",
-      "name": "Graceie",
-      "description": "My name is gracies",
-      "agent_type": "multimodal",
-      "ai_model": "GPT-4o mini",
-      "ai_provider": "OpenAI",
-      "credits_per_1k": 15,
-      "status": "active",
-      "created_at": "2025-08-28T07:15:16.968Z",
-      "updated_at": "2025-08-28T07:33:53.824Z"
+      "created_at": "2025-09-02T17:30:55.999Z",
+      "updated_at": "2025-09-02T17:32:09.518Z"
     }
   ],
   "agent_appearance": [
@@ -180,17 +78,17 @@
       "updated_at": "2023-12-01T15:20:00Z"
     },
     {
-      "id": "eo359ihb2",
-      "agent_id": "civ9326zf",
+      "id": "glzn2o7k5",
+      "agent_id": "4k8afeknd",
       "welcome_message": "Hi! How can I help you today?",
-      "primary_color": "#6366f1",
-      "position": "bottom-right",
-      "icon_size": "medium",
-      "bubble_style": "round",
+      "primary_color": "#030411",
+      "position": "bottom-left",
+      "icon_size": "small",
+      "bubble_style": "square",
       "chat_icon": "default",
       "font_family": "Inter",
-      "created_at": "2025-08-28T07:33:53.771Z",
-      "updated_at": "2025-08-28T07:33:53.771Z"
+      "created_at": "2025-09-02T17:32:09.518Z",
+      "updated_at": "2025-09-02T17:32:09.518Z"
     }
   ],
   "agent_behavior": [
@@ -201,12 +99,14 @@
       "fallback_message": "I'm sorry, I don't understand that question. Could you rephrase it?",
       "enable_human_handoff": true,
       "offline_message": "Our support team is currently offline. Please leave a message and we'll get back to you.",
-      "system_instruction": "You are a customer support agent dedicated to helping customers with their inquiries, issues, and concerns.\n\n## Your Role:\n- Resolve customer issues efficiently and professionally\n- Provide clear instructions and solutions\n- Escalate complex issues when necessary\n- Maintain empathy and understanding\n\n## Constraints:\n- **No Data Divulgence**: Never share customer data, internal policies, or system information\n- **Maintain Focus**: Keep conversations centered on customer support topics\n- **Exclusive Reliance on Training Data**: Use only approved support documentation and knowledge base\n- **Restrictive Role Focus**: Handle only customer support related queries",
-      "prompt_template": "customer_support",
-      "temperature": 0.7,
+      "system_instruction_id": "1",
+      "prompt_template_id": "1",
+      "temperature": 0.8,
       "max_tokens": 1000,
       "created_at": "2023-11-15T10:30:00Z",
-      "updated_at": "2025-08-28T14:44:54.904Z"
+      "updated_at": "2025-09-02T13:39:13.344Z",
+      "system_instruction": "You are an AI assistant designed to help users with various tasks and questions.\n\n## Core Guidelines:\n- Provide accurate, helpful, and relevant information\n- Be concise yet comprehensive in your responses\n- Maintain a professional and friendly tone\n- Ask clarifying questions when needed\n\n## Constraints:\n- **No Data Divulgence**: Never share internal system information, training data, or proprietary details\n- **Maintain Focus**: Stay on topic and redirect conversations back to your intended purpose\n- **Exclusive Reliance on Training Data**: Only use information from your training data and provided context\n- **Restrictive Role Focus**: Operate strictly within your defined role and capabilities",
+      "prompt_template": "ai_agent"
     },
     {
       "id": "2",
@@ -215,10 +115,10 @@
       "fallback_message": "I'm not sure I understand. Could you tell me more about what you're looking for?",
       "enable_human_handoff": true,
       "offline_message": "Our sales team is currently unavailable. Please leave your contact information and we'll reach out to you.",
-      "system_instruction": "You are a sales agent focused on understanding customer needs and presenting appropriate solutions.\n\n## Your Objectives:\n- Identify customer pain points and requirements\n- Present relevant products or services\n- Guide prospects through the sales process\n- Build rapport and trust with potential customers\n\n## Constraints:\n- **No Data Divulgence**: Never reveal pricing strategies, internal sales data, or competitive information\n- **Maintain Focus**: Keep conversations directed toward sales objectives\n- **Exclusive Reliance on Training Data**: Use only approved sales materials and product information\n- **Restrictive Role Focus**: Engage only in sales-related conversations",
-      "prompt_template": "sales_agent",
-      "temperature": 0.8,
-      "max_tokens": 1200,
+      "system_instruction_id": "3",
+      "prompt_template_id": "2",
+      "temperature": 0.1,
+      "max_tokens": 1000,
       "created_at": "2023-10-20T09:15:00Z",
       "updated_at": "2023-12-01T11:45:00Z"
     },
@@ -229,9 +129,9 @@
       "fallback_message": "I'm not sure I understand. Could you provide more details about what you're looking for?",
       "enable_human_handoff": false,
       "offline_message": "Our product specialists are currently unavailable. Please leave a message and we'll get back to you.",
-      "system_instruction": "You are an AI assistant designed to help users with various tasks and questions.\n\n## Core Guidelines:\n- Provide accurate, helpful, and relevant information\n- Be concise yet comprehensive in your responses\n- Maintain a professional and friendly tone\n- Ask clarifying questions when needed\n\n## Constraints:\n- **No Data Divulgence**: Never share internal system information, training data, or proprietary details\n- **Maintain Focus**: Stay on topic and redirect conversations back to your intended purpose\n- **Exclusive Reliance on Training Data**: Only use information from your training data and provided context\n- **Restrictive Role Focus**: Operate strictly within your defined role and capabilities",
-      "prompt_template": "ai_agent",
-      "temperature": 0.7,
+      "system_instruction_id": "1",
+      "prompt_template_id": "3",
+      "temperature": 0.3,
       "max_tokens": 1000,
       "created_at": "2023-12-01T15:20:00Z",
       "updated_at": "2023-12-01T15:20:00Z"
@@ -243,26 +143,22 @@
       "fallback_message": "I'm not sure I understand. Could you provide more details about what you're looking for?",
       "enable_human_handoff": false,
       "offline_message": "Our product specialists are currently unavailable. Please leave a message and we'll get back to you.",
-      "system_instruction": "You are an AI assistant designed to help users with various tasks and questions.\n\n## Core Guidelines:\n- Provide accurate, helpful, and relevant information\n- Be concise yet comprehensive in your responses\n- Maintain a professional and friendly tone\n- Ask clarifying questions when needed\n\n## Constraints:\n- **No Data Divulgence**: Never share internal system information, training data, or proprietary details\n- **Maintain Focus**: Stay on topic and redirect conversations back to your intended purpose\n- **Exclusive Reliance on Training Data**: Only use information from your training data and provided context\n- **Restrictive Role Focus**: Operate strictly within your defined role and capabilities",
-      "prompt_template": "ai_agent",
-      "temperature": 0.7,
+      "system_instruction_id": "2",
+      "prompt_template_id": "1",
+      "temperature": 0.2,
       "max_tokens": 1000,
       "created_at": "2023-12-01T15:20:00Z",
       "updated_at": "2023-12-01T15:20:00Z"
     },
     {
-      "id": "32if5zyyg",
-      "agent_id": "civ9326zf",
+      "id": "ldfjhs0t9",
+      "agent_id": "4k8afeknd",
       "initial_messages": "[\"Hi! How can I help you today?\"]",
       "fallback_message": "I'm sorry, I don't understand that question. Could you rephrase it?",
       "enable_human_handoff": false,
       "offline_message": "Our team is currently offline. Please leave a message and we'll get back to you.",
-      "system_instruction": "You are an AI assistant designed to help users with various tasks and questions.\n\n## Core Guidelines:\n- Provide accurate, helpful, and relevant information\n- Be concise yet comprehensive in your responses\n- Maintain a professional and friendly tone\n- Ask clarifying questions when needed\n\n## Constraints:\n- **No Data Divulgence**: Never share internal system information, training data, or proprietary details\n- **Maintain Focus**: Stay on topic and redirect conversations back to your intended purpose\n- **Exclusive Reliance on Training Data**: Only use information from your training data and provided context\n- **Restrictive Role Focus**: Operate strictly within your defined role and capabilities",
-      "prompt_template": "ai_agent",
-      "temperature": 0.7,
-      "max_tokens": 1000,
-      "created_at": "2025-08-28T07:33:53.789Z",
-      "updated_at": "2025-08-28T07:33:53.789Z"
+      "created_at": "2025-09-02T17:32:09.518Z",
+      "updated_at": "2025-09-02T17:32:09.518Z"
     }
   ],
   "agent_integrations": [
@@ -319,33 +215,6 @@
       "is_active": false,
       "created_at": "2023-12-01T15:20:00Z",
       "updated_at": "2023-12-01T15:20:00Z"
-    },
-    {
-      "id": "7",
-      "agent_id": "4",
-      "platform": "website",
-      "api_key": null,
-      "is_active": false,
-      "created_at": "2023-12-01T15:20:00Z",
-      "updated_at": "2023-12-01T15:20:00Z"
-    },
-    {
-      "id": "8",
-      "agent_id": "4",
-      "platform": "shopify",
-      "api_key": null,
-      "is_active": false,
-      "created_at": "2023-12-01T15:20:00Z",
-      "updated_at": "2023-12-01T15:20:00Z"
-    },
-    {
-      "id": "9",
-      "agent_id": "4",
-      "platform": "whatsapp",
-      "api_key": null,
-      "is_active": false,
-      "created_at": "2023-12-01T15:20:00Z",
-      "updated_at": "2023-12-01T15:20:00Z"
     }
   ],
   "agent_stats": [
@@ -380,73 +249,511 @@
       "last_calculated_at": "2025-07-26T00:40:46.092Z"
     },
     {
-      "id": "4",
-      "agent_id": "4",
-      "total_messages": 100,
-      "unique_users": 10,
-      "average_rating": 5,
-      "response_rate": 0.77,
-      "conversions_count": 0,
-      "last_calculated_at": "2025-07-26T00:40:46.092Z"
-    },
-    {
-      "id": "97wz7umd2",
-      "agent_id": "civ9326zf",
+      "id": "rzj4yuh17",
+      "agent_id": "4k8afeknd",
       "total_messages": 0,
       "unique_users": 0,
       "average_rating": 0,
       "response_rate": 0,
       "conversions_count": 0,
-      "last_calculated_at": "2025-08-28T07:33:53.809Z"
+      "last_calculated_at": "2025-09-02T17:32:09.518Z"
     }
   ],
-  "training_files": [
+  "conversations": [
     {
-      "id": "1",
+      "id": "convo_1",
       "agent_id": "1",
-      "filename": "customer_support_guide.pdf",
-      "file_type": "pdf",
-      "file_size": 2048576,
-      "file_path": "/uploads/agents/1/customer_support_guide.pdf",
-      "processing_status": "completed",
-      "extracted_text_length": 15420,
-      "created_at": "2023-11-15T10:30:00Z",
-      "updated_at": "2023-12-05T14:22:00Z"
+      "platform": "Website",
+      "client_id": null,
+      "title": "Laptop Return Request",
+      "created_at": "2025-07-01T10:01:00Z",
+      "status": "open",
+      "escalated_to_human": true,
+      "escalation_reason": "customer frustrated"
+    },
+    {
+      "id": "convo_2",
+      "agent_id": "2",
+      "platform": "Website",
+      "client_id": "+2348161769197",
+      "title": "Cardiology Appointment",
+      "created_at": "2025-07-01T10:01:00Z",
+      "status": "open",
+      "escalated_to_human": false,
+      "escalation_reason": null
+    },
+    {
+      "id": "convo_3",
+      "agent_id": "3",
+      "platform": "Website",
+      "client_id": null,
+      "title": "Business Loan Application",
+      "created_at": "2025-07-01T10:01:00Z",
+      "status": "open",
+      "escalated_to_human": false,
+      "escalation_reason": null
+    },
+    {
+      "id": "convo_4",
+      "agent_id": "1",
+      "platform": "Website",
+      "client_id": null,
+      "title": "Data Science Course Inquiry",
+      "created_at": "2025-07-01T10:01:00Z",
+      "status": "closed",
+      "escalated_to_human": false,
+      "escalation_reason": null
+    },
+    {
+      "id": "convo_5",
+      "agent_id": "2",
+      "platform": "Website",
+      "client_id": null,
+      "title": "Employment Contract Dispute",
+      "created_at": "2025-07-06T10:01:00Z",
+      "status": "closed",
+      "escalated_to_human": true,
+      "escalation_reason": "customer frustrated"
+    },
+    {
+      "id": "convo_6",
+      "agent_id": "3",
+      "platform": "Website",
+      "client_id": null,
+      "title": "House Purchase Inquiry",
+      "created_at": "2025-07-01T10:01:00Z",
+      "status": "open",
+      "escalated_to_human": false,
+      "escalation_reason": null
+    },
+    {
+      "id": "convo_7",
+      "agent_id": "1",
+      "platform": "Website",
+      "client_id": null,
+      "title": "Brake Inspection Appointment",
+      "created_at": "2025-07-01T10:01:00Z",
+      "status": "open",
+      "escalated_to_human": false,
+      "escalation_reason": null
     }
   ],
-  "training_websites": [
+  "messages": [
     {
-      "id": "1",
-      "agent_id": "1",
-      "url": "https://example.com/support",
-      "crawl_type": "single",
-      "crawl_status": "completed",
-      "pages_crawled": 1,
-      "last_crawled_at": "2023-12-05T14:22:00Z",
-      "created_at": "2023-11-15T10:30:00Z",
-      "updated_at": "2023-12-05T14:22:00Z"
+      "id": "msg_001",
+      "convo_id": "convo_1",
+      "role": "assistant",
+      "text": "Hello! Welcome to TechStore. I'm here to help you with any questions about our products or services. How can I assist you today?",
+      "timestamp": "2025-07-01T10:01:00Z",
+      "confidence_score": 0.85
+    },
+    {
+      "id": "msg_002",
+      "convo_id": "convo_1",
+      "role": "user",
+      "text": "I bought a laptop last week but it's not working properly. Can I return it?",
+      "timestamp": "2025-07-01T10:02:00Z",
+      "confidence_score": 0.88
+    },
+    {
+      "id": "msg_003",
+      "convo_id": "convo_1",
+      "role": "assistant",
+      "text": "I'm sorry to hear about the issue with your laptop. Yes, we have a 30-day return policy for all products. Since you purchased it last week, you're well within the return window. Could you please provide your order number so I can process this for you?",
+      "confidence_score": 0.95,
+      "timestamp": "2025-07-01T10:03:00Z"
+    },
+    {
+      "id": "msg_004",
+      "convo_id": "convo_1",
+      "role": "user",
+      "text": "The order number is TS-2024-001234",
+      "timestamp": "2025-07-01T10:04:00Z",
+      "confidence_score": 0.99
+    },
+    {
+      "id": "msg_005",
+      "convo_id": "convo_1",
+      "role": "assistant",
+      "text": "Perfect! I found your order for the Dell XPS 15 purchased on June 24th. I've initiated the return process. You'll receive a prepaid return label via email within 2 hours. Once we receive the laptop, your refund will be processed within 5-7 business days. Is there anything else I can help you with?",
+      "confidence_score": 0.92,
+      "timestamp": "2025-07-01T10:05:00Z"
+    },
+    {
+      "id": "msg_006",
+      "convo_id": "convo_2",
+      "role": "assistant",
+      "text": "Hi there! Welcome to HealthFirst Medical Center. I'm your virtual assistant and I'm here to help you with appointments, services, and general inquiries. What can I do for you today?",
+      "timestamp": "2025-07-01T10:01:00Z",
+      "confidence_score": 0.85
+    },
+    {
+      "id": "msg_007",
+      "convo_id": "convo_2",
+      "role": "user",
+      "text": "I need to schedule a consultation with a cardiologist",
+      "timestamp": "2025-07-01T10:02:00Z",
+      "confidence_score": 0.88
+    },
+    {
+      "id": "msg_008",
+      "convo_id": "convo_2",
+      "role": "assistant",
+      "text": "I'd be happy to help you schedule a cardiology consultation. We have Dr. Sarah Johnson and Dr. Michael Chen available. Dr. Johnson has availability next Tuesday at 2:30 PM or Thursday at 10:00 AM. Dr. Chen has slots on Wednesday at 3:00 PM or Friday at 9:30 AM. Which would work better for you?",
+      "confidence_score": 0.88,
+      "timestamp": "2025-07-01T10:03:00Z"
+    },
+    {
+      "id": "msg_009",
+      "convo_id": "convo_2",
+      "role": "user",
+      "text": "Tuesday at 2:30 PM with Dr. Johnson sounds perfect",
+      "timestamp": "2025-07-01T10:04:00Z",
+      "confidence_score": 0.99
+    },
+    {
+      "id": "msg_010",
+      "convo_id": "convo_2",
+      "role": "assistant",
+      "text": "Excellent! I've scheduled your appointment with Dr. Sarah Johnson for Tuesday, July 8th at 2:30 PM. Please arrive 15 minutes early for check-in and bring your insurance card and a valid ID. You'll receive a confirmation email shortly with all the details and pre-appointment instructions. Is there anything else I can help you with?",
+      "confidence_score": 0.94,
+      "timestamp": "2025-07-01T10:05:00Z"
+    },
+    {
+      "id": "msg_011",
+      "convo_id": "convo_3",
+      "role": "assistant",
+      "text": "Good day! Welcome to Premier Bank. I'm here to assist you with your banking needs, account inquiries, and financial services. How may I help you today?",
+      "timestamp": "2025-07-01T10:01:00Z",
+      "confidence_score": 0.85
+    },
+    {
+      "id": "msg_012",
+      "convo_id": "convo_3",
+      "role": "user",
+      "text": "I want to apply for a business loan for my restaurant",
+      "timestamp": "2025-07-01T10:02:00Z",
+      "confidence_score": 0.88
+    },
+    {
+      "id": "msg_013",
+      "convo_id": "convo_3",
+      "role": "assistant",
+      "text": "That's wonderful! I'd be happy to help you with your business loan application. For restaurant businesses, we offer competitive rates starting at 6.5% APR. You'll need your business license, tax returns for the last 2 years, financial statements, and a business plan. The typical loan amount ranges from $50,000 to $500,000. Would you like me to connect you with our business loan specialist to discuss your specific needs?",
+      "confidence_score": 0.91,
+      "timestamp": "2025-07-01T10:03:00Z"
+    },
+    {
+      "id": "msg_014",
+      "convo_id": "convo_3",
+      "role": "user",
+      "text": "Yes, that would be great. I'm looking for around $200,000",
+      "timestamp": "2025-07-01T10:04:00Z",
+      "confidence_score": 0.99
+    },
+    {
+      "id": "msg_015",
+      "convo_id": "convo_3",
+      "role": "assistant",
+      "text": "Perfect! $200,000 is well within our lending range for established restaurants. I'm scheduling you for a consultation with Maria Rodriguez, our senior business loan officer. She has availability tomorrow at 11:00 AM or Thursday at 3:00 PM. She'll review your documents and discuss terms, repayment options, and next steps. Which time works better for you?",
+      "confidence_score": 0.89,
+      "timestamp": "2025-07-01T10:05:00Z"
+    },
+    {
+      "id": "msg_016",
+      "convo_id": "convo_4",
+      "role": "assistant",
+      "text": "Hello! Welcome to EduLearn Online Academy. I'm here to help you with course information, enrollment, and academic support. What would you like to know today?",
+      "timestamp": "2025-07-01T10:01:00Z",
+      "confidence_score": 0.85
+    },
+    {
+      "id": "msg_017",
+      "convo_id": "convo_4",
+      "role": "user",
+      "text": "I'm interested in your data science certification program",
+      "timestamp": "2025-07-01T10:02:00Z",
+      "confidence_score": 0.88
+    },
+    {
+      "id": "msg_018",
+      "convo_id": "convo_4",
+      "role": "assistant",
+      "text": "Excellent choice! Our Data Science Certification is a comprehensive 6-month program covering Python, machine learning, statistics, and real-world projects. The program includes 120 hours of instruction, mentorship, and career support. The next cohort starts August 15th, and early bird pricing is $2,499 (regular price $2,999). We also offer payment plans. Would you like me to send you the detailed curriculum?",
+      "confidence_score": 0.93,
+      "timestamp": "2025-07-01T10:03:00Z"
+    },
+    {
+      "id": "msg_019",
+      "convo_id": "convo_4",
+      "role": "user",
+      "text": "Yes, please send the curriculum. Also, do you offer job placement assistance?",
+      "timestamp": "2025-07-01T10:04:00Z",
+      "confidence_score": 0.99
+    },
+    {
+      "id": "msg_020",
+      "convo_id": "convo_4",
+      "role": "assistant",
+      "text": "Absolutely! I'll email you the complete curriculum within the next 10 minutes. Yes, we provide comprehensive career support including resume review, interview preparation, and access to our partner network of 200+ hiring companies. Our job placement rate is 87% within 6 months of graduation. We also offer a job guarantee - if you don't find a position within 12 months, we'll refund 50% of your tuition. Would you like to schedule a call with our admissions counselor?",
+      "confidence_score": 0.96,
+      "timestamp": "2025-07-01T10:05:00Z"
+    },
+    {
+      "id": "msg_021",
+      "convo_id": "convo_5",
+      "role": "assistant",
+      "text": "Welcome to LegalAid Pro! I'm here to help you with legal information, consultation scheduling, and general legal guidance. Please note that I provide information only and this doesn't constitute legal advice. How can I assist you today?",
+      "confidence_score": 0.87,
+      "timestamp": "2025-07-06T10:01:00Z"
+    },
+    {
+      "id": "msg_022",
+      "convo_id": "convo_5",
+      "role": "user",
+      "text": "I need help with a contract dispute with my former employer",
+      "confidence_score": 0.87,
+      "timestamp": "2025-07-06T10:02:00Z"
+    },
+    {
+      "id": "msg_023",
+      "convo_id": "convo_5",
+      "role": "assistant",
+      "text": "I understand you're dealing with an employment contract dispute. This is a complex area that requires personalized legal advice. I'd recommend scheduling a consultation with one of our employment law specialists. Attorney Jennifer Walsh has 15 years of experience in employment disputes and is available Thursday at 2:00 PM or Friday at 10:30 AM. The initial consultation is $200 for 60 minutes. Would you like me to book one of these slots?",
+      "confidence_score": 0.87,
+      "timestamp": "2025-07-06T10:03:00Z"
+    },
+    {
+      "id": "msg_024",
+      "convo_id": "convo_5",
+      "role": "user",
+      "text": "Thursday at 2:00 PM works for me",
+      "confidence_score": 0.87,
+      "timestamp": "2025-07-06T10:04:00Z"
+    },
+    {
+      "id": "msg_025",
+      "convo_id": "convo_5",
+      "role": "assistant",
+      "text": "Perfect! I've scheduled your consultation with Attorney Jennifer Walsh for Thursday, July 10th at 2:00 PM. Please bring all relevant documents including your employment contract, any correspondence with your employer, and termination paperwork if applicable. You'll receive a confirmation email with intake forms to complete before your appointment. The consultation fee of $200 is due at the time of service. Is there anything else I can help you with?",
+      "confidence_score": 0.92,
+      "timestamp": "2025-07-06T10:05:00Z"
+    },
+    {
+      "id": "msg_026",
+      "convo_id": "convo_6",
+      "role": "assistant",
+      "text": "Hi! Welcome to GreenThumb Real Estate. I'm here to help you with property searches, market information, and connecting you with our expert agents. Whether you're buying, selling, or renting, I'm here to assist. What are you looking for today?",
+      "timestamp": "2025-07-01T10:01:00Z",
+      "confidence_score": 0.85
+    },
+    {
+      "id": "msg_027",
+      "convo_id": "convo_6",
+      "role": "user",
+      "text": "I'm looking to buy a 3-bedroom house in the downtown area, budget around $400,000",
+      "timestamp": "2025-07-01T10:02:00Z",
+      "confidence_score": 0.88
+    },
+    {
+      "id": "msg_028",
+      "convo_id": "convo_6",
+      "role": "assistant",
+      "text": "Great! I found 12 properties matching your criteria in the downtown area. The average price for 3-bedroom homes there is $385,000, so you're right in the sweet spot. I can show you listings with modern kitchens, updated bathrooms, and some with parking included. Would you like me to email you the top 5 properties, or would you prefer to schedule a viewing tour with one of our agents this weekend?",
+      "confidence_score": 0.9,
+      "timestamp": "2025-07-01T10:03:00Z"
+    },
+    {
+      "id": "msg_029",
+      "convo_id": "convo_6",
+      "role": "user",
+      "text": "Please email me the top 5 and let's schedule viewings for this Saturday",
+      "timestamp": "2025-07-01T10:04:00Z",
+      "confidence_score": 0.99
+    },
+    {
+      "id": "msg_030",
+      "convo_id": "convo_6",
+      "role": "assistant",
+      "text": "Excellent! I'm sending you the top 5 properties right now, including photos, floor plans, and neighborhood details. I've also scheduled you with Sarah Mitchell, our downtown specialist, for Saturday starting at 10:00 AM. The tour will take about 3 hours to see all properties comfortably. Sarah will call you tomorrow to confirm and discuss any specific features you're looking for. You'll receive all the details via email within 5 minutes!",
+      "confidence_score": 0.94,
+      "timestamp": "2025-07-01T10:05:00Z"
+    },
+    {
+      "id": "msg_031",
+      "convo_id": "convo_7",
+      "role": "assistant",
+      "text": "Hello! Welcome to AutoCare Plus, your trusted automotive service center. I can help you with service appointments, maintenance reminders, warranty information, and general automotive questions. How can I help you today?",
+      "timestamp": "2025-07-01T10:01:00Z",
+      "confidence_score": 0.85
+    },
+    {
+      "id": "msg_032",
+      "convo_id": "convo_7",
+      "role": "user",
+      "text": "My car is making a strange noise when I brake. Can I get it checked?",
+      "timestamp": "2025-07-01T10:02:00Z",
+      "confidence_score": 0.88
+    },
+    {
+      "id": "msg_033",
+      "convo_id": "convo_7",
+      "role": "assistant",
+      "text": "That's definitely something we should check right away - brake issues are a safety priority. It could be worn brake pads, warped rotors, or low brake fluid. We have an opening tomorrow at 9:00 AM or 2:30 PM for a brake inspection. The diagnostic fee is $89, which gets applied toward any repairs needed. Our certified technicians will have you back on the road safely. Which time slot works better for you?",
+      "confidence_score": 0.91,
+      "timestamp": "2025-07-01T10:03:00Z"
+    },
+    {
+      "id": "msg_034",
+      "convo_id": "convo_7",
+      "role": "user",
+      "text": "9:00 AM tomorrow works perfect. What should I bring?",
+      "timestamp": "2025-07-01T10:04:00Z",
+      "confidence_score": 0.99
+    },
+    {
+      "id": "msg_035",
+      "convo_id": "convo_7",
+      "role": "assistant",
+      "text": "Perfect! You're all set for tomorrow at 9:00 AM. Please bring your driver's license, vehicle registration, and any maintenance records if you have them. If your car is still under warranty, bring those documents too. We'll provide a free shuttle service to nearby locations if you need to leave your car for repairs. You'll receive a confirmation text tonight with our address and contact information. Drive safely and we'll see you tomorrow!",
+      "confidence_score": 0.95,
+      "timestamp": "2025-07-01T10:05:00Z"
     }
   ],
-  "training_texts": [
+  "message_metadata": [
     {
-      "id": "1",
-      "agent_id": "1",
-      "title": "Refund Policy",
-      "content": "Our return policy allows customers to return products within 30 days of purchase. Items must be in original condition with tags attached. Refunds are processed within 5-7 business days.",
-      "content_length": 156,
-      "created_at": "2023-11-15T10:30:00Z",
-      "updated_at": "2023-12-05T14:22:00Z"
+      "id": "meta_001",
+      "msg_id": "msg_001",
+      "sentiment": "neutral",
+      "intent": "order_help",
+      "msg_type": "text",
+      "token_count": 8
+    },
+    {
+      "id": "meta_002",
+      "msg_id": "msg_002",
+      "sentiment": "helpful",
+      "intent": "request_info",
+      "msg_type": "text",
+      "token_count": 9
+    },
+    {
+      "id": "meta_003",
+      "msg_id": "msg_003",
+      "sentiment": "curious",
+      "intent": "discount_inquiry",
+      "msg_type": "text",
+      "token_count": 6
+    },
+    {
+      "id": "meta_004",
+      "msg_id": "msg_004",
+      "sentiment": "positive",
+      "intent": "promotion_reply",
+      "msg_type": "text",
+      "token_count": 7
+    },
+    {
+      "id": "meta_005",
+      "msg_id": "msg_005",
+      "sentiment": "frustrated",
+      "intent": "human_request",
+      "msg_type": "text",
+      "token_count": 6
+    },
+    {
+      "id": "meta_006",
+      "msg_id": "msg_006",
+      "sentiment": "neutral",
+      "intent": "transfer",
+      "msg_type": "text",
+      "token_count": 5
+    },
+    {
+      "id": "meta_007",
+      "msg_id": "msg_007",
+      "sentiment": "worried",
+      "intent": "delivery_status",
+      "msg_type": "text",
+      "token_count": 5
+    },
+    {
+      "id": "meta_008",
+      "msg_id": "msg_008",
+      "sentiment": "reassuring",
+      "intent": "delivery_update",
+      "msg_type": "text",
+      "token_count": 6
+    },
+    {
+      "id": "meta_009",
+      "msg_id": "msg_009",
+      "sentiment": "dissatisfied",
+      "intent": "return_request",
+      "msg_type": "text",
+      "token_count": 6
+    },
+    {
+      "id": "meta_010",
+      "msg_id": "msg_010",
+      "sentiment": "supportive",
+      "intent": "return_help",
+      "msg_type": "text",
+      "token_count": 7
+    },
+    {
+      "id": "meta_011",
+      "msg_id": "msg_011",
+      "sentiment": "neutral",
+      "intent": "quote_request",
+      "msg_type": "text",
+      "token_count": 5
+    },
+    {
+      "id": "meta_012",
+      "msg_id": "msg_012",
+      "sentiment": "engaging",
+      "intent": "quote_followup",
+      "msg_type": "text",
+      "token_count": 8
     }
   ],
-  "training_qas": [
+  "contacts": [
     {
-      "id": "1",
-      "agent_id": "1",
-      "title": "Return Questions",
-      "questions": "[\"How do I return a product?\", \"What is your return policy?\", \"Can I get a refund?\"]",
-      "answer": "You can return products within 30 days of purchase. Items must be in original condition with tags attached. Refunds are processed within 5-7 business days. To initiate a return, please contact our support team.",
-      "created_at": "2023-11-15T10:30:00Z",
-      "updated_at": "2023-12-05T14:22:00Z"
+      "id": "contact_001",
+      "platform": "WhatsApp",
+      "phone_number": "+2348011111111",
+      "email": null
+    },
+    {
+      "id": "contact_002",
+      "platform": "Website",
+      "phone_number": null,
+      "email": "user2@example.com"
+    },
+    {
+      "id": "contact_003",
+      "platform": "WhatsApp",
+      "phone_number": "+2348033333333",
+      "email": null
+    },
+    {
+      "id": "contact_004",
+      "platform": "Website",
+      "phone_number": null,
+      "email": null
+    },
+    {
+      "id": "contact_005",
+      "platform": "Email",
+      "phone_number": null,
+      "email": "user5@example.com"
+    },
+    {
+      "id": "contact_006",
+      "platform": "WhatsApp",
+      "phone_number": "+2348066666666",
+      "email": null
     }
   ],
   "training_data": [
@@ -466,8 +773,8 @@
       "updated_at": "2023-12-05T14:22:00Z"
     },
     {
-      "id": "3",
-      "agent_id": "3",
+      "id": "2",
+      "agent_id": "1",
       "content_type": "faq",
       "category": "Customer Support",
       "title": "Shipping Information",
@@ -481,8 +788,68 @@
       "updated_at": "2023-12-05T14:22:00Z"
     },
     {
+      "id": "3",
+      "agent_id": "1",
+      "content_type": "knowledge_base",
+      "category": "Product Information",
+      "title": "Product Specifications",
+      "content": "Our premium headphones feature noise-cancelling technology, 20-hour battery life, wireless Bluetooth 5.0 connectivity, and come with a carrying case.",
+      "intent": "product_specifications",
+      "keywords": "headphones,noise-cancelling,battery,bluetooth,wireless",
+      "confidence_score": 0.88,
+      "source_url": null,
+      "is_active": true,
+      "created_at": "2023-11-15T10:30:00Z",
+      "updated_at": "2023-12-05T14:22:00Z"
+    },
+    {
       "id": "4",
-      "agent_id": "4",
+      "agent_id": "1",
+      "content_type": "procedure",
+      "category": "Support Process",
+      "title": "Troubleshooting Steps",
+      "content": "If experiencing connectivity issues: 1) Check device compatibility 2) Reset network settings 3) Update firmware 4) Contact support if issues persist",
+      "intent": "troubleshooting_guide",
+      "keywords": "troubleshooting,connectivity,reset,firmware,support",
+      "confidence_score": 0.9,
+      "source_url": null,
+      "is_active": true,
+      "created_at": "2023-11-15T10:30:00Z",
+      "updated_at": "2023-12-05T14:22:00Z"
+    },
+    {
+      "id": "5",
+      "agent_id": "1",
+      "content_type": "external_link",
+      "category": "Documentation",
+      "title": "User Manual",
+      "content": "Complete user manual with setup instructions, troubleshooting guides, and warranty information.",
+      "intent": "documentation_access",
+      "keywords": "manual,setup,instructions,warranty,guide",
+      "confidence_score": 0.85,
+      "source_url": "https://docs.example.com/user-manual",
+      "is_active": true,
+      "created_at": "2023-11-15T10:30:00Z",
+      "updated_at": "2023-12-05T14:22:00Z"
+    },
+    {
+      "id": "6",
+      "agent_id": "1",
+      "content_type": "website_content",
+      "category": "Company Information",
+      "title": "About Our Company",
+      "content": "We are a leading technology company specializing in innovative AI solutions and customer service automation. Founded in 2020, we serve over 10,000 businesses worldwide.",
+      "intent": "company_information",
+      "keywords": "company,about,technology,AI,automation,founded",
+      "confidence_score": 0.87,
+      "source_url": "https://example.com/about",
+      "is_active": true,
+      "created_at": "2023-11-15T10:30:00Z",
+      "updated_at": "2023-12-05T14:22:00Z"
+    },
+    {
+      "id": "7",
+      "agent_id": "2",
       "content_type": "faq",
       "category": "Customer Support",
       "title": "Product Return Policy",
@@ -492,11 +859,11 @@
       "confidence_score": 0.95,
       "source_url": null,
       "is_active": true,
-      "created_at": "2023-11-15T10:30:00Z",
-      "updated_at": "2023-12-05T14:22:00Z"
+      "created_at": "2023-10-20T09:15:00Z",
+      "updated_at": "2023-12-01T11:45:00Z"
     },
     {
-      "id": "2",
+      "id": "8",
       "agent_id": "2",
       "content_type": "faq",
       "category": "Customer Support",
@@ -507,136 +874,1006 @@
       "confidence_score": 0.92,
       "source_url": null,
       "is_active": true,
+      "created_at": "2023-10-20T09:15:00Z",
+      "updated_at": "2023-12-01T11:45:00Z"
+    },
+    {
+      "id": "9",
+      "agent_id": "2",
+      "content_type": "knowledge_base",
+      "category": "Product Information",
+      "title": "Product Specifications",
+      "content": "Our premium headphones feature noise-cancelling technology, 20-hour battery life, wireless Bluetooth 5.0 connectivity, and come with a carrying case.",
+      "intent": "product_specifications",
+      "keywords": "headphones,noise-cancelling,battery,bluetooth,wireless",
+      "confidence_score": 0.88,
+      "source_url": null,
+      "is_active": true,
+      "created_at": "2023-10-20T09:15:00Z",
+      "updated_at": "2023-12-01T11:45:00Z"
+    },
+    {
+      "id": "10",
+      "agent_id": "2",
+      "content_type": "procedure",
+      "category": "Support Process",
+      "title": "Troubleshooting Steps",
+      "content": "If experiencing connectivity issues: 1) Check device compatibility 2) Reset network settings 3) Update firmware 4) Contact support if issues persist",
+      "intent": "troubleshooting_guide",
+      "keywords": "troubleshooting,connectivity,reset,firmware,support",
+      "confidence_score": 0.9,
+      "source_url": null,
+      "is_active": true,
+      "created_at": "2023-10-20T09:15:00Z",
+      "updated_at": "2023-12-01T11:45:00Z"
+    },
+    {
+      "id": "11",
+      "agent_id": "2",
+      "content_type": "external_link",
+      "category": "Documentation",
+      "title": "User Manual",
+      "content": "Complete user manual with setup instructions, troubleshooting guides, and warranty information.",
+      "intent": "documentation_access",
+      "keywords": "manual,setup,instructions,warranty,guide",
+      "confidence_score": 0.85,
+      "source_url": "https://docs.example.com/user-manual",
+      "is_active": true,
+      "created_at": "2023-10-20T09:15:00Z",
+      "updated_at": "2023-12-01T11:45:00Z"
+    },
+    {
+      "id": "12",
+      "agent_id": "2",
+      "content_type": "website_content",
+      "category": "Company Information",
+      "title": "About Our Company",
+      "content": "We are a leading technology company specializing in innovative AI solutions and customer service automation. Founded in 2020, we serve over 10,000 businesses worldwide.",
+      "intent": "company_information",
+      "keywords": "company,about,technology,AI,automation,founded",
+      "confidence_score": 0.87,
+      "source_url": "https://example.com/about",
+      "is_active": true,
+      "created_at": "2023-10-20T09:15:00Z",
+      "updated_at": "2023-12-01T11:45:00Z"
+    },
+    {
+      "id": "13",
+      "agent_id": "3",
+      "content_type": "faq",
+      "category": "Customer Support",
+      "title": "Product Return Policy",
+      "content": "Our return policy allows customers to return products within 30 days of purchase. Items must be in original condition with tags attached. Refunds are processed within 5-7 business days.",
+      "intent": "return_policy_inquiry",
+      "keywords": "return,refund,policy,30 days,original condition",
+      "confidence_score": 0.95,
+      "source_url": null,
+      "is_active": true,
+      "created_at": "2023-12-01T15:20:00Z",
+      "updated_at": "2023-12-01T15:20:00Z"
+    },
+    {
+      "id": "14",
+      "agent_id": "3",
+      "content_type": "faq",
+      "category": "Customer Support",
+      "title": "Shipping Information",
+      "content": "We offer free shipping on orders over $50. Standard shipping takes 3-5 business days, express shipping takes 1-2 business days. International shipping is available to select countries.",
+      "intent": "shipping_inquiry",
+      "keywords": "shipping,delivery,free shipping,express,international",
+      "confidence_score": 0.92,
+      "source_url": null,
+      "is_active": true,
+      "created_at": "2023-12-01T15:20:00Z",
+      "updated_at": "2023-12-01T15:20:00Z"
+    },
+    {
+      "id": "15",
+      "agent_id": "3",
+      "content_type": "knowledge_base",
+      "category": "Product Information",
+      "title": "Product Specifications",
+      "content": "Our premium headphones feature noise-cancelling technology, 20-hour battery life, wireless Bluetooth 5.0 connectivity, and come with a carrying case.",
+      "intent": "product_specifications",
+      "keywords": "headphones,noise-cancelling,battery,bluetooth,wireless",
+      "confidence_score": 0.88,
+      "source_url": null,
+      "is_active": true,
+      "created_at": "2023-12-01T15:20:00Z",
+      "updated_at": "2023-12-01T15:20:00Z"
+    },
+    {
+      "id": "16",
+      "agent_id": "3",
+      "content_type": "procedure",
+      "category": "Support Process",
+      "title": "Troubleshooting Steps",
+      "content": "If experiencing connectivity issues: 1) Check device compatibility 2) Reset network settings 3) Update firmware 4) Contact support if issues persist",
+      "intent": "troubleshooting_guide",
+      "keywords": "troubleshooting,connectivity,reset,firmware,support",
+      "confidence_score": 0.9,
+      "source_url": null,
+      "is_active": true,
+      "created_at": "2023-12-01T15:20:00Z",
+      "updated_at": "2023-12-01T15:20:00Z"
+    },
+    {
+      "id": "17",
+      "agent_id": "3",
+      "content_type": "external_link",
+      "category": "Documentation",
+      "title": "User Manual",
+      "content": "Complete user manual with setup instructions, troubleshooting guides, and warranty information.",
+      "intent": "documentation_access",
+      "keywords": "manual,setup,instructions,warranty,guide",
+      "confidence_score": 0.85,
+      "source_url": "https://docs.example.com/user-manual",
+      "is_active": true,
+      "created_at": "2023-12-01T15:20:00Z",
+      "updated_at": "2023-12-01T15:20:00Z"
+    },
+    {
+      "id": "18",
+      "agent_id": "3",
+      "content_type": "website_content",
+      "category": "Company Information",
+      "title": "About Our Company",
+      "content": "We are a leading technology company specializing in innovative AI solutions and customer service automation. Founded in 2020, we serve over 10,000 businesses worldwide.",
+      "intent": "company_information",
+      "keywords": "company,about,technology,AI,automation,founded",
+      "confidence_score": 0.87,
+      "source_url": "https://example.com/about",
+      "is_active": true,
+      "created_at": "2023-12-01T15:20:00Z",
+      "updated_at": "2023-12-01T15:20:00Z"
+    },
+    {
+      "id": "dortze27l",
+      "agent_id": "4k8afeknd",
+      "content_type": "knowledge_base",
+      "category": "File Upload",
+      "title": "Oga Akorin.pdf",
+      "content": "%PDF-1.4\n%����\n1 0 obj\n<</Title (Oga Akorin)\n/Producer (Skia/PDF m140 Google Docs Renderer)>>\nendobj\n3 0 obj\n<</ca 1\n/BM /Normal>>\nendobj\n6 0 obj\n<</Filter /FlateDecode\n/Length 8687>> stream\nx��]َ%��}���\u001f�Z\u0012)Q\u0002\f\u0003���``<�?��\r\f0\u000f��`�Ȭ�\u001b\u0011�\rI�ʮ^�vn�Z(n\"�I\u001f#��\u000f���a������\u001f\u0002��������>ʿ���\u001f_��_���՟��?����:~L)���ׇ|��a\u0004��\u001f\u001e#n��1^��m����?��_��������?}�ݷ\u001f����W?�-��_\u001f�Ǉ�6�@=w��}\u0019�\u000f��\n�\u0012��\u001f���\u001fc\u0004���\u001f��C�PR��\u001a���OJ{�I\f@�\u0012���O��'-�\u0016\u000b�?��\u000f(�\u001as�oQh�A\r9�J�6ҷ��KH\r ��Hy�A\u000f<|����i���?N-�R(����\u0001\u0011�F�!u��2b\u0011[�\u0013轴�sT��G�C�{*;���۝��G�)7�>II��\b�#��\r���z�\u001c)��\u001a\u001c1c�\r���E��̖p2\u0004�����~��ų/Ez:��}��K\u0004�n\u001b�\"\u0004\u0000�!���sQ��!�\u000e�qY\u0010�k�`�\t\u0010Z�\u000e�\u0002��o���\b'�1��^����^�T\u0002A��w�s\f\u0018�h��|�r�  �5\u000f��:\u0001kǴ�k���|���\u000f�]Z~��bFGM�S�Z�z\ry��DU�6�TTI�o�!�Jzr1\u0000=�L~z\u0000\u0010B�\tU5�'ooY�A-\u0001\u0011�߉\u0003Őb��c�?\u0018�\u0013|l�Z'=j\u0012v�֕[]Y$�\u0007\u0010#�i\u001e6��[�{r�yj�\u0001��\u0014ëm��]M�\u0007R���zk\r�kU�\u0004�F$\f�k;�8Gb�\u0011S֔\u0017VKI=\u000f3,\u0001�\u0002\u001cHlˮ�\u0010��~n%&W_0���h���~\u0016dmFT�[�SwX��Zz�\u0006K�M-�\u001a~>up�ve�-)\u001d\u0003\u0007]�v��Ǉ\u0001�Ն�.���E�F�b��S[�\u001b9Ԝ�r(k��x_��-��&#yͼ��8N��>\u000e�\f��^n*�ʏ��\u0007�\u001f,���ƝX��-��m\u0007�|��\u000eys�s<\u001b:�\u0015쥷ؼ֔�24Rv�Ս\u001e_�U(�\u0007��p�o9���Ҥ\u000b�\u000e{!n'�\n/2V$Pv��|�\"�B,]�N�ɳ�Sƨ���\u00131��E�q:���*RR��j��F�R>��9x���t�ZXYY妎ʔ\u0017��r�\u0006��\u000030�M\n�^B��n�\n1�\fڕ��acE�iOz��\u000f�\u0005e\u0003و�ޛ�����Vd%�\u000ef�~��S�P\u0014'�L�~k��N�\u0014\u0018����\u001dX���T�\u0019b��\u0018{D\u0019\u000e�؋��\u0014�o1bk�E��\\��!`��rMC�|Eh�ۙ�v�\u0000�:����\u0002-��5���ͅ���U��Ko�J��#�z-�F���\u0005��Edd�l���Op[\u0017�\u001ei���8n�6�%-|a$kr�ǵ��\u001b�:��v\u001a�LhZ��2K��|;½�$<���%ם��^��\n\u0011�Z�7\u0013^\u0004-����!����eks��$�'�,O/>K�\u0016�C�r\u001a/ǵ����m�n�3�κ\u0018rT��T+��\u0007�&��N�G��V�3��Χ���\u0003�\u0014P��^����z�\"ی-`�NN'ǾVH5GeAvX���)\u001e���e/\u0017�\u000b�\u001a��|\u001bV�\u000b^c����\b\tlzG~�i~��F�t���\u0003�RB\fr\u000f�����\u0001��yjOo��\u0000��O��\u000f�8�t��\u000b�)TB\u00187����\u0017��G�?+��5�bБ\n�A/g[8����\u0011Sj�V�9t���\n\"R���y��oRk/���W��K1�\u000b_��3��t��\u0001ق���؍��)�}�f�\r�b\n켠��-Q�\u0019�rņR\u000e{��\u000b��I����-���n�^�m\u0002{2�\u0017sބ��K_�`y߯#��ǒ\"ץw��t��\u001eyM��e��n��%\u000bT>M`5�\u001c���\u001bZ�]C9]�e��!K��$�#�\u0011K:�\u001bY|��5�^ةv:�\u0004���K&vT\u0002\u0017���/\n;\u0019R��3�\u0012ٗg��N\u0003ڻ>P+��Z;�� X*��<'���(I�M��V+\u0017e\u000f\u000bQp��^�\u0006�\u0012�\u001d\u0017j�����R�<ϟ?gq�5\u0006��\u0006\u0017j2�@���\u0013/!2�$N��R%D�l\u0013�#���L�~�-\u0001�����n�T�6��|뒡E�ZhZ1���,<����W3�Oܷ>�/P�\u0011��\u0001\u0000��K�zއ�\u001aB�\r�z�\u001dx��?Վ\u0014_�\u0012�k\u0005���\u0013�k��R��� ڑ�sV�c��\u0014\u000feqEll�eEl������t�e�T`�$�VzZ%\u001c��e~�{�M#e`Q��l���v��{��Z& Plr�祬�\u0006�(\u0005A\u0019�K�u�\u001e>�ƨ�\u001e\u001f��Zi]�����o��\u0016\u0005bKXP��wjc�8�P��\r�iY�nf\u0004�� O���\u0019~*��\u0012Bl��\u000e��!O�:�g3V\u0014\u0019��̿��\r�\u0011\u000b%����r\t$�Am��8,F\u001e1�\u000e~�Aj\tſ'm�����\u0016;�6��\u0003[\bj%���x��\\L{���\u0007H�\u0013lM�N�Pr�@QS�ɨ!w��Z\r\r�R�5�\u0014�7U,�\u0012��~���1j\r�2�\u001cA�\f�B\u0010\u0014���(D�G�\u0006H����\u0011�\u0018>B�m/�����u=\u0001$�\\�)\u0018\r�\\�\u0017M��k�\u000b�_\u0004w�[�0$��+�\rX�{��Q\u0002��2�[�^�![\f��c�\u0013�����9\b�B�F�\u001c:dr�\u0016X�6��m�Ź0m��m�:𬳾[�\u0017b�/�|���0d�\u0001$��\f魢g�&�\r���Z��Cv�-h�r��\u0007\u000fCB\f�c\u001b��wu����\u0006*h̽\"NU��܍w/�x7��\u0002��F���.aw�MR�F9E�b�r!�A�U���g�bb��\u001fQ\u001a3U�'�y���f}Vw52Ѐ���=��5�Ǫh|6@��\u0014�C,\u0001\u000b�\u0005Cp\u0018�\u0003�*\u0013�=��!�t�5G�E01\u0010����jL\u001aM�\u001c>\n!�e�\u0007�p\u001c�5@m*փ�Xb��}���_-_�Z\u001e#�wr�Z�\u001e\u0011+��g����\u0018+��J!\r/g5V�U@�ԋ`\u001e�ERƣ��vc�1$b�;Ut����\u0014i�\r[���Y/~�\u0015f6b*k\u000e��Q\u0001۲;=�\u0011�bG6eZ���\u0007��'�\u001cHz>ܦ�)`�V�\u001eu�\u0012XV����C#�g�R�\u000er�qȲ�nw\r\u0015êز�\"��#��\u0018Ή��ќ�\u0018W�\rj��[̊8��N\u0005���t�7}�\u0010A�G�Q��h4m]��p\"�0�?�Y�ڋ�S1d*UA\u0005Yݞ��?�ZK�\u0019w\u0018v�1\u0006�\u0019ꮥ��Ó�Bٚ&�6\u0013�\u001d��4Y[L|\b$!�o�g�\u0000���pWQ����{�\b7R\u0015;�~5%��=`�;�v\rcb�LQ�)vBbDg�\u0002��\n�]�֚u�(\n���o\u001f���`ҀQ,��\f���/�©5��\u0002z���c�R�[4\\��0FӁB��̪i��\b+�LH��\t�3\u001f��\r\u001d]��)$�r�Nz�\u0000��淏���c�O;\f\u001b0�_�sn6V���z��X�/o\u0000\u001f���X�S<��~�v=\u0004Ў�E�\u001b]·\u0011�$�צ�\u0005'�}�>\u0010Ck�Q����J\t����b+G����Xw8@���-��\u0016�\u0002��hH=\u000e�Y\u0014\u0014���Hn��������\u000fx̺-�����F�ѝ\u0018�gAN,�\u0016��J�B��J*n׍�� �]�s�`�Gj����'�����ň���J�'!�#oWS �~\tp�\u0007�\u0017ZH��t�\u001fÓ\u001cZ\u0004�-�B�3�Ėj��R�j�ŽaMP�K���\u00106gа\u001d��\u001e�\u0001\u0014,yp3IE\b~z=�g\u001f���\u00196z\u0006(�\"Q��X]\u0012J�\b*��~A��J㈽����y\u0007\u0016܀��&��N!/4�O�7�\u0007�=\u0006\u0010\u0014��\r\u000bz�[�\u0018@dâx�=���},!�\u001c\u0017�=\u0010ONY컹��\u000f*=Ďw�\u0015\u000e\u0003v\b��R;��H�{?#!,?�@�R�:�s��\u001f�7�NϘ�UL\u001b���\u0016H�>�s|���J�S(����7\u001b�T�P���+Ж\u0011l�iB-�\u000f�|�ŀ\u001dJ\r�����XiH�I�Q�F��#\u0001�:\u0012�!�ejZC´F\u001c�W�I\u0001_���������]sW�o�t��X3�9Z1��\u001a��*�\u0014�j��#\u0016\u0016�^T\u001e�����1��h��n\u000e�-Sk���a�\u0018IQl�9��+Im\u000e�Qɏe��+�iR�Jэ��M�)4��[�`�\u0011�P�\u0016�Ԟ���\u0016�M�.�\u001e��$?1��\u0000([��YJ��^��*��\\\u0012<�D~Ǜ�\u0006�Ҵ�T\u0013��|��\u0019\u0005�('vC�ܽ]�f���g\u000f�6������8��\f���B^=Ѿ�N��y����\n���Jv��b���~;�e\b�g�R\u0007��}:2�\u001c_$�\u000b\u001b`�\u001b�s���\\ՖF\u0013�Έ����f��װ��\u0006�#!t�p^sQ�`-Y��P��\u000f\u0018�\u000b���\rcc�I5���<[\u0018k�`\u0011\u0013�?��j�Wi��Ao2�e�JjN�~\r�;�z�.��\u0003}O~z[��J��6y�5�w��\u0003��FRP��f�JΚT�f��GB\u0015\u000b�}З1\u001bQ�Kc�`��昤H��ϰaN�Q�k��{E�\u0017@*���R���V��\u0004��1�ږe\u0003��\u000b�|��\u0014�Ǐ�>Ї��\u001a���l��k�^\u0012�\u0004�W�FMS�H�~?�Ɩ��u\f�=p?ˠ����a�ΠxkH9TD.�\u001f�e�,���R\u001f�s�\u0004�8�Y0A�\u0011\\�\u0018�x\u001b5�=?����i��%\u000fP�Hj׺�V�\n\n��B\u0011���}\u001alr\u0016�r�(tw׭��\u0005�\fW~�,,�}+�s��Z��6�\r��ڨr�m����8� �^ҭ\u000e�À\u0014j*Z��Y�:[\t���\u0000\u0002���;��\u0001[(�6Ƽ\u0013_��U\u0001T�%a����-ɍ��� &μ�s���ӔΦ��\u0004�+�\u0012\u0019�۱�\b��\u000e��\u0018P�{\t�?hT62��\u001d���7�9>��ea�۵�k�P�\u0006���N���tQ_:\u0003fh?\u000fN'\t�ld�!\u0015�݋\u0017�\u0007i�\u001d�s}�*\u0014�\u0004��\"�t�9��=h�p��.5�)]\u000fv����B�����&������'/�Ǎ���\r��g����\u001b,Ϻ�\u0002]�ѵ\u001fS-���]!#\u001c3�;3l:\u0007�g}�3l�k��R\u0017�0�^�\u00136ʰ\u0006g-�nԬR�\u0011��9\u001c��!&T�\u001c����\u001bx�bb���N�ޮ�8\u0000>G�h�M\\%D-\u001c�(���<B\u001au\u001f�\u001d9t+Y<L/�T\u0001V��G���ĭ�\u0005���\u0005r!��w�ٵ��\u001c�/�R\u000f\u001a9�rvKaw\u0011��\u0002��C*�\u0005�����Kq_�*��n����ǡl�S��PH���{��U\f��)����s��M��79�sz���D3\u001a��t/\u0002E�����\u0014��_\u0016��\u0014\u0007a�J�|vFZ���I�6;�4�\u0014�nԗ1��\u0013��gן�j\u001a��ˌy,���\u0018uv�mX7�h�9�'T��t��\u00023��~49c�,\u0019�-<�\rq܉�S\u0018�˹-��-D\u0001b�\u0004\u0001܈M�� \u0012\\t\u0003�^@�\u001c=���\u0001ܬ#\u0012Gc���c������wH�s0\nR�ᴝ\u0002\u001a 5�\u001e\u0014�K\u0017�T�P'E���v�a\u0003X��:�޴2��9��<R��2k ��D*W�+�ro��RHc�[}*x�g� �\\��X{\u001a\u0011\u001a�ֲ�\u0013��b���I#~{/jQ\u0001\tF��'�IP�\u0005QU[�/�c$�(\u0018\u0013�or�azU�ǹ\u001a.\u0003�\u0006\u001b����1�\u0012�k�1��\u001f�I�g�i�/3gkf�'C���\u000e�'\u0013̱���JT\u0012\u001bV��s\u0016+m��\u0006J��\u001b�h��fvFJ���v������\u000b�\u0001�e�M|*3�j�\fC\\���Z%��l��h��O;N1E���Y0�qZ�:N_�2O���U����0�����JE,�=���_)�F*��Z��q�\u0013;d����_\u0011��\r����\u0017�\rg�\u001c\u0003|�K}o�\u00025\u001b):S��f�\u0000���ى�3�LF'�E��\u0004F�4��ҥ\u0016���M�\t^'I/�\u0016�R��\b.R��]�\u001cȰ���\u0013�!\t����ɴ�BE�4I�wAM\u0015�ݪ�\u001b��o�����;�/\u0013�gb��(m�X��\u0019r�\u001e`7\u0010/\u0016�4��G?��\"*���̟���\u0015\u0006���\f9���P�l�ߝ���6�!r\u0007q`\u0017\u0002,i>�ψ��2��A��%�y�یT��\n=�$͝:\u0005z(�h�d&T�]HH+���Y�\u0004J��°5�\b8˾n\n��'�un��MT�-:�\u00032K��WBM@�\n���J+��g�\\�d���n�v�\u0004�\u0015kn\u001a{�|82]Ⲑ�\u001d��\rٌ��д\u000f+��\u001b��S\u000b^��L���-T\u0003�Z�\u000b\u0014\u0016�\u0017}_v(���mR���\u0016��6?_�K�\u0019�f��S��5܀��)�,\u001fb�Aq,��\u001b\u0002m�$�ݞB�\u001b�n��I�K�$r �f����Ƥ\t��yǎz�i��q$eB\u0003�e����GO�C�?���\u0003n���xo���Z�_�Y�ƞY)V{�\u0003��\n�Y�G{�������v\u000eʡP�Aǲ\u001f�\u0015W�T�Β;��!����X,uq*�L\u0004!�Z��R\b�k�tn\u0012��,���nB=���-N\\\u0010��^�<��g(\u001b����l�\u0011���\"_۟P\u0012�Ӏ%IhB�\r���x���\u0015ɝ�z�L����Ci֑`h�%@\u0000�\u001c{�A�@�hE�ζ����O͓\u0000���R��[��K�լO7��a�m���;^�\u001c7�1*�jOJ�gq\u0010�?\u0018\u0003a�_�T�����3���L~�\f�\u001a�\u001c�\u0017\u000e�\u0003�O\u000b�\u001b��a<�v`,�3��2\u0014\u0012*\u000ek�����[\u0019Ϣ�\b\u0014J�I!�Z-��!��j�i\u0001�g-ĕ��\u0003=c\u000f��\u001e�-�33�4>�cNv\u001a\b|\u0011�x3��Z��x\u0014P�3\u001c��~Y\u0013�Rk1���P�\u0015��Q�Q�ߪ�?�.�X@��ȭw\r��,%Eu��\u0000�Ӱd��K��eڧ������D�\u00014\u00131T��wD�7�YoΆ�3����;��fиG�^�5xGC!�2��\u001a��\\i\r�Oe϶,�\u0015��ONԘ\u0002{ފ���[��Z{ǧP3/�\u001c\u001bf��Į7�Y�a�C�\bN�\n�%�V��\u0004��mפ���\u001a/['�\u001c��\u0006��\u0017�:�\u0011\u0002i���%H\u0014�kP��>\u0011\"*1�e\u000b�k�L�V7\r)���\u0012����SR����z�{c��Zo;\u0017���tt\u000fԀ\u001c[�\"\u0006DjZs�\u001dz��|$�\u000f�괼&�\u0005A��֬��\u0002�7O�\u0011\u001c��P�\u0011�6�\r{0�%����]Y�\u001bo�k�\n��\u001d�#�\u0005�\\;���^�d�����+��1%\u000f��l��5k�Y�\u0006X�\u001e�h9�.�ᑠ��͉��6-n/Q���d���\r���'b��P��L�\u0006��*�\u001e\n�we�т�����ߜm�^dK�X��R_���]�E&\u0018�`�\u0016e�y'�ld�U倍:k��\\\u000e�\u0003�\u0018�����0n�R�X����B�␨p��B>v����n�\u0015�1� ử6\u000bL=n���\u0011�1V��T<����-��w�\u0019{H=f���\t�\u0010>ٗ��v.N[����N97�#\u0013����\u0006�r���ұ\u0004E(A\u0004��kI�V&��ڒ���F� �pbL���#\u001c�ͺ�\u0001F��\b�w2�l�\"i�;KMe�u���}��\n;����gqJ�l_KWwӺ�&\u0016��`j�\u001fK\u0018m�\b}�\u000bj��6l\b-\u0018\bS��\f�s�5�\u0018�,�o\u0003����cBe��U:)�\u0002q\u0003�;�8�\u0014��\u0016l-���\u00063�&��/�7<��(�QS^rj���7��M>\t�P�@��t�8�e5\u000b\u0000�߯E\u0003\u0010J�\u0002>��#^~~\u0005):J�\u001bq��\u0001,�Λ/C���{\u0011\u0012qH�����x,��jS��\"?\u0001�1d���G\u001c\u0018�J�\u0005P�e c\u0000��UU�[o\u0004=4�3�\f��\u001cq4���Jx6gf'/�s�3�\u001c*P�3E -\u0018�\u0003�H�,��t\t�\u001d�Z#ͷ�x��/�$\rBO�w�P�\u0011z)\r9�h�mLP���<���@T�v��}����x\u000b\u0014~��PM���9��Z1����\u0019��\u000e�)�ea�,��t\r{�\u0017�\t����^��-R\u0002K?EU\u0007� x�Z�9P�D��$/`ίwm7)��1�{���\u0011�Z��UXJ��\u001b�iJ�w+3��i.k�RzJ\t4\u00007x}�\u001c�5��v���:�\u0002���b\u001b�I\u001eM\r����#AN����Cn@ٔ�\u0014�\u0001;z#T�\u0016��S�<1ɐ�Y�G6\\2r\u0018�sД7�$�YJR�U\u0002m�瀝��\f9T$� \u0011�NG�N�\u0015Dә��XC�\u0002;�t�JqӅ�\u001b�\u001cL\t�F7]�?5�b���>�<MN�Ӷ����\u0005(כּ�\u0017Y|�[\u0002zh�\r\tٿ�`i?�\u0018�� �\\Hg����\\�\u00155嶘��\u001b�j���ۂ���\u0013��t���\u0005�}�\u0003��]��o��Q����n\r�����6�W\u0015�y5c�\u0003\u000f�z#���Y<3�|֞�3;й�\u0002wۣ\f-𤳊)����\u000e\u0000\u001f�=JK*@�*�G\f\u0019U\f�+Ʋ�Z�\u0012�U?E\u000f,uXb���U��t\u001e�q����~\u0019�s���4���h9RC�;�ٷ�U\u0010�Y���.\u001c����$��M���QW�j�ㆺ��}�V5�\rwM�q�B����1 �b��\u0017a\u001c��S�}�v�|0ܦ��s\u0004�q��m]\u0018����}�Z� V+\u0004���\u0002�錻&m��Cv���I\u0002@S���W9��<\u000f�����CoY~�\u000bq\u001b�\u0016��\u0010��5��5�-��P��]eA/\u001c�7�`�}�\u00009��\u0006k�k�~��78]A�\u000e�Q�5T?�ya<�/g\u0017Y٧�`�\ruy+ш\u00154��\u0007<\u0005�k�\u0019z\u0011�������\u001e@\u0012�OQ�\u0003�&��\u001a\u0006�\"i��[�1.y�UZ�]\u00182\u001bM���<x�ғ��\u0014�Z��\u0010�K�mLU\u0013��a�FqO\"\u0014�W\u0013��[T5�ī�p��~W�|������\u0001̸\nTa��G��`��X\b��R�P[J�\u000b\u000e�@\u0000,9��ZG�L��r\u0015ux\u0004@|���\u000f>{�ׄ.IdPppW\u001duVT�A�/������\u0014�\u0017��#_�q�UT�b�\u0005?~{A�H�\"P�:/�R��R�q\u0018���\t!��0�g\u0012zn\n��⚚@�d<��\u0017\u0000ܡ�\r.�I`\t�yx\t\u0002��\u0016\"*���O@�PbC/c\bM��2�\u0011����w6�\\0��k�ܙ���>pv\u000f8~�r��Uw�B|񍏪e��K��\u001e�_k�\u001d��'�\u0015v{�(��2��\u001f��±K\n�����X�����hW�+\u0015C�`Q1\f���]4;��\u0003���z\u0010�C6��\u001d̺0������C��~vj���������;E\u001dS��7�a\u001f\bp)+��gH���5�-A@*��/��x:1�\b�3\u001dAt\u0001\u0004\u0004�M&�H�8{��i����\"#��H�\u0006�Z�| �Y� �|F嶟eG���\u0011�\u000fu�\r�*\u000e�\u000b�ҷ#��`��Ukl~�\"m]͡�o�E� |BX������z�\u001fvǷ\u0019�C����r\u000e]��\u0014b��r��Xt�7s\bO�Q���AP<B 7/\u0003k�\u0000QVr��kHt\u000be?\b-�?�84�\u0014s:S ��`@®J� 1�\u0012�h)�ݩnT0�Hv'FŞ\u000f�=���\u001cD�ɥ�r�\u0019\u0015\u0017�\u0011>~\u001a;Е�\u0015\n�9��\b�+M�\tH�\bv��0\u000b��^?��-\u0017ɘ\u0012��5\u0001hHѫp���E��h��eYW�B\u0013>�<�ȴn��kE0���\u00115\u0014�E�Z2d�\u0015\rh�W�:�wO��\u001c),\u0004S�ŏ\u001d��!�����,�ސ>{t\u000f�T��\u000e \u0007~~��\u0000R+�T\u001c�'\u000f\r\u0003ٲ)���\u0002!�)��`ի%G=䘢zM�ѦG�\"\u0014���Z�Y�\u0018\u0004\u00076��S��\u0015�ZTҔ��,'�T(4��'�E�S\u00134U����[�͐��_��vG�w\u0002\u0001�\u0002�!|�\u001b��D���\u0005p�\u0002���\ng�k�n�X��\u0001���\u0013�Vl\u0015�\u0006�:��>\u001f�5@H�\u001a{e�\b��P�>��r�L��I��J�$\u0018l��\u0006{-�\u0017��\u0017\u0015�ߌe�� \u0016�xq\u0010�����2�\u0005S�k�\u000b7�/FX�n\u0011_�\"�\\,\"\u0012\u0018�\u0018=\u0001�\u0001��T\u0001\u001eRл��#$�k%�\u0014$A��wM�$)J_�vM�ʱ\u0011Pĝ\u001b����;k�\nڥZ��#���9�{�G����$�\u001c����<�@\u0004*��*Dc���p�\u0013ߞݘB��r�\u000b�]�]��P\u000e�\f�GZ��P�\u0017�\u00016�>G\u001fD\u0018s\u0011Iu��\u001ba|�\"\n�P*���)�\u001b\u0006\"�m��x�8X�\u0003\r\u0015���Β�A�\u001c�\u0003R��a핞�\u0003ʒ�\u000fې��\u001f<��\nendstream\nendobj\n8 0 obj\n<</Filter /FlateDecode\n/Length 8908>> stream\nx��]��$�m�ߧ�\u0017p���\u000f\u0018\u0002��d��@\u001c�\r��@�\\�y d�H��49]�pFkŖ!{g�믺~X���a�\u001c��%��(�������|\n�n�����a�L���\u001f?_������?����O�}��sJ�?��??���_�Ё��ψ�G�����x�7��������_��{���o���˧�~��͏�s\u001a�m����_?����>a�H��s�Zh���������c����?��'����'�Y���~�&�<�\u001cq,|\u0003s�懟T�*\u0013_�Ş���lyb-�@L�2O,e{�\b0b��1����E\ri�\u001c��\u0017�m_�\u0000-B�\u001fST�2�����\u000f^�;fH�\u0015���^��\u0005H�z�x[q\u001a�\b�p6?�A'H\u0001j��o\u001e\u0012�0!�>�G�.\rߴ���P2����_j���Ʈ��^M����g�\u000fq�>>\u001f��I��[�\u0012b\u000e\t\u0007ĝMۼA졷Y�b��sPM#�\u0019*��\u0016��N��Fm��%q'����*�4����cr�j|��\u0002�)����w\u0019�c�\u0010^��N�\u0018�t�^\u001f�\u001c3N0\u001eʔ��6�v�\u0015إ�\u000f���6ޝ��l��/R����K����u�-�.Xb㴵\u0011r��p�&M�\t���L�q��8�1B���\u0016�I+\"��+d+��TJ�X\\q�HO�N�\u0010v��M��EiW�\u001fMH\u0011W\u00061g�;\n�L���+#�\u0015i\u001a��T�\u001c�\u001e�}��{\u0002��_X�\\�͓��bZK��0R�3\u0010�YA�\u0004oM�\u0011V�+b�\u0013��n�%g�v\"jEO\u0007�8��m\u0012[\fq4(��@_��kh���(��|�\u0000xO\u0013\u001e?��=�)\u0011T\u0018y��>�\b*൑\u0013�R�W�EX'�\u0007��\u0019�iؙ\u001b4i\u001f��\u0002��L7��Jy\u0012F�\u001eC�Й�h��^¨�9/��\u0016.Uyr��/\u001a\u001dy�%W\\}���<Ԟ�\b�g��\u000b\b\u0016K�1��\u0005���@��wю4\u0005\u0004}\u000b�R2A��\u0003�\f���\u0000��R��@�\"L�ɑ�9�1i[z�<#J��h��\\�\u001e;�6����B�r\u0018 �ɦ�\u0018\u0003\u001e\u001e�K�Ċ�xN��\\�M���C\u001b��n#Ŀ�K��ª�\u001f\t���ݥ�,�)�xWA`RS\u001bn\u0007�\fz�8\u0019L��ww�\u0015�wY��#�26,Uɸ4�̦6�\u0004ȸ@K�Y��%�\t�f��\u0004��\u0015M�\u0011��\u0014R��\f��#�\u0016��q宯r\u0001lx�����>`�\b��\u0004�\u0018��δ�k�\u0013A>�ٸ\u0003�A�=RH�~\u000eԈM�\u0001\t\u0013ʹ�/�W�9�J�����\u0011J��N��Ԉo*� i\u0006�'�}q��Q�[I0���>F�a�6�p�Nu�2E\u0001�\u0007]\u001b�Җ\u0010�5����et&J\f9���e�\u0001�\r���8Z�ȩx��Z�[x\"��-\u001e\u001f)�\u001e��bd��%\u0015\nL<�PZ�@b'�\u0016\u0006�=>-�!�\u0019��8dkB��V�;<o\t��\"��&\u0010��\u0015\u0018��g�9#W ��i�\nz�s����\"J\u0017q�����kx=\u0000�t�\u0019��at�\u001e�3 &Q���\u0014�\u0012w��\u0015<\tퟄGn�\u00046@S!�TG9b3#�\u0003�e�z<������u!y�\u001d5f6W�\u0018hY����o?F�0�\u0017���f\fm�\u0001g���\u0001;\t��#E�\u0016!�9��h�q��\\�ͺO}hV\f��ֲGĒ\u0010�ql�w��Kn�b1wϻ��eZ�5I\u0002�\"0���(G\u0002�Ӽ�^�B/\u0003W�k��\u0010AA�8���e�\\�'\\\u000fX\rx���\u0001�D7AK\u000e3a�4\u0001qE��w7N��h�Rg���y�0�$\u0000+N�t����\u0018ŔI\u001f\u0012�����sT�ee`�\u0012Կ{\u001e\u0014�Q\u0010,���8�b�N�ui\u001d�%����\u0011R�\u0013��/_�b�",
+      "intent": "file_knowledge",
+      "keywords": "Oga Akorin",
+      "confidence_score": 0.9,
+      "is_active": true,
+      "created_at": "2025-09-02T17:31:17.650Z",
+      "updated_at": "2025-09-02T17:31:17.650Z"
+    },
+    {
+      "id": "5k2bst82k",
+      "agent_id": "4k8afeknd",
+      "content_type": "knowledge_base",
+      "category": "File Upload",
+      "title": "Sister Mercy.pdf",
+      "content": "%PDF-1.4\n%����\n1 0 obj\n<</Title (Sister Mercy)\n/Producer (Skia/PDF m140 Google Docs Renderer)>>\nendobj\n3 0 obj\n<</ca 1\n/BM /Normal>>\nendobj\n7 0 obj\n<</Filter /FlateDecode\n/Length 5168>> stream\nx��]��e�m��b^ �(��\u0000�\u0005v��4@\u00034��@�&\u0001��h�\u0014�㗺sg�|��H:Z�c�m��{��(���\")x����@��)<��?\u001e���%�}��_�\u0010\u001e�������?���\u000f��\u001a\u001f��?\u000f�y*�\b\u0010��o|����6\u0014R��\b\r�Hh<���w�\u0014\u001e�����>��\u0007��ÇO?<=|����g!�]�����O\u000f�6�@.�Pby�R\t�\n��H\u0000��_���{�><~��\u0003�c\u0000\n9ˏ�O��\u0013t�B�\u0018^�������\u0013��$>?�\u000e\u0013'Ho?�d�$<�\u001e$\u0017�\u000f�,~\u0011́��ɏ_�&_��\u00029\u0007�\t\u001eG(�G\u0007̅X!\t4D�2(�O��T$���\u0001�O�\u0012��o�D��U��M�d\u0011 D�!�b�W+��s�Ţg>\u0014�!C����Y �\u000bB9����D���.��=\u000b�7R�w�c�ه�w?�\";Ȉ\"�o\u000f��j�\r��q�ל\u0005�v��S�\"�[�\u0010#i�ooX\u000e�3��I���ֻ�u�o8���\\d�󘚣cF�։�>]sV<4�p�4���\n\"*�\u000e�����\r\u001eb(�t\u000bܧ�l��\u0003H�\u0012,%\u000b\u0003�J\u0016?�Ϳ���\\.��-I1;¯����$���%�\u0013KUG\u0019t�-\u001f,����x*u���,��\t�\u0015�f�Hd+��|n����>�F�\u0004���\u0018M�\u0014>Zh��B���i����j�$[*\u0015𚈴K݊$\u0007�������e�`���l����&�,\u000ba��T.р���\u0010'��K$�:^\u001dM�3���\u0000��ͫ��R��\u0018�h@\u0017�\u000b��=�\u0002�K&\u0011��Р�������S���\u000f������\u001f��������འ�\u000f\u001f\u001e�\u001b�_'\u001c��Lt�\u0013����D�����HV�G.D�m8�\b��-�������x�[��w�E�\u001a2�\u0005Lef/Er��;�[\u0011���9W\u001b\u0011��@K�X[�w�@�\f�\u000ef�\r(�֤��'i��\u0014\u0012S�\u0006盢�]��\u0004�w\u0002:����'u�\u0001��k�I\u0018��@�\u001a\u001aB�1�yk\u0018|r�}V4S�c\u0014o�7`�7�\u0010D\\��?\u0001��\u0003�*��<��|`� �\r�Eu 剓��\u0004f\u0014E��\u0018���/�����<\u00041�$�6qR9;/d�\u0015䧆I��;͝-\u0006/:'mV�J݋\u0010���\n�Õ%��(Xt�3V\u0013|n(>\u0019\u0002c�%��dL�;����K\b/A�)6���v�\u0007\u0005��\u0018�\f��\u000fL��P9� ��3<6j����@�\u0017��Rd֔�1F�@9�(p�:7�A$���DՎٕľ�;M\u0018\u0010\n\\��\u0010�X�p?\u001c�2�\u0004b�#(\u0000l\u0014.e1#bƔ\r>ll�KYE�`H�\u001f�/���,��k:��z��e:��t�L'\u001b���|��!\u0015�E�U{4��\u0007��JQ��QO?�+VT�ퟔi��\u0018@�q�&�kfZ�1W\u0014��))�y�\u0015\u0012�@A�|\u0006u+d\u0012�M��>\u000e\u0005\u0004A�2i0���*W\u001ck�U02�]Wy,Z8mԤ\t$�\u0000~޶\rTs*\u0004�\u000fF\u0000hq�z�P�� �\u001b�|(d�\rd1\u0015E���Nl;ݹ�G$_?7�\u000f~��ثy\u000b��(�8^9%ZQ\u0014��e&�\u001d�{V�>���Bi\f���=�^\bC��Q|3����̬�͹��\u000f6�\u0001\u0016�\t%z:gw+�\bb�1F�T�̵2\u000f.l�3�'��Ȱ�gW����`DM\\��kIS�\u001fnEIڴ�v\u0004(|�@\r{��bv^�j-s�\u0006�Ƥ�(E癗\u001dH=>�R\u001c�'�\u0015��$@5�\u0011C�v�8O�D�81m\t4ik�ȫX��j��,��\u0015V�Z ����6W�\u0011\"o8I^�\u0017/Xm�ڐ���w��1������\u0007��\u0000K�4�͞�N^\u001c\u000e��\\�V�\t]�F���]\u001bG}6{\u001a��6cc/c\u0013�?o��c�\u000f4��\u0006��\u0014�\u001el�t�{�EQ��$�DK�3�3��Ab\ni�b-���\u0002�M��A$M\u0000_\u000ez{)� c�Q��<�f�|ZLwȂ�\u000f�NlH�m�(�� 7�1��d>Zh�\u0004���L�i\u0011[\u0015���h9ڏyt�9�6Y�sτ�\u0006��R��П4��\\,T�\u0011�nJ�1�.\u001fI�#P\u0002E8\u0006]$&�E�j�y�6�Ǟ')_��+� U\u001c5k��]F.iOp^��\u0014�!�\u001aP�\u0006FV�g�o\"��b�v\u0004�sa��0��P�b�c�� \u0016&a�C\u001e(\u00112�^�]���e���`���.1�?����\\�[(q�_���A�E��\u001f%ًX&�\u0006\u0016�]�Ǯ��\n��\r:��w��|r&Y{�Ę� �w�v����}%���۳��me��\rw�\\���s��1D_\u001c�^[�gb%�\u001e���M�R�\u001b�1\u0015G�\f��z�\u001bo��]U]�\u0012NJߴ]U\u0015�8�س�ʤm56ٷ]8K\u0012�˔0�:iLZ�`��3�\u000b��Z�\u0017�\u001a����\u001fNm�_\u001c�\u0019��\u0019Ի\rW�\u0015\u0018�\u000b���\u001b��\u001cұ���︟׎�&~��b8�`�\u000f�\r���@b�J�����I���A\u001f\u0013*@�V�\u001deO\u001b%�\u0018���CIs��E�x(>�cK�D3Ѽ}^��\"\u0017�0���B�Cm\u000f��h�4O\u001f^\u0012Q{T�`TL�\r�\u0015\u000b�\u000e�T���Jp9��7�֪�x�{� �dU��%1�zvP����92��b\u0014��\u001c�v�ټMV\u0014Sp\u001eJ\r0)Gz��:J!��\u0000�j\f�\fDV\n�%]�!ɮ��n{\u001d��yw�~Kb�P�|=�\u0004���\u001d�\u0004�\u000e��:��욎�z\u0013�\u001aӤ7s\t��t�p)9gC��tD5\u0012g�WY�9V\u0016�\u0012�-��+gk��1ƞ���,�dA\u001e%�]��S�!U�U��&�'�X5I,j;��Ҳ0L�|%'�w\f�\u0016��\u001d4mV(|ℚ�73�\u0006\u0007O�8\u0000\\k>��XD�9�ᳯ�c[�V\u001bA!� �>���+I�l\u0013�m�d5�iƱ�1�M\u001d�*]c�J�B��\u0004�ȑ-�V����Z-�bLE�Rp�J�[�<\u0013�>�U���\\�\\��w��J��\u0010�`�5⛨���\u000b)�Rc\u0006\u001f�c\tCf�3�\u0012|�7Y-���?�mEӛ8cb\u00143:ښ��v_�e�p�Ρ����\n`��Γ��D�Yg�\u0017?�\u000b,�\r�\u001a���2\u0002�!�\u0006M#W<\u0011��!�kM�V\u0014kl&�\tW�e\u0003.��|M��}#خ��v`��\u0006F�u\u000b�\u0006\u0017���Xc�����vp>'�T�·Vs:���id\u0016%��\t��j�\u001dW<\u000e�k�1_ꪺ��5�8�\u0001\fciL\u0004Z\u000b��C���R�\u0013'%�0��y�$�?��\bo�h�ٖ�\u0005���D�<�\u0006R��}R.1I��\u001c:d�r@�L�����&�GkuN���R�\u000f�m[)-_�l�j�˜Tk\u001cƤF�5\u001ayO�W\u001a�\u0005]4l������\u0015_�i]OWr����͈�����O먰��q��Z�����Y׽\u0003\u0013�a�h{�������uWR�x\bI�\u0005�\u001eϚd\u0010\u001bY��8���\u0017��5F�ۻ+�Ws�c=Ռ�\u0017�̍2/'��\u001c5�gn�i\u001f��A\u0004��H�\u001e�\f�+���g\u0015�v����R&l\\�\u0015ȣ�\u000b͆wO3��� ]�9ؒ$�rRc\u0012-�X�E#\nz'�;6��ޙ�R�ۆ��(Q��\u001a\u0007m������2䆪�5���m���#wkV֎oT�%,mI\u0016��� �ǭ+`�RX�fޘ<R\b��\u0006��$��B=��\u000e�Z\u0010��q�f\f�#�P�e2mHF�BA�\u0019�\u001d�>\u000e\u0015\u001c�%�X��u�\u001f��2�\u0019���DS\u0015�\b\u000f��.g}�ݽ�����\u0010�z\b�]\u000e^��\u0019��8E��Gm�`.J\u0018{׭�9_L���K�a�\u0014�\u000bog5\u001d0��F|&�=�lbF+��R�5�\n��.\u0018��+R\u0004���\u0013�)�0�����o�A7�VcG\u001f��qh_r�\u0010^K��i��\u0003�8��\u0017�-\u0001�E���;�r�\u0001�A'\n�\u0013�R�`{͔@\u000f#\u000b\u0019,}��<�\u0001�*:۔�8\\��\u000fz ��a\u0016�\t�_�6�L-��>2�]�B�_\u001dk\u000b�4��Y��\r��5_K�̬Ņ�\u0015$b�V\u0007����Vj�;Z`����!��\u0004!ӥ\u0014�\rE1@\u0014�`���2��|k��&�\r�=G��\u001b��n�i���vW\u001bz��:�\u0001\u0017�N���ݍ�ƺ\u0006��JH\u0013;��J\f.�v\u001c3���5%\n����̠��^d�n>\"�\u0013�`/2*�%:�\u0001�N��\t���3�\u0001&�\u001b\u001c!��`u4C�5I\\��%��˄�^1\\a��\u0003S�\u0014Kp�_�/\u001f�'M^X�'���\u0012�L\u0007��ƕA�V����1����,9�[��n��B\u0017'�_爳�-\u0001Ơ�>\u001acAM\u0001\u0015<�v��x�_����F�%��=�4�@\u0015:Q�^a��uw7��\rA\f��Y�>6�\u00076���U/��\t�\u0016\u001e\u0010��\u0005�]�4`V��4�)Q�\u0002���liw�J1:V����Ao=yp��ړa�B]t\u0006��\u0000>�ސA��f�Uc���z7H�v\f��A��\u0006RO��z��8F�k\u0015˛���Q�\n���7��h\fP�T��-wC�R��5^jQ���ܔ\u000b��iN.HS<�v\u001d\u0018�\u0015q,��\u0003F��W\u0013��ꡮ\u0013�fQ���\u0018Hf�\u0000U���\u0014\u0003��w\u0018�J7%s�D}Ӄ�*\u0019�@���1\u0016�\u000eM�\u000bx1\u0015gC�].F&��6b�.�\u000fRK$��V�\u0007\b��\u0014�%���϶�Ș��9:H\t�#Q��\u0011�fO�5��>Ҭ���\u0001˾Q������n`����ֽ$A\u0000<�*���6�\f�`N��$�\u0017?os˃��kU��\u0001�8��o������\u000bMv6=������m�\u0005>\u0015�}�\"��\u00198��\u0013M5�Mn�Y89x\u00129�\u0012�-�펽�wf�Ϧ2aew��iu-H;\n�Q@\u001e�%-�(O\\�䋚�>�\u0018�\u0012P+|t�\u000b{'�(�f�\u0004\u0014�(\u001eAV\u0013i/�`�k��\u0014g=\\z�\u0016�uո�\u0007��(�� 5\u0005��S\u001a<Ŭ98_��\u0017�(Ȍ����7`?Z<���g�\u000e|�Y\u000ft\t8Vc�p\"��\u0012�yg7)�z�*���3ǚj����\u00071�S�����\u001e��{ۛ�H��'4�l���\u001d�/�zw�Ci��=|2��t�ڪ�ZG\u0015k�����\u001a�f�YL[M+�S|O���e�l/�g����ՁZ~E�Uo��1�\u00072л���a�ޣ�F\u0017z�9�66Q�|�Fs�[\u0017\u001bm+\\�\u001d��\u000b�\u0002m��\u0005��Z\f�g^�^�1�v�����8\t��N��[�g804�\u0014c\u0010�\nAY\"���y�m\u0015�\r\u0017n�L�\u00078\u0002+\ni�\t\u0004�\u0005���=\u0001y \u0001y��R\u001c�<qڊ��O�Q�\u0005��\u0016���K+�,��\u0018+�M��p�2�������z�^N�ꉙ\u0013��?\u0005\u00172�z%�n6��I�\u0004��:�n)~��ޖ���횎 �-\u001c�MqВ\u0007\u0007�S�\rpK\u0007��;h+\u0007�Y�+gGm]\u0011Z�ͥ�\rGR�0�a-\u001b\u0016C�L�=�q�wV{���U���z$u�F���\u001e�����\u0005t1�s��\u0013�\u000e\t��\u0013������:\u0003\u0013b�6�0;�\\,*�y\n>:1J|\u001eZh�X�\r\u0007\u001f��[�9e��\u0001�:�\u00017�7%��`\u0006���jPn�K䋋T���#��:+\u001dN��֠s\f-��t>`�ȸ\f.�\u00145�u�[�����\u001a\u0013+ƚ�13ܠ�&�b���7A�-&R��/إ\u0012�4�v\u0006��v��i�;k����z;����\u0003\u0011�CϤ�dt\u0005\u000b\u0013+\u001c2K��z'��[�p\"6\\\u0011���s\u0014��=*\"\u0003F��y���\u0014_���׳ux�(�\tb�}�\u000bo1�wo�\"B��0��N�\u000b\u0002���U�U\u0011k\u0011��r��*@V��AB����}&uf\u001ffdY����\u0010\u000b\u0019\u0014�oT\u0019�'YC�Y\u0011�y�1+\u0012}�G{���\u0004��d�n�#N�\u000f\\\u0014�\u001d\u0005M,X\\[\u0015\u001b�\u001f_]iz6�>�w��4oǣx2)��{MY��7\u0005a�\u0011��\u0014��G��Ո�D\u0007;\u0005\u0007��\u0006��\u001dmn��\r��^F����\r���ymg�v2��`\\;\u0019��3c2\"\u0010��\u001c���Q�U��:��QZS]�j�'q�oSW�}\"��$w}&��\u0006l�'�=r:�⿻���\u0007L���\nendstream\nendobj\n9 0 obj\n<</Filter /FlateDecode\n/Length 5586>> stream\nx��]�\\����O�/\u0010Y\u0014�\u001b0\u0018`챓\u0000\t��_ �\rX�.v�Y �\u001f���S��#����`2�ĩr�\u001cQ�H~��c�~\u0001�_������\u001fBͧO��/\b���\u001f~�������/����� ��N�\u0000\t\u001f��ׇ�=��j���_^#�>�5���ƻ�=~�ݻ�~������߿������\u000f�>�-��\u001e?��\u0001�_5Ԟz���\u000b(� \u0001 >~���w1������x�\u0014�0W��<}���\u0018��\n�f_��\u001fN��A�ϟ8}�\u00034Ĉmd�����Z̼��\u00179[��x��F>~vQ�����\u0006\n5#ά\b1��{\"�\u000e�i_5�\u0012S��o��Ӿr�\u0014[��\u0002�\r2hd\u0012��Enҙ ���%$H�ց�I�B���\u001b\"�1\"�\u0018C.���S\u001b^0��j+ڡ=Q\u00010PM��\u0000��b��}6�\u001c�)��Nn!6��\u0004*)Tʉ�\u0015�\u001aw�%y�\u0016�\u0011��N\u001e�\u00134cW�Z+�����̐\u00051\u0005�u\u001d�\u0011Kh\u0004*#~�$(d\u0000\u0002��l���'�5�k���\\� �/�l���\u001e��R6��,��d���\u0017��f�=7�h3�$$�\bb�\u0014�\u001c�\b{ ��5&��\u001e�BzVΧ˿�:p\u0002g��ˢ-�N!5��|�N:愁_�։/F\u0010��ѡ�x?�~Cv�m\n�_�/5\"\u0013�K9�T[�?2���5G��'Y#@�/�0��i�T�n�g^\u000e��2_v���.$\b)B�]ٯi|\u001c��;;/w�s��K�R`��2�1ߕ\u000eM����nC��\u0003�f�����l�?�Y�\u0014��E��I#2�\u0010!\"(Lk���g7���Y\u0006��5\u0014�O6�0[����i�^\u001an0�\u000f`�\u0010\u000bś��@\u0018r��\u001d����\u0005e|�퇇w�¯x\u0006��\u0019|!�^�T\u000b��3�k(�����X\r���\"�Ag~�R\u0019C�|i\f���+��snT5G����[���\u0015���׃\u0000�<�ABB���ZU�t�l g6\u0011@G\u0001�no�*K\u0016�����\u00153�6j\u001agavC\u0018\u0013��BgON��̥�\u000f���J�\r�R�\u0012�:�O\u0005C��U|�.\u000f�\u0000]K�\u001e���\u0010Si�H��\f�n1��\u0011�\b��t�DC�?��v[�5�E��Nl8\u001e��g\u0014>�i-�C�u�lY���[�\u000b�6O����G\fK�v����\\�����vɚ\u0002\u001b2T4�\u0000[�;U�����8p�����'>�\u00077��o�\tb���v�= ����%��E\r`�b��K�\u001avz��\u0017�k���7Wv��\u001b&\u0011\bH�!7WK�\u0018�f��mc�g��l\u0019A\u0003\u000e�\u00169\u001b�֕{޽��W-k�\u0001cj|Iv�Z�X�F\u0010-��۵�7\u0013%���\u0013h\u0014)��U}`�Q��I��������&��h��?/�8�f�\"�\u0001\u0003xxI�\u001aȷ�f\u0001oA�K#�\u0006\u0006L8�\u0000nM���3s�E52ke�+�p�d\u000e��\u0007Op�$�A�Ia�K!\u0016�@���/N�\b\u000e\u001dP�vd�\u0013>�\u00128��t'�6�<3-�`\u001a6V���\u001f\fݫ�'��\t�z�h�F�\u0000o?\u0014kocȧ�#݃`_�(FT&�m�AT�i�ܣR\t��$�ª�G\b9w�Z���)\u001b$����\u001b�`�M!\u0007��\u0006\u001c���kh��\u0012��5�b\n\u0019��U\b:b\u0014�%y�J� �\\��\u001e�\u0018Fȯ��\u0018j�z�d\u0014��D�R٠p@\r�*�X��\u0004��Ez��dW23�o֜��Ց���\u0015ٻm���\u0019�?T�W��h\u0012d��B�t\u001b5��\t��F޲G�h�8a1���Gv`ü9��\f�\u0012��Ήe�[�\u0005�j^��8k\u0003p�v��\u000b�� �/���/�\u000bn%���\n!�K:�VC��c�_i\u001a{�=^d���7�KʛB�b���uI�)�\f��TXŔJ�&\\�1�h\u0002q��ɝ��\u0003\\�Vl�C��\u001e}\u0001�ś�\u0012k\u0012T���tU��*�ɾ\u000b\u0001\\o���h3�um\u0016%�\u0018:[S\u000b��{\u000e���Gm�\u000f�=\u001b�� \u0003���7��m�-e^����FW�|u\u0016TE�Ζ7a��$!\u0001\u0001��O\u001a|:�+��\n\u0014\u0015�\u001c��\u001c�\u0001o�/��,He�\u0011z�8�@w\u0003\u001a\u0013\u0019�nMd>c.��-\u0013��\u0010�A��\u000b֐3`U�kG��-\u0011���V3��/�(�\u001b���^��j@�@X��\\\u0002���\u001c��1�3wꏉ�ߦ��\u0010�Bm����V����\u00025�Ӓi7��\u000ed\u001f���OHMRIT\n* �$�k��\\��[p��c��H�X�(�D=H\u0016�(+���eW$�\u0014�bS���~�]�\r�\u001e��7�9�\u001a��om�\u0015�Q~+r;W\u000e�;_�y�UA\u0011�Ե\u001a\u0016;����H��P&��^x=\u0018ێ�+�c6�\u0004��R�\u0016����H��{���D�Г������el|�b�$O�E\u0011�i����?�w���\u0002��\u0001���\u001c�2\u0006$fؼ'��J��L���\u001d)\u0016/\u0013�S�\u0004\u0010��\u001d��\u001c#��.����ֻQhh9��\u0004��B�\u001e\u0003;\u0004�VѠSh A���nDP�\u0019b�\u001c�J�9�U�!Us��Ȟ�i4\r��B\t����YK\u0019B�;���׬*�&����d�\u0005�[��\u000b�H �p#���7�ٲ�l\"`]�\u0017\u0012����8O4L\u0003s%��1w{`�\u0000��U������{�\u001e2\u001d�~![\n��\u001f0\u001d4�)��\u0014+S��\"�U�L�g̴�_�\u00161-���g��t��-^S\u000eXf9���*b��^2�\u0001\n1-kh\n\u0001�$H\u001a������X��&A�#\u001dy�\u0003^�)b$⵱�����.�j�s4�(J�Z�\r�N�N*KY]p\u0016ۇ����)��\u0012j\u0002��{m��xM�{\u001a�ܕ���.�$\u0018\u001ak�@u�z7S���\u000e��\u001bt�J�U�R_3>*J\u001e�H\u0016����\u0001*��9N5��\u0004j��d�\u0013�I�\u001ec=�\u0007J꡿\u001a�Ί2��&\u001a;ھ�`:��mR��V���\u0017T\u0011\u001e)�V˿N���N\u0000��K�.{%%\f�NN�킼�N�4��t��\u0016vj9�T���~�[9w����36/O>�P��Q�Ǫ(G�X\u0014Ẽ1��\u0002�-�}�\u000b��\u001c�\u0018����.C����\u0018�=/l�'ڶbV��y\u000bam�\u001aj!q\t\u000f�\u0001���T2���F9\u0007ފ��j#\u0005�\u001b�NU\u0010m\u0001\u00043��r�~��|濕��9s��0��\u0013�ۛs�l�B�\u0001wt\b��)l5W6�K*wUi�g�9�Xk3��5)�ޗ5ף\u0012b'�����Yq\u0011w��;�ΏkL�I�#\u001c[U\u0013\u001bf]��\u000e T_�K7���R�\u001a�����\b���cQx�'\u0013N�C���f�ص�ܔ����\u0014�zX`��\u001crFX��(e���[�z��C�T�s�0J��R�u۔�\u0019��ZZ�P;�����\f��B��i6{��b6���\u0006��\u0015�N�͈��A-�oAIͯ��ڱ1�3�6-:h\u001d�6\u0013R�-�e\"M�_�H�%}����X�yt�s��\u0016���0�e�Jj�?0�ͺw�W��kC,R\u0011\r,>��9�\u0016Z-=�c�nc�\r��\u0001��\b�\u0007Z���\u0003-2��a���'2RVEF��rܘ�㟐�z�\u0002��Xz\t�jn\u0003���'0A��ב�\u001b\u001d3�M\u0013,ZO\u0006�g�,�D�>'IǷJO\u0006�\u0012�\u0003��%�z\u0013�7�Ù�D��2�E��<;i)\u0006i��\u0001oo��\u0015��\u000bQ[\u0004�=\u0007j�>��o'�YK����<�o;�f��t��\u0016\"푭��A�Q\u001b��2�-{e�Chs�bǯ2��\u0012u\u0015�O}V��\u0014�\u0018Ә��NE�~u]$QC��бwȍ��\u001e�\u000e��3���_weZUi\f�h��\b��X�)a��U.�2X�KM֭��#�|�aH2�H�?<�m&\u0011L���^ٝ�\u0002!1�-+2�^?�5\r)�Ƶ�c8����\u001c�I��\u0012;,�\u0004�c%�.��L7f;�\u001d���h}]�\u0003\u0014�yJ7v�'��-l�\u000e7r�\u001d9u�4�\u0005e��f\u001f����DRP�E��#���E�s<0��V �KP��X �#�2E�fu�=�9j��#���O������3��ˬk��H\\�ߧ#�\u0015OS�� ݽJ>g�{\u0010��'����lc���҉�ӪR\\)+�\r�RN��Y�Е�����؝�Uǝ�3�V���o���qhf/E\r�h\u0001����$v*2E�u`J���Dè��f�U\u0001���\\|߰���\u0003\\a7���\u0018p�n��\u0001GKSb�B��b\u0017~e�dQk,Ωj5�T�'\u0003���N\u001f�#x�\u0015-5\nm��(\b\\��_-,��2�G\u0012����\r�e��\u0006EsNn\u0018�\u0002]�$�R���!b^�PY\u001a1���z��,:O���\"�n���cZ�t$uZ��N���>�}rM\u000bۋ�O�\u001d��wY-��\r��軮\u0016�ٽ�,��\u0012�;F�lQ�)�I�\u0004�8�\tLWyg1�\u001b'uZ�0���]\u001d���\"S.�?�����6�Z�ǫ�\u0016v��NۙL�+���5�f2���\u0010a���؃m\u0007x�`�^}��C��2�\u0017V?Ƞ�S\t��\u0011`;3��\u001a0�5Ss(p�\u0004�k\u0010�M��\u001e�\u001b+@iY�./9E��\u0002\u001a����z�+s�\"��V��\u001bI\n�)�jU J��G��m�Hߣ����h���\bT55�ukVV�ūZR5isK�\u0017R�n)����\u001c���>y.�HD��v�Mښ�\u0003�\u0016�8�|�i\u0002\u0019:�#[m�vTO�������-P�]ym���\u0017�b'���%��\u000b�)��\u0007�R��n�e\u001a�~E�\"�\"�K�Ԝ^\n�[h�D�s\u0002�4\nx�z�*}���\u0018���o�e6�\u001e\u0005�K�~\u0019\u0013��\u0010�}N|:�kIdC�_ҍw?1���\tܞ���{\u000bԡ����+\u0002��lswҰq�SK\n�\u001a\u001d��jL��D*-�\u0001&¯L�ǘ��\u0000$v�&��?\no����Fj�\u001bkْ\u0016b\f|9�]�\u001b�K�[�r��\u001ce/Gi�J0���w�\u0019F+_��Z 4�\f���<C:�%�ӏ,�M�I��\u0016�4�\u0003��%�\f_�a��K�I#V���B\u001c�����{�Nv\u001dwd\u0010�QRo�!0^�W\u001a\b'�.)@^I�4<zeٛ?��J�2X�8<\t�j�{����o��\u0015�*���3��C��ͯ��\n.�*\u001b/��Qf�J���,T�7b\u0012��\r����\u001f��O�͏������?����럏�}���S������Gy���=\u0002{*T��_i��:�ʯ�M�_\u000e�����\"<3����\u0015Y�v�ζ_�l�j���vn�fnǝ5j�~�\u001eV츳>�\u0016Q�����})�X�ƎgI&t\u0012�u\u0004��$�\tP�\u0014J�EqEb'*^@\u0011cc�w�*��Ĥ���`�\u0004�\u0010Q��I�J�H��\\��Y1��\t٭�I���2�\u000ei\u000b��N��\ni�K�\\~q��x�Oe�d84�.$m���\u001d\u0002r\u001b�vߟ�ג�\u0005�nd�\u0002RH�9�\u0018\u0010;\f06�z�rYҍ\bnnW�\u001a��V{N>�!�l5l�o,��V�{�rN�7s�Wk@QS�l_�/�b���m�r�\u0005j[G �\u0018Rʍ��m@-��R#�*�Acfo�񗫈�\u0013�\u0000��c��\u0001\u0004\t���\u0015e�C�v�\u0018��\u0006\u0018��\b�lL��@��\t u��sYh$v\u0014�**�\r�\u0000��Ȓus��\t�[��u Bpi\u0002��&��ⳓ��=sM`�@Ay�Q:����uj���bƮ�i3\fpG��\n<q<��e\u0012�\u0015�Ts\b��N\u0015�\u001eH��)+���s����t$x�B�.\tv=wM�����IY#��.�N��\u000f�\u0014r#�\u0011Ǫuwj&&֪���m5��\u0000m\u0003��Eȇ\u0016��݈gz�n3�̃��\u0017\u000fO8\u000b��\fN���\u0006`�]\u001b;��Ѫ)&�+��+7��b\u0005|Ý\u0012S`����T��,� 4\u0017����6��ucn[�)�x|\u0006ߪ�\u0014��[j[X�E)H\u0013\u001a��34����S\u0002:\u0004\u0002�\u000b���l�Z\u0001��~�L��}8!u��/%��Jj���\u0006�\u0014��\u001b��Ut�\u0015�)j�;vW�W\u0016YhY�oa3P\u0019T\u001fkS�l\u0007!�",
+      "intent": "file_knowledge",
+      "keywords": "Sister Mercy",
+      "confidence_score": 0.9,
+      "is_active": true,
+      "created_at": "2025-09-02T17:31:25.422Z",
+      "updated_at": "2025-09-02T17:31:25.422Z"
+    },
+    {
+      "id": "kyymij2a0",
+      "agent_id": "4k8afeknd",
+      "content_type": "knowledge_base",
+      "category": "File Upload",
+      "title": "Olayuwa Feranmi Timothy.pdf",
+      "content": "%PDF-1.4\n%����\n1 0 obj\n<</Title (Olayuwa Feranmi Timothy)\n/Producer (Skia/PDF m140 Google Docs Renderer)>>\nendobj\n3 0 obj\n<</ca 1\n/BM /Normal>>\nendobj\n8 0 obj\n<</Filter /FlateDecode\n/Length 6335>> stream\nx��]�]9n�_OQ/0�HQ\u001b`\u0018�R�ɏ\u0006��\u0005\u0006�\u0001�L�L&@\u001e?�*�Y�{%\u001d]W9�v��uO]\u001e��ȏ�(����7��)�����ݹ\u001c�O���\u001f½�����?����{��p�������=\u0000�������w����Q�e\u001a~��i<��ƻ߅�����������\u001f>|����ӷ�w_�lqi���۟��e�.W����B�7�\\\n\u0004\u0010���?޿�>Ї�o�~\u0007�\"\u0000a)���'�<>�.䘁����\u001e�\u0014��ǀ����Av�<��򍘗\u0007�!`�������蠄�Ê\u0012.\u000f�c���sX>��5�\f.b�\u0019\u0014\u0006�0D19�2h�\"�\b�\u0012y\u0005j���\u0018\u0015��<\u0014bѪ\u0017e���w������Z|�\t�y\\X\u0000\u0017j�ſ� }�W�Ix����n����B����\u0014C�_*�k2\u0011��)�,�\u0007C`���j�\b�\u0005��7gk\u000f\u0019���x����\b���\u000e|�-���dv9#+-m�>>.Zp��R�\u0013�f�4\r\r���p\"#X[�\u0004�5>��ǡ��0T{������B�I�H_��ۆ�ު�W�а�\ra\u0001���H�y��.b�\u001e�\u0002��2\u0017Ұ\u00160�Đ�#[�\u0012\u0001�m϶\u001c\"j�c�`H�\u0003��aL�'�\u0001�K�g\r5�|\u001f\u001b{`B��e4�E��y\u0000\u001f��K���q�J���g�A(����9o�%3��嚆�ș�y�ڵ026��mU�\u0003c�%\f���)\u0018\n�\u000f�\u0014�����\u0018\r�=\u0006\u001eZT�\u001c�NT66����<o�Q!W1\u0016\u0015���rT����i��'\u0006~\u0010�%n���W[공��P�j���tX��ahwƘ\u001d1}Mɏ1�?�]S\u0002���D\bm�kzQ�Mtܽ\u001d]���p\u001c��89�y�\u0018{�DC\u0004��!'��\u0011���C������.\u00078,�e�V\u0014�<����\"\u0018]���`\u0016;!x�\u0013�Y�g��lm\u0007��\u0018t�{'���P\u0011�q��\u0019d\u001dY�\u0004͑�\u0012b��X�F�C4Q%� sOA�����\u0015��Ӫ�Ǖ�Q����\b\u0002+��Xnڔ\b�+����3T��^�}\u0011��T<c�Y#O���\u0014I����ɰ\u0012S'��\u000f�/\f:���*�ySe���h��\"\u0019#7��XP-�X��������\u0001�eF�\u001bf�vfL\f�4��\u0018\u0015a~���:4���2�2M���d���970+\u0001�Ԅ�z\u0017s\ty��kt�:H[?ˎ��Dd\u001dz��A�!���\u0007}Qr�U����\u001d�A\u001f5��r���)��\u0000ڔl�`L�R4��Ҏ$���+\u0019Q��e�h�W7��YXYhCRp�cU�y�\u0010\u0004=��\r��\u000eY�X5\u001aKՍa�ž�\u0007C0(��X\u000b�##�V$g\u00075\u0014\t��\tZ���s��w'�F��G\u0018�e͓��������>��\u001f����~�������ׇ�_q��\u001f>�K~�\u001d�\u0013�H�$[\u000b�������!�ʀ��\u0002���\u0014ã�\u0003:����\u0005\u001e�P�^�'(�\u0002>����\"���Ww�×�i22��D�i>; ��!8_\u001e���8�\u000f�9���\u000f>L�\u001f��\u0012� �\u0003ɧ��[\u0004\u0017=�y�7J���\u0003*�����\u0003�<���*\u000fO\u000f�+L!��^_�`�\u0003�\u0019\u0001�Ӫ��2B�c1:dTI�jr?軡��\u0011��6�?yc\t�m1X����Z���Z����8ª1��\u0006�%�Y����\n>;V�Kf���-l`��(�r� 4cV��we\u0000�q�\u0015�S\f�y�۫���\u0018\n�=��iڴ��'崰�0�W4���'#�ae@_�Ά�oF��9k\t\u0004\u000e|Z��⠝��\u0012�Lk�18�Ȝ��H\u001b�Ϸ�(�\u0003�^H(��IK�)��dU�0��q�֦��µ\f��\u001b��I����z\u001f-v�I.FL��N�\u001d+�X�b��ެ9I\u001d\u0011z ��\u0019�l��mʈ�d�\u0015�2�p%�u\u0005Э����?AdU���9ܓ\u0019Ǳ}�i�gG���z����}/���e�S��M�+�TYn\u0018L��Өo�S�`�lV�\u001c���дY\u0012�6Kn�\\\"���@�\u0004��\\�j\u0018��K���n-�\u001f��c��]��oP�?\u001a_\u0018�+\u0014r\u0005�&؃\u0000�T�\u001e'Te��$P7&�,\u0013�j�-{��8��KG�fE㏦h\u0013\u0003����\u001d�1�$��R��,�h�08\u0006KRV�'h��:�G��;��\u001fSzY�U�o�w~�i:\u0002�4�J�ߐ˴}HIj=��#�uXt3�'����0�\fmd%����b\t\u0005Қ\u000f�,��\u0011F�ȃ�\u0012\u0015A\u001e�ߌ�U.�x&��%�,u��2\u0018\u001ca���Z�,�\u0012��\u0005g�3k��\u0019za#+��&h�\u0001X����@;j�+��\u0012V\u0002��!)3A`'on���\u00142��\u0012H�n'h�!�,�\u0001��v�la0sQVŋ����,=9�#a��������1\u0006ʮ������OAf�/\u0011�A�,U\u001eE�s̙(kD�,\u0006�hl�3V��.b��O���� �!�1��\u001b��\u0017�>\u0013j�\"6���G-^��h���~\r��\b�Pq��@�\u0000l\u0017}8l��Aqr���\u001c��AS<�0�U������N�T�R�\b�^�F\u0013��A��ɐқ\u0011:�I\u0019\u0002�K��]x*\u001a��d\u0016̎S��K4~OЮA���X�L������9s�^.5I�ٞ�]�9�b<&G%WqI��(���^�\u0003\u001d�4����\u0004�\u0007ú\u001b��\u00156`v\u0014}���G�\u0014�\u0003�˱�\u0003C[���N��N\\�*\u0007$�\u0016r\u0012s\n9\n�V�7\u001664\u0003^��e��7����@�5�W�y�-+�$\u000f\n��Jȱ�\n�!i�|�4r�!<4e\u000f��ҚR搜\u0005��\u0017Gsi12�.xq5��x�����/��ϛ���ǜ���b\u001ej���\u0014\t8L�\t�\u0006�8\u0014M�_�OӋ�|q��i����G�������hY[Z�BNfi��\u001d�\u0016����U��}�\u0010\u0002a�ס/u�\fF����60�n��:�]�\u001f�T�Ϛ*\u0016<\u001b3_#�\"��2��\u0007�\u0017Л\bf��Ku�h,�\u0007���إ3\u0004�\u0003e��.��֥������g~��:���J)-��\\��}7z�\u0019\u0014�]���iG2����7=��Vۻ%)����\\��-IZ\u000e\u0013��[��-�a\u001e��b�*�ɠ�t*3=���X��UT��L)^sD{\u0007!�jJ!��j\r�K�հ�B��{jj\b����&M݃K��\u0014#�jM����#�Eݜ�y��r=E���}X��\u001drT�0�cW*h���\u001f\u001e\u0016_�-;Y6h\u001d\n��\n3w\u001f��\b9j�c��g}֝1��a�<qR�a?�/u��0�l\u0011�n\b\u0004�R��7\u00021!�Qc��ʹ��o\"\u0018�0���+�[v����\u0003�5���H�Q\bj��adã�\u0019���&'Z[S���\"\"�\u0003'J\u001dE�����iZ��Fl�C�\u001b�t\u0018*�B��y��\u0016���;�\n�w7�l\u000e�l'�ĥ/�L@.\u000e|\u0006�v���2���)j�0ƀY��J*�T��=��{\u001f��v�\\�1��\r��\u0012l�5z��F2�\u0000z[\u001dY��1'�=y\u001eg�3m�v�Y\u0012Ʊx��\u001b>jҎ���\u001ed\u0015E�A�\u000478+�]�S(Z�+3S�z�Om'�B������()%�y�X\r\u0012��ZW��\u0006\u001c;�l8��M~��۞drl������L4�fa��\u001c�m\u0018��F�$E��]��6\u000b���\u0003�\\\f\u001eU��y���<1A���%zE�7k��\bd����\u0012\t[�7��VV��h͡G\u001d)/�\u0015��D�T{u͗�\u001e\u001bfWé��;�\u0001�%Hj\u000fW+��\u0012���un\u0010*,�(���'� ���~�[;w��͝3��ݲ�������s\u001a��Z��yZ��͂z�X�/��\u000e���\u0004�H��QmF::'ɯ�\u0012��\u0004���0\u0016!��%\u0012����{��a�Z��kb���V��̩y�Gr�'�\u0010C��Czh\u0000Ny��}�%�>�\r)3\u001b��?]iK�D\u001c/'��*���/�c�&땦���|ۻ\u0013�a�x_�\u001d�� G\u0012\u0018����v\u0012\u0007���\\�(�iҤ��*��t��\u000eQ\\q>�}��xo\u0017��vR�\u001aQ��\f�\u0005<}��.U,=\u001a љ��3嘽6x�(�f����р�R^j�fm�P\\\b�H(�@���ݱ���\u0012�Y�\u0010ʼ=\bK�h�Z��\t��q�\u000fLuǟ�_і\u0002^��lB�v��B��;|\u0019����\u000eBp���c���$���j��k��\u0019!��#�L��\u0007�睗\u001b�\u000f��5�:'�\n��{\u0002\u0005Ì\u0002\bH� \n(���\u000b�\tFI�i$���\u0007�1\u0002�$��74�I�\f�k�\u001a�KŔr�π]W���bʴ�{��]Ki\bt{)��͒��᱗�x�mC19\u0012\b�%��di,%Tz\t��\u0017��O�ٷ_�/'�\u0010B�s�\u000bk�ųÕe��T�(0N�4�\u000f���\r?�c��<%��Y#�s5H[�rKX\u0000����\u001d�܎A\n\rs�sU\u0013[��\u0003��Y��ͤM8���,���\f-�\u001cu�0�\u001c�.�^}n�WL�۝�ݰ�b\u000b�\u001d�������}'�â#h��\u000bK�屉Ws�֘�a\u001a�M��]ʾ+o����7}]��\u00186���em�H���8\u0004�\u0016���(\u0018ԅ�r������\u0010�ܰ��\u0007'%eS�\u0012j�ԙ��F:�Jo}�����1��+����VHm=I\u0006 .�p��zK1������\u001c\u001b.����^\u001b��e�N�¹�|f�\u0001y�,v*�o݇\u000b��8�\"QC\\a\u0014J5\u0017:U\t�!X\u001c�\u0019�+٭ƻ���x{�j�uDV���NUw�\tV�\u0012��\u000b1�\u000f�t�G>XMu,�\u001ar�!FI��SwGo)&/I���'? #v���e(���}���ʘ��]�\u0014�ԅ��\u0018��iII�t9]�y��e��\\k��\u000b�� j\u0017񚑼��\u001b��},����\u0016��cw�\\�Ȗ`�bҨi���\n&(�\u0007��2�%w��\u0012\u0014�<Ty|'w\u001ba�WЩ��w\u0006;�ʎ�&��=\u001b��\u0011�߼\\��\r\u0016��^��Sy�\u0019�Ja��q腓���P��&5M�:���^\r�E��\u0015^�i�\u0017\u0011]�LJYL��>�0��?\u0011�S}J�N\u0006�7�6p��J\t�$�&�\u001ay�ʽ\u000b�)�M����q�\u0018����3��2ƘO%\u00057\u0004�\u000b�&-�{s�n��WZ�w�\u0017*SJ\u0018���AX\u001f�+�\u0005K+��)\u001aplФ�(䥑�\u001c��\u001c \u000bE�wo����K�g�3f��\u0017_���� �����*&��-=.7h�\u0002�m��\r)s�N���:\u0019)\n`��jj6\u0004��`NI+��!�%Tp��s\u0005'[���^\u0002�E�Qۍ� ����f\n�N/rOޕJa�V$��XHY�7��+NڄB�-Z�r� ]��J��$\t\"Dhhz���P�օ:d�PZ#2LJfӳ@f\u0018쑣]�m_�\u0004�\u0001�RǍ\u0013��\"朵��N�[)&�ҧ�\r!�P,�{�2^n��\u000f!�\u000f���+��y\u001d�:=4�����]�_W!�s)�]�[\u0017Y|˵�\u0017�l�\u001e�k�$A&M*\u0016��\u0016{���tw�d����̏XU���>��r���4M��8\u0010\t�H��&���_��)A��[Z\u0017x8׳�x�\n[�m)\u0018[��Y���\f��\u0016tl�C�&\u001e�Z����ʓ\u000b��֓暟�ʒ�\u0012,\u0013w7JiIE�;�Qp�0��\u0017Y�0�y�\u0016��\u000e�6/\u001a�>\u0010Y�QH3ٛ�\u0003�Z�\r1�2\u001f�s#:\u0005h\u0001�Iw\u000bl���(ʐ��]ʾ\u0001i5\u0013�6��7��\u0011�l=ծ�:.���Sk�$��N\u0013�!]#.+�/��5����]Ŭ\u0002��i�)\u0013��g\u0001�O\u0004�~��F6���1�J�O��vg�|#�1��6�[)eG��\u0005��c�l$��&OcʕX�S��\u0012O%��J��H\f�U�6Hw\u0003պ9\"t���\u0016�K�]�4o��J�\u001f�\u0013!J�ۚδ\u0002�\u0012���Q�P����ϱ\u000e-hb\u001b\n\u0014�2�����\u001a֒����'>ұs�!p=Wܰ�ȿ����ƺo\u0005��\u0015�v��\u0018��p�8k�\u0001[@R:����\u001e=���+M��:c��U��R~�-)��r��v$z�K\u0004Zm��dO�u\u0011�ݰ��\u0014�Э��\u0019�-F�n�\u000f\u0004-\u001b>�J�I���[��9Pz�'ָ����f�ژ�}9�ͯ���C�[�SY]PHgR_;��\u0015���k^;�7� D�}Bg�\u0010kY�ɶ}wl��p�����.�I��!j�ccw�g\u0012��ϔ �\b\u0016�}ղ�?�\"�\u000eY�\\ \nӴ��@�\u0007TX9��G�~�ҙ��]�\u0003Y�\u0014�m�\u001b5\rRe�)�j��#X\u001c����\tfe�\u001aӮ;��\u001f�5뺆�Ad\u0017�1��.\\��2{m���S��<o0�\u001aj��B|Y�͒�\n�\u000fo�\u0013ί�&كt9F�\u0015\u001c6�?,�\u0007٩�Q�`u�jk��\u001d�m�.�T���L�-�\u0006A֛`)���{(p\u0000\u0014yٗ3�\"\u0007\u0007���_n]�� d����\u0011�}D�K\u0011ڞ�\n\u0013���|0d�ӒB��V�9�M�\u0015̨�w\f�fI!��\u0012�9C,�x[����=E��s+Q?V�����\fK��9�\u0002��\u0000�����c�=�r\f=\u0017L��n\u0016w\u0012���ܕp \u0019ҳ!6�\u0019��\bk�����ꊤ�4%��Ϩ\f\\��TR�)\"_wx�/73��।XSn�\f���Gf�4{�#h\u0016bXp��{?�5%��K\u0013\u0002�a������o�Y���\u001f��\u001b0T/m\u0016���zy7��j��Y����xA��1�ڸ��Ԟ��\u0011�q`H���:k�\u0007\u0004���Rm�#8����uT��sF\u0018� `Xʭw\u0004�[y���g%X�\"zX\u0005=���z{�{{��G�]D��M�\u001c;\u0000\u0002@\u001e�\u0004��@S����赋?M/�;��x0>����\u001fA���Λ���І�\u001e���<�\u0010}v\u001e�n5͒`��Z�'���^ٖ�1�L�D�ϑ�T�a\u001a�^\u00007��kXz���V��i\u0013�])�Mx�,����� \u0004�ѿcՠK���\u001cd���\u0005�c0K�N�i�y���<�Nm\nrs�\u0014�I�\bI�J�jG����fz%k5�E��c�o�+�\f��z%�|��.�ޞ[r~O�\"LA\u0015\\\t^*-\rU3\u0014�@��)�szk\u0015��\u0013ܞ#ٜųN���ޱb����(]-&MVn'�'�/���Yyǡ\nc�`\f�ru�\u001c\u0016H����@�\u001d�\u001f� ���q�b�A�%s�#M\\kHAB�{�?��\u0005Hm\u0016.�դ918�\u0005��\u0005��\u000e�c����|�\u001c�a�.��q�N\u0013^�p�чr�s\u0001\u0017�K��I<��ЙH��-\u000fև\u000f�����\u000e\u001b;V�3�\u0005��n\u000eׂ�GC1+\u001a�\r�P\f\u001cu\r8�i�A׺\u001c�le���&$G�\u001e�iN��\u001cy�%*�����`�~\u001b��\u0003C$�6�W\u0016���6���\u0003Cɍ%�ٱq!��eݟG\u0010��\u0001�v��\nendstream\nendobj\n11 0 obj\n<</Filter /FlateDecode\n/Length 5571>> stream\nx��]��\u001c����b^ ZQ�������N\u0002$���/\u0010�\u0000A\u0012��r�=��5m����Ԝ�w=�w�gFU�(��ox���\u0017�5J����?���O?��?�G���||�����_����A�_;=\u0002$|��\u001f\u001f���\u0015j�y��}�k<�ϗ5��������~�#����\u001f�=����݇�\b-��Ǐz�/�\u001ajO�F�\\��\u0005�P�\u0000\u0010\u001f?����1Ʒo\u001e?�塄\u0004��ʿ��9��y\u000b�Ō�}�F|�}��ǩG�\u0018j̭U�\u0015pi�\u001c��N]Y1��7�a�I\u0014C�X3��;�+5 e�\\�\u0015kH%��ӗ�zT\u000f|\u001a��퓢b}���FΓ\\B�8��B/H\u0010�RF�\u0013`\u0002��-wmI�\fI?�\u0013_\u001d?�m\u000e�\u0010#ަ��\u0000�����?�Rծ�\"�\u001a\u0006���\u0014�3�c��E6�qsܾ\u0001\u00142\u0000��n?$.�4Q\r��C\u001c�\u0018���I��-�7�{\u0007�|�n��@\u001bI�<�ֳ/�r�T=��c(\u0000�4�ڝ.\u0011\f����3�/��� л3����\u0011�ݦ\u001fV��\u0019Y�@����[ �H�J��͞�9�\n\r�\u0000<�\u0001�����K�O\u001c\u000b\u0010���˗��\u0013���H\u0003k�rꘗ�t*\u0001k���\u0011B�4.��ا�2��^�l�;-Be��-\f��b���͖d%G}M��F|�\u0015~0O�Ԧ�PH��s'~�T]�̪ �Ҵ]���?�&\u0002��x\u0015 \u0005\"�\u0015/�Z�r��2%���\t\"ͅL|f �5���@���9\u0012q\u0011=E\n��\u0005\u001cW�]�\u001dT,K���P)!��<c���?P^>\u001b\u0007e�5\u0013\u0018�C���\u0006\u0005� e1���S\u001a+��𸠽��k7b���\f\u0011bw�k���L�)�`]�iVX�Rͥ��u�!(⽄�\u00182Ʀ�e��l�Agx�\u0010ڄ����,\u0012��F���Z�v��׬-�{by\u0019�9�\u001a蜰��e�[��Y\u000b��R��l�w��\u0000ȭ�{�J�-|E[W��*��\u0000%i�k�9��\\S5�\u001b�Rt�y��\u0001����J���%`%�D�F[|u�)&GVN�&���&x�h`´�S�R\u0003��\u0007~�B���\\�\u0019��6WL*_�A�\u0002u`h�\u000fV��\u001aqr\"A�Q\u0003�/#�7ۃWrË�Y�%S+\u000471��?5=���1�AvO^;�N�Bp��\u001a��8�(w:.h���G&z4���\u000b5\u0006�ͣY�WR\t�a\u0006&/�2h\t�q�\\�\u0003M-x`�Gn\u0018\u001f�q�;!��ʞF�)�v�B�US����H�\n�~\u0003��&i\\]��o5%��F\u001a�ձ�T\u0015Ҙ������\u0007L'���wp�R5k�'\u0004\b���\b�EL+N\r,M��;�\u00068@��\u0000kD�7v�\u0003�\bfÂ֣a�Ncc�@��\u001a��d\u0003�E|���դ���}w�x\u0000ϝx`��\u0016�\u000e$���\u0018\u0002eEEP3iA\u0001|\u0012<�y+��\u0001\u0011v�54�#R�\u00153�Eb�\f(XK�R\u0015�\u0011�����]�,a\"�\u0006��\u00126P\u0002�*�1̕(�3D\u001a4\u001c6�Lb�DǼ��ſ��71��\u001c�O>�Ƈ�\n\nȏ<)%�PYMJZ��&��\u0001�\t�wD�9-�!�i��fX�\bm�a\u0005\u0011L\u001ccz\u0001��R^R.\u0018[`:6�`>�P*v5�oɘ����'\u0000T�H�ڻc����� 0\f�\u0013�!^�b9��ᯁ%9�%\u0007���q�5\u0006f9�6�R��^\u0003�B�i��N�k5;a,���ѻoX��\u0010���[W}@5\u0005�\u0012԰Ϊ�S�\u001aE\u0005OK�Z�k[T\u0001��Y�Ck\u0010562�p(^b��J���W��9\u0016B�[���J\n�_~�ž/\u001d�\u001cx'��z��_��;[�?������~�������\u000f�?|H�Y��ͣX��$nU\\ϛ0�|�l���^� ���aA3���o��n��iJY�+��hd�\u0007T�\u0016\u001e�\u001d;��\"��Ӯ{��YGp/M�\u0012�,��C�X\u0015��j\u000evdy\\��VKko�c���E3����\u0011\u0015�糳 ��X�Es�\u0019����K<��3]�VX��kC���;τc4������s�\b$b�\u0011�r�G�T\u0004Ã�R�x�ÊV1Қ�\u0006�+[�-3����]��+Ng��;\u0010�\f��\u00191���d�Pa�\u0007L\u0015P�¿��7\u0011���hi\n\u0010sO~|�\u0006\\��?�G.�|vY\u0004E��\u0013\u001d\u0019w�|�\u001f�ϟ�\u0016��ݾs�H�/�4]�\u0003���p�AM��N��[\u00035I�#%�̷��\b��-\u0017Ӂ��jޙ�G� �\u000b�b��h-[1��\u0010J�4���&\u0017�\u001d%�\u0015~\u000e���0)���\f�{AƩV����Mc�>�j8�j7#�H�Zl��\u0003k�P\u0007��n\u0015�Nd��%�\fn��x�k\u001d𲎮X�s�P�:]���\u0015[�\u0013����K�\u001f�&\u0002�\u0014y������C��\u0003�x�D����X��>sP�\f��ӻA߹@����\u00010+�\\:���\u001f<c2\\.��\\:U��e��S\u0019a��L3����0�\u000e�N��l'��|�0�ሑ$~[ڕ#�^�K\u0000�S���1���S�i�?����6;�X��n�K�uj��m�/\u001a�\t\u000f��J����)��&hI��\u000bw;؅F�\u0010�a7-�Lٓ>��\u0013{S.�|��`B��; ����$\u0000Be�\u0015cQ�t��q�I�\u0019\u001f�j�]^�� ժ�h�2�\u0002'KDY鑶��,�\u001a�{\u001f��%%&���BqXע]�\u001b>��'Q졷Z�\u001b������d(ڡߓ�>��l^�\u001b�0���Ev��.�$�+k��\u0012]&=�>\f6���&31�$�9<�>��tI�LR,��O�\nd�\u001e��\\跤�,̽�,��]�d�,IL����{6 ��lE�\u0017+�/oy�g���|�\u001b] �\u0001u�\u0014T\u0012�ԉ�@IrPsR(ꕙa��|\"�W\u0002���_\u0003N)��\u0000��hN��\u0000\t:�\u000e3N���4�/�Ї�\\۟�\u0013 �Љ\"(�|U�H\u0016nl�\u001c�?�]��Nw�c~��&�ȝ�P*�&V\u0015)(�/�ά���[ǥ\u0003��K���\u0006[\u0013\u001cDFA�=�~\\͂Mz��b6\r�\u001d\u00126;��u,ܛ���y����F�E�����^RH\f�\u0015�j�2��|=\u0014=���d�b��\u0005bW��U�+R��t�|�ŬW�d��d��1{���W�\u001a\u0015\u001e�{*\u0018|�\u001c\u0014 uÃ����`1��d�\u0004\u0016ی�4KSXx�n�����\u0002Ŭ��vm��4Ŵ�GT�N�Y�n\u0011��\\��m�:<�\u0010���S���`\u000f}��Q�;���X��\u0004���[��L�.���X�EanQ����|:5%%a����\u0015ạl\f¬~!\u0005��\u0004%k��zD-���\u000e��\u001f)�%�0��A٭s\u0016��$��z�;�D�΁�rT��f�\u00153\u0003�D��|�\u001d3�\u000b�_\r\n�q���ꮾ��t�j��\u0002������#TDȡբE�n52�~TjL�\b��SL��I\n9��H�I�Y_���\u0017!!�~+W�M\u0001�,�\u0003\u0003��e.�`}Ń\u0017~�b��\u0019(\u000b]�}�W�^�\u0004�/�ޘ1cS%!�,�/��\u000b�:LY�\u0017�戼X���_Nؿ�\u0014]�{�%\u0012AqL��\u0012���$�e�|��yG��\u0000\u001fS�Y)p��b�AS�\u0001���\u001a��/\b�wP�xw�g�Z���g�1M\f�Et�5��/\"-��v�O�z\u0017s�jd�\u0001ՏKX�K����f�>�煺m�\u0018m\u0017����(�\u00015�h�N��|q���5�A�-T��ѭ�G�k\u0000ڌ3�L#5\u0013��K\u0006!O�ؿ��W��\f>��>\r�%��\"ͥO�W<>\n+��Zhj$dy���[��JܬU@O\b�$�\u0015���t�ǎ�W�c]�tf\u000fa�mϢ\u0004N�c�v�_�Y�\u0013�ڪ�\u0013u�}�,�il��K%\u0000\u0000�\nH�8)���)��t�Ŵ���RΎ�\b\u0019%��h�~zԋ9�ʹ�L��=�&Ǟm��\u0017��e\u0012aL�\u001c�0İ�|�\u0013ޅ�\u0017x�\r������\u000b�k\u0000��y���\u0017��X�D0̥�i��\u0001�2��<������\u001c}2�\u001a�Gd���&\"{\nX����ޥ�]l�d����TX� �\u0001aM\u0001h��JY�ƪ-I�q���6�p��t����t�G|\u0013֘�K�Mf��YcM�y��(l�4~�羈ɟrֵ�{R�3i\u0019��\u0013k\u0017���A�\u0001\u001c+�S\f��ӭ\u0004�]\u0010d���Y����2I�$��-����wZSC��8�д\u001aj\u0014�׿�ɼd޶~=warE������SA�\u001a��d_�-���H\u001a�]S�V�Jb\u0011�_c���*K߅\"��g0\u0015ÚWP�\u0007U��A����$\u001b(\u0004\\([�\u0016 O��c�ku%w\u0014\u0002\"�\r��\u0006�r��*�@��X��\u0013\u000b�����\u0001�]���\u001aou�d9`Cp�\u0019�|�ji\fW�;�����s�\u000e�\u0004\u0019\u0018R�`ܲC��a���α��{B�\u001e����R������ʖ\u0006�[�.�p�o?\u001ft`a\u0014��\u0013O�)���\f3�VG\u0014rm�'�\u0010{H����G��c�l�M���X���M$�z��}��2�}\u001ah��ht\fJH\u0006ys�\u0001�jΒ5�e�n3\"`Y�C��g�#����@�,�Y��\u0016\u0017f�7�=�M\f}����\"Z�\u0019\u001aپέ�\r�L�Z\u0018��c\u0001�$��7\u0002145D�s˳s3��\u0005\u000f�1.�B���\u0019�>����$>H\u0018ؔH]��5=�`v\u0014�W�ס���/,�ٕ�\u001c��S*���2ޜE7\u0002<�\u0006��rY",
+      "intent": "file_knowledge",
+      "keywords": "Olayuwa Feranmi Timothy",
+      "confidence_score": 0.9,
+      "is_active": true,
+      "created_at": "2025-09-02T17:31:33.475Z",
+      "updated_at": "2025-09-02T17:31:33.475Z"
+    },
+    {
+      "id": "clb677mo1",
+      "agent_id": "4k8afeknd",
+      "content_type": "knowledge_base",
+      "category": "File Upload",
+      "title": "CSC 410_FAULT TOLERANT COMPUTING_Individual Assignment_Fuoye.pdf",
+      "content": "%PDF-1.5\r\n%����\r\n1 0 obj\r\n<</Type/Catalog/Pages 2 0 R/Lang(en-US) /StructTreeRoot 39 0 R/MarkInfo<</Marked true>>>>\r\nendobj\r\n2 0 obj\r\n<</Type/Pages/Count 2/Kids[ 3 0 R 36 0 R] >>\r\nendobj\r\n3 0 obj\r\n<</Type/Page/Parent 2 0 R/Resources<</Font<</F1 5 0 R/F2 9 0 R/F3 11 0 R/F4 13 0 R/F5 18 0 R/F6 23 0 R/F7 28 0 R/F8 30 0 R>>/ExtGState<</GS7 7 0 R/GS8 8 0 R>>/XObject<</Image35 35 0 R>>/ProcSet[/PDF/Text/ImageB/ImageC/ImageI] >>/MediaBox[ 0 0 612 792] /Contents 4 0 R/Group<</Type/Group/S/Transparency/CS/DeviceRGB>>/Tabs/S/StructParents 0>>\r\nendobj\r\n4 0 obj\r\n<</Filter/FlateDecode/Length 4002>>\r\nstream\r\nx��]mS�F\u0012�N\u0015�a>]Y�Xh^4��R�X`�|�\u000b\u001b`s�J��`�Ue[Ė��ݯ��\u001e\u0003\u0006i����&�`lY�<3==�6���yS]\u000f�\u001a��O{\u0007M3�\u001a�#��ޫ�i��{\u0017_n˽�Ûj6l�z�w��l��uݔ��}���P�����$V�0Y\\$FH\u0015�\\H\u0013K+����~\u0010�ݝo�������k)��ᚋ��\u001d)\u0012�_\n�h�v*ci��)\\��<\u00137�ݝD��_��7�;��d�������1��\u0017\u0016�<�z\u001d�`Wh�1�\u0003L�\u0004�+��;X��\u0015���D\u0011\u0017�\u0011Tj�\u0011F\u001c�;\u0014b�=�߻���H\u001e\u0006��e\u001b\\�&N2a\u0013\u001b���\r��n\u0000|�{�ck�\r��\t��BK��0����\u0016��H��q�W��㳃H�޶�kK�\"��̃*�@\u0014J��|8�Lo����y�׽AԗI�\u0002���#\u0017|�Ƕ\b�1�4?;AN;f��I\u0016k�x��@�\u0006.$�������\u0006�k��)��\u0007�5J\u001a\u0014��u�:3\u000b��\u0004��X\u0005��q��E\u0013�����1��\u001a2�exjFk?�����p\u0003w6@�ȅ*a\u0011��\u0016�<��� u��{�\u0016\u001f�~�{��Y\u001c�D��w$\u000eA����zL���|p\u001a�M�D\f^\u001d\u001c\u001dD�\n/�6�\\�q)\u0006ct�\u0016�\u0006�uKac\t#���i���1tD�;8\u0003~�ER��=0\u0015���\u001626�O�V���\u001c�Ȝ��&��\u0007'�g��p@�N�\u0018p�h\u0012��v|�p��p(\f\u001a\u000e�2�����Cad\"��\u000f�K>�%�-�\u0010�����!ټ\u0010��u\"��bp򆭓T����l\u0002je\f66�\\�[ ��#P\u0011����\u0003|�\u0001\u0019s\u0019R\n�/���٬\f\\���p�\u00013.�\t0dpB\u0019���\u000f�\u0004�8L��L�4�^<6�$�\r�\u000e��q���+���\\Ӓ\\\r(�\u001eСi�D��+�| N\u000f����\u000bؚ8��H��p�3\u0015�Ys�\u0013�\u001e����M�\u000b�I�7o)���$���\"�� ����!�h�w#n;�]�\u0006�\u0014�I����_&4\u001d�Q\u00063��\u0016�\u001c��%��\u0015L\u0014\f\u0005�4-�4�\"�\u001a�h�n�����\u000bM�T\u0007'\u0003ކ\u001f�\u0019����\t>4+�ڃ���\u001aqA)�΃O*\rn��\u000e\u000f)���)\u0017\u0018\u0018\\�O\u0005�Q\u0002�/�\u001dw�@cu\u0001�X\u0005��\r� 3T\u0017S4��H\u001a���\u001a��Gi4d��1}t�L�\u0018�\u000e��\u0015�8\u0013��\u000f��J�Z���\u001a�6�U{���ڵΥ�\\�ҧL\u000b��2`�[�̴�7]l��=\u0001\u0002�>�\u0001��U�o\u0000kg�|(���9\u0017\u0010�:�\u000b�FG���>�jT\u000eA�\\%�`iA\u0016W`JVm@�.\u0017\r\u001a\u0004lhy��\u0003/�U\t��+s\u000bL�����;PI\u0013\u0017�\u000fe\u0018�&�\u0017��\u0018�k.�@�T���R�\u0001���\u0014u>�j��\\�E��?٘��敍OU3\u0016\rr�ְj\u0001j�aL50-m\u0012�v^DAi��r\u001c���7�lkƷa��L��d0e�E�ڌo�\u0014\u0016C~�٬B\u001e�(-KTxM�\u000b\b8�<�F\u0017d��ef�ڀ2-g�\u0012�#68����e\u0011�k��'`k��ק�\t�\u0002�^�g�벉-�M�$:$/`\u0013w\u0002m+[�g\u0013��,IR\u0005�d����)��f�1�4`q�Y\u0019v�PF̃�\u0011��6�ˢ��͈�\u0014D`V�\u0010{��\u0019\u0003#��R�\u0012���[\u0014;�q�y���v]PJ�S\tvÜ�xU\t�SJS\b�\u001b�\u001a3n�z˘L\u001b̸�M`J�؀�%RI�ϥV��U\u001a�R���;w�1\u000e]��\u0011�͚d�M\u000fLJ�d��Ѽ�2�ن�\u0005\\\u0005�}Z'dOn\u0018�\u001a�\\��SMi���0:���/��鄴��ԝ�\u0011�V�`Q�\u0007e��XE�$�<���Lb��;X��ٲĪ\r�җ���XzDA8���\n\\v.�ր�g�+>\u0003��\u001fe�@qa���5\u001f�\u001c|�\t�\t��a\u001a�\\p��\u0006W\u0010\u0006�\\�}�.{[�o�x���\r�*�\u001b�Yf�(M@I�f��[~'`�\u0016,�X����\u001c�\u001d��\u001dm�TM&T�v�\r\u0014���pR���\u0016\u0012�I�>l��E�\u0014�Ѕ|�D^7\u0010w\"σ�\u001e�z��l\u001e0,%֋����\u001b\u001fʼ���u\u0019el&��\u001awل�e-j\\\u000f�'��Éy��Hsp���\u001d[249���\u000f�f�%��'#s�\r�A�O\u001frE�\u0014���\u000eN\n��P3.�\u0006\t��^$6>6Ū(���[���^�Qcиa��-�#\u0013�]\u0004檥�3�@N�\r\u0011��~N�9a�̀9��g�\u0016��w����\r�=���\"�|j�\u001a|���'Sl�*�\u000fA6\u001b.�4Ro@f3��݀r�V2\u0006jV~lhZ`|$ީƜ�7�üXl�@����\u0017L]����}\u0001By�N�\u0007eDZ��a�\u0012W4-U�\u0006Ӎ͵T�B{\u0007��}\u000f_Rg�Ih7�qv/�bZ�D�\u0019�Y\\|�b�XT7QޛMW�~ڛ5\\���r���0\u0016G3�r4�Ĕ�\u000b8��@�f7\n�(/�v�\u001f�m/\u001d\u0018\u001ds�\u0012���,�`�?�9|f�3J���\u0001R�\u0007�+,W=\u0000�7�Nh�\u0014���n��]BbZr��䇆��\u0014UGzPV�\u001d��c,nv\fM�й\r��b\u001e�,�m�Q�\u0013�x�PD\u001f<�Ԓɿ�.Ύ�R�\u0012�W� ��֝'s�?��y�\u0002���-�b�ҖbU;�n�c�Y{���\u0005M�\u0012؃�\u0016�hy�v\f�UW��4�&�l\u001c\"^�\u000b�\u0007��c��\u000eK��<�n��9V�%��b����\t�|���<8\u001d�/�\u0005.�\"\u0006�m\u000b�\u0005��x�P\u0005�lQў֦d��4m#\u000bL-�\u0016�_\u001e���xn��(�g\u0017WX\u001a��b����m��n\\I���\u001a��}�Ν�\u0017���{�p��+g��_\b\nw��\u001e\t\u001aՏ��\nm��{�\u0012�\u000bqY.\u001a���\u0016\u001fI�.K���S�ߥ�4\u0015ٵ\u0017:ihw%��\u0004�@\u001cyN�H*����`K�Z��fOcX�܂�ϕ\u0016kG_���\u0004b�s�Q.�v�He��\u000b�FѾ>\u000f����g\u0002L%\u0005\u001a\u0003�J\r��Qf���*�d��Å�*���\n7�Q�6Ua>�Сɨ�R\n�\u001b�oS�]T!0\u001be�(k\u0019��'$t���%\u0006ɤ\u0014Y�F�\u0019���3\u0016�g�etb�\u0007���.ȉs�$���V���ڋ�W�M�g\u001e��4 ���A�Z�\\�s�3J�y�z��\u0006\u001d��#\u0004�[�\u001d!6�\rO�̃O'\r���\n���c�\u0001_��`\tq`J���w\\3\u001e���6�\u001d_�#�#H}tJ66�\n��l@\u0015d���p|\u0003c�%�yg�l�yǧ�\f���5\u0002n�N�F8�z�bk\u001d��K�\u00027�zP&傫�c��;4\u001d��N�\r���\u0004U\u0012�32)�4n(8����B�q\u001f���л�`3�f�\f�\u0015\u0018��k]x�\u001b��\nŬN\u0012�P`\t���>3�\u0017�Q�\u000b�b���c1\u001e\u0014�XLh6��l�\u0007e���b\\�\u0002M\u0003NIU��h�V\u000e�����\u0019��m~\u0014�腤�C�Qj\u0003\nc�B[,g\u000f�F\u0017��{P�a��\u000e��S��n!\u0010IƓpl��[�i�,ـr]͆QڛP�Z�\u001a���a��\u0019e6��h%�ڡ�E��+A|N�F�̃�ǆ��\u0004�4ـ�p�%�3�\u001f\\���,f;��u\u001a*�}�P���L9C\u00057]�����}���;[\t3m\r�^Z�\u001d�4������z�}P�J�)G��|�9K�}�Q��\f����\u0019˒t���\u001c��\u001d�\u0016��\ns�\u001e؃H����s\u0004��mC�\u0003��\u0010[3�h��\u001a�\u001a�è�G�t;lp/�\u0018Q!LSΧ���\u0015\u0001�\u001eY7\u0002h4�oc����~h��\u0005^;�G����[�^-�\u0018�)R\u001fc�~5x������'���HZ�'�\u0014���z�h���^\u000f+�;dNk/S��DM%]u\u0001s\u001aۦ���/Q�\u0012l��f�b=��\t���a�����%ἝAO0�ҍ�\u0015����b�o����۸�Xԛh�\u0003^��J�7�\u0004��~�\u0012�\u001e?7����ws�\u0004��n+����\u0010�/V����+��5\u0005\u000f\u0015���/?:p�ꐍ�<G������M�k��ֹ�>j�#T���/VoK��\u001a�߿�7x�V���Ͷ�'}r)��4�9CZ���.\u001b�?�1�\u0005�D�6v�xf���=T'�jv����j�2t6���\\\u0013T��`�\u000f�\u0013%uH{��C����x���D�[գ\u001fQ���;����4y\r=��\u0007�#T��d$H\r�d���,���S�̬��\u0018��qrG�nf�3�\u0006�\u0005F\u0016����e���*jû�4y��P69%��[\u001a�\u001d�=E\u001e;��\u0004\u0018���\u0007r�qG�&���z���8Y\u0017��� �lʩ I������\t3J2��r\u0013�aM�WՃ�rYM�\biPY8a�o}��a#���X8�eR���(�\u0013�|݂��sל�C�e;\u0006˒\b�Gy�Y���o��k\u001ev\u001c�u�� ����[���f�1\u0016�����'�V��)l.)^=���d\u001e��O��M�\u0002���\tt�\t\u0000���}�7�Q�u�qOm\u000f�{��#��g\u0002��tR0~��i�\n���L4���7M�l^uo��AO\u001c��x�G\u0004K��\u001e܇Y����,�`�i5\u001bUW��DM�\u0000�_}���;gl�s:\u0014\u000bt��{����\b�L����셳sv�=K\u0003��4uO(6T�jR�>��W�S\u000b�3%ֿ&���{���ԩ8��\u001d��\u0001}�iP\r\nendstream\r\nendobj\r\n5 0 obj\r\n<</Type/Font/Subtype/TrueType/Name/F1/BaseFont/TimesNewRomanPSMT/Encoding/WinAnsiEncoding/FontDescriptor 6 0 R/FirstChar 32/LastChar 186/Widths 105 0 R>>\r\nendobj\r\n6 0 obj\r\n<</Type/FontDescriptor/FontName/TimesNewRomanPSMT/Flags 32/ItalicAngle 0/Ascent 891/Descent -216/CapHeight 693/AvgWidth 401/MaxWidth 2614/FontWeight 400/XHeight 250/Leading 42/StemV 40/FontBBox[ -568 -216 2046 693] >>\r\nendobj\r\n7 0 obj\r\n<</Type/ExtGState/BM/Normal/ca 1>>\r\nendobj\r\n8 0 obj\r\n<</Type/ExtGState/BM/Normal/CA 1>>\r\nendobj\r\n9 0 obj\r\n<</Type/Font/Subtype/TrueType/Name/F2/BaseFont/ArialMT/Encoding/WinAnsiEncoding/FontDescriptor 10 0 R/FirstChar 32/LastChar 32/Widths 106 0 R>>\r\nendobj\r\n10 0 obj\r\n<</Type/FontDescriptor/FontName/ArialMT/Flags 32/ItalicAngle 0/Ascent 905/Descent -210/CapHeight 728/AvgWidth 441/MaxWidth 2665/FontWeight 400/XHeight 250/Leading 33/StemV 44/FontBBox[ -665 -210 2000 728] >>\r\nendobj\r\n11 0 obj\r\n<</Type/Font/Subtype/TrueType/Name/F3/BaseFont/TimesNewRomanPS-BoldMT/Encoding/WinAnsiEncoding/FontDescriptor 12 0 R/FirstChar 32/LastChar 120/Widths 107 0 R>>\r\nendobj\r\n12 0 obj\r\n<</Type/FontDescriptor/FontName/TimesNewRomanPS-BoldMT/Flags 32/ItalicAngle 0/Ascent 891/Descent -216/CapHeight 677/AvgWidth 427/MaxWidth 2558/FontWeight 700/XHeight 250/Leading 42/StemV 42/FontBBox[ -558 -216 2000 677] >>\r\nendobj\r\n13 0 obj\r\n<</Type/Font/Subtype/Type0/BaseFont/SymbolMT/Encoding/Identity-H/DescendantFonts 14 0 R/ToUnicode 108 0 R>>\r\nendobj\r\n14 0 obj\r\n[ 15 0 R] \r\nendobj\r\n15 0 obj\r\n<</BaseFont/SymbolMT/Subtype/CIDFontType2/Type/Font/CIDToGIDMap/Identity/DW 1000/CIDSystemInfo 16 0 R/FontDescriptor 17 0 R/W 110 0 R>>\r\nendobj\r\n16 0 obj\r\n<</Ordering(Identity) /Registry(Adobe) /Supplement 0>>\r\nendobj\r\n17 0 obj\r\n<</Type/FontDescriptor/FontName/SymbolMT/Flags 32/ItalicAngle 0/Ascent 1005/Descent -216/CapHeight 693/AvgWidth 600/MaxWidth 1113/FontWeight 400/XHeight 250/StemV 60/FontBBox[ 0 -216 1113 693] /FontFile2 109 0 R>>\r\nendobj\r\n18 0 obj\r\n<</Type/Font/Subtype/Type0/BaseFont/ABCDEE+Wingdings-Regular/Encoding/Identity-H/DescendantFonts 19 0 R/ToUnicode 111 0 R>>\r\nendobj\r\n19 0 obj\r\n[ 20 0 R] \r\nendobj\r\n20 0 obj\r\n<</BaseFont/ABCDEE+Wingdings-Regular/Subtype/CIDFontType2/Type/Font/CIDToGIDMap/Identity/DW 1000/CIDSystemInfo 21 0 R/FontDescriptor 22 0 R/W 113 0 R>>\r\nendobj\r\n21 0 obj\r\n<</Ordering(Identity) /Registry(Adobe) /Supplement 0>>\r\nendobj\r\n22 0 obj\r\n<</Type/FontDescriptor/FontName/ABCDEE+Wingdings-Regular/Flags 32/ItalicAngle 0/Ascent 899/Descent 205/CapHeight 771/AvgWidth 890/MaxWidth 1359/FontWeight 400/XHeight 250/StemV 89/FontBBox[ 0 205 1359 771] /FontFile2 112 0 R>>\r\nendobj\r\n23 0 obj\r\n<</Type/Font/Subtype/Type0/BaseFont/TimesNewRomanPSMT/Encoding/Identity-H/DescendantFonts 24 0 R/ToUnicode 102 0 R>>\r\nendobj\r\n24 0 obj\r\n[ 25 0 R] \r\nendobj\r\n25 0 obj\r\n<</BaseFont/TimesNewRomanPSMT/Subtype/CIDFontType2/Type/Font/CIDToGIDMap/Identity/DW 1000/CIDSystemInfo 26 0 R/FontDescriptor 27 0 R/W 104 0 R>>\r\nendobj\r\n26 0 obj\r\n<</Ordering(Identity) /Registry(Adobe) /Supplement 0>>\r\nendobj\r\n27 0 obj\r\n<</Type/FontDescriptor/FontName/TimesNewRomanPSMT/Flags 32/ItalicAngle 0/Ascent 891/Descent -216/CapHeight 693/AvgWidth 401/MaxWidth 2614/FontWeight 400/XHeight 250/Leading 42/StemV 40/FontBBox[ -568 -216 2046 693] /FontFile2 103 0 R>>\r\nendobj\r\n28 0 obj\r\n<</Type/Font/Subtype/TrueType/Name/F7/BaseFont/Arial-BoldMT/Encoding/WinAnsiEncoding/FontDescriptor 29 0 R/FirstChar 32/LastChar 121/Widths 117 0 R>>\r\nendobj\r\n29 0 obj\r\n<</Type/FontDescriptor/FontName/Arial-BoldMT/Flags 32/ItalicAngle 0/Ascent 905/Descent -210/CapHeight 728/AvgWidth 479/MaxWidth 2628/FontWeight 700/XHeight 250/Leading 33/StemV 47/FontBBox[ -628 -210 2000 728] >>\r\nendobj\r\n30 0 obj\r\n<</Type/Font/Subtype/Type0/BaseFont/Arial-BoldMT/Encoding/Identity-H/DescendantFonts 31 0 R/ToUnicode 114 0 R>>\r\nendobj\r\n31 0 obj\r\n[ 32 0 R] \r\nendobj\r\n32 0 obj\r\n<</BaseFont/Arial-BoldMT/Subtype/CIDFontType2/Type/Font/CIDToGIDMap/Identity/DW 1000/CIDSystemInfo 33 0 R/FontDescriptor 34 0 R/W 116 0 R>>\r\nendobj\r\n33 0 obj\r\n<</Ordering(Identity) /Registry(Adobe) /Supplement 0>>\r\nendobj\r\n34 0 obj\r\n<</Type/FontDescriptor/FontName/Arial-BoldMT/Flags 32/ItalicAngle 0/Ascent 905/Descent -210/CapHeight 728/AvgWidth 479/MaxWidth 2628/FontWeight 700/XHeight 250/Leading 33/StemV 47/FontBBox[ -628 -210 2000 728] /FontFile2 115 0 R>>\r\nendobj\r\n35 0 obj\r\n<</Type/XObject/Subtype/Image/Width 339/Height 248/ColorSpace/DeviceRGB/BitsPerComponent 8/Filter/DCTDecode/Interpolate true/Length 18388>>\r\nstream\r\n����\u0000\u0010JFIF\u0000\u0001\u0001\u0001\u0000`\u0000`\u0000\u0000��\u0000C\u0000\b\u0006\u0006\u0007\u0006\u0005\b\u0007\u0007\u0007\t\t\b\n\f\u0014\r\f\u000b\u000b\f\u0019\u0012\u0013\u000f\u0014\u001d\u001a\u001f\u001e\u001d\u001a\u001c\u001c $.' \",#\u001c\u001c(7),01444\u001f'9=82<.342��\u0000C\u0001\t\t\t\f\u000b\f\u0018\r\r\u00182!\u001c!22222222222222222222222222222222222222222222222222��\u0000\u0011\b\u0000�\u0001S\u0003\u0001\"\u0000\u0002\u0011\u0001\u0003\u0011\u0001��\u0000\u001f\u0000\u0000\u0001\u0005\u0001\u0001\u0001\u0001\u0001\u0001\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0001\u0002\u0003\u0004\u0005\u0006\u0007\b\t\n\u000b��\u0000�\u0010\u0000\u0002\u0001\u0003\u0003\u0002\u0004\u0003\u0005\u0005\u0004\u0004\u0000\u0000\u0001}\u0001\u0002\u0003\u0000\u0004\u0011\u0005\u0012!1A\u0006\u0013Qa\u0007\"q\u00142���\b#B��\u0015R��$3br�\t\n\u0016\u0017\u0018\u0019\u001a%&'()*456789:CDEFGHIJSTUVWXYZcdefghijstuvwxyz���������������������������������������������������������������������������\u0000\u001f\u0001\u0000\u0003\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0000\u0000\u0000\u0000\u0000\u0000\u0001\u0002\u0003\u0004\u0005\u0006\u0007\b\t\n\u000b��\u0000�\u0011\u0000\u0002\u0001\u0002\u0004\u0004\u0003\u0004\u0007\u0005\u0004\u0004\u0000\u0001\u0002w\u0000\u0001\u0002\u0003\u0011\u0004\u0005!1\u0006\u0012AQ\u0007aq\u0013\"2�\b\u0014B����\t#3R�\u0015br�\n\u0016$4�%�\u0017\u0018\u0019\u001a&'()*56789:CDEFGHIJSTUVWXYZcdefghijstuvwxyz��������������������������������������������������������������������������\u0000\f\u0003\u0001\u0000\u0002\u0011\u0003\u0011\u0000?\u0000��(��\n(��\n(��\n(��\nJZJ\u0000)i8\u0003�Q��ml����1�I����I���A�V?�����\u0000�}�\u0015?��c�ƚ�\u0017�\r�z� ����5<��Y-ݍ\u0019�-��3\\\"}XU\u0013�Z�żS����#�̞�\u0000�:2�y�2\u001fS��u�u�\"�\u0011���i\u0006x,B-D����\u00151Ti�#��v�/��4\"�i�\u0003��f�ܴ��\u0003�P�W�]|D�e?��A\u0012�2k&\u0015볻\u0017�u��\u0000\u0015\u000eq��r�5�\u001f�\\��cv�������\u001fҡm2\u0011�����i��\u001d�P���=��>�f�H,u\u0019����w,8Ϙ����)Ǳ�����bz�Ҵ_�$�����7�#A�7c�\u0000\u0002���)�U�%��v�V�t+�>\u000f:���\u001b�nlR��qͪ��(�z��zi�\u0000W�2\u000e�.\u0005I����Z��\u001e�\u0006�\u0016EftH���\u0015Uz���WVڍ��\u0000H[�\u0015�\fŐ:jq�Q,�msr�Ķ\u001a�c�Z�o��\u00184��}Դ�{�Mx���������\u00009 ��i[x�^�\u001f�bE��A��\u001b�F�͠��\u0013ӿ�.��\u0000��2|zņ\u0002��\\����Z'��W��\u000bo�*�0.�U�����",
+      "intent": "file_knowledge",
+      "keywords": "CSC 410_FAULT TOLERANT COMPUTING_Individual Assignment_Fuoye",
+      "confidence_score": 0.9,
+      "is_active": true,
+      "created_at": "2025-09-02T17:31:33.479Z",
+      "updated_at": "2025-09-02T17:31:33.479Z"
+    }
+  ],
+  "core_actions": [
+    {
+      "id": "core_1",
+      "name": "Answer FAQs",
+      "description": "Instantly answer frequently asked questions about shipping, refunds, and account help",
+      "category": "core",
+      "type": "conversation",
+      "status": "active",
+      "triggers": [
+        {
+          "type": "intent",
+          "value": "faq_inquiry"
+        }
+      ],
+      "steps": [
+        {
+          "id": "1",
+          "type": "message",
+          "config": {
+            "template": "faq_response"
+          },
+          "nextStep": null
+        }
+      ],
+      "isBuiltIn": true,
+      "created_at": "2023-11-15T10:30:00Z",
+      "updated_at": "2023-12-05T14:22:00Z"
+    },
+    {
+      "id": "core_2",
+      "name": "Escalate to Human",
+      "description": "Transfer conversation to human agent with full context when needed",
+      "category": "core",
+      "type": "task",
+      "status": "active",
+      "triggers": [
+        {
+          "type": "keyword",
+          "value": "human agent"
+        },
+        {
+          "type": "sentiment",
+          "value": "negative"
+        }
+      ],
+      "steps": [
+        {
+          "id": "1",
+          "type": "escalate",
+          "config": {
+            "department": "support"
+          },
+          "nextStep": null
+        }
+      ],
+      "isBuiltIn": true,
       "created_at": "2023-11-15T10:30:00Z",
       "updated_at": "2023-12-05T14:22:00Z"
     }
   ],
-  "conversations": [
+  "system_actions": [
     {
-      "id": "convo_1",
-      "agent_id": "1",
-      "platform": "Website",
-      "client_id": null,
-      "title": "Laptop Return Request",
-      "status": "closed",
-      "escalated_to_human": false,
-      "escalation_reason": null,
-      "created_at": "2025-07-01T10:01:00Z"
+      "id": "book_meeting",
+      "name": "Book Meeting",
+      "description": "Allow customers to book meetings directly through the chat interface with calendar integration",
+      "category": "system",
+      "type": "booking",
+      "status": "inactive",
+      "configurable": true,
+      "isBuiltIn": false,
+      "triggers": [
+        {
+          "type": "keyword",
+          "value": "book meeting",
+          "conditions": {}
+        },
+        {
+          "type": "keyword",
+          "value": "schedule appointment",
+          "conditions": {}
+        },
+        {
+          "type": "intent",
+          "value": "booking_request",
+          "conditions": {}
+        }
+      ],
+      "steps": [
+        {
+          "id": "check_availability",
+          "type": "api_call",
+          "config": {
+            "description": "Check calendar availability",
+            "integration_required": true
+          }
+        },
+        {
+          "id": "present_slots",
+          "type": "message",
+          "config": {
+            "template": "Here are the available time slots: {{available_slots}}"
+          }
+        },
+        {
+          "id": "confirm_booking",
+          "type": "api_call",
+          "config": {
+            "description": "Create calendar event",
+            "integration_required": true
+          }
+        }
+      ],
+      "defaultConfig": {
+        "meeting_duration": 30,
+        "buffer_time": 15,
+        "advance_booking_days": 30
+      },
+      "requiredIntegrations": [
+        {
+          "id": "google_calendar",
+          "name": "Google Calendar",
+          "type": "calendar",
+          "icon": "/images/googlecalendar.png",
+          "authType": "oauth",
+          "configFields": []
+        }
+      ],
+      "supportedProviders": [
+        {
+          "id": "google_calendar",
+          "name": "Google Calendar",
+          "type": "calendar",
+          "icon": "/images/googlecalendar.png",
+          "authType": "oauth",
+          "configFields": []
+        },
+        {
+          "id": "outlook_calendar",
+          "name": "Outlook Calendar",
+          "type": "calendar",
+          "icon": "/images/outlook.png",
+          "authType": "oauth",
+          "configFields": []
+        },
+        {
+          "id": "calendly",
+          "name": "Calendly",
+          "type": "calendar",
+          "icon": "/images/calendly.png",
+          "authType": "api_key",
+          "configFields": []
+        }
+      ],
+      "created_at": "2023-11-15T10:30:00Z",
+      "updated_at": "2023-12-05T14:22:00Z"
+    },
+    {
+      "id": "cancel_meeting",
+      "name": "Cancel Meeting",
+      "description": "Allow customers to cancel their existing meetings with automatic calendar updates",
+      "category": "system",
+      "type": "booking",
+      "status": "inactive",
+      "configurable": true,
+      "isBuiltIn": false,
+      "triggers": [
+        {
+          "type": "keyword",
+          "value": "cancel meeting",
+          "conditions": {}
+        },
+        {
+          "type": "keyword",
+          "value": "cancel appointment",
+          "conditions": {}
+        },
+        {
+          "type": "intent",
+          "value": "cancellation_request",
+          "conditions": {}
+        }
+      ],
+      "steps": [
+        {
+          "id": "find_booking",
+          "type": "api_call",
+          "config": {
+            "description": "Find customer's booking",
+            "integration_required": true
+          }
+        },
+        {
+          "id": "confirm_cancellation",
+          "type": "condition",
+          "config": {
+            "field": "booking_found",
+            "operator": "equals",
+            "value": "true"
+          }
+        },
+        {
+          "id": "cancel_booking",
+          "type": "api_call",
+          "config": {
+            "description": "Cancel the booking",
+            "integration_required": true
+          }
+        }
+      ],
+      "defaultConfig": {
+        "cancellation_notice_hours": 24,
+        "send_confirmation": true
+      },
+      "requiredIntegrations": [
+        {
+          "id": "google_calendar",
+          "name": "Google Calendar",
+          "type": "calendar",
+          "icon": "/images/googlecalendar.png",
+          "authType": "oauth",
+          "configFields": []
+        }
+      ],
+      "supportedProviders": [
+        {
+          "id": "google_calendar",
+          "name": "Google Calendar",
+          "type": "calendar",
+          "icon": "/images/googlecalendar.png",
+          "authType": "oauth",
+          "configFields": []
+        },
+        {
+          "id": "outlook_calendar",
+          "name": "Outlook Calendar",
+          "type": "calendar",
+          "icon": "/images/outlook.png",
+          "authType": "oauth",
+          "configFields": []
+        },
+        {
+          "id": "calendly",
+          "name": "Calendly",
+          "type": "calendar",
+          "icon": "/images/calendly.png",
+          "authType": "api_key",
+          "configFields": []
+        }
+      ],
+      "created_at": "2023-11-15T10:30:00Z",
+      "updated_at": "2023-12-05T14:22:00Z"
+    },
+    {
+      "id": "check_order_status",
+      "name": "Check Order Status",
+      "description": "Allow customers to check their order status by providing order number or email",
+      "category": "system",
+      "type": "order",
+      "status": "inactive",
+      "configurable": true,
+      "isBuiltIn": false,
+      "triggers": [
+        {
+          "type": "keyword",
+          "value": "order status",
+          "conditions": {}
+        },
+        {
+          "type": "keyword",
+          "value": "track order",
+          "conditions": {}
+        },
+        {
+          "type": "intent",
+          "value": "order_inquiry",
+          "conditions": {}
+        }
+      ],
+      "steps": [
+        {
+          "id": "request_order_info",
+          "type": "message",
+          "config": {
+            "text": "Please provide your order number or email address to check your order status."
+          }
+        },
+        {
+          "id": "lookup_order",
+          "type": "api_call",
+          "config": {
+            "description": "Look up order in system",
+            "integration_required": true
+          }
+        },
+        {
+          "id": "display_status",
+          "type": "message",
+          "config": {
+            "template": "Your order #{{order_number}} is {{status}}. {{tracking_info}}"
+          }
+        }
+      ],
+      "defaultConfig": {
+        "require_verification": true,
+        "show_tracking_link": true
+      },
+      "requiredIntegrations": [
+        {
+          "id": "salesforce",
+          "name": "Salesforce",
+          "type": "crm",
+          "icon": "/images/salesforce.png",
+          "authType": "oauth",
+          "configFields": []
+        }
+      ],
+      "supportedProviders": [
+        {
+          "id": "salesforce",
+          "name": "Salesforce",
+          "type": "crm",
+          "icon": "/images/salesforce.png",
+          "authType": "oauth",
+          "configFields": []
+        },
+        {
+          "id": "hubspot",
+          "name": "HubSpot",
+          "type": "crm",
+          "icon": "/images/hubspot.png",
+          "authType": "api_key",
+          "configFields": []
+        },
+        {
+          "id": "pipedrive",
+          "name": "Pipedrive",
+          "type": "crm",
+          "icon": "/images/pipedrive.png",
+          "authType": "api_key",
+          "configFields": []
+        }
+      ],
+      "created_at": "2023-11-15T10:30:00Z",
+      "updated_at": "2023-12-05T14:22:00Z"
+    },
+    {
+      "id": "initiate_return",
+      "name": "Initiate Return/Refund",
+      "description": "Help customers start the return or refund process for their orders",
+      "category": "system",
+      "type": "order",
+      "status": "inactive",
+      "configurable": true,
+      "isBuiltIn": false,
+      "triggers": [
+        {
+          "type": "keyword",
+          "value": "return",
+          "conditions": {}
+        },
+        {
+          "type": "keyword",
+          "value": "refund",
+          "conditions": {}
+        },
+        {
+          "type": "intent",
+          "value": "return_request",
+          "conditions": {}
+        }
+      ],
+      "steps": [
+        {
+          "id": "verify_order",
+          "type": "api_call",
+          "config": {
+            "description": "Verify order eligibility for return",
+            "integration_required": true
+          }
+        },
+        {
+          "id": "collect_return_reason",
+          "type": "message",
+          "config": {
+            "text": "Please select the reason for your return: {{return_reasons}}"
+          }
+        },
+        {
+          "id": "create_return_request",
+          "type": "api_call",
+          "config": {
+            "description": "Create return request in system",
+            "integration_required": true
+          }
+        }
+      ],
+      "defaultConfig": {
+        "return_window_days": 30,
+        "require_photos": false
+      },
+      "requiredIntegrations": [
+        {
+          "id": "salesforce",
+          "name": "Salesforce",
+          "type": "crm",
+          "icon": "/images/salesforce.png",
+          "authType": "oauth",
+          "configFields": []
+        }
+      ],
+      "supportedProviders": [
+        {
+          "id": "salesforce",
+          "name": "Salesforce",
+          "type": "crm",
+          "icon": "/images/salesforce.png",
+          "authType": "oauth",
+          "configFields": []
+        },
+        {
+          "id": "hubspot",
+          "name": "HubSpot",
+          "type": "crm",
+          "icon": "/images/hubspot.png",
+          "authType": "api_key",
+          "configFields": []
+        }
+      ],
+      "created_at": "2023-11-15T10:30:00Z",
+      "updated_at": "2023-12-05T14:22:00Z"
+    },
+    {
+      "id": "escalate_to_human",
+      "name": "Escalate to Human Agent",
+      "description": "Automatically escalate complex issues to human agents with context and priority",
+      "category": "system",
+      "type": "business",
+      "status": "inactive",
+      "configurable": true,
+      "isBuiltIn": false,
+      "triggers": [
+        {
+          "type": "keyword",
+          "value": "human agent",
+          "conditions": {}
+        },
+        {
+          "type": "keyword",
+          "value": "speak to person",
+          "conditions": {}
+        },
+        {
+          "type": "sentiment",
+          "value": "frustrated",
+          "conditions": {}
+        }
+      ],
+      "steps": [
+        {
+          "id": "collect_context",
+          "type": "message",
+          "config": {
+            "text": "I'll connect you with a human agent. Can you briefly describe your issue?"
+          }
+        },
+        {
+          "id": "create_ticket",
+          "type": "api_call",
+          "config": {
+            "description": "Create support ticket with conversation context",
+            "integration_required": true
+          }
+        },
+        {
+          "id": "notify_agents",
+          "type": "webhook",
+          "config": {
+            "description": "Notify available human agents",
+            "integration_required": true
+          }
+        }
+      ],
+      "defaultConfig": {
+        "priority_levels": ["low", "medium", "high", "urgent"],
+        "include_chat_history": true,
+        "max_wait_time_minutes": 15
+      },
+      "requiredIntegrations": [
+        {
+          "id": "salesforce",
+          "name": "Salesforce",
+          "type": "crm",
+          "icon": "/images/salesforce.png",
+          "authType": "oauth",
+          "configFields": []
+        }
+      ],
+      "supportedProviders": [
+        {
+          "id": "salesforce",
+          "name": "Salesforce",
+          "type": "crm",
+          "icon": "/images/salesforce.png",
+          "authType": "oauth",
+          "configFields": []
+        },
+        {
+          "id": "hubspot",
+          "name": "HubSpot",
+          "type": "crm",
+          "icon": "/images/hubspot.png",
+          "authType": "api_key",
+          "configFields": []
+        }
+      ],
+      "created_at": "2023-11-15T10:30:00Z",
+      "updated_at": "2023-12-05T14:22:00Z"
+    },
+    {
+      "id": "payment_reminder",
+      "name": "Payment Reminders",
+      "description": "Send automated reminders for pending payments, subscription renewals, or overdue invoices",
+      "category": "system",
+      "type": "alert",
+      "status": "inactive",
+      "configurable": true,
+      "isBuiltIn": false,
+      "triggers": [
+        {
+          "type": "schedule",
+          "value": "daily_check",
+          "conditions": {}
+        },
+        {
+          "type": "condition",
+          "value": "payment_overdue",
+          "conditions": {}
+        }
+      ],
+      "steps": [
+        {
+          "id": "check_overdue_payments",
+          "type": "api_call",
+          "config": {
+            "description": "Check for overdue payments",
+            "integration_required": true
+          }
+        },
+        {
+          "id": "send_reminder",
+          "type": "message",
+          "config": {
+            "template": "Your payment of {{amount}} is {{days_overdue}} days overdue. Please update your payment method."
+          }
+        },
+        {
+          "id": "update_reminder_log",
+          "type": "api_call",
+          "config": {
+            "description": "Log reminder sent",
+            "integration_required": true
+          }
+        }
+      ],
+      "defaultConfig": {
+        "reminder_frequency_days": 7,
+        "max_reminders": 3
+      },
+      "requiredIntegrations": [
+        {
+          "id": "stripe",
+          "name": "Stripe",
+          "type": "payment",
+          "icon": "/images/stripe.png",
+          "authType": "api_key",
+          "configFields": []
+        }
+      ],
+      "supportedProviders": [
+        {
+          "id": "stripe",
+          "name": "Stripe",
+          "type": "payment",
+          "icon": "/images/stripe.png",
+          "authType": "api_key",
+          "configFields": []
+        },
+        {
+          "id": "paystack",
+          "name": "Paystack",
+          "type": "payment",
+          "icon": "/images/paystack.png",
+          "authType": "api_key",
+          "configFields": []
+        }
+      ],
+      "created_at": "2023-11-15T10:30:00Z",
+      "updated_at": "2023-12-05T14:22:00Z"
     }
   ],
-  "messages": [
+  "custom_actions": [],
+  "api_functions": [
     {
-      "id": "msg_001",
-      "convo_id": "convo_1",
-      "role": "assistant",
-      "text": "Hello! Welcome to TechStore. I'm here to help you with any questions about our products or services. How can I assist you today?",
-      "timestamp": "2025-07-01T10:01:00Z"
+      "id": "api_func_1756511584477",
+      "agentId": "1",
+      "name": "tyuiop",
+      "description": "tyoiup",
+      "method": "GET",
+      "url": "https://bbc.com",
+      "authType": "none",
+      "errorHandling": {
+        "retries": 5,
+        "timeout": 5000,
+        "fallbackMessage": ""
+      },
+      "created_at": "2025-08-29T23:53:04.477Z",
+      "updated_at": "2025-08-29T23:53:04.477Z"
+    },
+    {
+      "id": "api_func_1756511584486",
+      "agentId": "1",
+      "name": "tyuiop",
+      "description": "tyoiup",
+      "method": "GET",
+      "url": "https://bbc.com",
+      "authType": "none",
+      "errorHandling": {
+        "retries": 5,
+        "timeout": 5000,
+        "fallbackMessage": ""
+      },
+      "created_at": "2025-08-29T23:53:04.486Z",
+      "updated_at": "2025-08-29T23:53:04.486Z"
+    },
+    {
+      "id": "api_func_1756511584491",
+      "agentId": "1",
+      "name": "tyuiop",
+      "description": "tyoiup",
+      "method": "GET",
+      "url": "https://bbc.com",
+      "authType": "none",
+      "errorHandling": {
+        "retries": 5,
+        "timeout": 5000,
+        "fallbackMessage": ""
+      },
+      "created_at": "2025-08-29T23:53:04.492Z",
+      "updated_at": "2025-08-29T23:53:04.492Z"
+    },
+    {
+      "id": "api_func_1756813659246",
+      "agentId": "1",
+      "name": "asdad",
+      "description": "asdfsd",
+      "method": "GET",
+      "url": "https://localhost:3000/login",
+      "headers": {},
+      "queryParams": {
+        "limit": "12"
+      },
+      "authType": "bearer",
+      "bearerToken": "122423325452452352",
+      "errorHandling": {
+        "retries": 2,
+        "timeout": 10000,
+        "fallbackMessage": ""
+      },
+      "created_at": "2025-09-02T11:47:39.246Z",
+      "updated_at": "2025-09-02T11:47:39.246Z"
     }
   ],
-  "contacts": [
+  "integration_providers": [
     {
-      "id": "contact_001",
-      "platform": "WhatsApp",
-      "phone_number": "+2348011111111",
-      "email": null
-    }
-  ],
-  "message_metadata": [
-    {
-      "id": "meta_001",
-      "msg_id": "msg_001",
-      "sentiment": "neutral",
-      "intent": "order_help",
-      "msg_type": "text",
-      "token_count": 8
-    }
-  ],
-  "message_feedback": [
-    {
-      "id": "feedback_001",
-      "message_id": "msg_003",
-      "feedback_type": "positive",
-      "user_comment": null,
-      "created_at": "2025-07-01T10:06:00Z"
-    }
-  ],
-  "message_improvements": [
-    {
-      "id": "improve_001",
-      "original_message_id": "msg_008",
-      "improved_text": "I'd be happy to help you schedule a cardiology consultation.",
-      "improvement_reason": "Corrected doctor name from Johnson to Smith",
-      "created_at": "2025-07-01T10:09:00Z"
-    }
-  ],
-  "escalation_points": [
-    {
-      "id": "escalation_001",
-      "conversation_id": "convo_2",
-      "message_id": "msg_010",
-      "escalation_reason": "Complex medical scheduling request",
-      "escalated_at": "2025-07-01T10:05:30Z"
-    }
-  ],
-  "test_queries": [
-    {
-      "id": "1",
-      "agent_id": "1",
-      "prompt_template": "customer_support",
-      "queries": [
-        "How do I return a product?",
-        "What is your refund policy?",
-        "I need help with my order",
-        "Can you track my shipment?",
-        "How do I contact customer service?"
+      "id": "google_calendar",
+      "name": "Google Calendar",
+      "type": "calendar",
+      "icon": "/images/googlecalendar.png",
+      "authType": "oauth",
+      "configFields": [
+        {
+          "name": "client_id",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "client_secret",
+          "type": "password",
+          "required": true
+        },
+        {
+          "name": "redirect_uri",
+          "type": "url",
+          "required": true
+        }
       ]
     },
     {
-      "id": "2",
-      "agent_id": "2",
-      "prompt_template": "sales_agent",
-      "queries": [
-        "What products do you recommend?",
-        "Can you help me find the right solution?",
-        "What are your pricing options?",
-        "Do you have any special offers?",
-        "How does your product compare to competitors?"
+      "id": "calendly",
+      "name": "Calendly",
+      "type": "calendar",
+      "icon": "/images/calendly.png",
+      "authType": "api_key",
+      "configFields": [
+        {
+          "name": "api_key",
+          "type": "password",
+          "required": true
+        },
+        {
+          "name": "organization_uri",
+          "type": "url",
+          "required": true
+        }
       ]
     },
     {
-      "id": "3",
-      "agent_id": "3",
-      "prompt_template": "ai_agent",
-      "queries": [
-        "Tell me about your services",
-        "How can I contact support?",
-        "What are your business hours?",
-        "Do you offer refunds?",
-        "How do I book an appointment?"
+      "id": "salesforce",
+      "name": "Salesforce",
+      "type": "crm",
+      "icon": "/images/salesforce.png",
+      "authType": "oauth",
+      "configFields": [
+        {
+          "name": "client_id",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "client_secret",
+          "type": "password",
+          "required": true
+        },
+        {
+          "name": "instance_url",
+          "type": "url",
+          "required": true
+        }
       ]
     },
     {
-      "id": "4",
-      "agent_id": "4",
-      "prompt_template": "ai_agent",
-      "queries": [
-        "Tell me about your services",
-        "How can I contact support?",
-        "What are your business hours?",
-        "Do you offer refunds?",
-        "How do I book an appointment?"
+      "id": "hubspot",
+      "name": "HubSpot",
+      "type": "crm",
+      "icon": "/images/hubspot.png",
+      "authType": "api_key",
+      "configFields": [
+        {
+          "name": "api_key",
+          "type": "password",
+          "required": true
+        }
       ]
     },
     {
-      "id": "5",
-      "agent_id": "civ9326zf",
-      "prompt_template": "ai_agent",
-      "queries": [
-        "Tell me about your services",
-        "How can I contact support?",
-        "What are your business hours?",
-        "Do you offer refunds?",
-        "How do I book an appointment?"
+      "id": "stripe",
+      "name": "Stripe",
+      "type": "payment",
+      "icon": "/images/stripe.png",
+      "authType": "api_key",
+      "configFields": [
+        {
+          "name": "secret_key",
+          "type": "password",
+          "required": true
+        },
+        {
+          "name": "publishable_key",
+          "type": "text",
+          "required": true
+        }
+      ]
+    },
+    {
+      "id": "paystack",
+      "name": "Paystack",
+      "type": "payment",
+      "icon": "/images/paystack.png",
+      "authType": "api_key",
+      "configFields": [
+        {
+          "name": "secret_key",
+          "type": "password",
+          "required": true
+        },
+        {
+          "name": "public_key",
+          "type": "text",
+          "required": true
+        }
       ]
     }
   ]
