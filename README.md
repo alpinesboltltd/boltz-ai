@@ -1,10 +1,10 @@
 # Boltz-ai - AI Chatbot Platform
 
-An AI-powered chatagent platform modeled after Helix.co, incorporating its pricing structure, documentation, and user interface.
+An AI-powered chatagent platform modeled after Boltz.co, incorporating its pricing structure, documentation, and user interface.
 
 ## Project Overview
 
-Helix is a no-code AI chatagent builder that allows users to create custom chatagents powered by various AI models including Google Gemini, GPT-4, Claude, and Mistral. The platform enables businesses to train chatagents with their own knowledge base, deploy them across multiple channels, and track performance with advanced analytics.
+Boltz is a no-code AI chatagent builder that allows users to create custom chatagents powered by various AI models including Google Gemini, GPT-4, Claude, and Mistral. The platform enables businesses to train chatagents with their own knowledge base, deploy them across multiple channels, and track performance with advanced analytics.
 
 ## Tech Stack
 
@@ -42,7 +42,7 @@ Helix is a no-code AI chatagent builder that allows users to create custom chata
 ## Project Structure
 
 ```
-Helix/
+Boltz/
 ├── src/
 │   ├── app/                    # Next.js app directory
 │   │   ├── dashboard/          # Dashboard pages

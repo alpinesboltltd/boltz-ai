@@ -1,8 +1,8 @@
-# Helix Backend Architecture
+# Boltz Backend Architecture
 
 ## Overview
 
-The backend architecture for Helix is designed to be scalable, maintainable, and performant. It follows a microservices approach with Golang for core services and TypeScript for API layers.
+The backend architecture for Boltz is designed to be scalable, maintainable, and performant. It follows a microservices approach with Golang for core services and TypeScript for API layers.
 
 ## Technology Stack
 
@@ -37,14 +37,14 @@ The backend architecture for Helix is designed to be scalable, maintainable, and
 | Custom AI Selection                    | Users can choose from multiple AI models, including Gemini, GPT-4, Claude, and Mistral | Gemini, OpenAI GPT-4, Claude, Mistral                                   |
 | AI-Powered Knowledge Retrieval         | Retrieves company knowledge from uploaded documents, FAQs, and databases               | Slack, MS Teams, Discord, Google Drive, Dropbox                         |
 | Advanced NLP & Machine Learning        | AI learns from conversations and improves over time                                    | Rasa Core, TensorFlow, Hugging Face, OpenAI API                         |
-| Real-Time Chatbot Training             | Users can train and update their bot dynamically                                       | Helix Web Platform, OpenAI Playground, Google Gemini Sandbox            |
+| Real-Time Chatbot Training             | Users can train and update their bot dynamically                                       | Boltz Web Platform, OpenAI Playground, Google Gemini Sandbox            |
 | Multilingual Support                   | Supports 80+ languages for global accessibility                                        | Google Translate API, Microsoft Translator, AWS Polly                   |
 | No-Code Chatbot Builder                | Drag-and-drop interface for building AI assistants without technical expertise         | Web Platform, Shopify, WordPress, Wix, Webflow                          |
 | Deep Analytics & User Insights         | Provides chatagent performance data, user interactions, and conversion tracking        | Google Analytics, HubSpot, Tableau, Mixpanel                            |
 | Omnichannel Integrations               | Deploy chatagents on websites, WhatsApp, Slack, and social media                       | WhatsApp Business, Facebook Messenger, Telegram, Instagram, Twitter DMs |
 | Live Human Handoff                     | Routes conversations to human agents when AI assistance isn't enough                   | Intercom, Zendesk, Freshdesk, Salesforce                                |
 | Secure Transactions & Privacy Controls | Offers encrypted messaging and compliance with GDPR & HIPAA                            | AWS Cloud Security, Google Cloud Encryption, Microsoft Azure            |
-| Customizable Pricing Plans             | Offers flexible plans similar to Helix, including free, Pro, and Enterprise tiers      | Stripe, PayPal, Razorpay, Coinbase Commerce                             |
+| Customizable Pricing Plans             | Offers flexible plans similar to Boltz, including free, Pro, and Enterprise tiers      | Stripe, PayPal, Razorpay, Coinbase Commerce                             |
 | Voice Capabilities                     | Support for voice input and output in conversations                                    | Amazon Polly, Google Text-to-Speech, Microsoft Azure Speech Services    |
 | Custom Avatar & Branding               | Personalized chatagent appearance with custom avatars and brand colors                 | Web Platform, Custom CSS, Image Processing API                          |
 | Conversation Interface Customization   | Fully customizable chat interface with themes and layouts                              | Web Components, React, Vue.js                                           |

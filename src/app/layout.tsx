@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Helix - AI Chatbot Platform",
+  title: "Boltz - AI Chatbot Platform",
   description:
     "Create custom AI agents with no-code builder, powered by Google Gemini, GPT-4, Claude, and more.",
 };
@@ -25,8 +25,20 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lexend:wght@400;500;600;700&display=swap"
           rel="stylesheet"
         />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.BOLTZ_CONFIG = {
+                id: "4k8afeknd",
+              };
+            `,
+          }}
+        />
+        <script src="http://192.168.1.162:3000/widget.js" async />
       </head>
-      <body className="min-h-screen bg-gray-50 font-sans">{children}</body>
+      <body className="min-h-screen bg-gray-50 font-sans w-full overflow-x-hidden">
+        {children}
+      </body>
     </html>
   );
 }

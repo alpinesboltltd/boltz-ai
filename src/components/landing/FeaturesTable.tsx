@@ -26,7 +26,7 @@ const features = [
   {
     name: "Real-Time Chatbot Training",
     description: "Train and update your bot dynamically",
-    platforms: "Helix Web Platform, OpenAI Playground, Google Gemini Sandbox",
+    platforms: "Boltz Web Platform, OpenAI Playground, Google Gemini Sandbox",
     tiers: { free: false, pro: true, business: true },
   },
   {

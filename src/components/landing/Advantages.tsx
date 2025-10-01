@@ -3,8 +3,9 @@
 import { SparklesIcon } from "@heroicons/react/24/outline";
 import Topic from "../ui/Topic";
 import { useState } from "react";
-import { Card, CardDescription, CardTitle } from "../ui/Card";
+import { Card, CardContent, CardDescription, CardTitle } from "../ui/Card";
 import { AdvantagesV } from "../ui/AdvantagesV";
+import Image from "next/image";
 
 const CARD_PER_PAGE = 3;
 
@@ -32,10 +33,20 @@ export function Advantages() {
 
       <div className="flex gap-4 overflow-hidden mb-4 p-2">
         {AdvantagesV.slice(index, index + CARD_PER_PAGE).map((item, i) => (
-          <Card key={i} className="w-1/3">
-            <img src={item.src} alt="" className="w-full h-40 object-cover" />
-            <CardTitle text={item.title} />
-            <CardDescription text={item.description} />
+          <Card key={i} className="w-1/3 bg-white">
+            <CardContent className="p-0">
+              <Image
+                height={40}
+                width={40}
+                src={item.src}
+                alt={item.title}
+                className="w-full h-40 object-cover rounded-t-lg"
+              />
+            </CardContent>
+            <CardContent>
+              <CardTitle className="text-lg font-bold text-gray-800">{item.title}</CardTitle>
+              <CardDescription className="text-sm text-gray-600">{item.description}</CardDescription>
+            </CardContent>
           </Card>
         ))}
       </div>

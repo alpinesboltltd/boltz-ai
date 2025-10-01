@@ -1,7 +1,4 @@
 // Export all chatagent components for easier imports
-export { BotPreview } from "./BotPreview";
-export { BotCustomizer } from "./BotCustomizer";
-export { BotPlayground } from "./BotPlayground";
 
 // Mock components that would be implemented in a real application
 export const ChatInterface = () => null;

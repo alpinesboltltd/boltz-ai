@@ -14,10 +14,10 @@ Add the following code to your website's HTML, just before the closing `</body>`
     theme: "light", // Options: light, dark, auto (follows user's system preference)
     initialMessage: "Hello! How can I help you today?",
     avatar: true, // Show or hide the bot avatar
-    branding: true, // Show or hide Helix branding
+    branding: true, // Show or hide Boltz branding
   };
 </script>
-<script src="https://cdn.Helix/widget.js" async></script>
+<script src="https://cdn.Boltz/widget.js" async></script>
 ```
 
 Replace `YOUR_CHATBOT_ID` with the unique ID of your chatagent from your dashboard.
@@ -26,22 +26,22 @@ Replace `YOUR_CHATBOT_ID` with the unique ID of your chatagent from your dashboa
 
 #### WordPress
 
-1. Install the Helix WordPress plugin from the WordPress plugin directory
-2. Navigate to the Helix settings page in your WordPress admin panel
+1. Install the Boltz WordPress plugin from the WordPress plugin directory
+2. Navigate to the Boltz settings page in your WordPress admin panel
 3. Enter your chatagent ID and customize appearance settings
 4. Save changes and the chatagent will appear on your site
 
 #### Shopify
 
-1. Visit the Shopify App Store and install the Helix app
-2. Follow the setup wizard to connect your Helix account
+1. Visit the Shopify App Store and install the Boltz app
+2. Follow the setup wizard to connect your Boltz account
 3. Select the chatagent you want to display on your store
 4. Customize appearance settings and save
 
 #### Wix
 
-1. Go to the Wix App Market and add the Helix app
-2. Connect your Helix account
+1. Go to the Wix App Market and add the Boltz app
+2. Connect your Boltz account
 3. Configure your chatagent settings
 4. Publish your site to make the changes live
 
@@ -90,7 +90,7 @@ boltzChat.setUser({
 
 ### 1. Initial Website Crawling
 
-When you first connect your website to Helix, our system performs an initial crawl of your site to:
+When you first connect your website to Boltz, our system performs an initial crawl of your site to:
 
 - Index all public pages
 - Extract product information

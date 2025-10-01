@@ -22,14 +22,13 @@ import { useAgentStore } from "@/store/agentStore";
 import { useAgentDetailStore } from "@/store/agentDetailStore";
 import { SYSTEM_PROMPT_TEMPLATES } from "@/data/systemPrompts";
 import { AI_MODELS, AIModel } from "@/mock-data/ai-models";
-import { cn } from "@/lib/utils";
 import Image from "next/image";
-import Select, { SingleValue } from "react-select";
+import Select from "react-select";
 
-export function BotPlayground() {
+export function AgentPlayground() {
   const agentId = useParams().id as string;
   const { getAgent } = useAgentStore();
-  const { appearance, fetchAppearance } = useAgentDetailStore();
+  const { fetchAppearance } = useAgentDetailStore();
   const [agent, setAgent] = useState<Agent>();
   const [messages, setMessages] = useState<any[]>([]);
   const [inputValue, setInputValue] = useState("");
@@ -255,14 +254,18 @@ export function BotPlayground() {
   );
 
   // Animate mobile tab transitions
-  useGSAP(() => {
-    if (mobileTabContentRef.current) {
-      gsap.fromTo(mobileTabContentRef.current, 
-        { opacity: 0, y: 10 },
-        { opacity: 1, y: 0, duration: 0.3, ease: "power2.out" }
-      );
-    }
-  }, { dependencies: [showConfig] });
+  useGSAP(
+    () => {
+      if (mobileTabContentRef.current) {
+        gsap.fromTo(
+          mobileTabContentRef.current,
+          { opacity: 0, y: 10 },
+          { opacity: 1, y: 0, duration: 0.3, ease: "power2.out" }
+        );
+      }
+    },
+    { dependencies: [showConfig] }
+  );
 
   // Custom styles for react-select
   const selectStyles = {
@@ -368,8 +371,14 @@ export function BotPlayground() {
                   <div className="bg-gray-100 px-4 py-2 rounded-lg">
                     <div className="flex space-x-1">
                       <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "0.2s" }}></div>
-                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "0.4s" }}></div>
+                      <div
+                        className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                        style={{ animationDelay: "0.2s" }}
+                      ></div>
+                      <div
+                        className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                        style={{ animationDelay: "0.4s" }}
+                      ></div>
                     </div>
                   </div>
                 </div>
@@ -426,7 +435,7 @@ export function BotPlayground() {
 
             <div ref={mobileTabContentRef} className="p-4">
               {showConfig ? (
-                <MobileConfigPanel 
+                <MobileConfigPanel
                   config={config}
                   setConfig={setConfig}
                   agent={agent}
@@ -462,7 +471,7 @@ export function BotPlayground() {
               <h3 className="font-medium text-gray-900">Configuration</h3>
               <Cog6ToothIcon className="h-5 w-5 text-gray-400" />
             </div>
-            <ConfigPanel 
+            <ConfigPanel
               config={config}
               setConfig={setConfig}
               agent={agent}
@@ -480,7 +489,7 @@ export function BotPlayground() {
 
           {/* Center - Chat Interface */}
           <div className="bg-white rounded-lg shadow overflow-hidden flex flex-col">
-            <ChatInterface 
+            <ChatInterface
               agent={agent}
               config={config}
               messages={messages}
@@ -513,7 +522,7 @@ export function BotPlayground() {
               <h3 className="font-medium text-gray-900">Configuration</h3>
               <Cog6ToothIcon className="h-5 w-5 text-gray-400" />
             </div>
-            <ConfigPanel 
+            <ConfigPanel
               config={config}
               setConfig={setConfig}
               agent={agent}
@@ -531,7 +540,7 @@ export function BotPlayground() {
 
           {/* Chat Interface */}
           <div className="col-span-2 bg-white rounded-lg shadow overflow-hidden flex flex-col">
-            <ChatInterface 
+            <ChatInterface
               agent={agent}
               config={config}
               messages={messages}
@@ -559,19 +568,19 @@ export function BotPlayground() {
 }
 
 // Configuration Panel Component
-function ConfigPanel({ 
-  config, 
-  setConfig, 
-  agent, 
-  allPrompts, 
-  handleTemplateChange, 
-  handleAddCustomPrompt, 
+function ConfigPanel({
+  config,
+  setConfig,
+  agent,
+  allPrompts,
+  handleTemplateChange,
+  handleAddCustomPrompt,
   handleConfigSave,
   modelOptions,
   selectedModel,
   selectStyles,
   ModelOption,
-  ModelSingleValue
+  ModelSingleValue,
 }: any) {
   return (
     <div className="space-y-4">
@@ -585,8 +594,7 @@ function ConfigPanel({
             {agent?.agent_type || "Loading..."}
           </span>
           <div className="text-xs text-gray-500 mt-1">
-            {agent?.agent_type === AgentType.TEXT &&
-              "Text-only conversations"}
+            {agent?.agent_type === AgentType.TEXT && "Text-only conversations"}
             {agent?.agent_type === AgentType.VOICE &&
               "Voice and audio processing"}
             {agent?.agent_type === AgentType.MULTIMODAL &&
@@ -608,9 +616,13 @@ function ConfigPanel({
             }
           }}
           options={modelOptions}
-          formatOptionLabel={(option: any) => <ModelOption data={option.data} />}
+          formatOptionLabel={(option: any) => (
+            <ModelOption data={option.data} />
+          )}
           components={{
-            SingleValue: ({ data }: any) => <ModelSingleValue data={data.data} />,
+            SingleValue: ({ data }: any) => (
+              <ModelSingleValue data={data.data} />
+            ),
           }}
           styles={selectStyles}
           className="text-sm"
@@ -704,7 +716,7 @@ function ConfigPanel({
             }))
           }
           rows={6}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none scrollbar-hide h-[280px]"
           placeholder="Enter custom system instruction..."
         />
       </div>
@@ -725,15 +737,15 @@ function MobileConfigPanel(props: any) {
 }
 
 // Chat Interface Component
-function ChatInterface({ 
-  agent, 
-  config, 
-  messages, 
-  isTyping, 
-  inputValue, 
-  setInputValue, 
-  handleSendMessage, 
-  handleReset 
+function ChatInterface({
+  agent,
+  config,
+  messages,
+  isTyping,
+  inputValue,
+  setInputValue,
+  handleSendMessage,
+  handleReset,
 }: any) {
   return (
     <>
@@ -741,7 +753,8 @@ function ChatInterface({
         <div>
           <h3 className="font-medium">Testing: {agent?.name}</h3>
           <p className="text-xs text-primary-100">
-            Type: {agent?.agent_type} | Model: {config.model} | Temp: {config.temperature} | Tokens: {config.maxTokens}
+            Type: {agent?.agent_type} | Model: {config.model} | Temp:{" "}
+            {config.temperature} | Tokens: {config.maxTokens}
           </p>
         </div>
         <button
@@ -769,9 +782,7 @@ function ChatInterface({
                     : "bg-gray-100 text-gray-800"
                 }`}
               >
-                <p className="text-sm whitespace-pre-wrap">
-                  {message.parts}
-                </p>
+                <p className="text-sm whitespace-pre-wrap">{message.parts}</p>
               </div>
             </div>
           ))}
@@ -819,12 +830,15 @@ function ChatInterface({
 }
 
 // Test Queries Panel Component
-function TestQueriesPanel({ testQueries, setTestQueries, handleSendMessage, saveTestQueries }: any) {
+function TestQueriesPanel({
+  testQueries,
+  setTestQueries,
+  handleSendMessage,
+  saveTestQueries,
+}: any) {
   return (
     <>
-      <h4 className="font-medium text-sm text-gray-700 mb-3">
-        Test Queries
-      </h4>
+      <h4 className="font-medium text-sm text-gray-700 mb-3">Test Queries</h4>
       <div className="space-y-2 mb-4 max-h-40 overflow-y-auto">
         {testQueries.map((query: string, index: number) => (
           <button
@@ -854,7 +868,8 @@ function TestQueriesPanel({ testQueries, setTestQueries, handleSendMessage, save
           type="button"
           className="w-full px-3 py-2 border border-gray-300 text-sm font-medium rounded-md bg-gray-50 hover:bg-gray-100"
           onClick={async (e) => {
-            const input = e.currentTarget.previousElementSibling as HTMLInputElement;
+            const input = e.currentTarget
+              .previousElementSibling as HTMLInputElement;
             if (input.value) {
               const newQueries = [...testQueries, input.value];
               setTestQueries(newQueries);

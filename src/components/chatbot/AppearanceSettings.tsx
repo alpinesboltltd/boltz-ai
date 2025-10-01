@@ -3,6 +3,7 @@
 import { useState, useRef } from "react";
 import { Spinner } from "@/components/common/Spinner";
 import { ChatInterface } from "@/components/chatagent";
+import Image from "next/image";
 
 interface AppearanceSettingsProps {
   chatagentId: string;
@@ -291,7 +292,9 @@ export default function AppearanceSettings({
                     onClick={() => avatarFileRef.current?.click()}
                   >
                     {settings.avatarImage ? (
-                      <img
+                      <Image
+                        height={40}
+                        width={40}
                         src={settings.avatarImage}
                         alt="Custom avatar"
                         className="h-full w-full object-cover"
@@ -346,7 +349,9 @@ export default function AppearanceSettings({
                     onClick={() => bubbleIconFileRef.current?.click()}
                   >
                     {settings.bubbleIconImage ? (
-                      <img
+                      <Image
+                        height={40}
+                        width={40}
                         src={settings.bubbleIconImage}
                         alt="Custom bubble icon"
                         className="h-full w-full object-cover"

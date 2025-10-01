@@ -236,7 +236,7 @@ export default function PlatformIntegrations({
   }
 </script>
 <script 
-  src="https://cdn.Helix/widget.js" 
+  src="https://cdn.Boltz/widget.js" 
   async>
 </script>`;
   };

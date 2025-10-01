@@ -55,7 +55,9 @@ export async function socialSignIn(method: AuthRequestMethods): Promise<User> {
             googleProvider
           );
           user = userdata;
-        } catch (error) {}
+        } catch {
+          // Error handled by returning undefined user
+        }
       }
       break;
     case AuthRequestMethods.github:
@@ -67,7 +69,9 @@ export async function socialSignIn(method: AuthRequestMethods): Promise<User> {
             githubProvider
           );
           user = userdata;
-        } catch (error) {}
+        } catch {
+          // Error handled by returning undefined user
+        }
       }
       break;
     default:

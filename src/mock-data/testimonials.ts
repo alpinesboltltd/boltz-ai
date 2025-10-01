@@ -13,7 +13,7 @@ export const testimonials: Testimonial[] = [
   {
     id: "1",
     content:
-      "Helix has transformed our customer support. We've reduced response times by 80% and increased customer satisfaction scores by 35%. The ability to train the chatagent with our own knowledge base makes it incredibly accurate.",
+      "Boltz has transformed our customer support. We've reduced response times by 80% and increased customer satisfaction scores by 35%. The ability to train the chatagent with our own knowledge base makes it incredibly accurate.",
     author: "Sarah Johnson",
     role: "Customer Success Manager",
     company: "TechCorp Inc.",
@@ -46,7 +46,7 @@ export const testimonials: Testimonial[] = [
   {
     id: "4",
     content:
-      "We integrated Helix with our WhatsApp Business account, and it's been a huge success. Our customers can now get support through their preferred channel, and we've seen a 45% increase in engagement.",
+      "We integrated Boltz with our WhatsApp Business account, and it's been a huge success. Our customers can now get support through their preferred channel, and we've seen a 45% increase in engagement.",
     author: "David Rodriguez",
     role: "Digital Marketing Manager",
     company: "Global Retail",
@@ -68,7 +68,7 @@ export const testimonials: Testimonial[] = [
   {
     id: "6",
     content:
-      "As a small business, we couldn't afford a 24/7 support team. Helix has allowed us to provide round-the-clock support to our global customers without breaking the bank. The ROI has been incredible.",
+      "As a small business, we couldn't afford a 24/7 support team. Boltz has allowed us to provide round-the-clock support to our global customers without breaking the bank. The ROI has been incredible.",
     author: "James Thompson",
     role: "Founder & CEO",
     company: "Startup Innovations",

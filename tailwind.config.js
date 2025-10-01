@@ -34,6 +34,14 @@ module.exports = {
           900: '#4c1d95',
           950: '#2e1065',
         },
+        card: {
+          DEFAULT: 'hsl(var(--card))',
+          foreground: 'hsl(var(--card-foreground))',
+        },
+        muted: {
+          DEFAULT: 'hsl(var(--muted))',
+          foreground: 'hsl(var(--muted-foreground))',
+        },
       },
       fontFamily: {
         sans: ['Inter', 'sans-serif'],

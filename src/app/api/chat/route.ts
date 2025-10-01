@@ -10,7 +10,7 @@ interface VectorStore {
 }
 
 // Import the vector store directly from embeddings module
-import { getVectorStore as getGlobalVectorStore } from '../embeddings/route';
+import { getVectorStore as getGlobalVectorStore } from "../embeddings/route";
 
 // Get vector store from embeddings route
 function getVectorStore(agentId: string): VectorStore {
@@ -18,7 +18,7 @@ function getVectorStore(agentId: string): VectorStore {
     const globalStore = getGlobalVectorStore();
     return globalStore[agentId] || {};
   } catch (error) {
-    console.error('Error accessing vector store:', error);
+    console.error("Error accessing vector store:", error);
     return {};
   }
 }
@@ -60,22 +60,25 @@ async function retrieveRelevantContext(
   if (queryEmbedding.length === 0) return [];
 
   const agentVectorStore = getVectorStore(agentId);
-  if (!agentVectorStore || Object.keys(agentVectorStore).length === 0) return [];
+  if (!agentVectorStore || Object.keys(agentVectorStore).length === 0)
+    return [];
 
   const similarities: { chunk: string; similarity: number }[] = [];
 
   // Calculate similarities for all chunks across all sources
-  Object.values(agentVectorStore).forEach((source: { chunks: string[]; embeddings: number[][]; }) => {
-    source.chunks.forEach((chunk: string, index: number) => {
-      if (source.embeddings[index]) {
-        const similarity = cosineSimilarity(
-          queryEmbedding,
-          source.embeddings[index]
-        );
-        similarities.push({ chunk, similarity });
-      }
-    });
-  });
+  Object.values(agentVectorStore).forEach(
+    (source: { chunks: string[]; embeddings: number[][] }) => {
+      source.chunks.forEach((chunk: string, index: number) => {
+        if (source.embeddings[index]) {
+          const similarity = cosineSimilarity(
+            queryEmbedding,
+            source.embeddings[index]
+          );
+          similarities.push({ chunk, similarity });
+        }
+      });
+    }
+  );
 
   // Sort by similarity and return top K chunks
   return similarities
@@ -136,6 +139,7 @@ export async function POST(request: Request) {
     let contextPrompt = message;
     if (relevantContext.length > 0) {
       const contextText = relevantContext.join("\n\n");
+      console.log(contextText);
       contextPrompt = `Context information:
 ${contextText}
 
@@ -166,7 +170,10 @@ Question: ${message}`;
             : MessageRoles.MODEL,
         parts: [{ text: item.parts }],
       })),
-      systemInstruction: systemInstruction !== "You are a helpful AI assistant." ? systemInstruction : undefined,
+      systemInstruction:
+        systemInstruction !== "You are a helpful AI assistant."
+          ? systemInstruction
+          : undefined,
       generationConfig: {
         maxOutputTokens: maxTokens,
         temperature: temperature,
@@ -185,5 +192,3 @@ Question: ${message}`;
     );
   }
 }
-
-

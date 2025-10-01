@@ -1,8 +1,8 @@
-# Helix - AI Chatbot Platform Project Structure
+# Boltz - AI Chatbot Platform Project Structure
 
 ## Overview
 
-This document outlines the structure and components of the Helix AI chatagent platform, modeled after Helix.co. The platform allows users to create custom AI chatagents powered by various AI models including Google Gemini, GPT-4, Claude, and Mistral.
+This document outlines the structure and components of the Boltz AI chatagent platform, modeled after Boltz.co. The platform allows users to create custom AI chatagents powered by various AI models including Google Gemini, GPT-4, Claude, and Mistral.
 
 ## Frontend Architecture
 
@@ -19,7 +19,7 @@ This document outlines the structure and components of the Helix AI chatagent pl
 ### Directory Structure
 
 ```
-Helix/
+Boltz/
 ├── src/
 │   ├── app/                    # Next.js app directory
 │   │   ├── dashboard/          # Dashboard pages

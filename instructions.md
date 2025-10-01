@@ -1,4 +1,4 @@
-# Helix - AI Chatbot Platform
+# Boltz - AI Chatbot Platform
 
 ## Features & Specifications
 

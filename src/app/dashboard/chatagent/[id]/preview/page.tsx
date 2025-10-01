@@ -9,13 +9,8 @@ import {
   EyeIcon,
 } from "@heroicons/react/24/outline";
 import { BotCustomizer } from "@/components/chatbot/BotCustomizer";
-import { BotPlayground } from "@/components/chatbot/BotPlayground";
-import { Tab } from "@headlessui/react";
-import {
-  ChatbotBubbleStyle,
-  ChatbotIconSize,
-  ChatbotPosition,
-} from "@/types/chatbot";
+import { AgentPlayground } from "@/components/chatbot/AgentPlayground";
+import { Tab, TabGroup, TabList, TabPanels, TabPanel } from "@headlessui/react";
 
 export default function ChatbotPreviewPage({
   params,
@@ -30,44 +25,21 @@ export default function ChatbotPreviewPage({
   const chatagent = {
     id,
     name: "Customer Support Bot",
-    description: "A helpful assistant for customer inquiries",
-    model: "Google Gemini",
-    welcomeMessage: "Hello! How can I help you today?",
-    primaryColor: "#6366F1",
-    avatar: "robot",
-    position: ChatbotPosition.BOTTOM_LEFT,
-    iconSize: ChatbotIconSize.LARGE,
-    bubbleStyle: ChatbotBubbleStyle.ROUNDED,
   };
-
-  const [botConfig, setBotConfig] = useState({
-    name: chatagent.name,
-    welcomeMessage: chatagent.welcomeMessage,
-    primaryColor: chatagent.primaryColor,
-    avatar: chatagent.avatar,
-    position: chatagent.position,
-    iconSize: chatagent.iconSize,
-    bubbleStyle: chatagent.bubbleStyle,
-  });
 
   const [showSavedMessage, setShowSavedMessage] = useState(false);
 
-  const handleSaveConfig = (config: any) => {
-    setBotConfig(config);
+  const handleSaveConfig = () => {
     setShowSavedMessage(true);
     setTimeout(() => setShowSavedMessage(false), 3000);
   };
 
   const embedCode = `<script>
   window.BOLTZ_CONFIG = {
-    botId: "${id}",
-    position: "${botConfig.position}",
-    iconSize: "${botConfig.iconSize}",
-    bubbleStyle: "${botConfig.bubbleStyle}",
-    primaryColor: "${botConfig.primaryColor}"
+    id: "${id}",
   };
 </script>
-<script src="https://cdn.Helix/widget.js" async></script>`;
+<script src="${window.location.origin}/widget.js" async></script>`;
 
   return (
     <div className="px-4 sm:px-6 lg:px-8 py-8">
@@ -123,8 +95,8 @@ export default function ChatbotPreviewPage({
         </div>
       )}
 
-      <Tab.Group>
-        <Tab.List className="flex space-x-1 rounded-xl bg-primary-100 p-1 mb-8">
+      <TabGroup>
+        <TabList className="flex space-x-1 rounded-xl bg-primary-100 p-1 mb-8">
           <Tab
             className={({ selected }) =>
               `w-full rounded-lg py-2.5 text-sm font-medium leading-5 
@@ -159,28 +131,17 @@ export default function ChatbotPreviewPage({
               }`
             }
           >
-            {/* FIXME:  */}
             Installation
           </Tab>
-        </Tab.List>
-        <Tab.Panels>
-          <Tab.Panel>
-            <BotCustomizer
-              name="Kewnu"
-              data={botConfig}
-              onSave={handleSaveConfig}
-            />
-          </Tab.Panel>
-          <Tab.Panel>
-            <BotPlayground
-              botId={id}
-              botName={chatagent.name}
-              model={chatagent.model}
-              // fix me, add actual appearance
-              appearance={botConfig}
-            />
-          </Tab.Panel>
-          <Tab.Panel>
+        </TabList>
+        <TabPanels>
+          <TabPanel>
+            <BotCustomizer onSave={handleSaveConfig} />
+          </TabPanel>
+          <TabPanel>
+            <AgentPlayground />
+          </TabPanel>
+          <TabPanel>
             <div className="bg-white shadow rounded-lg overflow-hidden">
               <div className="px-4 py-5 sm:p-6">
                 <h3 className="text-lg leading-6 font-medium text-gray-900">
@@ -217,27 +178,28 @@ export default function ChatbotPreviewPage({
                   </h4>
                   <ul className="mt-3 list-disc list-inside text-sm text-gray-500 space-y-1">
                     <li>
-                      The script automatically adapts to your website's theme
+                      The script automatically adapts to your website&apos;s
+                      theme
                     </li>
                     <li>
-                      Your chatagent will use the customizations you've set in
-                      the Customize tab
+                      Your chatagent will use the customizations you&apos;ve set
+                      in the Customize tab
                     </li>
                     <li>
                       The chatagent will appear on all pages where you include
                       this script
                     </li>
                     <li>
-                      You can update your chatagent's behavior and appearance
-                      anytime from this dashboard
+                      You can update your chatagent&apos;s behavior and
+                      appearance anytime from this dashboard
                     </li>
                   </ul>
                 </div>
               </div>
             </div>
-          </Tab.Panel>
-        </Tab.Panels>
-      </Tab.Group>
+          </TabPanel>
+        </TabPanels>
+      </TabGroup>
     </div>
   );
 }

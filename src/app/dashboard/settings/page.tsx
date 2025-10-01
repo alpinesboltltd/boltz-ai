@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Spinner } from "@/components/common/Spinner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import Image from "next/image";
 
 export default function SettingsPage() {
   const [loading, setLoading] = useState(false);
@@ -15,7 +16,7 @@ export default function SettingsPage() {
     email: "john.doe@example.com",
     company: "Acme Inc.",
     role: "Marketing Manager",
-    avatar: "https://via.placeholder.com/150",
+    avatar: "/images/logo.webp",
     notifications: {
       email: true,
       push: true,
@@ -192,7 +193,9 @@ export default function SettingsPage() {
                 <form onSubmit={handleProfileSubmit} className="mt-6 space-y-6">
                   <div className="flex items-center">
                     <div className="h-20 w-20 rounded-full overflow-hidden bg-gray-100">
-                      <img
+                      <Image
+                        width={40}
+                        height={40}
                         src={userData.avatar}
                         alt="Profile"
                         className="h-full w-full object-cover"
@@ -603,9 +606,16 @@ export default function SettingsPage() {
                     />
                     <button
                       type="button"
-                      onClick={() => {
-                        navigator.clipboard.writeText(userData.apiKey);
-                        alert("API key copied to clipboard!");
+                      onClick={async () => {
+                        try {
+                          await navigator.clipboard.writeText(userData.apiKey);
+                          alert("API key copied to clipboard!");
+                        } catch (err) {
+                          console.error("Failed to copy:", err);
+                          alert(
+                            "Failed to copy API key. Please copy manually."
+                          );
+                        }
                       }}
                       className="inline-flex items-center px-3 py-2 border border-l-0 border-gray-300 bg-gray-50 text-gray-500 rounded-r-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
                     >

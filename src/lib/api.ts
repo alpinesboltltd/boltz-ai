@@ -9,7 +9,62 @@ import {
   TrainingData,
 } from "@/types/agent";
 import { ChatMessage, Conversation } from "@/types/conversations";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
+import {
+  AgentActions,
+  UpdateActionsRequest,
+  ApiFunction,
+  CustomAction,
+} from "@/types/actions";
+import { PlaygroundConfig } from "@/types/agent";
+
+// Payload Types
+export interface CreateAgentPayload {
+  name: string;
+  description: string;
+  agent_type: string; // could refine with AgentType but keep string to match backend
+  ai_model: string;
+  ai_provider: string;
+  credits_per_1k: number;
+  status?: string;
+}
+
+export type UpdateAgentPayload = Partial<CreateAgentPayload> & { id?: string };
+
+export interface UpdateAppearancePayload {
+  primary_color?: string;
+  font_family?: string;
+  chat_icon?: string;
+  welcome_message?: string;
+  position?: string;
+  icon_size?: string;
+  bubble_style?: string;
+}
+
+export interface AddSourcePayload {
+  type: string;
+  url?: string;
+  content?: string;
+  title?: string;
+}
+
+export type CreateCustomActionPayload = Omit<
+  CustomAction,
+  "id" | "created_at" | "updated_at" | "isBuiltIn"
+>;
+
+export type CreateApiFunctionPayload = Omit<
+  ApiFunction,
+  "id" | "created_at" | "updated_at"
+>;
+
+export interface CreateWorkflowPayload {
+  name: string;
+  description?: string;
+  steps: Array<{ id: string; type: string; config: Record<string, unknown> }>;
+}
+
+export type UpdatePlaygroundConfigPayload = Partial<PlaygroundConfig>;
 
 // Create axios instance with default config
 const api = axios.create({
@@ -84,13 +139,19 @@ export const agentsAPI = {
     return response.data;
   },
 
-  create: async (data: any) => {
-    const response = await api.post("/chatagents", data);
+  create: async (data: CreateAgentPayload) => {
+    const response: AxiosResponse<{ data: Agent }> = await api.post(
+      "/chatagents",
+      data
+    );
     return response.data;
   },
 
-  update: async (id: string, data: any) => {
-    const response = await api.put(`/chatagents/${id}`, data);
+  update: async (id: string, data: UpdateAgentPayload) => {
+    const response: AxiosResponse<{ data: Agent }> = await api.put(
+      `/chatagents/${id}`,
+      data
+    );
     return response.data;
   },
 
@@ -110,8 +171,11 @@ export const agentsAPI = {
     return response.data;
   },
 
-  updateAppearance: async (id: string, data: any) => {
-    const response = await api.put(`/chatagents/${id}/appearance`, data);
+  updateAppearance: async (id: string, data: UpdateAppearancePayload) => {
+    const response: AxiosResponse<{ data: AgentAppearance }> = await api.put(
+      `/chatagents/${id}/appearance`,
+      data
+    );
     return response.data;
   },
 
@@ -125,8 +189,11 @@ export const agentsAPI = {
     return response.data;
   },
 
-  addSource: async (id: string, data: any) => {
-    const response = await api.post(`/chatagents/${id}/sources`, data);
+  addSource: async (id: string, data: AddSourcePayload) => {
+    const response: AxiosResponse<{ data: unknown }> = await api.post(
+      `/chatagents/${id}/sources`,
+      data
+    );
     return response.data;
   },
 
@@ -135,26 +202,44 @@ export const agentsAPI = {
     return response.data;
   },
 
-  updateActions: async (id: string, data: any) => {
-    const response = await api.put(`/chatagents/${id}/actions`, data);
+  updateActions: async (id: string, data: UpdateActionsRequest) => {
+    const response: AxiosResponse<{ data: AgentActions }> = await api.put(
+      `/chatagents/${id}/actions`,
+      data
+    );
     return response.data;
   },
 
   // Create custom action
-  createCustomAction: async (id: string, action: any) => {
-    const response = await api.post(`/chatagents/${id}/actions/custom`, action);
+  createCustomAction: async (id: string, action: CreateCustomActionPayload) => {
+    const response: AxiosResponse<{ data: CustomAction }> = await api.post(
+      `/chatagents/${id}/actions/custom`,
+      action
+    );
     return response.data;
   },
 
   // Create API function
-  createApiFunction: async (id: string, apiFunction: any) => {
-    const response = await api.post(`/chatagents/${id}/actions/api-functions`, apiFunction);
+  createApiFunction: async (
+    id: string,
+    apiFunction: CreateApiFunctionPayload
+  ) => {
+    const response: AxiosResponse<{ data: ApiFunction }> = await api.post(
+      `/chatagents/${id}/actions/api-functions`,
+      apiFunction
+    );
     return response.data;
   },
 
   // Create sequential workflow
-  createSequentialWorkflow: async (id: string, workflow: any) => {
-    const response = await api.post(`/chatagents/${id}/actions/workflows`, workflow);
+  createSequentialWorkflow: async (
+    id: string,
+    workflow: CreateWorkflowPayload
+  ) => {
+    const response: AxiosResponse<{ data: unknown }> = await api.post(
+      `/chatagents/${id}/actions/workflows`,
+      workflow
+    );
     return response.data;
   },
 
@@ -166,7 +251,9 @@ export const agentsAPI = {
 
   // Toggle action status
   toggleActionStatus: async (id: string, actionId: string) => {
-    const response = await api.patch(`/chatagents/${id}/actions/${actionId}/toggle`);
+    const response = await api.patch(
+      `/chatagents/${id}/actions/${actionId}/toggle`
+    );
     return response.data;
   },
 
@@ -181,16 +268,26 @@ export const agentsAPI = {
     return response.data;
   },
 
-  updatePlaygroundConfig: async (id: string, data: any) => {
-    const response = await api.put(`/chatagents/${id}/playground`, data);
+  updatePlaygroundConfig: async (
+    id: string,
+    data: UpdatePlaygroundConfigPayload
+  ) => {
+    const response: AxiosResponse<{ data: PlaygroundConfig }> = await api.put(
+      `/chatagents/${id}/playground`,
+      data
+    );
     return response.data;
   },
 };
 
 // Integrations API
 export const integrationsAPI = {
-  connect: async (chatagentId: string, platform: string, data: any = {}) => {
-    const response = await api.post(
+  connect: async (
+    chatagentId: string,
+    platform: string,
+    data: Record<string, unknown> = {}
+  ) => {
+    const response: AxiosResponse<{ data: unknown }> = await api.post(
       `/chatagents/${chatagentId}/integrations/${platform}`,
       data
     );

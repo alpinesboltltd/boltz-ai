@@ -5,7 +5,12 @@ import { BotPreview } from "./BotPreview";
 import { useParams } from "next/navigation";
 import { useAgentStore } from "@/store/agentStore";
 import { useAgentDetailStore } from "@/store/agentDetailStore";
-import { AgentAppearance } from "@/types/agent";
+import {
+  AgentAppearance,
+  AgentBubbleStyle,
+  AgentIconSize,
+  AgentPosition,
+} from "@/types/agent";
 
 interface BotCustomizerProps {
   onSave: () => void;
@@ -14,15 +19,16 @@ interface BotCustomizerProps {
 export function BotCustomizer({ onSave }: BotCustomizerProps) {
   const agentId = useParams().id as string;
   const { getAgent } = useAgentStore();
-  const { appearance, fetchAppearance, updateAppearance } = useAgentDetailStore();
+  const { appearance, fetchAppearance, updateAppearance } =
+    useAgentDetailStore();
   const [name, setName] = useState("Agent");
-  const [config, setConfig] = useState<AgentAppearance>({
-    position: "bottom-right",
-    icon_size: "medium",
-    bubble_style: "rounded",
+  const [config, setConfig] = useState<Partial<AgentAppearance>>({
+    position: "bottom-right" as AgentPosition,
+    icon_size: "medium" as AgentIconSize,
+    bubble_style: "round" as AgentBubbleStyle,
     chat_icon: "default",
     primary_color: "#3B82F6",
-    welcome_message: "Hello! How can I help you today?"
+    welcome_message: "Hello! How can I help you today?",
   });
 
   useEffect(() => {
@@ -118,8 +124,8 @@ export function BotCustomizer({ onSave }: BotCustomizerProps) {
                   type="radio"
                   name="bubbleStyle"
                   value="rounded"
-                  checked={config.bubble_style === "rounded"}
-                  onChange={() => handleChange("bubbleStyle", "rounded")}
+                  checked={config.bubble_style === AgentBubbleStyle.ROUND}
+                  onChange={() => handleChange("bubbleStyle", "round")}
                   className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300"
                 />
                 <span className="ml-2 text-sm text-gray-700">Rounded</span>

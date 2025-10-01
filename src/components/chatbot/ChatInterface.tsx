@@ -4,7 +4,6 @@ import {
   XMarkIcon,
   SpeakerWaveIcon,
 } from "@heroicons/react/24/outline";
-import { VoiceRecorder } from "@/components/chatagent";
 import {
   CalendarWidget,
   PaymentMethodWidget,
@@ -12,6 +11,8 @@ import {
   SubscriptionWidget,
   BankTransferWidget,
 } from "./InteractiveWidgets";
+import Image from "next/image";
+import VoiceRecorder from "./VoiceRecorder";
 
 interface Message {
   id: number;
@@ -387,7 +388,9 @@ export default function ChatInterface({
 
     if (avatarStyle === "custom" && avatarImage) {
       return (
-        <img
+        <Image
+          height={40}
+          width={40}
           src={avatarImage}
           alt="Bot avatar"
           className="h-full w-full object-cover"

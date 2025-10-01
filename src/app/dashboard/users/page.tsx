@@ -1,22 +1,23 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { Spinner } from '@/components/common/Spinner';
-import { 
-  UserIcon, 
-  PencilIcon, 
-  TrashIcon, 
-  EnvelopeIcon, 
+import { useState, useEffect } from "react";
+import { Spinner } from "@/components/common/Spinner";
+import {
+  UserIcon,
+  PencilIcon,
+  TrashIcon,
+  EnvelopeIcon,
   PhoneIcon,
-  UserPlusIcon
-} from '@heroicons/react/24/outline';
+  UserPlusIcon,
+} from "@heroicons/react/24/outline";
+import Image from "next/image";
 
 interface User {
   id: string;
   name: string;
   email: string;
   role: string;
-  status: 'active' | 'inactive';
+  status: "active" | "inactive";
   lastActive: string;
   phone?: string;
   avatar?: string;
@@ -25,24 +26,24 @@ interface User {
 export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [roleFilter, setRoleFilter] = useState('all');
-  const [statusFilter, setStatusFilter] = useState('all');
+  const [searchQuery, setSearchQuery] = useState("");
+  const [roleFilter, setRoleFilter] = useState("all");
+  const [statusFilter, setStatusFilter] = useState("all");
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [userToDelete, setUserToDelete] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
-  
+
   useEffect(() => {
     async function loadUsers() {
       try {
         // In production, this would call the real API
         // const response = await fetch('/api/users');
         // const data = await response.json();
-        
+
         // For development, use mock data
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
-        const roles = ['Admin', 'Editor', 'Viewer'];
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+
+        const roles = ["Admin", "Editor", "Viewer"];
         const mockUsers = Array.from({ length: 20 }, (_, i) => {
           const roleIndex = i % 3;
           return {
@@ -50,59 +51,64 @@ export default function UsersPage() {
             name: `User ${i + 1}`,
             email: `user${i + 1}@example.com`,
             role: roles[roleIndex],
-            status: i % 5 === 0 ? 'inactive' : 'active',
-            lastActive: new Date(Date.now() - Math.floor(Math.random() * 30) * 24 * 60 * 60 * 1000).toISOString(),
+            status: i % 5 === 0 ? "inactive" : "active",
+            lastActive: new Date(
+              Date.now() - Math.floor(Math.random() * 30) * 24 * 60 * 60 * 1000
+            ).toISOString(),
             phone: `+1 ${Math.floor(Math.random() * 900) + 100}-${Math.floor(Math.random() * 900) + 100}-${Math.floor(Math.random() * 9000) + 1000}`,
-            avatar: `https://i.pravatar.cc/150?u=${i}`
+            avatar: `https://i.pravatar.cc/150?u=${i}`,
           } as User;
         });
-        
+
         setUsers(mockUsers);
       } catch (error) {
-        console.error('Failed to load users:', error);
+        console.error("Failed to load users:", error);
       } finally {
         setLoading(false);
       }
     }
-    
+
     loadUsers();
   }, []);
-  
+
   const handleDeleteUser = async () => {
     if (!userToDelete) return;
-    
+
     setIsDeleting(true);
-    
+
     try {
       // In production, this would call the real API
       // await fetch(`/api/users/${userToDelete}`, {
       //   method: 'DELETE'
       // });
-      
+
       // For development, simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      setUsers(users.filter(user => user.id !== userToDelete));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      setUsers(users.filter((user) => user.id !== userToDelete));
       setShowDeleteModal(false);
     } catch (error) {
-      console.error('Failed to delete user:', error);
+      console.error("Failed to delete user:", error);
     } finally {
       setIsDeleting(false);
       setUserToDelete(null);
     }
   };
-  
-  const filteredUsers = users.filter(user => {
-    const matchesSearch = 
-      user.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+
+  const filteredUsers = users.filter((user) => {
+    const matchesSearch =
+      user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       user.email.toLowerCase().includes(searchQuery.toLowerCase());
-    
-    const matchesRole = roleFilter === 'all' || user.role.toLowerCase() === roleFilter.toLowerCase();
-    const matchesStatus = statusFilter === 'all' || user.status === statusFilter;
-    
+
+    const matchesRole =
+      roleFilter === "all" ||
+      user.role.toLowerCase() === roleFilter.toLowerCase();
+    const matchesStatus =
+      statusFilter === "all" || user.status === statusFilter;
+
     return matchesSearch && matchesRole && matchesStatus;
   });
-  
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -110,14 +116,15 @@ export default function UsersPage() {
       </div>
     );
   }
-  
+
   return (
     <div className="px-4 sm:px-6 lg:px-8 py-8">
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
           <h1 className="text-2xl font-semibold text-gray-900">Users</h1>
           <p className="mt-2 text-sm text-gray-700">
-            A list of all users in your account including their name, email, role and status.
+            A list of all users in your account including their name, email,
+            role and status.
           </p>
         </div>
         <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
@@ -130,7 +137,7 @@ export default function UsersPage() {
           </button>
         </div>
       </div>
-      
+
       {/* Filters */}
       <div className="mt-8 flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
         <div className="flex flex-col sm:flex-row sm:items-center space-y-4 sm:space-y-0 sm:space-x-4">
@@ -140,8 +147,18 @@ export default function UsersPage() {
             </label>
             <div className="relative">
               <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                <svg className="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                  <path fillRule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clipRule="evenodd" />
+                <svg
+                  className="h-5 w-5 text-gray-400"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z"
+                    clipRule="evenodd"
+                  />
                 </svg>
               </div>
               <input
@@ -155,7 +172,7 @@ export default function UsersPage() {
               />
             </div>
           </div>
-          
+
           <div className="flex space-x-4">
             <div>
               <select
@@ -171,7 +188,7 @@ export default function UsersPage() {
                 <option value="viewer">Viewer</option>
               </select>
             </div>
-            
+
             <div>
               <select
                 id="status-filter"
@@ -187,12 +204,12 @@ export default function UsersPage() {
             </div>
           </div>
         </div>
-        
+
         <div className="text-sm text-gray-500">
           Showing {filteredUsers.length} of {users.length} users
         </div>
       </div>
-      
+
       {/* Users Table */}
       <div className="mt-8 flex flex-col">
         <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -201,19 +218,34 @@ export default function UsersPage() {
               <table className="min-w-full divide-y divide-gray-300">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
+                    <th
+                      scope="col"
+                      className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+                    >
                       User
                     </th>
-                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                    <th
+                      scope="col"
+                      className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                    >
                       Role
                     </th>
-                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                    <th
+                      scope="col"
+                      className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                    >
                       Status
                     </th>
-                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                    <th
+                      scope="col"
+                      className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                    >
                       Last Active
                     </th>
-                    <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-6">
+                    <th
+                      scope="col"
+                      className="relative py-3.5 pl-3 pr-4 sm:pr-6"
+                    >
                       <span className="sr-only">Actions</span>
                     </th>
                   </tr>
@@ -225,7 +257,13 @@ export default function UsersPage() {
                         <div className="flex items-center">
                           <div className="h-10 w-10 flex-shrink-0">
                             {user.avatar ? (
-                              <img className="h-10 w-10 rounded-full" src={user.avatar} alt="" />
+                              <Image
+                                height={40}
+                                width={40}
+                                className="h-10 w-10 rounded-full"
+                                src={user.avatar}
+                                alt={user.name}
+                              />
                             ) : (
                               <div className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
                                 <UserIcon className="h-6 w-6 text-gray-400" />
@@ -233,29 +271,35 @@ export default function UsersPage() {
                             )}
                           </div>
                           <div className="ml-4">
-                            <div className="font-medium text-gray-900">{user.name}</div>
+                            <div className="font-medium text-gray-900">
+                              {user.name}
+                            </div>
                             <div className="text-gray-500">{user.email}</div>
                           </div>
                         </div>
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        <span className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${
-                          user.role === 'Admin' 
-                            ? 'bg-purple-100 text-purple-800' 
-                            : user.role === 'Editor'
-                              ? 'bg-blue-100 text-blue-800'
-                              : 'bg-green-100 text-green-800'
-                        }`}>
+                        <span
+                          className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${
+                            user.role === "Admin"
+                              ? "bg-purple-100 text-purple-800"
+                              : user.role === "Editor"
+                                ? "bg-blue-100 text-blue-800"
+                                : "bg-green-100 text-green-800"
+                          }`}
+                        >
                           {user.role}
                         </span>
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        <span className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${
-                          user.status === 'active' 
-                            ? 'bg-green-100 text-green-800' 
-                            : 'bg-red-100 text-red-800'
-                        }`}>
-                          {user.status === 'active' ? 'Active' : 'Inactive'}
+                        <span
+                          className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${
+                            user.status === "active"
+                              ? "bg-green-100 text-green-800"
+                              : "bg-red-100 text-red-800"
+                          }`}
+                        >
+                          {user.status === "active" ? "Active" : "Inactive"}
                         </span>
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
@@ -307,27 +351,41 @@ export default function UsersPage() {
           </div>
         </div>
       </div>
-      
+
       {/* Delete Confirmation Modal */}
       {showDeleteModal && (
         <div className="fixed z-10 inset-0 overflow-y-auto">
           <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div className="fixed inset-0 transition-opacity" aria-hidden="true">
+            <div
+              className="fixed inset-0 transition-opacity"
+              aria-hidden="true"
+            >
               <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
             </div>
-            
-            <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-            
+
+            <span
+              className="hidden sm:inline-block sm:align-middle sm:h-screen"
+              aria-hidden="true"
+            >
+              &#8203;
+            </span>
+
             <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
               <div>
                 <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100">
-                  <TrashIcon className="h-6 w-6 text-red-600" aria-hidden="true" />
+                  <TrashIcon
+                    className="h-6 w-6 text-red-600"
+                    aria-hidden="true"
+                  />
                 </div>
                 <div className="mt-3 text-center sm:mt-5">
-                  <h3 className="text-lg leading-6 font-medium text-gray-900">Delete User</h3>
+                  <h3 className="text-lg leading-6 font-medium text-gray-900">
+                    Delete User
+                  </h3>
                   <div className="mt-2">
                     <p className="text-sm text-gray-500">
-                      Are you sure you want to delete this user? This action cannot be undone.
+                      Are you sure you want to delete this user? This action
+                      cannot be undone.
                     </p>
                   </div>
                 </div>
@@ -339,7 +397,7 @@ export default function UsersPage() {
                   onClick={handleDeleteUser}
                   disabled={isDeleting}
                 >
-                  {isDeleting ? <Spinner size="sm" color="white" /> : 'Delete'}
+                  {isDeleting ? <Spinner size="sm" color="white" /> : "Delete"}
                 </button>
                 <button
                   type="button"
