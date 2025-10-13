@@ -3,9 +3,9 @@
 import { useState, useRef } from "react";
 import { Spinner } from "@/components/common/Spinner";
 
-interface KnowledgeBaseManagerProps {
-  chatagentId: string;
-}
+// interface KnowledgeBaseManagerProps {
+//   chatagentId: string;
+// }
 
 interface Document {
   id: string;
@@ -30,9 +30,7 @@ interface FAQ {
   answer: string;
 }
 
-export default function KnowledgeBaseManager({
-  chatagentId,
-}: KnowledgeBaseManagerProps) {
+export default function KnowledgeBaseManager() {
   const [documents, setDocuments] = useState<Document[]>([]);
   const [websites, setWebsites] = useState<Website[]>([]);
   const [faqs, setFaqs] = useState<FAQ[]>([]);

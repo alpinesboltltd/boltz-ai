@@ -1,12 +1,10 @@
 import { SparklesIcon } from "@heroicons/react/24/outline";
-import Topic from "../ui/Topic";
 import {
   Card,
   CardHeader,
   CardTitle,
   CardDescription,
 } from "@/components/ui/Card";
-import VideoPlayer from "../media/VideoPlayer";
 import { CompWork } from "../ui/CompWork";
 
 export function Features() {
@@ -18,7 +16,8 @@ export function Features() {
             Advanced Features & Integrations
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Connect with your existing tools and unlock powerful capabilities for your AI agents.
+            Connect with your existing tools and unlock powerful capabilities
+            for your AI agents.
           </p>
         </div>
 
@@ -57,15 +56,24 @@ export function Features() {
         <Card className="p-8">
           <div className="flex flex-col lg:flex-row items-start gap-8">
             <div className="lg:w-1/3">
-              <CardTitle text="Works with Your Favorite Tools" className="text-2xl mb-4" />
-              <CardDescription text="Seamlessly integrate with payment processors, communication platforms, and business tools to create a unified customer experience." className="text-lg" />
+              <CardTitle
+                text="Works with Your Favorite Tools"
+                className="text-2xl mb-4"
+              />
+              <CardDescription
+                text="Seamlessly integrate with payment processors, communication platforms, and business tools to create a unified customer experience."
+                className="text-lg"
+              />
             </div>
             <div className="lg:w-2/3 grid grid-cols-2 md:grid-cols-3 gap-4">
               <CompWork text="Stripe" src="/images/stripe.png" />
               <CompWork text="Paystack" src="/images/paystack.png" />
               <CompWork text="WhatsApp" src="/images/whatsapp.png" />
               <CompWork text="Messenger" src="/images/messenger.png" />
-              <CompWork text="Google Calendar" src="/images/googlecalendar.png" />
+              <CompWork
+                text="Google Calendar"
+                src="/images/googlecalendar.png"
+              />
               <CompWork text="Cal.com" src="/images/cal.png" />
             </div>
           </div>

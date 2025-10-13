@@ -1,17 +1,18 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useState } from "react";
 import { Spinner } from "@/components/common/Spinner";
 
 interface FacebookIntegrationModalProps {
-  chatagentId: string;
+  chatagentId?: string;
   isOpen: boolean;
   onClose: () => void;
   onSuccess: () => void;
 }
 
 export default function FacebookIntegrationModal({
-  chatagentId,
+  // chatagentId,
   isOpen,
   onClose,
   onSuccess,
@@ -43,7 +44,7 @@ export default function FacebookIntegrationModal({
     }
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
     setLoading(true);
     setError("");
@@ -209,11 +210,11 @@ export default function FacebookIntegrationModal({
           </h4>
           <ol className="mt-2 text-xs text-gray-500 list-decimal list-inside space-y-1">
             <li>Go to your Facebook Page</li>
-            <li>Click on "About" in the left sidebar</li>
+            <li>Click on &apos;About&apos; in the left sidebar</li>
             <li>Scroll down to find your Page ID</li>
             <li>
-              For the access token, you'll need to create a Facebook App in the
-              Meta for Developers portal
+              For the access token, you&#39;ll need to create a Facebook App in
+              the Meta for Developers portal
             </li>
           </ol>
           <p className="mt-2 text-xs text-gray-500">

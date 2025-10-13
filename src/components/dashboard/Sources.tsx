@@ -2,16 +2,15 @@
 
 import { useState, useRef } from "react";
 import { useParams } from "next/navigation";
-import { 
-  DocumentTextIcon, 
-  GlobeAltIcon, 
-  PlusIcon, 
-  TrashIcon, 
+import {
+  DocumentTextIcon,
+  GlobeAltIcon,
+  TrashIcon,
   CloudArrowUpIcon,
   ChatBubbleLeftRightIcon,
   DocumentIcon,
   LinkIcon,
-  QuestionMarkCircleIcon
+  QuestionMarkCircleIcon,
 } from "@heroicons/react/24/outline";
 
 interface TrainingSource {
@@ -37,12 +36,19 @@ interface VectorStore {
   };
 }
 
+enum ActiveTab {
+  document = "document",
+  website = "website",
+  text = "text",
+  qa = "qa",
+}
+
 export function Sources() {
   const params = useParams();
-  const agentId = params?.id as string || 'default';
+  const agentId = (params?.id as string) || "default";
   const [sources, setSources] = useState<TrainingSource[]>([]);
   const [vectorStore, setVectorStore] = useState<VectorStore>({});
-  const [activeTab, setActiveTab] = useState<"document" | "website" | "text" | "qa">("document");
+  const [activeTab, setActiveTab] = useState<ActiveTab>(ActiveTab.document);
   const [isProcessing, setIsProcessing] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -56,26 +62,29 @@ export function Sources() {
 
   const generateEmbeddings = async (text: string): Promise<number[]> => {
     try {
-      const response = await fetch('/api/embeddings', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text })
+      const response = await fetch("/api/embeddings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text }),
       });
       const data = await response.json();
       return data.embedding || [];
     } catch (error) {
-      console.error('Error generating embeddings:', error);
+      console.error("Error generating embeddings:", error);
       return [];
     }
   };
 
   const chunkText = (text: string, maxChunkSize: number = 1000): string[] => {
-    const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
+    const sentences = text.split(/[.!?]+/).filter((s) => s.trim().length > 0);
     const chunks: string[] = [];
     let currentChunk = "";
 
     for (const sentence of sentences) {
-      if (currentChunk.length + sentence.length > maxChunkSize && currentChunk.length > 0) {
+      if (
+        currentChunk.length + sentence.length > maxChunkSize &&
+        currentChunk.length > 0
+      ) {
         chunks.push(currentChunk.trim());
         currentChunk = sentence;
       } else {
@@ -92,10 +101,10 @@ export function Sources() {
 
   const processAndVectorize = async (source: TrainingSource) => {
     setIsProcessing(true);
-    
+
     try {
       let textToProcess = "";
-      
+
       if (source.type === "document" && source.file) {
         textToProcess = await extractTextFromFile(source.file);
       } else if (source.type === "website" && source.url) {
@@ -117,32 +126,39 @@ export function Sources() {
       // Store in memory vector store
       const newVectorStore = {
         ...vectorStore,
-        [source.id]: { chunks, embeddings }
+        [source.id]: { chunks, embeddings },
       };
       setVectorStore(newVectorStore);
 
       // Send vector data to chat API for storage
-      await fetch('/api/chat', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
+      await fetch("/api/chat", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
           agentId: agentId,
-          vectorStore: newVectorStore 
-        })
+          vectorStore: newVectorStore,
+        }),
       });
 
       // Update source status
-      setSources(prev => prev.map(s => 
-        s.id === source.id 
-          ? { ...s, status: "completed", vectorized: true, chunks, embeddings }
-          : s
-      ));
-
+      setSources((prev) =>
+        prev.map((s) =>
+          s.id === source.id
+            ? {
+                ...s,
+                status: "completed",
+                vectorized: true,
+                chunks,
+                embeddings,
+              }
+            : s
+        )
+      );
     } catch (error) {
-      console.error('Error processing source:', error);
-      setSources(prev => prev.map(s => 
-        s.id === source.id ? { ...s, status: "error" } : s
-      ));
+      console.error("Error processing source:", error);
+      setSources((prev) =>
+        prev.map((s) => (s.id === source.id ? { ...s, status: "error" } : s))
+      );
     } finally {
       setIsProcessing(false);
     }
@@ -156,7 +172,7 @@ export function Sources() {
         resolve(text);
       };
       reader.onerror = reject;
-      
+
       if (file.type === "text/plain") {
         reader.readAsText(file);
       } else if (file.type === "application/pdf") {
@@ -170,15 +186,15 @@ export function Sources() {
 
   const crawlWebsite = async (url: string): Promise<string> => {
     try {
-      const response = await fetch('/api/crawl', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url })
+      const response = await fetch("/api/crawl", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url }),
       });
       const data = await response.json();
       return data.content || "";
     } catch (error) {
-      console.error('Error crawling website:', error);
+      console.error("Error crawling website:", error);
       return "";
     }
   };
@@ -196,10 +212,10 @@ export function Sources() {
         file,
         status: "processing",
         vectorized: false,
-        created_at: new Date().toISOString()
+        created_at: new Date().toISOString(),
       };
 
-      setSources(prev => [...prev, source]);
+      setSources((prev) => [...prev, source]);
       await processAndVectorize(source);
     }
 
@@ -218,10 +234,10 @@ export function Sources() {
       url: websiteUrl,
       status: "processing",
       vectorized: false,
-      created_at: new Date().toISOString()
+      created_at: new Date().toISOString(),
     };
 
-    setSources(prev => [...prev, source]);
+    setSources((prev) => [...prev, source]);
     await processAndVectorize(source);
     setWebsiteUrl("");
   };
@@ -236,10 +252,10 @@ export function Sources() {
       content: textContent,
       status: "processing",
       vectorized: false,
-      created_at: new Date().toISOString()
+      created_at: new Date().toISOString(),
     };
 
-    setSources(prev => [...prev, source]);
+    setSources((prev) => [...prev, source]);
     await processAndVectorize(source);
     setTextContent("");
     setTextTitle("");
@@ -257,18 +273,18 @@ export function Sources() {
       answer: qaAnswer,
       status: "processing",
       vectorized: false,
-      created_at: new Date().toISOString()
+      created_at: new Date().toISOString(),
     };
 
-    setSources(prev => [...prev, source]);
+    setSources((prev) => [...prev, source]);
     await processAndVectorize(source);
     setQaQuestion("");
     setQaAnswer("");
   };
 
   const handleDeleteSource = (id: string) => {
-    setSources(prev => prev.filter(s => s.id !== id));
-    setVectorStore(prev => {
+    setSources((prev) => prev.filter((s) => s.id !== id));
+    setVectorStore((prev) => {
       const newStore = { ...prev };
       delete newStore[id];
       return newStore;
@@ -276,39 +292,54 @@ export function Sources() {
   };
 
   const handleRetrainSource = async (id: string) => {
-    const source = sources.find(s => s.id === id);
+    const source = sources.find((s) => s.id === id);
     if (source) {
-      setSources(prev => prev.map(s => 
-        s.id === id ? { ...s, status: "processing", vectorized: false } : s
-      ));
+      setSources((prev) =>
+        prev.map((s) =>
+          s.id === id ? { ...s, status: "processing", vectorized: false } : s
+        )
+      );
       await processAndVectorize(source);
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "completed": return "bg-green-100 text-green-800";
-      case "processing": return "bg-yellow-100 text-yellow-800";
-      case "error": return "bg-red-100 text-red-800";
-      default: return "bg-gray-100 text-gray-800";
+      case "completed":
+        return "bg-green-100 text-green-800";
+      case "processing":
+        return "bg-yellow-100 text-yellow-800";
+      case "error":
+        return "bg-red-100 text-red-800";
+      default:
+        return "bg-gray-100 text-gray-800";
     }
   };
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case "document": return <DocumentIcon className="h-5 w-5" />;
-      case "website": return <LinkIcon className="h-5 w-5" />;
-      case "text": return <DocumentTextIcon className="h-5 w-5" />;
-      case "qa": return <QuestionMarkCircleIcon className="h-5 w-5" />;
-      default: return <DocumentIcon className="h-5 w-5" />;
+      case "document":
+        return <DocumentIcon className="h-5 w-5" />;
+      case "website":
+        return <LinkIcon className="h-5 w-5" />;
+      case "text":
+        return <DocumentTextIcon className="h-5 w-5" />;
+      case "qa":
+        return <QuestionMarkCircleIcon className="h-5 w-5" />;
+      default:
+        return <DocumentIcon className="h-5 w-5" />;
     }
   };
 
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-xl font-semibold text-gray-900">Training Sources</h2>
-        <p className="text-sm text-gray-600">Upload and manage training materials for your AI agent</p>
+        <h2 className="text-xl font-semibold text-gray-900">
+          Training Sources
+        </h2>
+        <p className="text-sm text-gray-600">
+          Upload and manage training materials for your AI agent
+        </p>
       </div>
 
       {/* Tabs */}
@@ -318,11 +349,11 @@ export function Sources() {
             { key: "document", label: "Documents", icon: DocumentIcon },
             { key: "website", label: "Websites", icon: GlobeAltIcon },
             { key: "text", label: "Text", icon: DocumentTextIcon },
-            { key: "qa", label: "Q&A", icon: ChatBubbleLeftRightIcon }
+            { key: "qa", label: "Q&A", icon: ChatBubbleLeftRightIcon },
           ].map(({ key, label, icon: Icon }) => (
             <button
               key={key}
-              onClick={() => setActiveTab(key as any)}
+              onClick={() => setActiveTab(key as ActiveTab)}
               className={`${
                 activeTab === key
                   ? "border-primary-500 text-primary-600"
@@ -350,7 +381,9 @@ export function Sources() {
                 onChange={(e) => setDocumentFiles(e.target.files)}
                 className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100"
               />
-              <p className="text-xs text-gray-500 mt-1">Supported: TXT, PDF, DOC, DOCX</p>
+              <p className="text-xs text-gray-500 mt-1">
+                Supported: TXT, PDF, DOC, DOCX
+              </p>
             </div>
             <button
               onClick={handleDocumentUpload}
@@ -407,7 +440,9 @@ export function Sources() {
             </div>
             <button
               onClick={handleTextAdd}
-              disabled={!textContent.trim() || !textTitle.trim() || isProcessing}
+              disabled={
+                !textContent.trim() || !textTitle.trim() || isProcessing
+              }
               className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 disabled:opacity-50"
             >
               <DocumentTextIcon className="h-4 w-4 mr-2" />
@@ -450,31 +485,47 @@ export function Sources() {
       {/* Sources List */}
       <div className="bg-white shadow rounded-lg">
         <div className="px-6 py-4 border-b border-gray-200">
-          <h3 className="text-lg font-medium">Training Materials ({sources.length})</h3>
+          <h3 className="text-lg font-medium">
+            Training Materials ({sources.length})
+          </h3>
         </div>
         <div className="divide-y divide-gray-200">
           {sources.length === 0 ? (
             <div className="px-6 py-8 text-center">
-              <p className="text-gray-500">No training materials added yet. Start by uploading documents or adding content above.</p>
+              <p className="text-gray-500">
+                No training materials added yet. Start by uploading documents or
+                adding content above.
+              </p>
             </div>
           ) : (
             sources.map((source) => (
-              <div key={source.id} className="px-6 py-4 flex items-center justify-between">
+              <div
+                key={source.id}
+                className="px-6 py-4 flex items-center justify-between"
+              >
                 <div className="flex items-center space-x-4">
                   <div className="flex-shrink-0 text-gray-400">
                     {getTypeIcon(source.type)}
                   </div>
                   <div>
-                    <h4 className="text-sm font-medium text-gray-900">{source.title}</h4>
+                    <h4 className="text-sm font-medium text-gray-900">
+                      {source.title}
+                    </h4>
                     <div className="flex items-center space-x-4 mt-1">
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(source.status)}`}>
+                      <span
+                        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(source.status)}`}
+                      >
                         {source.status}
                       </span>
                       {source.vectorized && (
-                        <span className="text-xs text-green-600">✓ Vectorized</span>
+                        <span className="text-xs text-green-600">
+                          ✓ Vectorized
+                        </span>
                       )}
                       {source.chunks && (
-                        <span className="text-xs text-gray-500">{source.chunks.length} chunks</span>
+                        <span className="text-xs text-gray-500">
+                          {source.chunks.length} chunks
+                        </span>
                       )}
                     </div>
                     <p className="text-xs text-gray-500 mt-1">
@@ -506,11 +557,16 @@ export function Sources() {
       {/* Vector Store Info */}
       {Object.keys(vectorStore).length > 0 && (
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-          <h4 className="text-sm font-medium text-blue-900 mb-2">Vector Store Status</h4>
+          <h4 className="text-sm font-medium text-blue-900 mb-2">
+            Vector Store Status
+          </h4>
           <p className="text-sm text-blue-700">
-            {Object.keys(vectorStore).length} sources vectorized with {
-              Object.values(vectorStore).reduce((total, store) => total + store.chunks.length, 0)
-            } total chunks in memory.
+            {Object.keys(vectorStore).length} sources vectorized with{" "}
+            {Object.values(vectorStore).reduce(
+              (total, store) => total + store.chunks.length,
+              0
+            )}{" "}
+            total chunks in memory.
           </p>
         </div>
       )}

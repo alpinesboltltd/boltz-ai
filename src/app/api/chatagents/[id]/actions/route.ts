@@ -1,12 +1,18 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextRequest, NextResponse } from "next/server";
-import { AgentActions, CoreAction, SystemAction, CustomAction } from "@/types/actions";
-import fs from 'fs';
-import path from 'path';
+import {
+  AgentActions,
+  CoreAction,
+  SystemAction,
+  CustomAction,
+} from "@/types/actions";
+import fs from "fs";
+import path from "path";
 
 // Mock data loader - replace with real DB in production
 function loadMockData() {
-  const dbPath = path.join(process.cwd(), 'mock-data', 'db.json');
-  const data = JSON.parse(fs.readFileSync(dbPath, 'utf8'));
+  const dbPath = path.join(process.cwd(), "mock-data", "db.json");
+  const data = JSON.parse(fs.readFileSync(dbPath, "utf8"));
   return data;
 }
 
@@ -18,16 +24,16 @@ export async function GET(
 
   try {
     const mockData = loadMockData();
-    
+
     // Get actions for the specific agent
     const coreActions: CoreAction[] = mockData.core_actions || [];
     const systemActions: SystemAction[] = mockData.system_actions || [];
-    const customActions: CustomAction[] = mockData.custom_actions?.filter(
-      (action: CustomAction) => action.agentId === id
-    ) || [];
-    const apiFunctions = mockData.api_functions?.filter(
-      (func: any) => func.agentId === id
-    ) || [];
+    const customActions: CustomAction[] =
+      mockData.custom_actions?.filter(
+        (action: CustomAction) => action.agentId === id
+      ) || [];
+    const apiFunctions =
+      mockData.api_functions?.filter((func: any) => func.agentId === id) || [];
     const integrationProviders = mockData.integration_providers || [];
 
     const actions: AgentActions = {
@@ -42,15 +48,15 @@ export async function GET(
           name: "Slack",
           platform: "slack",
           status: "disconnected",
-          enabled: false
+          enabled: false,
         },
         {
           id: "whatsapp",
           name: "WhatsApp",
           platform: "whatsapp",
           status: "disconnected",
-          enabled: false
-        }
+          enabled: false,
+        },
       ],
       embedSettings: {
         isPublic: false,
@@ -59,18 +65,22 @@ export async function GET(
         customization: {
           theme: "light",
           position: "bottom-right",
-          showBranding: true
-        }
+          showBranding: true,
+        },
       },
       shareSettings: {
         isPublic: false,
-        shareUrl: `https://chat.example.com/${id}`
-      }
+        shareUrl: `https://chat.example.com/${id}`,
+      },
     };
 
     return NextResponse.json({ success: true, data: actions });
   } catch (error) {
-    return NextResponse.json({ error: "Failed to fetch actions" }, { status: 500 });
+    console.log(error);
+    return NextResponse.json(
+      { error: "Failed to fetch actions" },
+      { status: 500 }
+    );
   }
 }
 
@@ -89,7 +99,11 @@ export async function PUT(
       data: body,
     });
   } catch (error) {
-    return NextResponse.json({ error: "Failed to update actions" }, { status: 500 });
+    console.log(error);
+    return NextResponse.json(
+      { error: "Failed to update actions" },
+      { status: 500 }
+    );
   }
 }
 
@@ -109,7 +123,7 @@ export async function POST(
       category: "custom",
       isBuiltIn: false,
       created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
+      updated_at: new Date().toISOString(),
     };
 
     return NextResponse.json({
@@ -118,6 +132,10 @@ export async function POST(
       data: newAction,
     });
   } catch (error) {
-    return NextResponse.json({ error: "Failed to create action" }, { status: 500 });
+    console.log(error);
+    return NextResponse.json(
+      { error: "Failed to create action" },
+      { status: 500 }
+    );
   }
 }

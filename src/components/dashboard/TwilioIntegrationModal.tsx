@@ -1,17 +1,18 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useState } from "react";
 import { Spinner } from "@/components/common/Spinner";
 
 interface TwilioIntegrationModalProps {
-  chatagentId: string;
+  chatagentId?: string;
   isOpen: boolean;
   onClose: () => void;
   onSuccess: () => void;
 }
 
 export default function TwilioIntegrationModal({
-  chatagentId,
+  // chatagentId,
   isOpen,
   onClose,
   onSuccess,
@@ -169,7 +170,7 @@ export default function TwilioIntegrationModal({
             </li>
             <li>
               Purchase a phone number from the Phone Numbers section if you
-              don't have one
+              don&#39;t have one
             </li>
           </ol>
         </div>

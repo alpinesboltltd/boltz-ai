@@ -1,16 +1,17 @@
 import { NextResponse } from "next/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { vectorStore } from "./vectorStore";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
 
 // Global vector store
-let globalVectorStore: { [agentId: string]: { [sourceId: string]: { chunks: string[]; embeddings: number[][]; } } } = {};
+// Using shared vectorStore from helper module
 
 function chunkText(text: string, chunkSize: number = 500): string[] {
-  const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
+  const sentences = text.split(/[.!?]+/).filter((s) => s.trim().length > 0);
   const chunks: string[] = [];
   let currentChunk = "";
-  
+
   for (const sentence of sentences) {
     if (currentChunk.length + sentence.length > chunkSize && currentChunk) {
       chunks.push(currentChunk.trim());
@@ -19,21 +20,34 @@ function chunkText(text: string, chunkSize: number = 500): string[] {
       currentChunk += (currentChunk ? ". " : "") + sentence;
     }
   }
-  
+
   if (currentChunk) chunks.push(currentChunk.trim());
   return chunks;
 }
 
-export async function POST(request: Request) {
+interface EmbeddingPostResponse {
+  success?: boolean;
+  chunksProcessed?: number;
+  error?: string;
+}
+export async function POST(
+  request: Request
+): Promise<NextResponse<EmbeddingPostResponse>> {
   try {
     const { text, agentId, sourceId } = await request.json();
 
     if (!text || !agentId || !sourceId) {
-      return NextResponse.json({ error: "Text, agentId, and sourceId are required" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Text, agentId, and sourceId are required" },
+        { status: 400 }
+      );
     }
 
     if (!process.env.GEMINI_API_KEY) {
-      return NextResponse.json({ error: "API key not configured" }, { status: 500 });
+      return NextResponse.json(
+        { error: "API key not configured" },
+        { status: 500 }
+      );
     }
 
     const model = genAI.getGenerativeModel({ model: "text-embedding-004" });
@@ -47,15 +61,12 @@ export async function POST(request: Request) {
     }
 
     // Store in global vector store
-    if (!globalVectorStore[agentId]) {
-      globalVectorStore[agentId] = {};
+    if (!vectorStore[agentId]) {
+      vectorStore[agentId] = {};
     }
-    globalVectorStore[agentId][sourceId] = { chunks, embeddings };
+    vectorStore[agentId][sourceId] = { chunks, embeddings };
 
-    return NextResponse.json({
-      success: true,
-      chunksProcessed: chunks.length,
-    });
+    return NextResponse.json({ success: true, chunksProcessed: chunks.length });
   } catch (error) {
     console.error("Error generating embeddings:", error);
     return NextResponse.json(
@@ -66,21 +77,28 @@ export async function POST(request: Request) {
 }
 
 // GET endpoint to retrieve vector store data
-export async function GET(request: Request) {
+interface EmbeddingGetResponse {
+  success: boolean;
+  vectorStore?: unknown;
+  error?: string;
+}
+export async function GET(
+  request: Request
+): Promise<NextResponse<EmbeddingGetResponse>> {
   const url = new URL(request.url);
-  const agentId = url.searchParams.get('agentId');
-  
+  const agentId = url.searchParams.get("agentId");
+
   if (!agentId) {
-    return NextResponse.json({ error: "Agent ID is required" }, { status: 400 });
+    return NextResponse.json(
+      { success: false, error: "Agent ID is required" },
+      { status: 400 }
+    );
   }
-  
+
   return NextResponse.json({
-    vectorStore: globalVectorStore[agentId] || {},
     success: true,
+    vectorStore: vectorStore[agentId] || {},
   });
 }
 
-// Export vector store for chat route
-export function getVectorStore() {
-  return globalVectorStore;
-}
+// Do not export additional helpers from this route file to satisfy Next.js route type constraints.

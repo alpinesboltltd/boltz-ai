@@ -13,19 +13,25 @@ import {
 } from "./InteractiveWidgets";
 import Image from "next/image";
 import VoiceRecorder from "./VoiceRecorder";
+import type {
+  ChatWidget,
+  ChatInterfaceMessage as ChatMessage,
+  Card,
+  Product,
+  Plan,
+} from "@/types/chatWidgets";
 
-interface Message {
-  id: number;
-  text: string;
-  sender: "user" | "bot";
-  timestamp: Date;
-  audioUrl?: string;
-  hasVoice?: boolean;
-  widget?: {
-    type: "calendar" | "payment" | "products" | "subscription" | "bankTransfer";
-    data?: any;
-  };
-}
+// Type guard helpers for widget discriminated union
+const isPaymentWidget = (
+  w: ChatWidget
+): w is Extract<ChatWidget, { type: "payment" }> => w.type === "payment";
+const isProductsWidget = (
+  w: ChatWidget
+): w is Extract<ChatWidget, { type: "products" }> => w.type === "products";
+const isSubscriptionWidget = (
+  w: ChatWidget
+): w is Extract<ChatWidget, { type: "subscription" }> =>
+  w.type === "subscription";
 
 interface ChatInterfaceProps {
   chatagentName?: string;
@@ -54,7 +60,7 @@ export default function ChatInterface({
   fontFamily = "Inter, sans-serif",
   position = "bottom-right",
 }: ChatInterfaceProps) {
-  const [messages, setMessages] = useState<Message[]>([
+  const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: 1,
       text: welcomeMessage,
@@ -66,7 +72,7 @@ export default function ChatInterface({
   const [activeWidget, setActiveWidget] = useState<string | null>(null);
   const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
-  const [isRecording, setIsRecording] = useState(false);
+  // recording state removed (not yet implemented)
   const [voiceResponseEnabled, setVoiceResponseEnabled] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -81,7 +87,7 @@ export default function ChatInterface({
 
     if (inputValue.trim() === "") return;
 
-    const userMessage: Message = {
+    const userMessage: ChatMessage = {
       id: messages.length + 1,
       text: inputValue,
       sender: "user",
@@ -96,7 +102,7 @@ export default function ChatInterface({
     setTimeout(
       () => {
         const response = getBotResponse(inputValue);
-        const botMessage: Message = {
+        const botMessage: ChatMessage = {
           id: messages.length + 2,
           text: response.text,
           sender: "bot",
@@ -115,7 +121,7 @@ export default function ChatInterface({
 
         // Generate voice response if enabled
         if (voiceResponseEnabled) {
-          generateVoiceResponse(response.text, messages.length + 2);
+          generateVoiceResponse(response.text);
         }
       },
       1000 + Math.random() * 2000
@@ -123,13 +129,11 @@ export default function ChatInterface({
   };
 
   const handleVoiceRecordingComplete = (audioBlob: Blob) => {
-    setIsRecording(false);
-
     // Create audio URL
     const audioUrl = URL.createObjectURL(audioBlob);
 
     // Create user message with audio
-    const userMessage: Message = {
+    const userMessage: ChatMessage = {
       id: messages.length + 1,
       text: "Voice message",
       sender: "user",
@@ -144,7 +148,7 @@ export default function ChatInterface({
     // For now, we'll simulate a response after a delay
     setTimeout(() => {
       const botResponse = "I received your voice message. How can I help you?";
-      const botMessage: Message = {
+      const botMessage: ChatMessage = {
         id: messages.length + 2,
         text: botResponse,
         sender: "bot",
@@ -156,7 +160,7 @@ export default function ChatInterface({
 
       // Generate voice response if enabled
       if (voiceResponseEnabled) {
-        generateVoiceResponse(botResponse, messages.length + 2);
+        generateVoiceResponse(botResponse);
       }
     }, 2000);
   };
@@ -164,7 +168,7 @@ export default function ChatInterface({
   // Enhanced mock response function with widget support
   const getBotResponse = (
     userInput: string
-  ): { text: string; widget?: any } => {
+  ): { text: string; widget?: ChatWidget } => {
     const input = userInput.toLowerCase();
 
     if (input.includes("hello") || input.includes("hi")) {
@@ -350,7 +354,7 @@ export default function ChatInterface({
   };
 
   // Generate voice response (in a real app, this would call a text-to-speech API)
-  const generateVoiceResponse = async (text: string, messageId: number) => {
+  const generateVoiceResponse = async (text: string) => {
     try {
       // In a real app, this would call a text-to-speech API
       // For now, we'll use the browser's built-in speech synthesis
@@ -529,98 +533,126 @@ export default function ChatInterface({
                       />
                     )}
 
-                    {message.widget.type === "payment" && (
-                      <PaymentMethodWidget
-                        savedCards={message.widget.data.savedCards}
-                        onAddCard={(cardDetails) => {
-                          setMessages([
-                            ...messages,
-                            {
-                              id: messages.length + 1,
-                              text: `Card ending in ${cardDetails.cardNumber.slice(-4)} has been added`,
-                              sender: "bot",
-                              timestamp: new Date(),
-                            },
-                          ]);
-                          setActiveWidget(null);
-                        }}
-                        onSelectCard={(cardId) => {
-                          const card = message.widget?.data.savedCards.find(
-                            (c: any) => c.id === cardId
-                          );
-                          setMessages([
-                            ...messages,
-                            {
-                              id: messages.length + 1,
-                              text: `You selected the card ending in ${card.last4}`,
-                              sender: "bot",
-                              timestamp: new Date(),
-                            },
-                          ]);
-                          setActiveWidget(null);
-                        }}
-                        onClose={() => setActiveWidget(null)}
-                      />
-                    )}
+                    {message.widget.type === "payment" &&
+                      isPaymentWidget(message.widget) && (
+                        <PaymentMethodWidget
+                          savedCards={message.widget.data.savedCards}
+                          onAddCard={(cardDetails) => {
+                            setMessages([
+                              ...messages,
+                              {
+                                id: messages.length + 1,
+                                text: `Card ending in ${cardDetails.cardNumber.slice(-4)} has been added`,
+                                sender: "bot",
+                                timestamp: new Date(),
+                              },
+                            ]);
+                            setActiveWidget(null);
+                          }}
+                          onSelectCard={(cardId) => {
+                            if (
+                              !message.widget ||
+                              !isPaymentWidget(message.widget)
+                            )
+                              return;
+                            const card = message.widget.data.savedCards.find(
+                              (c: Card) => c.id === cardId
+                            );
+                            if (!card) return;
+                            setMessages([
+                              ...messages,
+                              {
+                                id: messages.length + 1,
+                                text: `You selected the card ending in ${card.last4}`,
+                                sender: "bot",
+                                timestamp: new Date(),
+                              },
+                            ]);
+                            setActiveWidget(null);
+                          }}
+                          onClose={() => setActiveWidget(null)}
+                        />
+                      )}
 
-                    {message.widget.type === "products" && (
-                      <ProductSearchWidget
-                        products={message.widget.data.products}
-                        onAddToCart={(productId) => {
-                          const product = message.widget?.data.products.find(
-                            (p: any) => p.id === productId
-                          );
-                          setMessages([
-                            ...messages,
-                            {
-                              id: messages.length + 1,
-                              text: `Added ${product.name} to your cart`,
-                              sender: "bot",
-                              timestamp: new Date(),
-                            },
-                          ]);
-                          setActiveWidget(null);
-                        }}
-                        onViewDetails={(productId) => {
-                          const product = message.widget?.data.products.find(
-                            (p: any) => p.id === productId
-                          );
-                          setMessages([
-                            ...messages,
-                            {
-                              id: messages.length + 1,
-                              text: `Here are the details for ${product.name}: ${product.description}`,
-                              sender: "bot",
-                              timestamp: new Date(),
-                            },
-                          ]);
-                        }}
-                        onClose={() => setActiveWidget(null)}
-                      />
-                    )}
+                    {message.widget.type === "products" &&
+                      isProductsWidget(message.widget) && (
+                        <ProductSearchWidget
+                          products={message.widget.data.products}
+                          onAddToCart={(productId) => {
+                            if (
+                              !message.widget ||
+                              !isProductsWidget(message.widget)
+                            )
+                              return;
+                            const product = message.widget.data.products.find(
+                              (p: Product) => p.id === productId
+                            );
+                            if (!product) return;
+                            setMessages([
+                              ...messages,
+                              {
+                                id: messages.length + 1,
+                                text: `Added ${product.name} to your cart`,
+                                sender: "bot",
+                                timestamp: new Date(),
+                              },
+                            ]);
+                            setActiveWidget(null);
+                          }}
+                          onViewDetails={(productId) => {
+                            if (
+                              !message.widget ||
+                              !isProductsWidget(message.widget)
+                            )
+                              return;
+                            const product = message.widget.data.products.find(
+                              (p: Product) => p.id === productId
+                            );
+                            if (!product) return;
+                            setMessages([
+                              ...messages,
+                              {
+                                id: messages.length + 1,
+                                text: `Here are the details for ${product.name}: ${product.description}`,
+                                sender: "bot",
+                                timestamp: new Date(),
+                              },
+                            ]);
+                          }}
+                          onClose={() => setActiveWidget(null)}
+                        />
+                      )}
 
-                    {message.widget.type === "subscription" && (
-                      <SubscriptionWidget
-                        currentPlan={message.widget.data.currentPlan}
-                        availablePlans={message.widget.data.availablePlans}
-                        onChangePlan={(planId) => {
-                          const plan = message.widget?.data.availablePlans.find(
-                            (p: any) => p.id === planId
-                          );
-                          setMessages([
-                            ...messages,
-                            {
-                              id: messages.length + 1,
-                              text: `Your subscription has been changed to the ${plan.name} plan`,
-                              sender: "bot",
-                              timestamp: new Date(),
-                            },
-                          ]);
-                          setActiveWidget(null);
-                        }}
-                        onClose={() => setActiveWidget(null)}
-                      />
-                    )}
+                    {message.widget.type === "subscription" &&
+                      isSubscriptionWidget(message.widget) && (
+                        <SubscriptionWidget
+                          currentPlan={message.widget.data.currentPlan}
+                          availablePlans={message.widget.data.availablePlans}
+                          onChangePlan={(planId) => {
+                            if (
+                              !message.widget ||
+                              !isSubscriptionWidget(message.widget)
+                            )
+                              return;
+                            const plan =
+                              message.widget.data.availablePlans.find(
+                                (p: Plan) => p.id === planId
+                              );
+                            if (!plan) return;
+                            setMessages([
+                              ...messages,
+                              {
+                                id: messages.length + 1,
+                                text: `Your subscription has been changed to the ${plan.name} plan`,
+                                sender: "bot",
+                                timestamp: new Date(),
+                              },
+                            ]);
+                            setActiveWidget(null);
+                          }}
+                          onClose={() => setActiveWidget(null)}
+                        />
+                      )}
 
                     {message.widget.type === "bankTransfer" && (
                       <BankTransferWidget />
@@ -633,6 +665,7 @@ export default function ChatInterface({
                 activeWidget !== `${message.id}-${message.widget.type}` && (
                   <button
                     onClick={() =>
+                      message.widget &&
                       setActiveWidget(`${message.id}-${message.widget.type}`)
                     }
                     className="mt-2 inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"

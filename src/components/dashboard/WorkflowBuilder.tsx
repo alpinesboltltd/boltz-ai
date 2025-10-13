@@ -1,7 +1,18 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { workflowSchema, WorkflowFormData } from "@/schemas/actionSchemas";
-import { Plus, Save, X, Trash2, Globe, Key, Mail, Clock, MessageSquare, GitBranch } from "lucide-react";
+import {
+  Plus,
+  Save,
+  X,
+  Trash2,
+  Globe,
+  Mail,
+  Clock,
+  MessageSquare,
+  GitBranch,
+} from "lucide-react";
 
 interface WorkflowBuilderProps {
   onSave: (workflow: WorkflowFormData) => void;
@@ -9,20 +20,40 @@ interface WorkflowBuilderProps {
   initialWorkflow?: Partial<WorkflowFormData>;
 }
 
-export function WorkflowBuilder({ onSave, onCancel, initialWorkflow }: WorkflowBuilderProps) {
-  const { register, control, handleSubmit, watch, formState: { errors } } = useForm<WorkflowFormData>({
+export function WorkflowBuilder({
+  onSave,
+  onCancel,
+  initialWorkflow,
+}: WorkflowBuilderProps) {
+  const {
+    register,
+    control,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<WorkflowFormData>({
     resolver: zodResolver(workflowSchema),
     defaultValues: {
       name: initialWorkflow?.name || "",
       description: initialWorkflow?.description || "",
-      trigger: initialWorkflow?.trigger || { type: "keyword", value: "", conditions: {} },
-      steps: initialWorkflow?.steps || [{ id: "1", name: "Step 1", type: "api_call" }]
-    }
+      trigger: initialWorkflow?.trigger || {
+        type: "keyword",
+        value: "",
+        conditions: {},
+      },
+      steps: initialWorkflow?.steps || [
+        { id: "1", name: "Step 1", type: "api_call" },
+      ],
+    },
   });
 
-  const { fields: stepFields, append: appendStep, remove: removeStep } = useFieldArray({
+  const {
+    fields: stepFields,
+    append: appendStep,
+    remove: removeStep,
+  } = useFieldArray({
     control,
-    name: "steps"
+    name: "steps",
   });
 
   const watchedSteps = watch("steps");
@@ -33,7 +64,7 @@ export function WorkflowBuilder({ onSave, onCancel, initialWorkflow }: WorkflowB
     { value: "condition", label: "Condition", icon: GitBranch },
     { value: "message", label: "Send Message", icon: MessageSquare },
     { value: "email", label: "Send Email", icon: Mail },
-    { value: "delay", label: "Delay", icon: Clock }
+    { value: "delay", label: "Delay", icon: Clock },
   ];
 
   const onSubmit = (data: WorkflowFormData) => {
@@ -44,12 +75,12 @@ export function WorkflowBuilder({ onSave, onCancel, initialWorkflow }: WorkflowB
     appendStep({
       id: `step_${Date.now()}`,
       name: `Step ${stepFields.length + 1}`,
-      type: "api_call"
+      type: "api_call",
     });
   };
 
   const getStepIcon = (type: string) => {
-    const stepType = stepTypes.find(st => st.value === type);
+    const stepType = stepTypes.find((st) => st.value === type);
     return stepType?.icon || Globe;
   };
 
@@ -66,7 +97,10 @@ export function WorkflowBuilder({ onSave, onCancel, initialWorkflow }: WorkflowB
               <Save className="w-4 h-4" />
               Save Workflow
             </button>
-            <button onClick={onCancel} className="p-2 text-gray-400 hover:text-gray-600">
+            <button
+              onClick={onCancel}
+              className="p-2 text-gray-400 hover:text-gray-600"
+            >
               <X className="w-5 h-5" />
             </button>
           </div>
@@ -76,27 +110,41 @@ export function WorkflowBuilder({ onSave, onCancel, initialWorkflow }: WorkflowB
           <div className="p-6 border-b">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Workflow Name</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Workflow Name
+                </label>
                 <input
                   {...register("name")}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                   placeholder="Enter workflow name"
                 />
-                {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>}
+                {errors.name && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.name.message}
+                  </p>
+                )}
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Description
+                </label>
                 <input
                   {...register("description")}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                   placeholder="Describe what this workflow does"
                 />
-                {errors.description && <p className="text-red-500 text-sm mt-1">{errors.description.message}</p>}
+                {errors.description && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.description.message}
+                  </p>
+                )}
               </div>
             </div>
 
             <div className="mt-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Trigger</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Trigger
+              </label>
               <div className="flex gap-3">
                 <select
                   {...register("trigger.type")}
@@ -132,7 +180,7 @@ export function WorkflowBuilder({ onSave, onCancel, initialWorkflow }: WorkflowB
               {stepFields.map((field, index) => {
                 const stepType = watchedSteps[index]?.type;
                 const Icon = getStepIcon(stepType);
-                
+
                 return (
                   <div key={field.id} className="border rounded-lg p-4">
                     <div className="flex items-center justify-between mb-4">
@@ -159,13 +207,17 @@ export function WorkflowBuilder({ onSave, onCancel, initialWorkflow }: WorkflowB
 
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Step Type</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Step Type
+                        </label>
                         <select
                           {...register(`steps.${index}.type`)}
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                         >
-                          {stepTypes.map(type => (
-                            <option key={type.value} value={type.value}>{type.label}</option>
+                          {stepTypes.map((type) => (
+                            <option key={type.value} value={type.value}>
+                              {type.label}
+                            </option>
                           ))}
                         </select>
                       </div>
@@ -175,7 +227,9 @@ export function WorkflowBuilder({ onSave, onCancel, initialWorkflow }: WorkflowB
                       <div className="mt-4 space-y-4">
                         <div className="grid grid-cols-2 gap-4">
                           <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">Method</label>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                              Method
+                            </label>
                             <select
                               {...register(`steps.${index}.method`)}
                               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
@@ -188,7 +242,9 @@ export function WorkflowBuilder({ onSave, onCancel, initialWorkflow }: WorkflowB
                             </select>
                           </div>
                           <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">URL</label>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                              URL
+                            </label>
                             <input
                               {...register(`steps.${index}.url`)}
                               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
@@ -198,7 +254,9 @@ export function WorkflowBuilder({ onSave, onCancel, initialWorkflow }: WorkflowB
                         </div>
 
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">Authentication</label>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Authentication
+                          </label>
                           <select
                             {...register(`steps.${index}.authType`)}
                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
@@ -252,7 +310,9 @@ export function WorkflowBuilder({ onSave, onCancel, initialWorkflow }: WorkflowB
                         )}
 
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">Request Body (JSON)</label>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Request Body (JSON)
+                          </label>
                           <textarea
                             {...register(`steps.${index}.body`)}
                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
@@ -298,7 +358,9 @@ export function WorkflowBuilder({ onSave, onCancel, initialWorkflow }: WorkflowB
                     {stepType === "delay" && (
                       <div className="mt-4">
                         <input
-                          {...register(`steps.${index}.delaySeconds`, { valueAsNumber: true })}
+                          {...register(`steps.${index}.delaySeconds`, {
+                            valueAsNumber: true,
+                          })}
                           type="number"
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                           placeholder="Delay in seconds"

@@ -220,12 +220,9 @@ export const agentsAPI = {
   },
 
   // Create API function
-  createApiFunction: async (
-    id: string,
-    apiFunction: CreateApiFunctionPayload
-  ) => {
+  createApiFunction: async (apiFunction: CreateApiFunctionPayload) => {
     const response: AxiosResponse<{ data: ApiFunction }> = await api.post(
-      `/chatagents/${id}/actions/api-functions`,
+      `/chatagents/${apiFunction.agentId}/actions/api-functions`,
       apiFunction
     );
     return response.data;

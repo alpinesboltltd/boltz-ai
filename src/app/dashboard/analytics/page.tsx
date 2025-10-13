@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useState, useEffect } from "react";
@@ -45,7 +46,7 @@ const chartOptions = {
   maintainAspectRatio: false,
   interaction: {
     intersect: false,
-    mode: 'index' as const,
+    mode: "index" as const,
   },
   plugins: {
     legend: {
@@ -53,7 +54,7 @@ const chartOptions = {
     },
     tooltip: {
       enabled: true,
-      mode: 'index' as const,
+      mode: "index" as const,
       intersect: false,
     },
   },
@@ -62,7 +63,7 @@ const chartOptions = {
       beginAtZero: true,
       grid: {
         display: true,
-        color: 'rgba(0, 0, 0, 0.1)',
+        color: "rgba(0, 0, 0, 0.1)",
       },
     },
     x: {
@@ -89,11 +90,15 @@ const doughnutOptions = {
     tooltip: {
       enabled: true,
       callbacks: {
-        label: function(context: any) {
-          const label = context.label || '';
+        label: function (context: any) {
+          const label = context.label || "";
           const value = context.parsed || 0;
-          const total = context.dataset.data.reduce((a: number, b: number) => a + b, 0);
-          const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : '0';
+          const total = context.dataset.data.reduce(
+            (a: number, b: number) => a + b,
+            0
+          );
+          const percentage =
+            total > 0 ? ((value / total) * 100).toFixed(1) : "0";
           return `${label}: ${value} (${percentage}%)`;
         },
       },
@@ -189,7 +194,11 @@ export default function AnalyticsPage() {
         setError(null);
       } catch (error) {
         console.error("Failed to load analytics:", error);
-        setError(error instanceof Error ? error.message : "Failed to load analytics data");
+        setError(
+          error instanceof Error
+            ? error.message
+            : "Failed to load analytics data"
+        );
       } finally {
         setLoading(false);
       }
@@ -210,7 +219,9 @@ export default function AnalyticsPage() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="text-red-600 text-lg font-medium mb-2">Error Loading Analytics</div>
+          <div className="text-red-600 text-lg font-medium mb-2">
+            Error Loading Analytics
+          </div>
           <div className="text-gray-600 mb-4">{error}</div>
           <button
             onClick={() => window.location.reload()}

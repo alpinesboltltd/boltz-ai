@@ -13,7 +13,7 @@ export interface ExportData {
   timeline: TimeSeriesData[];
   topQuestions: TopQuestion[];
   userSatisfaction: UserSatisfaction;
-  platformDistribution: PlatformData[];
+  platformDistribution: (PlatformData | Omit<PlatformData, "count">)[];
   sentimentAnalysis: SentimentData[];
   conversationsByHour: number[];
 }
@@ -75,7 +75,8 @@ export class AnalyticsExporter {
     csvContent += `PLATFORM DISTRIBUTION\n`;
     csvContent += `Platform,Percentage,Count\n`;
     data.platformDistribution.forEach((item) => {
-      csvContent += `${item.platform},${item.percentage}%,${item.count || "N/A"}\n`;
+      const count = "count" in item ? (item as PlatformData).count : undefined;
+      csvContent += `${item.platform},${item.percentage}%,${count ?? "N/A"}\n`;
     });
     csvContent += `\n`;
 

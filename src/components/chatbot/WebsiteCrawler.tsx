@@ -1,7 +1,11 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { GlobeAltIcon, CheckIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { useState } from "react";
+import {
+  GlobeAltIcon,
+  CheckIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
 
 interface WebsiteCrawlerProps {
   onSubmit: (data: WebsiteCrawlerData) => void;
@@ -14,9 +18,9 @@ export interface WebsiteCrawlerData {
 }
 
 export function WebsiteCrawler({ onSubmit }: WebsiteCrawlerProps) {
-  const [websiteUrl, setWebsiteUrl] = useState('');
-  const [includePath, setIncludePath] = useState('');
-  const [excludePath, setExcludePath] = useState('');
+  const [websiteUrl, setWebsiteUrl] = useState("");
+  const [includePath, setIncludePath] = useState("");
+  const [excludePath, setExcludePath] = useState("");
   const [includePaths, setIncludePaths] = useState<string[]>([]);
   const [excludePaths, setExcludePaths] = useState<string[]>([]);
   const [isValidUrl, setIsValidUrl] = useState(true);
@@ -26,6 +30,8 @@ export function WebsiteCrawler({ onSubmit }: WebsiteCrawlerProps) {
       new URL(url);
       return true;
     } catch (e) {
+      // FIXME: toast error
+      console.log(e);
       return false;
     }
   };
@@ -33,29 +39,29 @@ export function WebsiteCrawler({ onSubmit }: WebsiteCrawlerProps) {
   const handleUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const url = e.target.value;
     setWebsiteUrl(url);
-    setIsValidUrl(url === '' || validateUrl(url));
+    setIsValidUrl(url === "" || validateUrl(url));
   };
 
   const addIncludePath = () => {
     if (includePath && !includePaths.includes(includePath)) {
       setIncludePaths([...includePaths, includePath]);
-      setIncludePath('');
+      setIncludePath("");
     }
   };
 
   const addExcludePath = () => {
     if (excludePath && !excludePaths.includes(excludePath)) {
       setExcludePaths([...excludePaths, excludePath]);
-      setExcludePath('');
+      setExcludePath("");
     }
   };
 
   const removeIncludePath = (path: string) => {
-    setIncludePaths(includePaths.filter(p => p !== path));
+    setIncludePaths(includePaths.filter((p) => p !== path));
   };
 
   const removeExcludePath = (path: string) => {
-    setExcludePaths(excludePaths.filter(p => p !== path));
+    setExcludePaths(excludePaths.filter((p) => p !== path));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -64,7 +70,7 @@ export function WebsiteCrawler({ onSubmit }: WebsiteCrawlerProps) {
       onSubmit({
         websiteUrl,
         includePaths,
-        excludePaths
+        excludePaths,
       });
     }
   };
@@ -74,16 +80,22 @@ export function WebsiteCrawler({ onSubmit }: WebsiteCrawlerProps) {
       <h3 className="text-lg font-medium text-gray-900 mb-4">
         Train Agent with Website Content
       </h3>
-      
+
       <form onSubmit={handleSubmit}>
         <div className="space-y-4">
           <div>
-            <label htmlFor="websiteUrl" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="websiteUrl"
+              className="block text-sm font-medium text-gray-700"
+            >
               Website URL
             </label>
             <div className="mt-1 relative rounded-md shadow-sm">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <GlobeAltIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                <GlobeAltIcon
+                  className="h-5 w-5 text-gray-400"
+                  aria-hidden="true"
+                />
               </div>
               <input
                 type="text"
@@ -91,9 +103,9 @@ export function WebsiteCrawler({ onSubmit }: WebsiteCrawlerProps) {
                 value={websiteUrl}
                 onChange={handleUrlChange}
                 className={`block w-full pl-10 pr-12 py-2 sm:text-sm rounded-md ${
-                  isValidUrl 
-                    ? 'border-gray-300 focus:ring-primary-500 focus:border-primary-500' 
-                    : 'border-red-300 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500'
+                  isValidUrl
+                    ? "border-gray-300 focus:ring-primary-500 focus:border-primary-500"
+                    : "border-red-300 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500"
                 }`}
                 placeholder="https://example.com"
               />
@@ -107,7 +119,10 @@ export function WebsiteCrawler({ onSubmit }: WebsiteCrawlerProps) {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="includePath" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="includePath"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Include Paths (Optional)
               </label>
               <div className="mt-1 flex rounded-md shadow-sm">
@@ -130,13 +145,13 @@ export function WebsiteCrawler({ onSubmit }: WebsiteCrawlerProps) {
               {includePaths.length > 0 && (
                 <div className="mt-2 flex flex-wrap gap-2">
                   {includePaths.map((path) => (
-                    <span 
-                      key={path} 
+                    <span
+                      key={path}
                       className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-green-100 text-green-800"
                     >
                       {path}
-                      <button 
-                        type="button" 
+                      <button
+                        type="button"
                         onClick={() => removeIncludePath(path)}
                         className="ml-1.5 inline-flex text-green-400 hover:text-green-600 focus:outline-none"
                       >
@@ -149,7 +164,10 @@ export function WebsiteCrawler({ onSubmit }: WebsiteCrawlerProps) {
             </div>
 
             <div>
-              <label htmlFor="excludePath" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="excludePath"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Exclude Paths (Optional)
               </label>
               <div className="mt-1 flex rounded-md shadow-sm">
@@ -172,13 +190,13 @@ export function WebsiteCrawler({ onSubmit }: WebsiteCrawlerProps) {
               {excludePaths.length > 0 && (
                 <div className="mt-2 flex flex-wrap gap-2">
                   {excludePaths.map((path) => (
-                    <span 
-                      key={path} 
+                    <span
+                      key={path}
                       className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-red-100 text-red-800"
                     >
                       {path}
-                      <button 
-                        type="button" 
+                      <button
+                        type="button"
                         onClick={() => removeExcludePath(path)}
                         className="ml-1.5 inline-flex text-red-400 hover:text-red-600 focus:outline-none"
                       >

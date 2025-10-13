@@ -1,6 +1,6 @@
 import { auth } from "@/configs/firebase";
 import { handleFirebaseErrorMessage } from "@/lib/utils";
-import { AuthRequestMethods, FirebaseErrorMessage } from "@/types";
+import { AuthRequestMethods } from "@/types";
 import { FirebaseError } from "firebase/app";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { NextResponse } from "next/server";
@@ -27,7 +27,7 @@ export async function POST(request: Request) {
         return NextResponse.json({ success: true, user });
       } catch (error) {
         if (error instanceof FirebaseError) {
-          let message = handleFirebaseErrorMessage(error.code);
+          const message = handleFirebaseErrorMessage(error.code);
           return NextResponse.json({ success: false, message });
         }
         throw error;

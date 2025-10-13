@@ -1,5 +1,6 @@
 import { CheckIcon } from "@heroicons/react/20/solid";
 
+// FIXME: fetch from the database
 const tiers = [
   {
     name: "Free",
@@ -66,7 +67,7 @@ export function PricingSection() {
           </p>
         </div>
         <div className="grid lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          {tiers.map((tier, tierIdx) => (
+          {tiers.map((tier) => (
             <div
               key={tier.id}
               className={`relative bg-white rounded-2xl p-8 shadow-lg ${

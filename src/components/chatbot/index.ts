@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // Export all chatagent components for easier imports
-
+// FIXME: DB AND UI
 // Mock components that would be implemented in a real application
 export const ChatInterface = () => null;
 export const ModifiedCalendarWidget = ({

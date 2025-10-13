@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useForm } from "react-hook-form";
 import { Settings, X } from "lucide-react";
 
@@ -15,9 +16,13 @@ interface NodeConfigPanelProps {
   onClose: () => void;
 }
 
-export function NodeConfigPanel({ node, onNodeUpdate, onClose }: NodeConfigPanelProps) {
-  const { register, handleSubmit, watch } = useForm({
-    defaultValues: node?.data || {}
+export function NodeConfigPanel({
+  node,
+  onNodeUpdate,
+  onClose,
+}: NodeConfigPanelProps) {
+  const { register, handleSubmit } = useForm({
+    defaultValues: node?.data || {},
   });
 
   if (!node) return null;
@@ -26,19 +31,21 @@ export function NodeConfigPanel({ node, onNodeUpdate, onClose }: NodeConfigPanel
     onNodeUpdate({
       ...node,
       name: data.name || node.name,
-      data
+      data,
     });
   };
 
   const renderNodeConfig = () => {
     switch (node.type) {
-      case 'trigger':
+      case "trigger":
         return (
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Trigger Type</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Trigger Type
+              </label>
               <select
-                {...register('triggerType')}
+                {...register("triggerType")}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
               >
                 <option value="keyword">Keyword</option>
@@ -48,9 +55,11 @@ export function NodeConfigPanel({ node, onNodeUpdate, onClose }: NodeConfigPanel
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Trigger Value</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Trigger Value
+              </label>
               <input
-                {...register('triggerValue')}
+                {...register("triggerValue")}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                 placeholder="e.g., 'help', 'booking', 'frustrated'"
               />
@@ -58,22 +67,26 @@ export function NodeConfigPanel({ node, onNodeUpdate, onClose }: NodeConfigPanel
           </div>
         );
 
-      case 'message':
+      case "message":
         return (
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Message Text</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Message Text
+              </label>
               <textarea
-                {...register('messageText')}
+                {...register("messageText")}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                 rows={4}
                 placeholder="Enter the message to send to the user"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Message Type</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Message Type
+              </label>
               <select
-                {...register('messageType')}
+                {...register("messageType")}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
               >
                 <option value="text">Text</option>
@@ -84,14 +97,16 @@ export function NodeConfigPanel({ node, onNodeUpdate, onClose }: NodeConfigPanel
           </div>
         );
 
-      case 'api_call':
+      case "api_call":
         return (
           <div className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Method</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Method
+                </label>
                 <select
-                  {...register('method')}
+                  {...register("method")}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                 >
                   <option value="GET">GET</option>
@@ -101,27 +116,33 @@ export function NodeConfigPanel({ node, onNodeUpdate, onClose }: NodeConfigPanel
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">URL</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  URL
+                </label>
                 <input
-                  {...register('url')}
+                  {...register("url")}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                   placeholder="https://api.example.com/endpoint"
                 />
               </div>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Headers (JSON)</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Headers (JSON)
+              </label>
               <textarea
-                {...register('headers')}
+                {...register("headers")}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                 rows={3}
                 placeholder='{"Authorization": "Bearer {{token}}"}'
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Request Body (JSON)</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Request Body (JSON)
+              </label>
               <textarea
-                {...register('requestBody')}
+                {...register("requestBody")}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                 rows={3}
                 placeholder='{"data": "{{user_input}}"}'
@@ -130,22 +151,26 @@ export function NodeConfigPanel({ node, onNodeUpdate, onClose }: NodeConfigPanel
           </div>
         );
 
-      case 'condition':
+      case "condition":
         return (
           <div className="space-y-4">
             <div className="grid grid-cols-3 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Field</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Field
+                </label>
                 <input
-                  {...register('conditionField')}
+                  {...register("conditionField")}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                   placeholder="user_type"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Operator</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Operator
+                </label>
                 <select
-                  {...register('conditionOperator')}
+                  {...register("conditionOperator")}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                 >
                   <option value="equals">Equals</option>
@@ -156,9 +181,11 @@ export function NodeConfigPanel({ node, onNodeUpdate, onClose }: NodeConfigPanel
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Value</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Value
+                </label>
                 <input
-                  {...register('conditionValue')}
+                  {...register("conditionValue")}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                   placeholder="premium"
                 />
@@ -167,13 +194,15 @@ export function NodeConfigPanel({ node, onNodeUpdate, onClose }: NodeConfigPanel
           </div>
         );
 
-      case 'delay':
+      case "delay":
         return (
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Delay Duration (seconds)</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Delay Duration (seconds)
+              </label>
               <input
-                {...register('delaySeconds', { valueAsNumber: true })}
+                {...register("delaySeconds", { valueAsNumber: true })}
                 type="number"
                 min="1"
                 max="3600"
@@ -184,30 +213,36 @@ export function NodeConfigPanel({ node, onNodeUpdate, onClose }: NodeConfigPanel
           </div>
         );
 
-      case 'email':
+      case "email":
         return (
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">To Email</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                To Email
+              </label>
               <input
-                {...register('emailTo')}
+                {...register("emailTo")}
                 type="email"
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                 placeholder="support@company.com"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Subject</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Subject
+              </label>
               <input
-                {...register('emailSubject')}
+                {...register("emailSubject")}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                 placeholder="Customer Support Request"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Email Body</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Email Body
+              </label>
               <textarea
-                {...register('emailBody')}
+                {...register("emailBody")}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                 rows={4}
                 placeholder="Email content..."
@@ -217,7 +252,11 @@ export function NodeConfigPanel({ node, onNodeUpdate, onClose }: NodeConfigPanel
         );
 
       default:
-        return <div className="text-gray-500">No configuration available for this node type.</div>;
+        return (
+          <div className="text-gray-500">
+            No configuration available for this node type.
+          </div>
+        );
     }
   };
 
@@ -238,9 +277,11 @@ export function NodeConfigPanel({ node, onNodeUpdate, onClose }: NodeConfigPanel
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Node Name</label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Node Name
+          </label>
           <input
-            {...register('name')}
+            {...register("name")}
             defaultValue={node.name}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
             placeholder="Node name"

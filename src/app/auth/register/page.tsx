@@ -60,6 +60,7 @@ export default function RegisterPage() {
 
       // TODO: Fetch user details from the db
     } catch (error) {
+      console.log(error);
       // TODO: Toast error
     }
   };

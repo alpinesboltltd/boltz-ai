@@ -3,12 +3,9 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Spinner } from "@/components/common/Spinner";
-import {
-  ArrowPathIcon,
-  CheckCircleIcon,
-  XCircleIcon,
-} from "@heroicons/react/24/outline";
+import { ArrowPathIcon, CheckCircleIcon } from "@heroicons/react/24/outline";
 
+// TODO: fetch from the database
 const aiModels = [
   {
     id: "gemini",
@@ -572,7 +569,7 @@ export default function CreateAgentPage() {
                         </h3>
                         <div className="mt-2 text-sm text-blue-700">
                           <p>
-                            After creating your AI agent, you'll be able to:
+                            After creating your AI agent, you&#39;ll be able to:
                           </p>
                           <ul className="list-disc pl-5 space-y-1 mt-2">
                             <li>Customize its appearance further</li>

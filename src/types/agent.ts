@@ -124,8 +124,22 @@ export interface CreateAgentRequest {
 }
 
 export interface UpdateAgentRequest extends Partial<CreateAgentRequest> {
-  id: number;
+  id?: string; // id provided as path param in API call wrapper
+  updated_at?: string;
 }
+
+// Creation request types for related resources (omit server-managed fields)
+export type CreateAgentAppearanceRequest = Omit<AgentAppearance, "id">;
+export type CreateAgentBehaviorRequest = Omit<AgentBehavior, "id"> & {
+  // allow initial_messages as string[] during creation for convenience
+  initial_messages?: string[] | string;
+};
+export type CreateAgentStatsRequest = Omit<
+  AgentStats,
+  "id" | "last_calculated_at"
+> & {
+  last_calculated_at?: string;
+};
 
 export interface CreateTrainingDataRequest {
   agent_id: string;
@@ -216,8 +230,6 @@ export enum MessageRoles {
   ASSISTANT = "assistant",
   MODEL = "model",
 }
-
-
 
 export type messageRole = keyof MessageRoles[keyof MessageRoles];
 

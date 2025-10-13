@@ -9,18 +9,12 @@ interface VectorStore {
   };
 }
 
-// Import the vector store directly from embeddings module
-import { getVectorStore as getGlobalVectorStore } from "../embeddings/route";
+// Import the shared vector store object
+import { vectorStore } from "../embeddings/vectorStore";
 
 // Get vector store from embeddings route
 function getVectorStore(agentId: string): VectorStore {
-  try {
-    const globalStore = getGlobalVectorStore();
-    return globalStore[agentId] || {};
-  } catch (error) {
-    console.error("Error accessing vector store:", error);
-    return {};
-  }
+  return vectorStore[agentId] || {};
 }
 
 function cosineSimilarity(a: number[], b: number[]): number {
@@ -89,7 +83,11 @@ async function retrieveRelevantContext(
 }
 
 export async function POST(request: Request) {
-  const { message, history, agentId } = await request.json();
+  const { message, history, agentId } = (await request.json()) as {
+    message: string;
+    history: ChatHistoryItem[];
+    agentId: string;
+  };
 
   if (!message) {
     return NextResponse.json({ error: "Message is required" }, { status: 400 });
@@ -152,7 +150,9 @@ Question: ${message}`;
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
     // Filter and prepare chat history
-    const chatHistory = history.filter((item: any) => item.role !== "system");
+    const chatHistory = history.filter(
+      (item) => item.role !== MessageRoles.MODEL
+    );
 
     // Ensure first message is from user
     while (

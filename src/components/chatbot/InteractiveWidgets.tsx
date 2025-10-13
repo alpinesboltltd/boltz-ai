@@ -1,11 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useState } from "react";
-import {
-  CalendarIcon,
-  CreditCardIcon,
-  ShoppingCartIcon,
-} from "@heroicons/react/24/outline";
+import { CreditCardIcon, ShoppingCartIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 
 interface CalendarWidgetProps {
@@ -732,8 +729,8 @@ export function BankTransferWidget() {
 
       <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-md mb-4">
         <p className="text-sm text-yellow-700">
-          For security reasons, you'll be redirected to your bank's secure
-          authentication page to complete this transaction.
+          For security reasons, you&#39;ll be redirected to your bank&#39;s
+          secure authentication page to complete this transaction.
         </p>
       </div>
 

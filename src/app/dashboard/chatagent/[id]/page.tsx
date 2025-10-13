@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { Sources } from "@/components/dashboard/Sources";
 import { Activity } from "@/components/dashboard/Activity";
 import { ConversationLogs } from "@/components/dashboard/ConversationLogs";
-import { Actions } from "@/components/dashboard/Actions";
+// import { Actions } from "@/components/dashboard/Actions";
 import { useDashboardStore, DetailsTab } from "@/store/dashboardStore";
 import { AgentPlayground } from "@/components/chatbot/AgentPlayground";
 import { BotCustomizer } from "@/components/chatbot/BotCustomizer";
@@ -25,16 +25,17 @@ export default function AgentDetailPage() {
       const activeButton = tabNavRef.current.querySelector(
         `button:nth-child(${Object.values(DetailsTab).indexOf(activeTab) + 1})`
       ) as HTMLElement;
-      
+
       if (activeButton) {
         const nav = tabNavRef.current;
         const buttonRect = activeButton.getBoundingClientRect();
         const navRect = nav.getBoundingClientRect();
-        const scrollLeft = activeButton.offsetLeft - (navRect.width / 2) + (buttonRect.width / 2);
-        
+        const scrollLeft =
+          activeButton.offsetLeft - navRect.width / 2 + buttonRect.width / 2;
+
         nav.scrollTo({
           left: scrollLeft,
-          behavior: 'smooth'
+          behavior: "smooth",
         });
       }
     }
@@ -44,7 +45,11 @@ export default function AgentDetailPage() {
     <div className="px-4 sm:px-6 lg:px-8 pb-8">
       {/* Tabs */}
       <div className="border-b border-gray-200">
-        <nav ref={tabNavRef} className="-mb-px flex space-x-8 overflow-x-auto scrollbar-hide" aria-label="Tabs">
+        <nav
+          ref={tabNavRef}
+          className="-mb-px flex space-x-8 overflow-x-auto scrollbar-hide"
+          aria-label="Tabs"
+        >
           {Object.values(DetailsTab).map((tab) => (
             <button
               key={tab}
@@ -92,7 +97,8 @@ export default function AgentDetailPage() {
         {activeTab === DetailsTab.ACTIVITY && <Activity />}
         {activeTab === DetailsTab.CONVERSATIONS && <ConversationLogs />}
         {activeTab === DetailsTab.SOURCES && <Sources />}
-        {activeTab === DetailsTab.ACTION && <Actions />}
+        {/* NOTE: This is a future feature. Do not uncomment */}
+        {/* {activeTab === DetailsTab.ACTION && <Actions />} */}
         {activeTab === DetailsTab.APPEARANCE && (
           <BotCustomizer onSave={handleSaveConfig} />
         )}

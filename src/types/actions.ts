@@ -1,21 +1,43 @@
 // Core Action Types
 export type ActionCategory = "core" | "system" | "custom" | "meta";
-export type ActionType = "conversation" | "followup" | "task" | "knowledge" | "booking" | "order" | "alert" | "workflow" | "api" | "messaging" | "business" | "learning";
+export type ActionType =
+  | "conversation"
+  | "followup"
+  | "task"
+  | "knowledge"
+  | "booking"
+  | "order"
+  | "alert"
+  | "workflow"
+  | "api"
+  | "messaging"
+  | "business"
+  | "learning";
 export type ActionStatus = "active" | "inactive" | "draft";
-export type TriggerType = "keyword" | "intent" | "sentiment" | "condition" | "manual";
+export type TriggerType =
+  | "keyword"
+  | "intent"
+  | "sentiment"
+  | "condition"
+  | "manual";
 
 // Action Configuration
+// Generic primitive value used in dynamic configs
+export type Primitive = string | number | boolean | null;
+export type ConditionValue = Primitive | Primitive[];
+export type ConditionsMap = Record<string, ConditionValue>;
+
 export interface ActionTrigger {
   type: TriggerType;
   value: string;
-  conditions?: Record<string, any>;
+  conditions?: ConditionsMap;
 }
 
 export interface ApiRequest {
   method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
   url: string;
   headers?: Record<string, string>;
-  body?: Record<string, any>;
+  body?: Record<string, unknown>;
   auth?: {
     type: "bearer" | "basic" | "api_key";
     token?: string;
@@ -36,8 +58,15 @@ export interface WebhookConfig {
 
 export interface ActionStep {
   id: string;
-  type: "message" | "api_call" | "webhook" | "condition" | "delay" | "escalate" | "log";
-  config: Record<string, any>;
+  type:
+    | "message"
+    | "api_call"
+    | "webhook"
+    | "condition"
+    | "delay"
+    | "escalate"
+    | "log";
+  config: Record<string, unknown>;
   apiRequest?: ApiRequest;
   webhookConfig?: WebhookConfig;
   nextStep?: string;
@@ -81,7 +110,7 @@ export interface IntegrationProvider {
 export interface SystemAction extends BaseAction {
   category: "system";
   configurable: boolean;
-  defaultConfig: Record<string, any>;
+  defaultConfig: Record<string, unknown>;
   requiredIntegrations: IntegrationProvider[];
   supportedProviders: IntegrationProvider[];
 }
@@ -103,7 +132,7 @@ export interface WorkflowNode {
   position: { x: number; y: number };
   data: {
     label: string;
-    config: Record<string, any>;
+    config: Record<string, unknown>;
   };
 }
 
@@ -122,7 +151,7 @@ export interface IntegrationStatus {
   platform: "slack" | "whatsapp" | "messenger" | "instagram" | "telegram";
   status: "connected" | "disconnected" | "error";
   enabled: boolean;
-  config?: Record<string, any>;
+  config?: Record<string, unknown>;
   last_sync?: string;
 }
 

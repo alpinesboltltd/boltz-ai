@@ -9,6 +9,7 @@ import {
   DocumentPlusIcon,
 } from "@heroicons/react/24/outline";
 
+// TODO: fetch from the datavase
 // Mock data for knowledge sources
 const knowledgeSources = [
   {
@@ -92,8 +93,8 @@ export default function KnowledgePage() {
         return <DocumentTextIcon className="h-5 w-5 text-gray-400" />;
     }
   };
-
-  const getStatusBadge = (statu: string) => {
+  // FIXME: USE ENUM TYPE FOR STATUS
+  const getStatusBadge = (status: string) => {
     switch (status) {
       case "processed":
         return (

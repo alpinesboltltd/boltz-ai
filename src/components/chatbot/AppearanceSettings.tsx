@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react";
 import { Spinner } from "@/components/common/Spinner";
-import { ChatInterface } from "@/components/chatagent";
+import ChatInterface from "@/components/chatbot/ChatInterface";
 import Image from "next/image";
 
 interface AppearanceSettingsProps {
@@ -20,7 +20,9 @@ interface AppearanceSettingsProps {
     position: "bottom-right" | "bottom-left";
     darkMode: boolean;
   };
-  onSave: (settings: any) => Promise<void>;
+  onSave: (
+    settings: AppearanceSettingsProps["initialSettings"]
+  ) => Promise<void>;
 }
 
 const fontOptions = [
@@ -34,7 +36,6 @@ const fontOptions = [
 ];
 
 export default function AppearanceSettings({
-  chatagentId,
   initialSettings = {
     primaryColor: "#6366F1",
     secondaryColor: "#F3F4F6",

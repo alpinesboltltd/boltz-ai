@@ -83,7 +83,7 @@ export default function PricingPage() {
             Simple, transparent pricing
           </p>
           <p className="mt-6 text-lg leading-8 text-gray-600">
-            Choose the plan that's right for you. All plans include a 14-day
+            Choose the plan that&#39;s right for you. All plans include a 14-day
             free trial.
           </p>
         </div>
@@ -167,8 +167,8 @@ export default function PricingPage() {
                 What happens if I exceed my message limit?
               </h3>
               <p className="mt-2 text-sm leading-6 text-gray-600">
-                If you exceed your monthly message limit, you'll be charged a
-                small fee per additional message. You can also upgrade to a
+                If you exceed your monthly message limit, you&#39;ll be charged
+                a small fee per additional message. You can also upgrade to a
                 higher plan.
               </p>
             </div>

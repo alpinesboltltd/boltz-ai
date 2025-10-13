@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useState } from "react";
 import { Spinner } from "@/components/common/Spinner";
 
 interface HumanHandoffSettingsProps {
-  chatagentId: string;
+  chatagentId?: string;
   initialSettings?: {
     enabled: boolean;
     email?: string;
@@ -47,7 +48,7 @@ const timezones = [
 ];
 
 export default function HumanHandoffSettings({
-  chatagentId,
+  // chatagentId,
   initialSettings = {
     enabled: false,
     threshold: 70,
@@ -229,7 +230,7 @@ export default function HumanHandoffSettings({
                     className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
                   />
                   <p className="mt-1 text-xs text-gray-500">
-                    When the AI's confidence falls below this threshold, the
+                    When the AI&#39;s confidence falls below this threshold, the
                     conversation will be transferred to a human.
                   </p>
                 </div>

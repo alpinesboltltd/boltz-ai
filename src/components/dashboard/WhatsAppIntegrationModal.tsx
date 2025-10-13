@@ -4,14 +4,14 @@ import { useState } from "react";
 import { Spinner } from "@/components/common/Spinner";
 
 interface WhatsAppIntegrationModalProps {
-  chatagentId: string;
+  chatagentId?: string;
   isOpen: boolean;
   onClose: () => void;
   onSuccess: () => void;
 }
 
 export default function WhatsAppIntegrationModal({
-  chatagentId,
+  // chatagentId,
   isOpen,
   onClose,
   onSuccess,

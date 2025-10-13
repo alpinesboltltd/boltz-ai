@@ -1,17 +1,18 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useState } from "react";
 import { Spinner } from "@/components/common/Spinner";
 
 interface ShopifyIntegrationModalProps {
-  chatagentId: string;
+  chatagentId?: string;
   isOpen: boolean;
   onClose: () => void;
   onSuccess: () => void;
 }
 
 export default function ShopifyIntegrationModal({
-  chatagentId,
+  // chatagentId,
   isOpen,
   onClose,
   onSuccess,
@@ -178,9 +179,12 @@ export default function ShopifyIntegrationModal({
           <ol className="mt-2 text-xs text-gray-500 list-decimal list-inside space-y-1">
             <li>Log in to your Shopify admin panel</li>
             <li>Go to Apps &gt; App and sales channel settings</li>
-            <li>Click "Develop apps for your store"</li>
+            <li>Click &quot;Develop apps for your store&quot;</li>
             <li>Create a new app or select an existing one</li>
-            <li>Under "API credentials", click "Configure Admin API scopes"</li>
+            <li>
+              Under &quot;API credentials&quot;, click &quot;Configure Admin API
+              scopes&quot;
+            </li>
             <li>Add the required scopes and save</li>
             <li>Your API key and secret will be displayed</li>
           </ol>

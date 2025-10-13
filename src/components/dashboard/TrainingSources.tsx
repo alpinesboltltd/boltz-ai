@@ -1,14 +1,18 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useState } from "react";
-import { Upload, FileText, Globe, MessageSquare, Plus, X } from "lucide-react";
+import { Upload, FileText, Globe, MessageSquare, X } from "lucide-react";
 
 interface TrainingSourcesProps {
   agentId?: string | null;
   onDataAdded?: (data: any) => void;
 }
 
-export function TrainingSources({ agentId, onDataAdded }: TrainingSourcesProps) {
+export function TrainingSources({
+  agentId,
+  onDataAdded,
+}: TrainingSourcesProps) {
   const [activeTab, setActiveTab] = useState("files");
   const [isUploading, setIsUploading] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
@@ -18,7 +22,7 @@ export function TrainingSources({ agentId, onDataAdded }: TrainingSourcesProps) 
 
   const saveTrainingData = async (data: any) => {
     if (!agentId) return;
-    
+
     try {
       const response = await fetch("http://localhost:3001/training_data", {
         method: "POST",
@@ -31,7 +35,7 @@ export function TrainingSources({ agentId, onDataAdded }: TrainingSourcesProps) 
           updated_at: new Date().toISOString(),
         }),
       });
-      
+
       if (response.ok) {
         onDataAdded?.(data);
       }
@@ -42,6 +46,9 @@ export function TrainingSources({ agentId, onDataAdded }: TrainingSourcesProps) 
 
   const handleFileUpload = async (files: FileList) => {
     setIsUploading(true);
+    // FIXME: loading state for is uploading
+    console.log(isUploading);
+
     for (const file of Array.from(files)) {
       const reader = new FileReader();
       reader.onload = async (e) => {
@@ -52,37 +59,37 @@ export function TrainingSources({ agentId, onDataAdded }: TrainingSourcesProps) 
           title: file.name,
           content: content.substring(0, 10000), // Limit content
           intent: "file_knowledge",
-          keywords: file.name.split('.')[0],
+          keywords: file.name.split(".")[0],
           confidence_score: 0.9,
           is_active: true,
         });
       };
       reader.readAsText(file);
-      setUploadedFiles(prev => [...prev, file]);
+      setUploadedFiles((prev) => [...prev, file]);
     }
     setIsUploading(false);
   };
 
   const handleTextSubmit = async () => {
     if (!textData.title || !textData.content) return;
-    
+
     await saveTrainingData({
       content_type: "faq",
       category: "Manual Entry",
       title: textData.title,
       content: textData.content,
       intent: "manual_knowledge",
-      keywords: textData.title.toLowerCase().replace(/\s+/g, ','),
+      keywords: textData.title.toLowerCase().replace(/\s+/g, ","),
       confidence_score: 0.95,
       is_active: true,
     });
-    
+
     setTextData({ title: "", content: "" });
   };
 
   const handleUrlSubmit = async () => {
     if (!urlData) return;
-    
+
     await saveTrainingData({
       content_type: "website_content",
       category: "Website",
@@ -94,24 +101,24 @@ export function TrainingSources({ agentId, onDataAdded }: TrainingSourcesProps) 
       source_url: urlData,
       is_active: true,
     });
-    
+
     setUrlData("");
   };
 
   const handleQASubmit = async () => {
     if (!qaData.question || !qaData.answer) return;
-    
+
     await saveTrainingData({
       content_type: "faq",
       category: "Q&A",
       title: qaData.question,
       content: qaData.answer,
       intent: "qa_knowledge",
-      keywords: qaData.question.toLowerCase().replace(/\s+/g, ','),
+      keywords: qaData.question.toLowerCase().replace(/\s+/g, ","),
       confidence_score: 1.0,
       is_active: true,
     });
-    
+
     setQaData({ question: "", answer: "" });
   };
 
@@ -168,21 +175,26 @@ export function TrainingSources({ agentId, onDataAdded }: TrainingSourcesProps) 
                 Supports PDF, TXT, DOC, DOCX files up to 10MB
               </p>
             </div>
-            
+
             <input
               id="file-input"
               type="file"
               multiple
               accept=".pdf,.txt,.doc,.docx"
               className="hidden"
-              onChange={(e) => e.target.files && handleFileUpload(e.target.files)}
+              onChange={(e) =>
+                e.target.files && handleFileUpload(e.target.files)
+              }
             />
 
             {uploadedFiles.length > 0 && (
               <div className="space-y-2">
                 <h4 className="font-medium text-gray-900">Uploaded Files</h4>
                 {uploadedFiles.map((file, index) => (
-                  <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                  <div
+                    key={index}
+                    className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                  >
                     <div className="flex items-center space-x-3">
                       <FileText className="w-5 h-5 text-gray-400" />
                       <span className="text-sm font-medium">{file.name}</span>
@@ -191,7 +203,11 @@ export function TrainingSources({ agentId, onDataAdded }: TrainingSourcesProps) 
                       </span>
                     </div>
                     <button
-                      onClick={() => setUploadedFiles(prev => prev.filter((_, i) => i !== index))}
+                      onClick={() =>
+                        setUploadedFiles((prev) =>
+                          prev.filter((_, i) => i !== index)
+                        )
+                      }
                       className="text-red-500 hover:text-red-700"
                     >
                       <X className="w-4 h-4" />
@@ -206,20 +222,28 @@ export function TrainingSources({ agentId, onDataAdded }: TrainingSourcesProps) 
         {activeTab === "text" && (
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Title</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Title
+              </label>
               <input
                 type="text"
                 value={textData.title}
-                onChange={(e) => setTextData(prev => ({ ...prev, title: e.target.value }))}
+                onChange={(e) =>
+                  setTextData((prev) => ({ ...prev, title: e.target.value }))
+                }
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                 placeholder="e.g., Return Policy"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Content</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Content
+              </label>
               <textarea
                 value={textData.content}
-                onChange={(e) => setTextData(prev => ({ ...prev, content: e.target.value }))}
+                onChange={(e) =>
+                  setTextData((prev) => ({ ...prev, content: e.target.value }))
+                }
                 rows={8}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 resize-none"
                 placeholder="Enter the text content you want your agent to learn from..."
@@ -238,7 +262,9 @@ export function TrainingSources({ agentId, onDataAdded }: TrainingSourcesProps) 
         {activeTab === "website" && (
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Website URL</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Website URL
+              </label>
               <input
                 type="url"
                 value={urlData}
@@ -260,20 +286,28 @@ export function TrainingSources({ agentId, onDataAdded }: TrainingSourcesProps) 
         {activeTab === "qa" && (
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Question</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Question
+              </label>
               <input
                 type="text"
                 value={qaData.question}
-                onChange={(e) => setQaData(prev => ({ ...prev, question: e.target.value }))}
+                onChange={(e) =>
+                  setQaData((prev) => ({ ...prev, question: e.target.value }))
+                }
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                 placeholder="What is your return policy?"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Answer</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Answer
+              </label>
               <textarea
                 value={qaData.answer}
-                onChange={(e) => setQaData(prev => ({ ...prev, answer: e.target.value }))}
+                onChange={(e) =>
+                  setQaData((prev) => ({ ...prev, answer: e.target.value }))
+                }
                 rows={4}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 resize-none"
                 placeholder="We offer a 30-day return policy..."

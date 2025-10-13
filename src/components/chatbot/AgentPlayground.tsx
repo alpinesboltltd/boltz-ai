@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useState, useEffect, useRef } from "react";
@@ -24,6 +25,7 @@ import { SYSTEM_PROMPT_TEMPLATES } from "@/data/systemPrompts";
 import { AI_MODELS, AIModel } from "@/mock-data/ai-models";
 import Image from "next/image";
 import Select from "react-select";
+import { Message } from "@/types";
 
 export function AgentPlayground() {
   const agentId = useParams().id as string;
@@ -716,7 +718,7 @@ function ConfigPanel({
             }))
           }
           rows={6}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none scrollbar-hide h-[280px]"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none scrollbar-hide"
           placeholder="Enter custom system instruction..."
         />
       </div>
@@ -769,8 +771,8 @@ function ChatInterface({
       {/* Messages */}
       <div className="flex-1 p-4 overflow-y-auto">
         {messages
-          .filter((m: any) => m.role !== "system")
-          .map((message: any, index: number) => (
+          .filter((m: Message) => m.role !== "system")
+          .map((message: Message, index: number) => (
             <div
               key={index}
               className={`mb-4 flex ${message.role === "user" ? "justify-end" : "justify-start"}`}

@@ -1,18 +1,41 @@
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { agentsAPI } from "@/lib/api";
-import { AgentActions, CoreAction, SystemAction, CustomAction, WorkflowNode, WorkflowConnection } from "@/types/actions";
-import { Plus, Settings, Play, Pause, Edit, Trash2, Zap, MessageSquare, Calendar, ShoppingCart, Bell, Workflow, Code, Users } from "lucide-react";
+import {
+  AgentActions,
+  CoreAction,
+  SystemAction,
+  CustomAction,
+} from "@/types/actions";
+import {
+  Plus,
+  Settings,
+  Play,
+  Pause,
+  Edit,
+  Trash2,
+  Zap,
+  MessageSquare,
+  Calendar,
+  ShoppingCart,
+  Bell,
+  Workflow,
+  Code,
+  Users,
+} from "lucide-react";
 import { ApiFunctionBuilder } from "./ApiFunctionBuilder";
 import { SequentialWorkflowBuilder } from "./SequentialWorkflowBuilder";
 import { ActionForm } from "./ActionForm";
-import { ApiFunctionFormData, SequentialWorkflowFormData } from "@/schemas/actionSchemas";
+import {
+  ApiFunctionFormData,
+  SequentialWorkflowFormData,
+} from "@/schemas/actionSchemas";
 
-interface ActionsV2Props {
-  onCreateCustomAction?: () => void;
-}
+// interface ActionsV2Props {
+//   onCreateCustomAction?: () => void;
+// }
 
-export function ActionsV2({ onCreateCustomAction }: ActionsV2Props) {
+export function ActionsV2() {
   const agentId = useParams().id as string;
   const [actionsData, setActionsData] = useState<AgentActions | null>(null);
   const [loading, setLoading] = useState(true);
@@ -27,7 +50,7 @@ export function ActionsV2({ onCreateCustomAction }: ActionsV2Props) {
         const { data } = await agentsAPI.getActions(agentId);
         setActionsData(data);
       } catch (error) {
-        console.error('Failed to fetch actions:', error);
+        console.error("Failed to fetch actions:", error);
       } finally {
         setLoading(false);
       }
@@ -48,33 +71,44 @@ export function ActionsV2({ onCreateCustomAction }: ActionsV2Props) {
       api: Code,
       messaging: MessageSquare,
       business: Users,
-      learning: Zap
+      learning: Zap,
     };
     return icons[type as keyof typeof icons] || Settings;
   };
 
-  const ActionCard = ({ action, onEdit, onToggle, onDelete }: {
+  const ActionCard = ({
+    action,
+    onEdit,
+    onToggle,
+    onDelete,
+  }: {
     action: CoreAction | SystemAction | CustomAction;
     onEdit: (id: string) => void;
     onToggle: (id: string) => void;
     onDelete?: (id: string) => void;
   }) => {
     const Icon = getActionIcon(action.type);
-    
+
     return (
       <div className="border rounded-lg p-4 bg-white shadow-sm">
         <div className="flex items-start justify-between">
           <div className="flex items-start gap-3">
-            <div className={`p-2 rounded-lg ${action.status === 'active' ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-600'}`}>
+            <div
+              className={`p-2 rounded-lg ${action.status === "active" ? "bg-green-100 text-green-600" : "bg-gray-100 text-gray-600"}`}
+            >
               <Icon className="w-5 h-5" />
             </div>
             <div>
               <h3 className="font-medium text-gray-900">{action.name}</h3>
               <p className="text-sm text-gray-500 mt-1">{action.description}</p>
               <div className="flex items-center gap-2 mt-2">
-                <span className={`px-2 py-1 text-xs rounded-full ${
-                  action.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'
-                }`}>
+                <span
+                  className={`px-2 py-1 text-xs rounded-full ${
+                    action.status === "active"
+                      ? "bg-green-100 text-green-700"
+                      : "bg-gray-100 text-gray-700"
+                  }`}
+                >
                   {action.status}
                 </span>
                 <span className="px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded-full">
@@ -86,9 +120,13 @@ export function ActionsV2({ onCreateCustomAction }: ActionsV2Props) {
           <div className="flex items-center gap-2">
             <button
               onClick={() => onToggle(action.id)}
-              className={`p-2 rounded-lg ${action.status === 'active' ? 'text-green-600 hover:bg-green-50' : 'text-gray-400 hover:bg-gray-50'}`}
+              className={`p-2 rounded-lg ${action.status === "active" ? "text-green-600 hover:bg-green-50" : "text-gray-400 hover:bg-gray-50"}`}
             >
-              {action.status === 'active' ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+              {action.status === "active" ? (
+                <Pause className="w-4 h-4" />
+              ) : (
+                <Play className="w-4 h-4" />
+              )}
             </button>
             <button
               onClick={() => onEdit(action.id)}
@@ -111,7 +149,7 @@ export function ActionsV2({ onCreateCustomAction }: ActionsV2Props) {
   };
 
   const handleEdit = (id: string) => {
-    console.log('Edit action:', id);
+    console.log("Edit action:", id);
   };
 
   const handleToggle = async (id: string) => {
@@ -121,7 +159,7 @@ export function ActionsV2({ onCreateCustomAction }: ActionsV2Props) {
       const { data } = await agentsAPI.getActions(agentId);
       setActionsData(data);
     } catch (error) {
-      console.error('Failed to toggle action:', error);
+      console.error("Failed to toggle action:", error);
     }
   };
 
@@ -132,7 +170,7 @@ export function ActionsV2({ onCreateCustomAction }: ActionsV2Props) {
       const { data } = await agentsAPI.getActions(agentId);
       setActionsData(data);
     } catch (error) {
-      console.error('Failed to delete action:', error);
+      console.error("Failed to delete action:", error);
     }
   };
 
@@ -146,13 +184,14 @@ export function ActionsV2({ onCreateCustomAction }: ActionsV2Props) {
 
   const handleSaveApiFunction = async (apiFunction: ApiFunctionFormData) => {
     try {
-      await agentsAPI.createApiFunction(agentId, apiFunction);
+      // TODO: refactor correctly
+      await agentsAPI.createApiFunction({ agentId, ...apiFunction });
       setShowApiFunctionBuilder(false);
       // Refresh actions data
       const { data } = await agentsAPI.getActions(agentId);
       setActionsData(data);
     } catch (error) {
-      console.error('Failed to create API function:', error);
+      console.error("Failed to create API function:", error);
     }
   };
 
@@ -168,7 +207,7 @@ export function ActionsV2({ onCreateCustomAction }: ActionsV2Props) {
       const { data } = await agentsAPI.getActions(agentId);
       setActionsData(data);
     } catch (error) {
-      console.error('Failed to create workflow:', error);
+      console.error("Failed to create workflow:", error);
     }
   };
 
@@ -184,7 +223,7 @@ export function ActionsV2({ onCreateCustomAction }: ActionsV2Props) {
       const { data } = await agentsAPI.getActions(agentId);
       setActionsData(data);
     } catch (error) {
-      console.error('Failed to create action:', error);
+      console.error("Failed to create action:", error);
     }
   };
 
@@ -241,9 +280,12 @@ export function ActionsV2({ onCreateCustomAction }: ActionsV2Props) {
       {activeTab === "core" && (
         <div className="mt-6">
           <div className="mb-6">
-            <h2 className="text-lg font-semibold text-gray-900">Core Inbuilt Actions</h2>
+            <h2 className="text-lg font-semibold text-gray-900">
+              Core Inbuilt Actions
+            </h2>
             <p className="text-sm text-gray-600 mt-1">
-              Essential actions that are part of the system's general intelligence for customer support.
+              Essential actions that are part of the system&#39;s general
+              intelligence for customer support.
             </p>
           </div>
           <div className="space-y-4">
@@ -263,29 +305,45 @@ export function ActionsV2({ onCreateCustomAction }: ActionsV2Props) {
       {activeTab === "system" && (
         <div className="mt-6">
           <div className="mb-6">
-            <h2 className="text-lg font-semibold text-gray-900">System-Defined Actions</h2>
+            <h2 className="text-lg font-semibold text-gray-900">
+              System-Defined Actions
+            </h2>
             <p className="text-sm text-gray-600 mt-1">
-              Pre-built actions that show what your agent can do. Configure integrations to enable these actions.
+              Pre-built actions that show what your agent can do. Configure
+              integrations to enable these actions.
             </p>
           </div>
           <div className="space-y-6">
             {actionsData?.systemActions?.map((action) => (
-              <div key={action.id} className="border rounded-lg p-6 bg-white shadow-sm">
+              <div
+                key={action.id}
+                className="border rounded-lg p-6 bg-white shadow-sm"
+              >
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-start gap-3">
-                    <div className={`p-2 rounded-lg ${action.status === 'active' ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-600'}`}>
+                    <div
+                      className={`p-2 rounded-lg ${action.status === "active" ? "bg-green-100 text-green-600" : "bg-gray-100 text-gray-600"}`}
+                    >
                       {(() => {
                         const Icon = getActionIcon(action.type);
                         return <Icon className="w-5 h-5" />;
                       })()}
                     </div>
                     <div>
-                      <h3 className="font-medium text-gray-900">{action.name}</h3>
-                      <p className="text-sm text-gray-500 mt-1">{action.description}</p>
+                      <h3 className="font-medium text-gray-900">
+                        {action.name}
+                      </h3>
+                      <p className="text-sm text-gray-500 mt-1">
+                        {action.description}
+                      </p>
                       <div className="flex items-center gap-2 mt-2">
-                        <span className={`px-2 py-1 text-xs rounded-full ${
-                          action.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'
-                        }`}>
+                        <span
+                          className={`px-2 py-1 text-xs rounded-full ${
+                            action.status === "active"
+                              ? "bg-green-100 text-green-700"
+                              : "bg-gray-100 text-gray-700"
+                          }`}
+                        >
                           {action.status}
                         </span>
                         <span className="px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded-full">
@@ -301,22 +359,32 @@ export function ActionsV2({ onCreateCustomAction }: ActionsV2Props) {
                     View Only
                   </button>
                 </div>
-                
-                {action.supportedProviders && action.supportedProviders.length > 0 && (
-                  <div className="border-t pt-4">
-                    <h4 className="text-sm font-medium text-gray-900 mb-3">Supported Integrations</h4>
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                      {action.supportedProviders.map((provider) => (
-                        <div key={provider.id} className="flex items-center gap-2 p-2 border rounded-lg">
-                          <div className="w-8 h-8 bg-gray-100 rounded flex items-center justify-center">
-                            <span className="text-xs font-medium">{provider.name.charAt(0)}</span>
+
+                {action.supportedProviders &&
+                  action.supportedProviders.length > 0 && (
+                    <div className="border-t pt-4">
+                      <h4 className="text-sm font-medium text-gray-900 mb-3">
+                        Supported Integrations
+                      </h4>
+                      <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                        {action.supportedProviders.map((provider) => (
+                          <div
+                            key={provider.id}
+                            className="flex items-center gap-2 p-2 border rounded-lg"
+                          >
+                            <div className="w-8 h-8 bg-gray-100 rounded flex items-center justify-center">
+                              <span className="text-xs font-medium">
+                                {provider.name.charAt(0)}
+                              </span>
+                            </div>
+                            <span className="text-sm text-gray-700">
+                              {provider.name}
+                            </span>
                           </div>
-                          <span className="text-sm text-gray-700">{provider.name}</span>
-                        </div>
-                      ))}
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
               </div>
             ))}
           </div>
@@ -328,9 +396,12 @@ export function ActionsV2({ onCreateCustomAction }: ActionsV2Props) {
         <div className="mt-6">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h2 className="text-lg font-semibold text-gray-900">Custom Actions</h2>
+              <h2 className="text-lg font-semibold text-gray-900">
+                Custom Actions
+              </h2>
               <p className="text-sm text-gray-600 mt-1">
-                Create custom workflows and actions specific to your business needs.
+                Create custom workflows and actions specific to your business
+                needs.
               </p>
             </div>
             <div className="flex gap-2">
@@ -361,8 +432,13 @@ export function ActionsV2({ onCreateCustomAction }: ActionsV2Props) {
             {actionsData?.customActions?.length === 0 ? (
               <div className="text-center py-12 border-2 border-dashed border-gray-300 rounded-lg">
                 <Workflow className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-gray-900 mb-2">No custom actions yet</h3>
-                <p className="text-gray-600 mb-4">Create your first custom action to automate specific workflows.</p>
+                <h3 className="text-lg font-medium text-gray-900 mb-2">
+                  No custom actions yet
+                </h3>
+                <p className="text-gray-600 mb-4">
+                  Create your first custom action to automate specific
+                  workflows.
+                </p>
                 <div className="flex gap-2">
                   <button
                     onClick={() => setShowActionForm(true)}
@@ -401,14 +477,14 @@ export function ActionsV2({ onCreateCustomAction }: ActionsV2Props) {
           </div>
         </div>
       )}
-      
+
       {showApiFunctionBuilder && (
         <ApiFunctionBuilder
           onSave={handleSaveApiFunction}
           onCancel={handleCancelApiFunction}
         />
       )}
-      
+
       {showWorkflowBuilder && (
         <SequentialWorkflowBuilder
           onSave={handleSaveWorkflow}
@@ -416,12 +492,9 @@ export function ActionsV2({ onCreateCustomAction }: ActionsV2Props) {
           availableApiFunctions={actionsData?.apiFunctions || []}
         />
       )}
-      
+
       {showActionForm && (
-        <ActionForm
-          onSave={handleSaveAction}
-          onCancel={handleCancelAction}
-        />
+        <ActionForm onSave={handleSaveAction} onCancel={handleCancelAction} />
       )}
     </div>
   );

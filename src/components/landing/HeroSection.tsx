@@ -1,7 +1,5 @@
 import Link from "next/link";
-import Image from "next/image";
 import VideoPlayer from "../media/VideoPlayer";
-import { Card } from "../ui/Card";
 
 export function HeroSection() {
   return (

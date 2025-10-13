@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, use as useReact } from "react";
+import { useState, useEffect, useRef } from "react";
 import { PaperAirplaneIcon } from "@heroicons/react/24/outline";
 // import { ModifiedCalendarWidget } from "@/components/agent";
 import { AgentData, useAgentStore } from "@/store/agentStore";
@@ -18,13 +18,9 @@ interface GeminiChatHistoryItem {
   parts: string;
 }
 
-interface ChatBotPage {
-  convoId?: string;
-  agentId?: string;
-}
-
-export default function ChatbotPage({ convoId }: ChatBotPage) {
+export default function ChatbotPage() {
   const agentId = useParams().id as string;
+  const convoId: string | undefined = undefined; // TODO: integrate real conversation id via backend
   const chatWindowRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const { getAgent } = useAgentStore();
@@ -34,7 +30,12 @@ export default function ChatbotPage({ convoId }: ChatBotPage) {
   const [agent, setAgent] = useState<Agent | null>(null);
   const [agentData, setAgentData] = useState<AgentData | null>(null);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [conversationData, setConversationData] = useState<any>(null);
+  const [conversationData, setConversationData] = useState<{
+    id: string;
+    title?: string;
+    escalated_to_human?: boolean;
+    escalation_reason?: string | null;
+  } | null>(null);
 
   const handleFeedback = async (
     messageId: string,
@@ -114,7 +115,7 @@ export default function ChatbotPage({ convoId }: ChatBotPage) {
     };
 
     getBotData();
-  }, [agentId]);
+  }, [agentId, convoId, getAgent, messages.length]);
 
   useEffect(() => {
     const getConvo = async () => {
@@ -146,7 +147,7 @@ export default function ChatbotPage({ convoId }: ChatBotPage) {
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!inputValue.trim()) return;
-    let input = sanitizedContent(inputValue);
+    const input = sanitizedContent(inputValue);
     const userMessage: ChatMessage = {
       id: messages.length + 1,
       convo_id: convoId!, //FIXME: uSE REAL CONVO_ID FROM BACKEND
@@ -468,7 +469,7 @@ export default function ChatbotPage({ convoId }: ChatBotPage) {
                   className="inline-flex items-center p-2 border border-transparent text-sm font-medium rounded-full shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
                   disabled={isTyping || !inputValue.trim()}
                   style={{
-                    backgroundColor: agentData!?.appearance.primary_color,
+                    backgroundColor: agentData?.appearance?.primary_color,
                     color: getOptimalTextColor(
                       agentData?.appearance.primary_color || "#f3f4f6"
                     ),

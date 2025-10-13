@@ -4,14 +4,14 @@ import { useState } from "react";
 import { Spinner } from "@/components/common/Spinner";
 
 interface DiscordIntegrationModalProps {
-  chatagentId: string;
+  chatagentId?: string;
   isOpen: boolean;
   onClose: () => void;
   onSuccess: () => void;
 }
 
 export default function DiscordIntegrationModal({
-  chatagentId,
+  // chatagentId,
   isOpen,
   onClose,
   onSuccess,
@@ -226,13 +226,17 @@ export default function DiscordIntegrationModal({
               </a>
             </li>
             <li>Create a new application or select an existing one</li>
-            <li>Find your Application ID under "General Information"</li>
             <li>
-              Go to the "Bot" tab and click "Add Bot" if you haven't already
+              Find your Application ID under &quot;General Information&quot;
             </li>
-            <li>Click "Reset Token" to generate a new bot token</li>
             <li>
-              Make sure to enable the necessary "Privileged Gateway Intents"
+              Go to the &quot;Bot&quot; tab and click &quot;Add Bot&quot; if you
+              haven&#39;t already
+            </li>
+            <li>Click &quot;Reset Token&quot; to generate a new bot token</li>
+            <li>
+              Make sure to enable the necessary &quot;Privileged Gateway
+              Intents&quot;
             </li>
           </ol>
           <p className="mt-2 text-xs text-gray-500">

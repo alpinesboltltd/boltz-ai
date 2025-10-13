@@ -28,12 +28,16 @@ interface AgentAppearanceForm {
   font_family: string;
 }
 
+interface AgentPreviewData {
+  name?: string;
+}
+
 export default function CreateAgentPage() {
   const router = useRouter();
   const [step, setStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [agentId, setAgentId] = useState<string | null>(null);
-  const [agentData, setAgentData] = useState<any>(null);
+  const [agentData, setAgentData] = useState<AgentPreviewData | null>(null);
 
   const agentForm = useForm<AgentSchemaInput>({
     resolver: zodResolver(AgentSchema),
@@ -129,26 +133,27 @@ export default function CreateAgentPage() {
 
       await Promise.all([
         agentApi.createAppearance({
-          id: agentApi.generateId(),
           agent_id: agentId,
           ...data,
           created_at: timestamp,
           updated_at: timestamp,
         }),
         agentApi.createBehavior({
-          id: agentApi.generateId(),
           agent_id: agentId,
           initial_messages: JSON.stringify([data.welcome_message]),
           fallback_message:
             "I'm sorry, I don't understand that question. Could you rephrase it?",
           enable_human_handoff: false,
           offline_message:
-            "Our team is currently offline. Please leave a message and we'll get back to you.",
+            "Our team is currently offline. Please leave a message and we\'ll get back to you.",
+          system_instruction: "You are a helpful AI assistant.",
+          prompt_template: "{{conversation}}",
+          temperature: 0.7,
+          max_tokens: 500,
           created_at: timestamp,
           updated_at: timestamp,
         }),
         agentApi.createStats({
-          id: agentApi.generateId(),
           agent_id: agentId,
           total_messages: 0,
           unique_users: 0,
@@ -158,7 +163,7 @@ export default function CreateAgentPage() {
           last_calculated_at: timestamp,
         }),
         agentApi.updateAgent(agentId, {
-          status: "active",
+          status: AgentStatus.ACTIVE,
           updated_at: timestamp,
         }),
       ]);
@@ -199,7 +204,9 @@ export default function CreateAgentPage() {
                     <p className="text-xs sm:text-sm font-medium text-gray-900 whitespace-nowrap">
                       {stepItem.title}
                     </p>
-                    <p className="text-xs text-gray-500 hidden sm:block">{stepItem.desc}</p>
+                    <p className="text-xs text-gray-500 hidden sm:block">
+                      {stepItem.desc}
+                    </p>
                   </div>
                 </div>
                 {index < 2 && (
@@ -223,8 +230,8 @@ export default function CreateAgentPage() {
                   Create Your AI Agent
                 </h2>
                 <p className="text-sm sm:text-base text-gray-600 mt-2">
-                  Let's start with the basics. Choose a name, type, and AI model
-                  for your agent.
+                  Let&apos;s start with the basics. Choose a name, type, and AI
+                  model for your agent.
                 </p>
               </div>
 

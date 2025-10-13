@@ -1,4 +1,3 @@
-import { integrations } from "@/mock-data/integrations";
 import {
   AgentAppearance,
   AgentBehavior,
@@ -9,10 +8,10 @@ import {
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  const { id } = await params;
+  _request: NextRequest,
+  context: unknown
+): Promise<NextResponse<{ success: boolean; data?: unknown; error?: string }>> {
+  const { id } = (context as { params: { id: string } }).params;
 
   try {
     // FIXME: use api call to db
@@ -38,7 +37,10 @@ export async function GET(
     const agentStats = stats.find((stat) => stat.agent_id === id);
 
     if (!agentStats) {
-      return NextResponse.json({ error: "Agent not found" }, { status: 404 });
+      return NextResponse.json(
+        { success: false, error: "Agent not found" },
+        { status: 404 }
+      );
     }
 
     const chatagentData = {
@@ -52,17 +54,20 @@ export async function GET(
       success: true,
       data: chatagentData,
     });
-  } catch (error) {
-    return NextResponse.json({ error: "Item not found" }, { status: 404 });
+  } catch {
+    return NextResponse.json(
+      { success: false, error: "Item not found" },
+      { status: 404 }
+    );
   }
 }
 
 // You can also add other HTTP methods
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
-) {
-  const id = params.id;
+  context: unknown
+): Promise<NextResponse<{ message: string; data: unknown }>> {
+  const { id } = (context as { params: { id: string } }).params;
   const body = await request.json();
 
   // Update logic here
@@ -74,10 +79,10 @@ export async function PUT(
 }
 
 export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
-  const id = params.id;
+  _request: NextRequest,
+  context: unknown
+): Promise<NextResponse<{ message: string }>> {
+  const { id } = (context as { params: { id: string } }).params;
 
   // Delete logic here
 

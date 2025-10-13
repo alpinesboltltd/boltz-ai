@@ -4,14 +4,14 @@ import { useState } from "react";
 import { Spinner } from "@/components/common/Spinner";
 
 interface TelegramIntegrationModalProps {
-  chatagentId: string;
+  chatagentId?: string;
   isOpen: boolean;
   onClose: () => void;
   onSuccess: () => void;
 }
 
 export default function TelegramIntegrationModal({
-  chatagentId,
+  // chatagentId,
   isOpen,
   onClose,
   onSuccess,
@@ -167,8 +167,9 @@ export default function TelegramIntegrationModal({
             <li>Copy the token and paste it above</li>
           </ol>
           <p className="mt-2 text-xs text-gray-500">
-            After connecting, you'll need to set a webhook URL in your bot
-            settings. This will be done automatically when you click "Connect".
+            After connecting, you&apos;ll need to set a webhook URL in your bot
+            settings. This will be done automatically when you click
+            &quot;Connect&quot;.
           </p>
           <p className="mt-2 text-xs text-gray-500">
             Need help?{" "}

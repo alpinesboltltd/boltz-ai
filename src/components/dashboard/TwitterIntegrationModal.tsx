@@ -4,14 +4,14 @@ import { useState } from "react";
 import { Spinner } from "@/components/common/Spinner";
 
 interface TwitterIntegrationModalProps {
-  chatagentId: string;
+  chatagentId?: string;
   isOpen: boolean;
   onClose: () => void;
   onSuccess: () => void;
 }
 
 export default function TwitterIntegrationModal({
-  chatagentId,
+  // chatagentId,
   isOpen,
   onClose,
   onSuccess,
@@ -257,11 +257,14 @@ export default function TwitterIntegrationModal({
               </a>
             </li>
             <li>Create a new app or select an existing one</li>
-            <li>Go to the "Keys and tokens" tab</li>
-            <li>Find your API Key and API Key Secret under "Consumer Keys"</li>
+            <li>Go to the &quot;Keys and tokens&quot; tab</li>
+            <li>
+              Find your API Key and API Key Secret under &quot;Consumer
+              Keys&quot;
+            </li>
             <li>
               Generate Access Token and Access Token Secret under
-              "Authentication Tokens"
+              &quot;Authentication Tokens&quote;
             </li>
           </ol>
           <p className="mt-2 text-xs text-gray-500">

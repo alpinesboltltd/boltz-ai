@@ -4,14 +4,14 @@ import { useState } from "react";
 import { Spinner } from "@/components/common/Spinner";
 
 interface SlackIntegrationModalProps {
-  chatagentId: string;
+  chatagentId?: string;
   isOpen: boolean;
   onClose: () => void;
   onSuccess: () => void;
 }
 
 export default function SlackIntegrationModal({
-  chatagentId,
+  // chatagentId,
   isOpen,
   onClose,
   onSuccess,
@@ -166,7 +166,7 @@ export default function SlackIntegrationModal({
                   required
                 />
                 <p className="mt-1 text-xs text-gray-500">
-                  Starts with "xoxb-"
+                  Starts with &quot;xoxb-&quot;
                 </p>
               </div>
 
@@ -226,12 +226,12 @@ export default function SlackIntegrationModal({
             </li>
             <li>Select your app or create a new one</li>
             <li>
-              For Bot Token: Navigate to "OAuth & Permissions" and find it under
-              "Bot User OAuth Token"
+              For Bot Token: Navigate to &quot;OAuth & Permissions&quot; and
+              find it under &quot;Bot User OAuth Token&quot;
             </li>
             <li>
-              For Signing Secret: Go to "Basic Information" and find it under
-              "App Credentials"
+              For Signing Secret: Go to &quot;Basic Information&quot; and find
+              it under &quot;App Credentials&quot;
             </li>
           </ol>
           <p className="mt-2 text-xs text-gray-500">

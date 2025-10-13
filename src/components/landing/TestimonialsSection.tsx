@@ -1,4 +1,5 @@
 export function TestimonialsSection() {
+  //  FIXME: Fetch from the database
   const testimonials = [
     {
       content:
@@ -58,7 +59,7 @@ export function TestimonialsSection() {
                 </div>
               </div>
               <p className="text-gray-600 italic mb-6">
-                "{testimonial.content}"
+                &quot;{testimonial.content}&quot;
               </p>
               <div className="flex items-center">
                 {[...Array(5)].map((_, i) => (

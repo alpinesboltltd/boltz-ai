@@ -65,6 +65,22 @@ export default function SettingsPage() {
   const handleProfileSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    // FIXME: run implementation for subscription
+    setSubscription({
+      plan: "Pro",
+      price: "$29/month",
+      status: "active",
+      nextBillingDate: "2023-12-01",
+      features: [
+        "10,000 messages per month",
+        "Advanced chatagent customization",
+        "Website & WhatsApp integration",
+        "All AI models (Gemini, GPT-4, Claude)",
+        "Knowledge base integration",
+        "Analytics dashboard",
+        "Priority support",
+      ],
+    });
 
     try {
       // In production, this would call the real API

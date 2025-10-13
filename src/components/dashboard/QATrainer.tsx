@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Plus, X } from "lucide-react";
-import TextEditor from "./TextEditor";
 
 interface QAItem {
   id: string;
@@ -15,7 +14,7 @@ interface QATrainerProps {
 
 export function QATrainer({ onSubmit }: QATrainerProps) {
   const [title, setTitle] = useState("");
-  const [questions, setQuestions] = useState([""]); 
+  const [questions, setQuestions] = useState([""]);
   const [answer, setAnswer] = useState("");
   const [savedQAs, setSavedQAs] = useState<QAItem[]>([]);
 
@@ -36,14 +35,14 @@ export function QATrainer({ onSubmit }: QATrainerProps) {
   };
 
   const handleSubmit = () => {
-    if (!title.trim() || !answer.trim() || questions.every(q => !q.trim())) {
+    if (!title.trim() || !answer.trim() || questions.every((q) => !q.trim())) {
       return;
     }
 
     const qaItem: QAItem = {
       id: Date.now().toString(),
       title: title.trim(),
-      questions: questions.filter(q => q.trim()),
+      questions: questions.filter((q) => q.trim()),
       answer: answer.trim(),
     };
 
@@ -57,7 +56,7 @@ export function QATrainer({ onSubmit }: QATrainerProps) {
   };
 
   const removeQA = (id: string) => {
-    setSavedQAs(savedQAs.filter(qa => qa.id !== id));
+    setSavedQAs(savedQAs.filter((qa) => qa.id !== id));
   };
 
   return (
@@ -65,12 +64,15 @@ export function QATrainer({ onSubmit }: QATrainerProps) {
       <div className="border border-gray-300 rounded-lg p-4">
         <h3 className="font-medium text-gray-900 mb-4">Add Q&A</h3>
         <p className="text-sm text-gray-500 mb-4">
-          Create question-answer pairs to train your agent with specific responses.
+          Create question-answer pairs to train your agent with specific
+          responses.
         </p>
 
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700">Title</label>
+            <label className="block text-sm font-medium text-gray-700">
+              Title
+            </label>
             <input
               type="text"
               value={title}
@@ -81,7 +83,9 @@ export function QATrainer({ onSubmit }: QATrainerProps) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Questions</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Questions
+            </label>
             {questions.map((question, index) => (
               <div key={index} className="flex gap-2 mb-2">
                 <input
@@ -111,7 +115,9 @@ export function QATrainer({ onSubmit }: QATrainerProps) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Answer</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Answer
+            </label>
             <textarea
               value={answer}
               onChange={(e) => setAnswer(e.target.value)}
@@ -124,7 +130,11 @@ export function QATrainer({ onSubmit }: QATrainerProps) {
           <div className="flex justify-end">
             <button
               onClick={handleSubmit}
-              disabled={!title.trim() || !answer.trim() || questions.every(q => !q.trim())}
+              disabled={
+                !title.trim() ||
+                !answer.trim() ||
+                questions.every((q) => !q.trim())
+              }
               className="bg-primary-600 text-white px-4 py-2 rounded-md hover:bg-primary-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
             >
               Add Q&A
@@ -136,7 +146,9 @@ export function QATrainer({ onSubmit }: QATrainerProps) {
       {/* Saved Q&As */}
       {savedQAs.length > 0 && (
         <div className="border border-gray-300 rounded-lg p-4">
-          <h4 className="font-medium text-gray-900 mb-4">Saved Q&As ({savedQAs.length})</h4>
+          <h4 className="font-medium text-gray-900 mb-4">
+            Saved Q&As ({savedQAs.length})
+          </h4>
           <div className="space-y-3">
             {savedQAs.map((qa) => (
               <div key={qa.id} className="bg-gray-50 p-3 rounded-md">
@@ -144,7 +156,8 @@ export function QATrainer({ onSubmit }: QATrainerProps) {
                   <div className="flex-1">
                     <h5 className="font-medium text-sm">{qa.title}</h5>
                     <p className="text-xs text-gray-600 mt-1">
-                      {qa.questions.length} question{qa.questions.length !== 1 ? 's' : ''}
+                      {qa.questions.length} question
+                      {qa.questions.length !== 1 ? "s" : ""}
                     </p>
                   </div>
                   <button

@@ -1,16 +1,17 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextRequest, NextResponse } from "next/server";
-import fs from 'fs';
-import path from 'path';
+import fs from "fs";
+import path from "path";
 
 // Mock data loader and saver
 function loadMockData() {
-  const dbPath = path.join(process.cwd(), 'mock-data', 'db.json');
-  const data = JSON.parse(fs.readFileSync(dbPath, 'utf8'));
+  const dbPath = path.join(process.cwd(), "mock-data", "db.json");
+  const data = JSON.parse(fs.readFileSync(dbPath, "utf8"));
   return data;
 }
 
 function saveMockData(data: any) {
-  const dbPath = path.join(process.cwd(), 'mock-data', 'db.json');
+  const dbPath = path.join(process.cwd(), "mock-data", "db.json");
   fs.writeFileSync(dbPath, JSON.stringify(data, null, 2));
 }
 
@@ -23,7 +24,7 @@ export async function POST(
 
   try {
     const mockData = loadMockData();
-    
+
     // Create new sequential workflow as a custom action
     const newWorkflow = {
       id: `workflow_${Date.now()}`,
@@ -39,9 +40,9 @@ export async function POST(
         type: step.type,
         config: {
           name: step.name,
-          ...step
+          ...step,
         },
-        nextStep: step.onSuccess || null
+        nextStep: step.onSuccess || null,
       })),
       isBuiltIn: false,
       workflowConfig: {
@@ -51,22 +52,24 @@ export async function POST(
           position: { x: index * 200, y: 100 },
           data: {
             label: step.name,
-            config: step
-          }
+            config: step,
+          },
         })),
-        connections: body.steps.map((step: any, index: number) => {
-          if (step.onSuccess && index < body.steps.length - 1) {
-            return {
-              id: `conn_${index}`,
-              source: step.id || `step_${index + 1}`,
-              target: step.onSuccess
-            };
-          }
-          return null;
-        }).filter(Boolean)
+        connections: body.steps
+          .map((step: any, index: number) => {
+            if (step.onSuccess && index < body.steps.length - 1) {
+              return {
+                id: `conn_${index}`,
+                source: step.id || `step_${index + 1}`,
+                target: step.onSuccess,
+              };
+            }
+            return null;
+          })
+          .filter(Boolean),
       },
       created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
+      updated_at: new Date().toISOString(),
     };
 
     // Add to custom_actions array
@@ -84,7 +87,10 @@ export async function POST(
       data: newWorkflow,
     });
   } catch (error) {
-    console.error('Error creating workflow:', error);
-    return NextResponse.json({ error: "Failed to create workflow" }, { status: 500 });
+    console.error("Error creating workflow:", error);
+    return NextResponse.json(
+      { error: "Failed to create workflow" },
+      { status: 500 }
+    );
   }
 }

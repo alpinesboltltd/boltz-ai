@@ -19,7 +19,7 @@ export async function GET(
           type: "pdf",
           status: "processed",
           created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
+          updated_at: new Date().toISOString(),
         },
         {
           id: "2",
@@ -29,8 +29,8 @@ export async function GET(
           type: "txt",
           status: "processed",
           created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        }
+          updated_at: new Date().toISOString(),
+        },
       ],
       websites: [
         {
@@ -42,8 +42,8 @@ export async function GET(
           status: "crawled",
           crawl_type: "recursive",
           created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        }
+          updated_at: new Date().toISOString(),
+        },
       ],
       texts: [
         {
@@ -53,8 +53,8 @@ export async function GET(
           content: "Our company policies...",
           status: "active",
           created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        }
+          updated_at: new Date().toISOString(),
+        },
       ],
       qaItems: [
         {
@@ -64,16 +64,20 @@ export async function GET(
           answer: "9 AM to 5 PM",
           status: "active",
           created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        }
+          updated_at: new Date().toISOString(),
+        },
       ],
       totalSize: 1536000,
-      maxSize: 400000000 // 400MB
+      maxSize: 400000000, // 400MB
     };
 
     return NextResponse.json({ success: true, data: sources });
   } catch (error) {
-    return NextResponse.json({ error: "Failed to fetch sources" }, { status: 500 });
+    console.log(error);
+    return NextResponse.json(
+      { error: "Failed to fetch sources" },
+      { status: 500 }
+    );
   }
 }
 

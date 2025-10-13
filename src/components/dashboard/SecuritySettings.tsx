@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useState } from "react";
@@ -9,7 +10,7 @@ import {
 } from "@heroicons/react/24/outline";
 
 interface SecuritySettingsProps {
-  chatagentId: string;
+  chatagentId?: string;
   initialSettings?: {
     dataRetention: number;
     piiFiltering: boolean;
@@ -23,7 +24,7 @@ interface SecuritySettingsProps {
 }
 
 export default function SecuritySettings({
-  chatagentId,
+  // chatagentId,
   initialSettings = {
     dataRetention: 30,
     piiFiltering: true,

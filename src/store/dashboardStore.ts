@@ -1,12 +1,12 @@
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 export enum DetailsTab {
   PLAYGROUND = "playground",
-  ACTIVITY = "activity", 
+  ACTIVITY = "activity",
   CONVERSATIONS = "conversations",
   SOURCES = "sources",
-  ACTION = "action",
+  // ACTION = "action",
   APPEARANCE = "appearance",
 }
 
@@ -22,7 +22,7 @@ export const useDashboardStore = create<DashboardState>()(
       setActiveTab: (tab) => set({ activeTab: tab }),
     }),
     {
-      name: 'dashboard-storage',
+      name: "dashboard-storage",
     }
   )
 );

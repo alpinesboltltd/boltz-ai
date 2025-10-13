@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useState, useEffect } from "react";
@@ -19,8 +20,7 @@ interface BotCustomizerProps {
 export function BotCustomizer({ onSave }: BotCustomizerProps) {
   const agentId = useParams().id as string;
   const { getAgent } = useAgentStore();
-  const { appearance, fetchAppearance, updateAppearance } =
-    useAgentDetailStore();
+  const { appearance, fetchAppearance } = useAgentDetailStore();
   const [name, setName] = useState("Agent");
   const [config, setConfig] = useState<Partial<AgentAppearance>>({
     position: "bottom-right" as AgentPosition,

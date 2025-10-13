@@ -57,7 +57,8 @@ export default function LoginPage() {
       // TODO: Store user session
       router.push("/dashboard");
     } catch (err) {
-      // TODO display error in a toast
+      // TODO: display error in a toast
+      console.log(err);
     } finally {
       setLoading(false);
     }

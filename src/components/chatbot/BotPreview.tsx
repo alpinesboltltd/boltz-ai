@@ -2,10 +2,18 @@
 
 import { useState } from "react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import { AgentAppearance } from "@/types/agent";
+
+interface BotConfig {
+  welcome_message?: string;
+  position?: "bottom-right" | "bottom-left";
+  icon_size?: "small" | "medium" | "large";
+  bubble_style?: "round" | "square" | "rounded";
+  chat_icon?: string;
+  primary_color?: string;
+}
 
 interface BotPreviewProps {
-  botConfig: any;
+  botConfig: BotConfig;
   name: string;
 }
 
@@ -109,12 +117,12 @@ export function BotPreview({ botConfig, name }: BotPreviewProps) {
 
       {/* Chat widget */}
       <div
-        className={`absolute ${positionStyles[botConfig.position || "bottom-right"]} z-10`}
+        className={`absolute ${positionStyles[botConfig.position ?? "bottom-right"]} z-10`}
       >
         {!isOpen ? (
           <button
             onClick={toggleChat}
-            className={`${iconSizes[botConfig.icon_size || "medium"]} ${bubbleStyles[botConfig.bubble_style || "round"]} flex items-center justify-center shadow-lg`}
+            className={`${iconSizes[botConfig.icon_size ?? "medium"]} ${bubbleStyles[botConfig.bubble_style ?? "round"]} flex items-center justify-center shadow-lg`}
             style={{ backgroundColor: botConfig.primary_color || "#6366f1" }}
           >
             <span className="text-2xl text-white">{getAvatar()}</span>

@@ -33,11 +33,21 @@ export interface Message {
   id: string;
   chatagentId: string;
   sessionId: string;
-  content: string;
-  role: "user" | "bot";
+  // content: string;
+  parts: string;
+  role: "user" | "system";
   timestamp: string;
-  metadata?: Record<string, any>;
+  metadata?: MessageMetadata;
 }
+
+// Narrow metadata shape to common JSON-compatible primitives/arrays/objects
+export type JSONPrimitive = string | number | boolean | null;
+export interface JSONObject {
+  [key: string]: JSONValue;
+}
+export type JSONArray = JSONValue[];
+export type JSONValue = JSONPrimitive | JSONObject | JSONArray;
+export type MessageMetadata = Record<string, JSONValue>;
 
 // Integration Types
 export interface Integration {
