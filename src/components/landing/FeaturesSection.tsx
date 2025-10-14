@@ -1,136 +1,142 @@
 import {
   ChatBubbleLeftRightIcon,
+  MicrophoneIcon,
+  PhotoIcon,
   CpuChipIcon,
-  GlobeAltIcon,
   ChartBarIcon,
   ShieldCheckIcon,
-  CubeTransparentIcon,
-  DocumentTextIcon,
-  ArrowPathIcon,
-  PaintBrushIcon,
-  UserGroupIcon,
-  CodeBracketIcon,
-  LanguageIcon,
-  ArrowsRightLeftIcon,
-  PhoneArrowUpRightIcon,
 } from "@heroicons/react/24/outline";
+import Topic from "../ui/Topic";
 
-const features = [
+const agentTypes = [
   {
-    name: "Custom AI Model Selection",
+    name: "Multimodal AI Agents",
     description:
-      "Choose from multiple AI models including Google Gemini, GPT-4, Claude, and Mistral to power your chatbot.",
+      "Handle text, images, documents, and voice in one intelligent agent. Perfect for complex customer support scenarios.",
+    icon: PhotoIcon,
+    features: [
+      "Image recognition",
+      "Document processing",
+      "Voice integration",
+      "Multi-format responses",
+    ],
+  },
+  {
+    name: "Text AI Agents",
+    description:
+      "Lightning-fast text-based agents for chat, email, and messaging platforms. Optimized for quick, accurate responses.",
+    icon: ChatBubbleLeftRightIcon,
+    features: [
+      "Instant responses",
+      "Context awareness",
+      "Multi-language",
+      "Smart routing",
+    ],
+  },
+  {
+    name: "Voice AI Agents",
+    description:
+      "Natural voice conversations with advanced speech recognition and synthesis. Handle phone calls like a human.",
+    icon: MicrophoneIcon,
+    features: [
+      "Natural speech",
+      "Real-time processing",
+      "Emotion detection",
+      "Call handling",
+    ],
+  },
+];
+
+const coreFeatures = [
+  {
+    name: "Advanced AI Models",
+    description:
+      "Powered by GPT-5, Claude, Gemini, and other leading AI models for superior performance.",
     icon: CpuChipIcon,
   },
   {
-    name: "No-Code Chatbot Builder",
+    name: "Real-time Analytics",
     description:
-      "Build and customize your chatbot without writing a single line of code using our intuitive drag-and-drop interface.",
-    icon: CubeTransparentIcon,
-  },
-  {
-    name: "Knowledge Base Integration",
-    description:
-      "Train your chatbot with your documents, FAQs, and website data to provide accurate and relevant responses.",
-    icon: DocumentTextIcon,
-  },
-  {
-    name: "Real-time Training",
-    description:
-      "Update and improve your chatbot responses in real-time as you receive user feedback.",
-    icon: ArrowPathIcon,
-  },
-  {
-    name: "Multi-channel Deployment",
-    description:
-      "Deploy your chatbot on your website, WhatsApp, Slack, and social media platforms with a single click.",
-    icon: GlobeAltIcon,
-  },
-  {
-    name: "Advanced Analytics",
-    description:
-      "Track user interactions, conversation quality, and conversion metrics with detailed analytics dashboards.",
+      "Track performance, user satisfaction, and conversion metrics with detailed dashboards.",
     icon: ChartBarIcon,
   },
   {
-    name: "Multilingual Support",
+    name: "Enterprise Security",
     description:
-      "Communicate with your customers in over 80 languages with automatic language detection and translation.",
-    icon: LanguageIcon,
-  },
-  {
-    name: "Enterprise-grade Security",
-    description:
-      "Keep your data safe with end-to-end encryption, GDPR compliance, and advanced security features.",
+      "Bank-level security with encryption, compliance, and data protection built-in.",
     icon: ShieldCheckIcon,
-  },
-  {
-    name: "White Labeling",
-    description:
-      "Customize the chatbot with your brand colors, logo, and domain for a seamless brand experience.",
-    icon: PaintBrushIcon,
-  },
-  {
-    name: "Live Human Handoff",
-    description:
-      "Seamlessly transfer conversations to human agents when AI assistance is not sufficient.",
-    icon: PhoneArrowUpRightIcon,
-  },
-  {
-    name: "Team Collaboration",
-    description:
-      "Work together with your team to build, train, and improve your chatbots with role-based permissions.",
-    icon: UserGroupIcon,
-  },
-  {
-    name: "API Access",
-    description:
-      "Integrate your chatbot with your existing systems using our comprehensive API.",
-    icon: CodeBracketIcon,
   },
 ];
 
 export function FeaturesSection() {
   return (
-    <div className="bg-white py-24 sm:py-32">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <div className="mx-auto max-w-2xl lg:text-center">
-          <h2 className="text-base font-semibold leading-7 text-primary-600">
-            Powerful Features
+    <section className="min-h-screen bg-gray-50 py-24">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <div className="text-center mb-20">
+          <Topic
+            text="Agent Types"
+            Icon={PhotoIcon}
+            className="bg-blue-50 mb-6"
+          />
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+            Build Any Type of AI Agent Your Business Needs
           </h2>
-          <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-            Everything you need to build advanced AI chatbots
-          </p>
-          <p className="mt-6 text-lg leading-8 text-gray-600">
-            Our platform combines the latest AI technology with an intuitive
-            interface to help you create intelligent, conversational chatbots
-            that engage your customers and drive results.
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            From handling complex documents to natural voice conversations -
+            create the perfect AI agent for every customer touchpoint.
           </p>
         </div>
-        <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-4xl">
-          <dl className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-10 lg:max-w-none lg:grid-cols-2 lg:gap-y-16">
-            {features.map((feature) => (
-              <div
-                key={feature.name}
-                className="relative pl-16 transition-all duration-300 hover:translate-y-[-5px]"
-              >
-                <dt className="text-base font-semibold leading-7 text-gray-900">
-                  <div className="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg bg-primary-600 shadow-md">
-                    <feature.icon
-                      className="h-6 w-6 text-white"
-                      aria-hidden="true"
-                    />
-                  </div>
-                  {feature.name}
-                </dt>
-                <dd className="mt-2 text-base leading-7 text-gray-600">
-                  {feature.description}
-                </dd>
+
+        {/* Agent Types */}
+        <div className="grid lg:grid-cols-3 gap-8 mb-20">
+          {agentTypes.map((agent) => (
+            <div
+              key={agent.name}
+              className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow"
+            >
+              <div className="flex items-center justify-center w-16 h-16 bg-primary-100 rounded-xl mb-6">
+                <agent.icon className="w-8 h-8 text-primary-600" />
               </div>
-            ))}
-          </dl>
+              <h3 className="text-xl font-bold text-gray-900 mb-4">
+                {agent.name}
+              </h3>
+              <p className="text-gray-600 mb-6">{agent.description}</p>
+              <ul className="space-y-2">
+                {agent.features.map((feature) => (
+                  <li
+                    key={feature}
+                    className="flex items-center text-sm text-gray-600"
+                  >
+                    <div className="w-1.5 h-1.5 bg-primary-600 rounded-full mr-3"></div>
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+
+        {/* Core Features */}
+        <div className="text-center mb-12">
+          <h3 className="text-2xl font-bold text-gray-900 mb-4">
+            Powerful Core Features
+          </h3>
+        </div>
+        <div className="grid md:grid-cols-3 gap-8">
+          {coreFeatures.map((feature) => (
+            <div key={feature.name} className="text-center">
+              <div className="flex items-center justify-center w-12 h-12 bg-primary-600 rounded-lg mx-auto mb-4">
+                <feature.icon className="w-6 h-6 text-white" />
+              </div>
+              <h4 className="text-lg font-semibold text-gray-900 mb-2">
+                {feature.name}
+              </h4>
+              <p className="text-gray-600">{feature.description}</p>
+            </div>
+          ))}
         </div>
       </div>
-    </div>
+    </section>
   );
 }

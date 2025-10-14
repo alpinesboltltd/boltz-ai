@@ -1,16 +1,16 @@
-# Chatboltz - AI Chatbot Platform
+# Boltz - AI Chatbot Platform
 
 ## Features & Specifications
 
 ### Core Features
 
 - **Custom AI Model Selection**: Support for Google Gemini, GPT-4, Claude, Mistral, and other AI models
-- **Knowledge Base Integration**: Upload documents, FAQs, and website data to train the chatbot
-- **Real-time Chatbot Training**: Dynamic training and updating of chatbot responses
+- **Knowledge Base Integration**: Upload documents, FAQs, and website data to train the chatagent
+- **Real-time Chatbot Training**: Dynamic training and updating of chatagent responses
 - **No-Code Chatbot Builder**: Intuitive interface for non-technical users
 - **Advanced Analytics**: Track user interactions, conversation quality, and conversion metrics
 - **Multi-channel Integration**: Deploy on websites, WhatsApp, Slack, Shopify, and other platforms
-- **Customization Options**: Personalize chatbot appearance, behavior, and responses
+- **Customization Options**: Personalize chatagent appearance, behavior, and responses
 - **Multilingual Support**: Support for 80+ languages
 
 ### Technical Requirements

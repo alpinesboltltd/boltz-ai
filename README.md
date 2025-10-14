@@ -1,10 +1,10 @@
 # Boltz-ai - AI Chatbot Platform
 
-An AI-powered chatbot platform modeled after Chatbase.co, incorporating its pricing structure, documentation, and user interface.
+An AI-powered chatagent platform modeled after Boltz.co, incorporating its pricing structure, documentation, and user interface.
 
 ## Project Overview
 
-Chatboltz is a no-code AI chatbot builder that allows users to create custom chatbots powered by various AI models including Google Gemini, GPT-4, Claude, and Mistral. The platform enables businesses to train chatbots with their own knowledge base, deploy them across multiple channels, and track performance with advanced analytics.
+Boltz is a no-code AI chatagent builder that allows users to create custom chatagents powered by various AI models including Google Gemini, GPT-4, Claude, and Mistral. The platform enables businesses to train chatagents with their own knowledge base, deploy them across multiple channels, and track performance with advanced analytics.
 
 ## Tech Stack
 
@@ -31,22 +31,22 @@ Chatboltz is a no-code AI chatbot builder that allows users to create custom cha
 ### Core Features
 
 - **Custom AI Model Selection**: Support for Google Gemini, GPT-4, Claude, Mistral, and other AI models
-- **Knowledge Base Integration**: Upload documents, FAQs, and website data to train the chatbot
-- **Real-time Chatbot Training**: Dynamic training and updating of chatbot responses
+- **Knowledge Base Integration**: Upload documents, FAQs, and website data to train the chatagent
+- **Real-time Chatbot Training**: Dynamic training and updating of chatagent responses
 - **No-Code Chatbot Builder**: Intuitive interface for non-technical users
 - **Advanced Analytics**: Track user interactions, conversation quality, and conversion metrics
 - **Multi-channel Integration**: Deploy on websites, WhatsApp, Slack, Shopify, and other platforms
-- **Customization Options**: Personalize chatbot appearance, behavior, and responses
+- **Customization Options**: Personalize chatagent appearance, behavior, and responses
 - **Multilingual Support**: Support for 80+ languages
 
 ## Project Structure
 
 ```
-Chatboltz/
+Boltz/
 ├── src/
 │   ├── app/                    # Next.js app directory
 │   │   ├── dashboard/          # Dashboard pages
-│   │   ├── chatbot/            # Chatbot pages
+│   │   ├── chatagent/            # Chatbot pages
 │   │   ├── globals.css         # Global styles
 │   │   ├── layout.tsx          # Root layout
 │   │   └── page.tsx            # Home page
@@ -54,7 +54,7 @@ Chatboltz/
 │   │   ├── common/             # Common components (Header, Footer, etc.)
 │   │   ├── landing/            # Landing page components
 │   │   ├── dashboard/          # Dashboard components
-│   │   └── chatbot/            # Chatbot components
+│   │   └── chatagent/            # Chatbot components
 │   ├── lib/                    # Utility libraries
 │   ├── mock-data/              # Mock data for development
 │   ├── store/                  # State management
@@ -79,17 +79,17 @@ Chatboltz/
 
 ### Dashboard Pages
 
-- **Dashboard**: Overview of chatbots, analytics, and recent activity
-- **Chatbot Builder**: No-code interface for building and customizing chatbots
+- **Dashboard**: Overview of chatagents, analytics, and recent activity
+- **Chatbot Builder**: No-code interface for building and customizing chatagents
 - **Knowledge Base**: Upload and manage training data
 - **Analytics**: Performance metrics and user insights
 - **Settings**: Account and billing settings
 
 ### Chatbot Pages
 
-- **Chatbot Demo**: Live preview of the chatbot
-- **Chatbot Settings**: Configuration options for the chatbot
-- **Training**: Interface for training and improving the chatbot
+- **Chatbot Demo**: Live preview of the chatagent
+- **Chatbot Settings**: Configuration options for the chatagent
+- **Training**: Interface for training and improving the chatagent
 
 ## Pricing Structure
 

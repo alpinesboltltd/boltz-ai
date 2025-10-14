@@ -9,40 +9,40 @@ Add the following code to your website's HTML, just before the closing `</body>`
 ```html
 <script>
   window.boltzConfig = {
-    chatbotId: "YOUR_CHATBOT_ID",
+    chatagentId: "YOUR_CHATBOT_ID",
     position: "bottom-right", // Options: bottom-right, bottom-left
     theme: "light", // Options: light, dark, auto (follows user's system preference)
     initialMessage: "Hello! How can I help you today?",
     avatar: true, // Show or hide the bot avatar
-    branding: true, // Show or hide Chatboltz branding
+    branding: true, // Show or hide Boltz branding
   };
 </script>
-<script src="https://cdn.Chatboltz/widget.js" async></script>
+<script src="https://cdn.Boltz/widget.js" async></script>
 ```
 
-Replace `YOUR_CHATBOT_ID` with the unique ID of your chatbot from your dashboard.
+Replace `YOUR_CHATBOT_ID` with the unique ID of your chatagent from your dashboard.
 
 ### 2. CMS Platform Integrations
 
 #### WordPress
 
-1. Install the Chatboltz WordPress plugin from the WordPress plugin directory
-2. Navigate to the Chatboltz settings page in your WordPress admin panel
-3. Enter your chatbot ID and customize appearance settings
-4. Save changes and the chatbot will appear on your site
+1. Install the Boltz WordPress plugin from the WordPress plugin directory
+2. Navigate to the Boltz settings page in your WordPress admin panel
+3. Enter your chatagent ID and customize appearance settings
+4. Save changes and the chatagent will appear on your site
 
 #### Shopify
 
-1. Visit the Shopify App Store and install the Chatboltz app
-2. Follow the setup wizard to connect your Chatboltz account
-3. Select the chatbot you want to display on your store
+1. Visit the Shopify App Store and install the Boltz app
+2. Follow the setup wizard to connect your Boltz account
+3. Select the chatagent you want to display on your store
 4. Customize appearance settings and save
 
 #### Wix
 
-1. Go to the Wix App Market and add the Chatboltz app
-2. Connect your Chatboltz account
-3. Configure your chatbot settings
+1. Go to the Wix App Market and add the Boltz app
+2. Connect your Boltz account
+3. Configure your chatagent settings
 4. Publish your site to make the changes live
 
 #### Webflow
@@ -53,10 +53,10 @@ Replace `YOUR_CHATBOT_ID` with the unique ID of your chatbot from your dashboard
 
 ### 3. Advanced Integration with API
 
-For more advanced use cases, you can use our REST API to programmatically control the chatbot:
+For more advanced use cases, you can use our REST API to programmatically control the chatagent:
 
 ```javascript
-// Initialize the chatbot
+// Initialize the chatagent
 const boltzChat = new BoltzChat("YOUR_API_KEY");
 
 // Open the chat programmatically
@@ -90,7 +90,7 @@ boltzChat.setUser({
 
 ### 1. Initial Website Crawling
 
-When you first connect your website to Chatboltz, our system performs an initial crawl of your site to:
+When you first connect your website to Boltz, our system performs an initial crawl of your site to:
 
 - Index all public pages
 - Extract product information
@@ -101,7 +101,7 @@ This process typically takes a few minutes for small sites and up to a few hours
 
 ### 2. Structured Data Support
 
-To improve the chatbot's ability to understand your products and content, we recommend adding structured data markup to your website:
+To improve the chatagent's ability to understand your products and content, we recommend adding structured data markup to your website:
 
 ```html
 <script type="application/ld+json">
@@ -123,7 +123,7 @@ To improve the chatbot's ability to understand your products and content, we rec
 
 ### 3. Real-time Search
 
-When a user asks about products or services, the chatbot:
+When a user asks about products or services, the chatagent:
 
 1. Analyzes the user's query using NLP
 2. Searches the indexed content for relevant information
@@ -133,7 +133,7 @@ When a user asks about products or services, the chatbot:
 
 ### 4. Dynamic Content Updates
 
-The chatbot stays up-to-date with your website content through:
+The chatagent stays up-to-date with your website content through:
 
 - Regular re-crawling (configurable frequency)
 - Webhook notifications when content changes
@@ -144,7 +144,7 @@ The chatbot stays up-to-date with your website content through:
 
 ### Product Search and Display
 
-When a user asks about products, the chatbot can:
+When a user asks about products, the chatagent can:
 
 1. Display product cards with images, prices, and descriptions
 2. Show product variants (sizes, colors, etc.)
@@ -154,7 +154,7 @@ When a user asks about products, the chatbot can:
 
 ### Shopping Cart Integration
 
-The chatbot can help users manage their shopping cart:
+The chatagent can help users manage their shopping cart:
 
 1. Add items to cart
 2. Update quantities
@@ -164,7 +164,7 @@ The chatbot can help users manage their shopping cart:
 
 ### Secure Checkout
 
-For secure transactions, the chatbot can:
+For secure transactions, the chatagent can:
 
 1. Redirect to your secure checkout page
 2. Process payments through your existing payment gateway
@@ -176,7 +176,7 @@ For secure transactions, the chatbot can:
 
 ### Secure Authentication
 
-Before any financial transactions, the chatbot ensures secure authentication:
+Before any financial transactions, the chatagent ensures secure authentication:
 
 1. Multi-factor authentication (MFA)
 2. Biometric verification (when available)
@@ -216,12 +216,12 @@ All financial transactions are protected by:
 
 ## Best Practices
 
-1. **Keep your knowledge base updated** - Regularly review and update your chatbot's knowledge base to ensure it has the latest information.
+1. **Keep your knowledge base updated** - Regularly review and update your chatagent's knowledge base to ensure it has the latest information.
 
-2. **Use structured data** - Implement schema.org markup on your website to help the chatbot better understand your content.
+2. **Use structured data** - Implement schema.org markup on your website to help the chatagent better understand your content.
 
-3. **Train your chatbot** - Regularly review conversations and train your chatbot on common questions and edge cases.
+3. **Train your chatagent** - Regularly review conversations and train your chatagent on common questions and edge cases.
 
 4. **Set up human handoff** - Configure when and how conversations should be transferred to human agents.
 
-5. **Monitor analytics** - Use the analytics dashboard to identify areas for improvement and optimize your chatbot's performance.
+5. **Monitor analytics** - Use the analytics dashboard to identify areas for improvement and optimize your chatagent's performance.

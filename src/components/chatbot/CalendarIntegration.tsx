@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { CalendarIcon, CheckIcon } from '@heroicons/react/24/outline';
+import { useState } from "react";
+import { CalendarIcon, CheckIcon } from "@heroicons/react/24/outline";
 
 interface CalendarIntegrationProps {
   onSubmit: (data: CalendarIntegrationData) => void;
 }
 
 export interface CalendarIntegrationData {
-  provider: 'calendly' | 'google' | 'cal';
+  provider: "calendly" | "google" | "cal";
   settings: {
     apiKey?: string;
     username?: string;
@@ -18,27 +18,29 @@ export interface CalendarIntegrationData {
 }
 
 export function CalendarIntegration({ onSubmit }: CalendarIntegrationProps) {
-  const [provider, setProvider] = useState<'calendly' | 'google' | 'cal'>('calendly');
-  const [apiKey, setApiKey] = useState('');
-  const [username, setUsername] = useState('');
-  const [clientId, setClientId] = useState('');
-  const [clientSecret, setClientSecret] = useState('');
+  const [provider, setProvider] = useState<"calendly" | "google" | "cal">(
+    "calendly"
+  );
+  const [apiKey, setApiKey] = useState("");
+  const [username, setUsername] = useState("");
+  const [clientId, setClientId] = useState("");
+  const [clientSecret, setClientSecret] = useState("");
   const [isConnected, setIsConnected] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     const settings = {
-      ...(provider === 'calendly' && { apiKey, username }),
-      ...(provider === 'google' && { clientId, clientSecret }),
-      ...(provider === 'cal' && { apiKey })
+      ...(provider === "calendly" && { apiKey, username }),
+      ...(provider === "google" && { clientId, clientSecret }),
+      ...(provider === "cal" && { apiKey }),
     };
-    
+
     onSubmit({
       provider,
-      settings
+      settings,
     });
-    
+
     // In a real app, this would verify the connection
     setIsConnected(true);
   };
@@ -48,7 +50,7 @@ export function CalendarIntegration({ onSubmit }: CalendarIntegrationProps) {
       <h3 className="text-lg font-medium text-gray-900 mb-4">
         Calendar Integration
       </h3>
-      
+
       {!isConnected ? (
         <form onSubmit={handleSubmit}>
           <div className="space-y-4">
@@ -63,62 +65,64 @@ export function CalendarIntegration({ onSubmit }: CalendarIntegrationProps) {
                     id="calendly"
                     name="provider"
                     value="calendly"
-                    checked={provider === 'calendly'}
-                    onChange={() => setProvider('calendly')}
+                    checked={provider === "calendly"}
+                    onChange={() => setProvider("calendly")}
                     className="sr-only"
                   />
                   <label
                     htmlFor="calendly"
                     className={`flex flex-col items-center p-3 border rounded-md cursor-pointer ${
-                      provider === 'calendly'
-                        ? 'border-primary-500 bg-primary-50'
-                        : 'border-gray-300 hover:bg-gray-50'
+                      provider === "calendly"
+                        ? "border-primary-500 bg-primary-50"
+                        : "border-gray-300 hover:bg-gray-50"
                     }`}
                   >
                     <CalendarIcon className="h-6 w-6 text-gray-400" />
                     <span className="mt-2 text-sm font-medium">Calendly</span>
                   </label>
                 </div>
-                
+
                 <div>
                   <input
                     type="radio"
                     id="google"
                     name="provider"
                     value="google"
-                    checked={provider === 'google'}
-                    onChange={() => setProvider('google')}
+                    checked={provider === "google"}
+                    onChange={() => setProvider("google")}
                     className="sr-only"
                   />
                   <label
                     htmlFor="google"
                     className={`flex flex-col items-center p-3 border rounded-md cursor-pointer ${
-                      provider === 'google'
-                        ? 'border-primary-500 bg-primary-50'
-                        : 'border-gray-300 hover:bg-gray-50'
+                      provider === "google"
+                        ? "border-primary-500 bg-primary-50"
+                        : "border-gray-300 hover:bg-gray-50"
                     }`}
                   >
                     <span className="text-2xl">📅</span>
-                    <span className="mt-2 text-sm font-medium">Google Calendar</span>
+                    <span className="mt-2 text-sm font-medium">
+                      Google Calendar
+                    </span>
                   </label>
                 </div>
-                
+
                 <div>
                   <input
                     type="radio"
                     id="cal"
                     name="provider"
                     value="cal"
-                    checked={provider === 'cal'}
-                    onChange={() => setProvider('cal')}
+                    checked={provider === "cal"}
+                    onChange={() => setProvider("cal")}
                     className="sr-only"
                   />
                   <label
                     htmlFor="cal"
                     className={`flex flex-col items-center p-3 border rounded-md cursor-pointer ${
-                      provider === 'cal'
-                        ? 'border-primary-500 bg-primary-50'
-                        : 'border-gray-300 hover:bg-gray-50'
+                      provider === "cal"
+                        ? "border-primary-500 bg-primary-50"
+                        : "border-gray-300 hover:bg-gray-50"
                     }`}
                   >
                     <span className="text-2xl">🗓️</span>
@@ -127,11 +131,14 @@ export function CalendarIntegration({ onSubmit }: CalendarIntegrationProps) {
                 </div>
               </div>
             </div>
-            
-            {provider === 'calendly' && (
+
+            {provider === "calendly" && (
               <>
                 <div>
-                  <label htmlFor="apiKey" className="block text-sm font-medium text-gray-700">
+                  <label
+                    htmlFor="apiKey"
+                    className="block text-sm font-medium text-gray-700"
+                  >
                     API Key
                   </label>
                   <input
@@ -145,7 +152,10 @@ export function CalendarIntegration({ onSubmit }: CalendarIntegrationProps) {
                   />
                 </div>
                 <div>
-                  <label htmlFor="username" className="block text-sm font-medium text-gray-700">
+                  <label
+                    htmlFor="username"
+                    className="block text-sm font-medium text-gray-700"
+                  >
                     Username
                   </label>
                   <input
@@ -160,11 +170,14 @@ export function CalendarIntegration({ onSubmit }: CalendarIntegrationProps) {
                 </div>
               </>
             )}
-            
-            {provider === 'google' && (
+
+            {provider === "google" && (
               <>
                 <div>
-                  <label htmlFor="clientId" className="block text-sm font-medium text-gray-700">
+                  <label
+                    htmlFor="clientId"
+                    className="block text-sm font-medium text-gray-700"
+                  >
                     Client ID
                   </label>
                   <input
@@ -178,7 +191,10 @@ export function CalendarIntegration({ onSubmit }: CalendarIntegrationProps) {
                   />
                 </div>
                 <div>
-                  <label htmlFor="clientSecret" className="block text-sm font-medium text-gray-700">
+                  <label
+                    htmlFor="clientSecret"
+                    className="block text-sm font-medium text-gray-700"
+                  >
                     Client Secret
                   </label>
                   <input
@@ -193,10 +209,13 @@ export function CalendarIntegration({ onSubmit }: CalendarIntegrationProps) {
                 </div>
               </>
             )}
-            
-            {provider === 'cal' && (
+
+            {provider === "cal" && (
               <div>
-                <label htmlFor="calApiKey" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="calApiKey"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   API Key
                 </label>
                 <input
@@ -210,7 +229,7 @@ export function CalendarIntegration({ onSubmit }: CalendarIntegrationProps) {
                 />
               </div>
             )}
-            
+
             <div className="pt-4">
               <button
                 type="submit"
@@ -227,9 +246,17 @@ export function CalendarIntegration({ onSubmit }: CalendarIntegrationProps) {
           <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100">
             <CheckIcon className="h-6 w-6 text-green-600" aria-hidden="true" />
           </div>
-          <h3 className="mt-3 text-lg font-medium text-gray-900">Calendar Connected</h3>
+          <h3 className="mt-3 text-lg font-medium text-gray-900">
+            Calendar Connected
+          </h3>
           <p className="mt-2 text-sm text-gray-500">
-            Your {provider === 'calendly' ? 'Calendly' : provider === 'google' ? 'Google Calendar' : 'Cal.com'} account has been successfully connected.
+            Your{" "}
+            {provider === "calendly"
+              ? "Calendly"
+              : provider === "google"
+                ? "Google Calendar"
+                : "Cal.com"}{" "}
+            account has been successfully connected.
           </p>
           <div className="mt-4">
             <button

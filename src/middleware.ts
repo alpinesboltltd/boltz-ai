@@ -17,20 +17,29 @@ export function middleware(request: NextRequest) {
     path === "/contact" ||
     path === "/privacy" ||
     path === "/terms" ||
-    path.startsWith("/chatbot/") ||
-    path.startsWith("/api/public/");
+    path.startsWith("/dashboard/") ||
+    path.startsWith("/chatagent/") ||
+    path.startsWith("/api/") ||
+    path.startsWith("/v1/");
 
-  // Get the token from cookies
-  const token = request.cookies.get("auth_token")?.value;
+  // Check for Bearer token in Authorization header first
+  let token: string | undefined = undefined;
+  const authHeader = request.headers.get("authorization");
+  if (authHeader && authHeader.startsWith("Bearer ")) {
+    token = authHeader.substring(7);
+  } else {
+    // Fallback to cookie
+    token = request.cookies.get("auth_token")?.value;
+  }
 
   // If the path requires authentication and there's no token, redirect to login
-  // if (!isPublicPath && !token) {
-  //   // Store the original URL to redirect back after login
-  //   const url = new URL("/auth/login", request.url);
-  //   url.searchParams.set("redirect", encodeURI(request.nextUrl.pathname));
+  if (!isPublicPath && !token) {
+    // Store the original URL to redirect back after login
+    const url = new URL("/auth/login", request.url);
+    url.searchParams.set("redirect", encodeURI(request.nextUrl.pathname));
 
-  //   return NextResponse.redirect(url);
-  // }
+    return NextResponse.redirect(url);
+  }
 
   // If the user is logged in and trying to access auth pages, redirect to dashboard
   if (token && (path === "/auth/login" || path === "/auth/register")) {

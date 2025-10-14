@@ -9,9 +9,9 @@ import { getAuth } from "firebase/auth";
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyAEDaemjVTeEHtrQ8s_KYt3pp9wOQ8GDvQ",
-  authDomain: "chatboltz.firebaseapp.com",
-  projectId: "chatboltz",
-  storageBucket: "chatboltz.firebasestorage.app",
+  authDomain: "boltz.firebaseapp.com",
+  projectId: "boltz",
+  storageBucket: "boltz.firebasestorage.app",
   messagingSenderId: "629956062943",
   appId: "1:629956062943:web:6e2ce3cc8537f2ae27436a",
   measurementId: "G-7TDKWX3CKJ",

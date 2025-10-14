@@ -13,16 +13,18 @@ export const CompWork = ({
   className?: string;
 }) => (
   <div
-    className={`flex items-center mx-1 gap-3 rounded-full px-3 py-1 bg-gray-300  flex-grow ${className}`}
+    className={`flex items-center gap-3 rounded-xl px-4 py-3 bg-gray-50 border border-gray-200 hover:border-primary-300 hover:bg-primary-50 transition-colors ${className}`}
   >
     <Image
       src={src}
-      alt="icon"
-      height={40}
-      width={40}
-      className="w-8 rounded-full aspect-square"
+      alt={`${text} integration`}
+      height={32}
+      width={32}
+      className="w-8 h-8 rounded-lg object-contain"
     />
-    <p className={`text-lg font-bold text-gray-800 ${className}`}>{text}</p>
-    <p className={`text-lg  text-gray-400 ${className}`}>{work}</p>
+    <div className="flex-1">
+      <p className="text-sm font-semibold text-gray-900">{text}</p>
+      {work && <p className="text-xs text-gray-500">{work}</p>}
+    </div>
   </div>
 );

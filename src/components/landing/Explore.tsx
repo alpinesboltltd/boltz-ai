@@ -2,94 +2,143 @@
 
 import { SparklesIcon } from "@heroicons/react/24/outline";
 import Topic from "../ui/Topic";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/Card";
-import VideoPlayer from "../media/VideoPlayer";
-import clsx from "clsx";
-import { useEffect, useState } from "react";
+import { Card, CardContent } from "@/components/ui/Card";
+import { useEffect, useState, useRef } from "react";
 import { ExploreV } from "../ui/ExploreV";
+import { cn } from "@/lib/utils";
+import Image from "next/image";
+import { gsap } from "gsap";
 
 export function Explore() {
   const [activeTab, setActiveTab] = useState(0);
   const ActiveIcon = ExploreV[activeTab].icon;
+  const imageRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  const handleTabChange = (newTab: number) => {
+    if (imageRef.current) {
+      gsap.to(imageRef.current, {
+        opacity: 0,
+        scale: 0.95,
+        duration: 0.2,
+        ease: "power2.out",
+        onComplete: () => {
+          setActiveTab(newTab);
+          gsap.to(imageRef.current, {
+            opacity: 1,
+            scale: 1,
+            duration: 0.3,
+            ease: "power2.out",
+          });
+        },
+      });
+    } else {
+      setActiveTab(newTab);
+    }
+
+    // Center active tab on mobile without affecting page scroll
+    if (scrollRef.current && window.innerWidth < 640) {
+      const container = scrollRef.current;
+      const activeButton = container.children[newTab] as HTMLElement;
+      if (activeButton) {
+        const containerRect = container.getBoundingClientRect();
+        const buttonRect = activeButton.getBoundingClientRect();
+        const scrollLeft =
+          activeButton.offsetLeft -
+          containerRect.width / 2 +
+          buttonRect.width / 2;
+        container.scrollTo({ left: scrollLeft, behavior: "smooth" });
+      }
+    }
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setActiveTab((prev) => (prev + 1) % ExploreV.length);
+      handleTabChange((activeTab + 1) % ExploreV.length);
     }, 5000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [activeTab]);
 
   return (
-    <section className="px-4 py-4 sm:px-6 lg:px-8 bg-black rounded-2xl mt-3">
-      <Topic text="Features" Icon={SparklesIcon} className="bg-blue-50" />
-      <h1 className="font-semibold text-white text-4xl mt-3">
-        Discover the Chatbase platform
-      </h1>
-      <div className="hidden sm:flex flex-row justify-around gap-1">
-        {ExploreV.map((item, i) => (
-          <div
-            key={i}
-            className={clsx(
-              "p-5 cursor-pointer transition-all duration-500 mb-5 flex text-white",
-              activeTab === i
-                ? "scale-y-125 bg-foundation-accent-900 border-blue-500 border-b-4"
-                : "scale-y-100"
-            )}
-            onClick={() => setActiveTab(i)}
-          >
-            <p
-              className={clsx(
-                activeTab === i
-                  ? "font-semibold text-xl text-blue-500 flex items-center"
-                  : "text-xl flex items-center"
-              )}
-            >
-              <ActiveIcon className="w-4 h-4 text-blue-600" />
-              {item.title}
-            </p>
-          </div>
-        ))}
-      </div>
-      <div className="hidden sm:block md:block">
-        <Card className="p-3">
-          <img src={ExploreV[activeTab].src} className="rounded-2xl" />
-        </Card>
-      </div>
-      <div className="block sm:hidden">
-        <Card className="p-5 text-white bg-foundation-accent-900 mb-4">
-          <div className="flex flex-col items-center gap-4">
-            <img
-              src={ExploreV[activeTab].src}
-              alt={ExploreV[activeTab].title}
-              className="w-full max-w-xs"
-            />
-            <p className="text-sm font-semibold text-black flex items-center gap-2">
-              <ActiveIcon className="w-4 h-4 text-blue-600" />
-              {ExploreV[activeTab].title}
-            </p>
-          </div>
-        </Card>
-        <div className="flex flex-row justify-around gap-1">
+    <section className="bg-black py-12 sm:py-24">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+        <Topic
+          text="Platform Features"
+          Icon={SparklesIcon}
+          className="bg-blue-50 mb-4 sm:mb-6"
+        />
+        <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-white mb-6 sm:mb-12">
+          Discover the Boltz Ai Platform
+        </h2>
+
+        {/* Desktop Tabs */}
+        <div className="hidden sm:flex justify-center gap-4 lg:gap-8 mb-12">
           {ExploreV.map((item, i) => (
-            <div
+            <button
               key={i}
-              className={clsx(
-                "p-3 rounded-md cursor-pointer transition-all duration-300 text-white",
+              className={cn(
+                "px-6 py-4 rounded-lg transition-all duration-300 flex items-center gap-3",
                 activeTab === i
-                  ? "bg-foundation-accent-800 border-blue-500 border-b-4"
-                  : "bg-foundation-accent-600"
+                  ? "bg-primary-600 text-white scale-105"
+                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
               )}
-              onClick={() => setActiveTab(i)}
+              onClick={() => handleTabChange(i)}
             >
-              <p className="text-sm text-center">{item.title}</p>
-            </div>
+              <item.icon className="w-5 h-5" />
+              <span className="font-medium">{item.title}</span>
+            </button>
           ))}
+        </div>
+
+        <Card className="bg-transparent border-none shadow-none">
+          <CardContent className="p-2 sm:p-6">
+            <div
+              ref={imageRef}
+              className="relative w-full aspect-video sm:aspect-[16/10] lg:aspect-[16/9] bg-transparent"
+            >
+              <Image
+                src={ExploreV[activeTab].src}
+                alt={ExploreV[activeTab].title}
+                fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 80vw"
+                className="rounded-lg sm:rounded-xl object-cover"
+                priority
+              />
+            </div>
+
+            {/* Mobile Tab Title */}
+            <div className="flex items-center gap-2 justify-center mt-3 sm:hidden">
+              <ActiveIcon className="w-5 h-5 text-primary-600" />
+              <span className="font-semibold text-gray-900">
+                {ExploreV[activeTab].title}
+              </span>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Mobile Scrollable Tabs */}
+        <div className="sm:hidden mt-4">
+          <div
+            ref={scrollRef}
+            className="flex gap-2 overflow-x-auto scrollbar-hide px-3 py-2"
+            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+          >
+            {ExploreV.map((item, i) => (
+              <button
+                key={i}
+                className={cn(
+                  "flex-shrink-0 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300",
+                  activeTab === i
+                    ? "bg-primary-600 text-white"
+                    : "bg-gray-800 text-gray-300"
+                )}
+                onClick={() => handleTabChange(i)}
+              >
+                {item.title}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
     </section>

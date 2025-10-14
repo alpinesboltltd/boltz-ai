@@ -26,8 +26,7 @@ const features = [
   {
     name: "Real-Time Chatbot Training",
     description: "Train and update your bot dynamically",
-    platforms:
-      "Chatbase Web Platform, OpenAI Playground, Google Gemini Sandbox",
+    platforms: "Boltz Web Platform, OpenAI Playground, Google Gemini Sandbox",
     tiers: { free: false, pro: true, business: true },
   },
   {
@@ -46,14 +45,14 @@ const features = [
   {
     name: "Deep Analytics & User Insights",
     description:
-      "Provides chatbot performance data, user interactions, and conversion tracking",
+      "Provides chatagent performance data, user interactions, and conversion tracking",
     platforms: "Google Analytics, HubSpot, Tableau, Mixpanel",
     tiers: { free: false, pro: true, business: true },
   },
   {
     name: "Omnichannel Integrations",
     description:
-      "Deploy chatbots on websites, WhatsApp, Slack, and social media",
+      "Deploy chatagents on websites, WhatsApp, Slack, and social media",
     platforms:
       "WhatsApp Business, Facebook Messenger, Telegram, Instagram, Twitter DMs",
     tiers: { free: false, pro: true, business: true },
@@ -81,7 +80,7 @@ const features = [
   {
     name: "Custom Avatar & Branding",
     description:
-      "Personalized chatbot appearance with custom avatars and brand colors",
+      "Personalized chatagent appearance with custom avatars and brand colors",
     platforms: "Web Platform, Custom CSS, Image Processing API",
     tiers: { free: false, pro: true, business: true },
   },
@@ -114,7 +113,7 @@ export function FeaturesTable() {
             Comprehensive Features
           </h2>
           <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-            Everything you need to build powerful AI chatbots
+            Everything you need to build powerful AI chatagents
           </p>
           <p className="mt-6 text-lg leading-8 text-gray-600">
             Compare our features across different plans and see the platforms we

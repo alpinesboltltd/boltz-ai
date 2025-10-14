@@ -1,18 +1,49 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BotPreview } from "./BotPreview";
-import { ChatbotData } from "@/store/agentStore";
+import { useParams } from "next/navigation";
+import { useAgentStore } from "@/store/agentStore";
+import { useAgentDetailStore } from "@/store/agentDetailStore";
+import {
+  AgentAppearance,
+  AgentBubbleStyle,
+  AgentIconSize,
+  AgentPosition,
+} from "@/types/agent";
 
 interface BotCustomizerProps {
-  name: string;
-  data: Partial<ChatbotData>;
-  // FIXME: USE A STRNG TYPE FOR CONFIG
-  onSave: (config: any) => void;
+  onSave: () => void;
 }
 
-export function BotCustomizer({ name, data, onSave }: BotCustomizerProps) {
-  const [config, setConfig] = useState(data.appearance!);
+export function BotCustomizer({ onSave }: BotCustomizerProps) {
+  const agentId = useParams().id as string;
+  const { getAgent } = useAgentStore();
+  const { appearance, fetchAppearance } = useAgentDetailStore();
+  const [name, setName] = useState("Agent");
+  const [config, setConfig] = useState<Partial<AgentAppearance>>({
+    position: "bottom-right" as AgentPosition,
+    icon_size: "medium" as AgentIconSize,
+    bubble_style: "round" as AgentBubbleStyle,
+    chat_icon: "default",
+    primary_color: "#3B82F6",
+    welcome_message: "Hello! How can I help you today?",
+  });
+
+  useEffect(() => {
+    const { agent } = getAgent(agentId);
+    if (agent) {
+      setName(agent.name);
+    }
+    fetchAppearance(agentId);
+  }, [agentId, getAgent, fetchAppearance]);
+
+  useEffect(() => {
+    if (appearance) {
+      setConfig(appearance);
+    }
+  }, [appearance]);
   const handleChange = (field: string, value: any) => {
     setConfig({
       ...config,
@@ -93,8 +124,8 @@ export function BotCustomizer({ name, data, onSave }: BotCustomizerProps) {
                   type="radio"
                   name="bubbleStyle"
                   value="rounded"
-                  checked={config.bubble_style === "rounded"}
-                  onChange={() => handleChange("bubbleStyle", "rounded")}
+                  checked={config.bubble_style === AgentBubbleStyle.ROUND}
+                  onChange={() => handleChange("bubbleStyle", "round")}
                   className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300"
                 />
                 <span className="ml-2 text-sm text-gray-700">Rounded</span>
@@ -211,7 +242,7 @@ export function BotCustomizer({ name, data, onSave }: BotCustomizerProps) {
           <div className="pt-4">
             <button
               type="button"
-              onClick={() => onSave(config)}
+              onClick={onSave}
               className="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
             >
               Save Customization

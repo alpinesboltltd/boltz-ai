@@ -1,8 +1,122 @@
-.next
+###############################################
+# Base: Node / JavaScript / TypeScript / Next #
+###############################################
+# See https://help.github.com/articles/ignoring-files/
 
-node_modules
+# Dependencies
+node_modules/
+.pnp
+.pnp.*
+.npm
+npm-packages-offline-cache/
 
-.env
-certificates
+# Yarn v2+ (already selective allow-list pattern kept)
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+!.yarn/sdks
+!.yarn/constraints.pro
 
+# PNPM store (if symlinked locally)
+.pnpm-store
+
+# Build output / artifacts
+.next/
+out/
+build/
+dist/
+coverage/
+.nyc_output/
+storybook-static/
+
+# Next.js / SWC / Turbopack caches
+.next/cache
+.swc/
+.turbo/
+
+# TypeScript build info
+*.tsbuildinfo
+next-env.d.ts
+
+# Logs & diagnostics
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+lerna-debug.log*
+report.*.json
+
+# OS / Editor cruft
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Icon?
+*.swp
+*.swo
+*.orig
+*.rej
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.history/
+.fleet/
+
+# Env / secrets (create a tracked .env.example instead)
+.env*
+!.env.example
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Vercel / deployment
+.vercel
+
+# Caches
+.eslintcache
+.stylelintcache
+.cache/
+cache/
+
+# Coverage & testing extras
+jest-html-reporters-*/
+test-results/
+
+# Certificates / keys
+# Previously '*.pem' ignored globally; if you need to keep development certs under 'certificates/' tracked:
+#   1. Remove/adjust the pattern below OR add explicit negation lines.
+# If you DO want to ignore all PEMs except the committed localhost dev certs, uncomment the negation lines.
+*.pem
+!certificates/localhost.pem
+!certificates/localhost-key.pem
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.backup
+*.old
+*.retry
+
+# Patch / diff artifacts
+*.patch
+*.diff
+
+# Lockfiles (decide on single manager; keep pnpm since pnpm-lock.yaml exists)
+# yarn.lock
+# package-lock.json
+
+# Generated API / SDK stubs (add specific paths if you later auto-generate clients)
+
+# Misc project-specific
 BOLTZ_AI_MVP_ROADMAP.md
+
+# Ignore any local playground scratch files (convention: *.local.*)
+*.local.*
+
+# End of file

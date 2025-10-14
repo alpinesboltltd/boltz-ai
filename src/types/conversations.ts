@@ -1,4 +1,4 @@
-import { MessageRoles, Platform } from "./chatbot";
+import { MessageRoles, Platform } from "./agent";
 
 export interface ChatMessage {
   id: number;
@@ -15,5 +15,8 @@ export interface Conversation {
   platform: Platform;
   client_id: string | null;
   title: string;
+  status: "open" | "closed";
+  escalated_to_human: boolean;
+  escalation_reason: string | null;
   created_at: string;
 }

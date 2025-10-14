@@ -2,12 +2,9 @@
 
 import { SparklesIcon } from "@heroicons/react/24/outline";
 import Topic from "../ui/Topic";
-import { useState } from "react";
-import { Card, CardDescription, CardHeader, CardTitle } from "../ui/Card";
-import { AdvantagesV } from "../ui/AdvantagesV";
+import { Card, CardContent, CardDescription, CardTitle } from "../ui/Card";
 import { CompWork } from "../ui/CompWork";
-
-const CARD_PER_PAGE = 3;
+import Image from "next/image";
 
 export function Testimonials() {
   return (
@@ -18,53 +15,89 @@ export function Testimonials() {
         className="bg-blue-50"
       />
       <h1 className="font-semibold text-5xl text-center mb-4">
-        With over 9000 clients served, here's what they have to say
+        With over 9000 clients served, here&#39;s what they have to say
       </h1>
 
       <div className="flex gap-4 overflow-hidden mb-4 p-2">
-        <Card className="w-2/3">
-          <p className="text-sm text-gray-600 mb-28">
-            "Chatbase is a strong signal of how customer support will evolve. It
-            is an early adopter of the agentic approach, which will become
-            increasingly effective, trusted, and prominent."
-          </p>
-          <CompWork text="Marc Manara" work="OpenAI" src="/images/logo.webp" />
+        <Card className="w-2/3 bg-white">
+          <CardContent>
+            <p className="text-sm text-gray-600 mb-28">
+              &quot;Boltz is a strong signal of how customer support will
+              evolve. It is an early adopter of the agentic approach, which will
+              become increasingly effective, trusted, and prominent.&quot;
+            </p>
+            <CompWork
+              text="Marc Manara"
+              work="OpenAI"
+              src="/images/logo.webp"
+            />
+          </CardContent>
         </Card>
-        <Card className="w-1/2">
-          <p className="text-sm text-gray-600 mb-28">
-            "This is awesome, thanks for building it!"
-          </p>
-          <CompWork
-            text="Logan Kilpatrick"
-            work="Google"
-            src="/images/logo.webp"
-          />
+        <Card className="w-1/2 bg-white">
+          <CardContent>
+            <p className="text-sm text-gray-600 mb-28">
+              &quot;This is awesome, thanks for building it!&quot;
+            </p>
+            <CompWork
+              text="Logan Kilpatrick"
+              work="Google"
+              src="/images/logo.webp"
+            />
+          </CardContent>
         </Card>
-        <Card className="w-1/3">
-          <CardHeader src="/images/logo.webp" />
-          <CardTitle text="9000+" className="*text-5xl" />
-          <CardDescription text="businesses trust Chatbase" />
+        <Card className="w-1/3 bg-white">
+          <CardContent className="flex flex-col items-center gap-2">
+            <Image
+              height={48}
+              width={48}
+              src="/images/logo.webp"
+              alt="icon"
+              className="w-12 h-12 object-contain"
+            />
+            <CardTitle className="text-5xl">9000+</CardTitle>
+            <CardDescription>businesses trust Boltz</CardDescription>
+          </CardContent>
         </Card>
       </div>
       <div className="flex gap-4 overflow-hidden mb-4 p-2">
-        <Card className="w-1/3">
-          <CardHeader src="/images/logo.webp" />
-          <CardTitle text="9000+" className="*text-5xl" />
-          <CardDescription text="businesses trust Chatbase" />
+        <Card className="w-1/3 bg-white">
+          <CardContent className="flex flex-col items-center gap-2">
+            <Image
+              height={48}
+              width={48}
+              src="/images/logo.webp"
+              alt="icon"
+              className="w-12 h-12 object-contain"
+            />
+            <CardTitle className="text-5xl">9000+</CardTitle>
+            <CardDescription>businesses trust Boltz</CardDescription>
+          </CardContent>
         </Card>
-        <Card className="w-1/2">
-          <p className="text-sm text-gray-600 mb-28">
-            "An overpowered tool built with the OP stack."
-          </p>
-          <CompWork text="Greg Kogan" work="Pinecone" src="/images/logo.webp" />
+        <Card className="w-1/2 bg-white">
+          <CardContent>
+            <p className="text-sm text-gray-600 mb-28">
+              &quot;An overpowered tool built with the OP stack.&quot;
+            </p>
+            <CompWork
+              text="Greg Kogan"
+              work="Pinecone"
+              src="/images/logo.webp"
+            />
+          </CardContent>
         </Card>
-        <Card className="w-2/3">
-          <p className="text-sm text-gray-600 mb-28">
-            "Chatbase is a strong signal of how customer support will evolve. It
-            is an early adopter of the agentic approach, which will become
-            increasingly effective, trusted, and prominent."
-          </p>
-          <CompWork text="Marc Manara" work="OpenAI" src="/images/logo.webp" />
+        <Card className="w-2/3 bg-white">
+          <CardContent>
+            <p className="text-sm text-gray-600 mb-28">
+              &quot;Boltz is a strong signal of how customer support will
+              evolve. It is an early adopter of the agentic approach, which will
+              become increasingly effective, trusted, and prominent.&quot;
+            </p>
+            <CompWork
+              text="Marc Manara"
+              work="OpenAI"
+              src="/images/logo.webp"
+            />
+          </CardContent>
         </Card>
       </div>
     </section>

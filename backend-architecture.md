@@ -1,8 +1,8 @@
-# Chatboltz Backend Architecture
+# Boltz Backend Architecture
 
 ## Overview
 
-The backend architecture for Chatboltz is designed to be scalable, maintainable, and performant. It follows a microservices approach with Golang for core services and TypeScript for API layers.
+The backend architecture for Boltz is designed to be scalable, maintainable, and performant. It follows a microservices approach with Golang for core services and TypeScript for API layers.
 
 ## Technology Stack
 
@@ -37,16 +37,16 @@ The backend architecture for Chatboltz is designed to be scalable, maintainable,
 | Custom AI Selection                    | Users can choose from multiple AI models, including Gemini, GPT-4, Claude, and Mistral | Gemini, OpenAI GPT-4, Claude, Mistral                                   |
 | AI-Powered Knowledge Retrieval         | Retrieves company knowledge from uploaded documents, FAQs, and databases               | Slack, MS Teams, Discord, Google Drive, Dropbox                         |
 | Advanced NLP & Machine Learning        | AI learns from conversations and improves over time                                    | Rasa Core, TensorFlow, Hugging Face, OpenAI API                         |
-| Real-Time Chatbot Training             | Users can train and update their bot dynamically                                       | Chatbase Web Platform, OpenAI Playground, Google Gemini Sandbox         |
+| Real-Time Chatbot Training             | Users can train and update their bot dynamically                                       | Boltz Web Platform, OpenAI Playground, Google Gemini Sandbox            |
 | Multilingual Support                   | Supports 80+ languages for global accessibility                                        | Google Translate API, Microsoft Translator, AWS Polly                   |
 | No-Code Chatbot Builder                | Drag-and-drop interface for building AI assistants without technical expertise         | Web Platform, Shopify, WordPress, Wix, Webflow                          |
-| Deep Analytics & User Insights         | Provides chatbot performance data, user interactions, and conversion tracking          | Google Analytics, HubSpot, Tableau, Mixpanel                            |
-| Omnichannel Integrations               | Deploy chatbots on websites, WhatsApp, Slack, and social media                         | WhatsApp Business, Facebook Messenger, Telegram, Instagram, Twitter DMs |
+| Deep Analytics & User Insights         | Provides chatagent performance data, user interactions, and conversion tracking        | Google Analytics, HubSpot, Tableau, Mixpanel                            |
+| Omnichannel Integrations               | Deploy chatagents on websites, WhatsApp, Slack, and social media                       | WhatsApp Business, Facebook Messenger, Telegram, Instagram, Twitter DMs |
 | Live Human Handoff                     | Routes conversations to human agents when AI assistance isn't enough                   | Intercom, Zendesk, Freshdesk, Salesforce                                |
 | Secure Transactions & Privacy Controls | Offers encrypted messaging and compliance with GDPR & HIPAA                            | AWS Cloud Security, Google Cloud Encryption, Microsoft Azure            |
-| Customizable Pricing Plans             | Offers flexible plans similar to Chatbase, including free, Pro, and Enterprise tiers   | Stripe, PayPal, Razorpay, Coinbase Commerce                             |
+| Customizable Pricing Plans             | Offers flexible plans similar to Boltz, including free, Pro, and Enterprise tiers      | Stripe, PayPal, Razorpay, Coinbase Commerce                             |
 | Voice Capabilities                     | Support for voice input and output in conversations                                    | Amazon Polly, Google Text-to-Speech, Microsoft Azure Speech Services    |
-| Custom Avatar & Branding               | Personalized chatbot appearance with custom avatars and brand colors                   | Web Platform, Custom CSS, Image Processing API                          |
+| Custom Avatar & Branding               | Personalized chatagent appearance with custom avatars and brand colors                 | Web Platform, Custom CSS, Image Processing API                          |
 | Conversation Interface Customization   | Fully customizable chat interface with themes and layouts                              | Web Components, React, Vue.js                                           |
 | Enterprise SSO                         | Single sign-on for enterprise customers                                                | Okta, Auth0, Microsoft Azure AD, Google Workspace                       |
 | API Access                             | RESTful API for custom integrations and extensions                                     | Swagger/OpenAPI, GraphQL                                                |
@@ -280,7 +280,7 @@ The backend architecture for Chatboltz is designed to be scalable, maintainable,
 ```
 {
   id: string,
-  chatbotId: string,
+  chatagentId: string,
   name: string,
   description: string,
   createdAt: timestamp,
@@ -311,7 +311,7 @@ The backend architecture for Chatboltz is designed to be scalable, maintainable,
 ```
 {
   id: string,
-  chatbotId: string,
+  chatagentId: string,
   sessionId: string,
   startedAt: timestamp,
   endedAt: timestamp,
@@ -352,7 +352,7 @@ The backend architecture for Chatboltz is designed to be scalable, maintainable,
 ```
 {
   id: string,
-  chatbotId: string,
+  chatagentId: string,
   date: date,
   metrics: {
     totalMessages: number,
@@ -427,21 +427,21 @@ The backend architecture for Chatboltz is designed to be scalable, maintainable,
 
 ### Chatbot API
 
-- `GET /api/chatbots` - List all chatbots
-- `POST /api/chatbots` - Create a new chatbot
-- `GET /api/chatbots/:id` - Get chatbot details
-- `PUT /api/chatbots/:id` - Update chatbot
-- `DELETE /api/chatbots/:id` - Delete chatbot
-- `GET /api/chatbots/:id/stats` - Get chatbot statistics
-- `POST /api/chatbots/:id/deploy` - Deploy chatbot
-- `POST /api/chatbots/:id/undeploy` - Undeploy chatbot
-- `PUT /api/chatbots/:id/appearance` - Update chatbot appearance
-- `PUT /api/chatbots/:id/security` - Update security settings
+- `GET /api/chatagents` - List all chatagents
+- `POST /api/chatagents` - Create a new chatagent
+- `GET /api/chatagents/:id` - Get chatagent details
+- `PUT /api/chatagents/:id` - Update chatagent
+- `DELETE /api/chatagents/:id` - Delete chatagent
+- `GET /api/chatagents/:id/stats` - Get chatagent statistics
+- `POST /api/chatagents/:id/deploy` - Deploy chatagent
+- `POST /api/chatagents/:id/undeploy` - Undeploy chatagent
+- `PUT /api/chatagents/:id/appearance` - Update chatagent appearance
+- `PUT /api/chatagents/:id/security` - Update security settings
 
 ### Knowledge API
 
-- `GET /api/chatbots/:id/knowledge` - List knowledge bases
-- `POST /api/chatbots/:id/knowledge` - Create knowledge base
+- `GET /api/chatagents/:id/knowledge` - List knowledge bases
+- `POST /api/chatagents/:id/knowledge` - Create knowledge base
 - `GET /api/knowledge/:id` - Get knowledge base details
 - `PUT /api/knowledge/:id` - Update knowledge base
 - `DELETE /api/knowledge/:id` - Delete knowledge base
@@ -453,39 +453,39 @@ The backend architecture for Chatboltz is designed to be scalable, maintainable,
 
 ### Conversation API
 
-- `POST /api/conversation/:chatbotId` - Start a new conversation
-- `POST /api/conversation/:chatbotId/message` - Send a message
+- `POST /api/conversation/:chatagentId` - Start a new conversation
+- `POST /api/conversation/:chatagentId/message` - Send a message
 - `GET /api/conversation/:id/history` - Get conversation history
 - `POST /api/conversation/:id/feedback` - Submit conversation feedback
 - `POST /api/conversation/:id/handoff` - Request human handoff
-- `POST /api/conversation/:chatbotId/voice` - Send voice message
+- `POST /api/conversation/:chatagentId/voice` - Send voice message
 - `GET /api/conversation/:id/voice/:messageId` - Get voice message
 
 ### Analytics API
 
-- `GET /api/analytics/chatbots/:id` - Get chatbot analytics
-- `GET /api/analytics/chatbots/:id/conversations` - Get conversation analytics
-- `GET /api/analytics/chatbots/:id/users` - Get user analytics
-- `GET /api/analytics/chatbots/:id/questions` - Get top questions
-- `GET /api/analytics/chatbots/:id/feedback` - Get feedback analytics
-- `GET /api/analytics/chatbots/:id/export` - Export analytics data
-- `GET /api/analytics/chatbots/:id/platforms` - Get platform distribution
+- `GET /api/analytics/chatagents/:id` - Get chatagent analytics
+- `GET /api/analytics/chatagents/:id/conversations` - Get conversation analytics
+- `GET /api/analytics/chatagents/:id/users` - Get user analytics
+- `GET /api/analytics/chatagents/:id/questions` - Get top questions
+- `GET /api/analytics/chatagents/:id/feedback` - Get feedback analytics
+- `GET /api/analytics/chatagents/:id/export` - Export analytics data
+- `GET /api/analytics/chatagents/:id/platforms` - Get platform distribution
 
 ### Integration API
 
 - `GET /api/integrations` - List available integrations
-- `GET /api/chatbots/:id/integrations` - List chatbot integrations
-- `POST /api/chatbots/:id/integrations/:platform` - Add integration
-- `DELETE /api/chatbots/:id/integrations/:platform` - Remove integration
-- `GET /api/chatbots/:id/integrations/:platform/config` - Get integration config
-- `PUT /api/chatbots/:id/integrations/:platform/config` - Update integration config
+- `GET /api/chatagents/:id/integrations` - List chatagent integrations
+- `POST /api/chatagents/:id/integrations/:platform` - Add integration
+- `DELETE /api/chatagents/:id/integrations/:platform` - Remove integration
+- `GET /api/chatagents/:id/integrations/:platform/config` - Get integration config
+- `PUT /api/chatagents/:id/integrations/:platform/config` - Update integration config
 
 ### Voice API
 
 - `POST /api/voice/text-to-speech` - Convert text to speech
 - `POST /api/voice/speech-to-text` - Convert speech to text
 - `GET /api/voice/voices` - List available voices
-- `POST /api/chatbots/:id/voice/settings` - Update voice settings
+- `POST /api/chatagents/:id/voice/settings` - Update voice settings
 
 ### Billing API
 

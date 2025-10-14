@@ -1,8 +1,8 @@
-# Chatboltz - AI Chatbot Platform Project Structure
+# Boltz - AI Chatbot Platform Project Structure
 
 ## Overview
 
-This document outlines the structure and components of the Chatboltz AI chatbot platform, modeled after Chatbase.co. The platform allows users to create custom AI chatbots powered by various AI models including Google Gemini, GPT-4, Claude, and Mistral.
+This document outlines the structure and components of the Boltz AI chatagent platform, modeled after Boltz.co. The platform allows users to create custom AI chatagents powered by various AI models including Google Gemini, GPT-4, Claude, and Mistral.
 
 ## Frontend Architecture
 
@@ -19,19 +19,19 @@ This document outlines the structure and components of the Chatboltz AI chatbot 
 ### Directory Structure
 
 ```
-Chatboltz/
+Boltz/
 ├── src/
 │   ├── app/                    # Next.js app directory
 │   │   ├── dashboard/          # Dashboard pages
 │   │   │   ├── page.tsx        # Main dashboard
 │   │   │   ├── layout.tsx      # Dashboard layout with sidebar
-│   │   │   ├── chatbots/       # Chatbot management pages
+│   │   │   ├── chatagents/       # Chatbot management pages
 │   │   │   ├── analytics/      # Analytics pages
 │   │   │   ├── knowledge/      # Knowledge base pages
 │   │   │   ├── integrations/   # Integration pages
 │   │   │   └── settings/       # Settings pages
-│   │   ├── chatbot/            # Public chatbot pages
-│   │   │   └── [id]/           # Dynamic chatbot routes
+│   │   ├── chatagent/            # Public chatagent pages
+│   │   │   └── [id]/           # Dynamic chatagent routes
 │   │   ├── auth/               # Authentication pages
 │   │   ├── globals.css         # Global styles
 │   │   ├── layout.tsx          # Root layout
@@ -53,7 +53,7 @@ Chatboltz/
 │   │   │   ├── StatCard.tsx    # Statistics card
 │   │   │   ├── ChatbotList.tsx # Chatbot list component
 │   │   │   └── AnalyticsChart.tsx # Analytics chart component
-│   │   └── chatbot/            # Chatbot components
+│   │   └── chatagent/            # Chatbot components
 │   │       ├── ChatInterface.tsx # Chat interface
 │   │       ├── MessageBubble.tsx # Message bubble
 │   │       └── ChatInput.tsx   # Chat input component
@@ -61,14 +61,14 @@ Chatboltz/
 │   │   ├── api.ts              # API client
 │   │   └── helpers.ts          # Helper functions
 │   ├── mock-data/              # Mock data for development
-│   │   ├── chatbots.ts         # Mock chatbot data
+│   │   ├── chatagents.ts         # Mock chatagent data
 │   │   ├── models.ts           # Mock AI model data
 │   │   ├── integrations.ts     # Mock integration data
 │   │   └── analytics.ts        # Mock analytics data
 │   ├── store/                  # State management
 │   │   ├── chatStore.ts        # Chat state
 │   │   ├── userStore.ts        # User state
-│   │   └── chatbotStore.ts     # Chatbot state
+│   │   └── chatagentStore.ts     # Chatbot state
 │   ├── types/                  # TypeScript type definitions
 │   │   └── index.ts            # Type definitions
 │   └── utils/                  # Utility functions
@@ -94,23 +94,23 @@ Chatboltz/
 
 ### 2. Dashboard
 
-- Overview of chatbot performance
-- Quick access to all chatbots
+- Overview of chatagent performance
+- Quick access to all chatagents
 - Key metrics and statistics
 - Recent activity feed
 - Quick actions for common tasks
 
 ### 3. Chatbot Management
 
-- List of all chatbots with status and metrics
-- Create, edit, and delete chatbots
-- Preview chatbots in action
-- Deploy chatbots to different platforms
-- Customize chatbot appearance and behavior
+- List of all chatagents with status and metrics
+- Create, edit, and delete chatagents
+- Preview chatagents in action
+- Deploy chatagents to different platforms
+- Customize chatagent appearance and behavior
 
 ### 4. Chatbot Builder
 
-- No-code interface for building chatbots
+- No-code interface for building chatagents
 - Drag-and-drop components
 - Visual conversation flow editor
 - Preview changes in real-time
@@ -121,7 +121,7 @@ Chatboltz/
 - Upload documents (PDF, DOCX, TXT)
 - Import website content
 - Create and manage FAQs
-- Train chatbot on custom data
+- Train chatagent on custom data
 - Monitor training progress
 
 ### 6. AI Model Selection
@@ -169,10 +169,10 @@ Chatboltz/
 
 1. Sign up for an account
 2. Select a plan (Free, Pro, Business)
-3. Create first chatbot
+3. Create first chatagent
 4. Choose AI model
 5. Upload knowledge base or start from scratch
-6. Customize chatbot appearance
+6. Customize chatagent appearance
 7. Deploy to website or other platform
 
 ### 2. Chatbot Creation
@@ -184,8 +184,8 @@ Chatboltz/
 5. Choose deployment platforms
 6. Configure appearance and behavior
 7. Add knowledge base (optional)
-8. Test chatbot
-9. Deploy chatbot
+8. Test chatagent
+9. Deploy chatagent
 
 ### 3. Knowledge Base Training
 
@@ -194,13 +194,13 @@ Chatboltz/
 3. Create FAQs or custom training data
 4. Start training process
 5. Monitor training progress
-6. Test chatbot with new knowledge
-7. Publish updated chatbot
+6. Test chatagent with new knowledge
+7. Publish updated chatagent
 
 ### 4. Analytics Review
 
 1. Navigate to analytics section
-2. Select chatbot to analyze
+2. Select chatagent to analyze
 3. Choose date range
 4. Review key metrics
 5. Identify top questions and issues
@@ -211,7 +211,7 @@ Chatboltz/
 
 ### Free Tier
 
-- 1 chatbot
+- 1 chatagent
 - 1,000 messages per month
 - Basic customization
 - Website integration only
@@ -220,7 +220,7 @@ Chatboltz/
 
 ### Pro Plan ($29/month)
 
-- 5 chatbots
+- 5 chatagents
 - 10,000 messages per month
 - Advanced customization
 - Website & WhatsApp integration
@@ -231,7 +231,7 @@ Chatboltz/
 
 ### Business Plan ($99/month)
 
-- 20 chatbots
+- 20 chatagents
 - 50,000 messages per month
 - Full customization
 - All platform integrations
@@ -243,7 +243,7 @@ Chatboltz/
 
 ### Enterprise Plan (Custom pricing)
 
-- Unlimited chatbots
+- Unlimited chatagents
 - Custom message volume
 - Custom integrations
 - Custom AI model deployment
@@ -282,14 +282,14 @@ Chatboltz/
 - Set up Next.js project with TypeScript
 - Implement landing page components
 - Create dashboard UI with mock data
-- Build chatbot interface components
+- Build chatagent interface components
 - Develop no-code builder interface
 
 ### Phase 2: Backend API Development
 
 - Set up Golang and TypeScript services
 - Implement authentication and user management
-- Create chatbot configuration endpoints
+- Create chatagent configuration endpoints
 - Develop knowledge base management APIs
 - Build analytics data collection endpoints
 

@@ -2,173 +2,99 @@
   "users": [
     {
       "id": "1",
-      "name": "Demo User",
-      "email": "demo@example.com",
+      "name": "Grace Ajayi",
+      "email": "grace@ajayi.com",
       "role": "admin",
-      "avatar": "https://ui-avatars.com/api/?name=Demo+User&background=6366F1&color=fff",
+      "avatar": "https://ui-avatars.com/api/?name=Grace+Ajayi&background=6366F1&color=fff",
       "password": "password"
-    },
-    {
-      "id": "2",
-      "name": "Test User",
-      "email": "test@example.com",
-      "role": "user",
-      "avatar": "https://ui-avatars.com/api/?name=Test+User&background=6366F1&color=fff",
-      "password": "testpass"
     }
   ],
-
-  "chatbots": [
+  "agents": [
     {
-      "id": "1",
+      "id": "4k8afeknd",
       "user_id": "1",
-      "name": "Customer Support Bot",
-      "description": "A chatbot for handling customer support inquiries",
-      "ai_model": "gemini-pro",
+      "name": "Besty",
+      "description": "Besty helps us improve sales",
+      "agent_type": "text",
+      "ai_model": "GPT-4 Turbo",
+      "ai_provider": "OpenAI",
+      "credits_per_1k": 25,
       "status": "active",
-      "created_at": "2023-11-15T10:30:00Z",
-      "updated_at": "2023-12-05T14:22:00Z"
+      "created_at": "2025-09-02T17:30:55.999Z",
+      "updated_at": "2025-09-02T17:32:09.518Z"
     },
     {
-      "id": "2",
+      "id": "bx1dek6bf",
       "user_id": "1",
-      "name": "Sales Assistant",
-      "description": "A chatbot for helping with product recommendations and sales",
-      "ai_model": "gpt-4",
-      "status": "archived",
-      "created_at": "2023-10-20T09:15:00Z",
-      "updated_at": "2023-12-01T11:45:00Z"
-    },
-    {
-      "id": "3",
-      "user_id": "2",
-      "name": "Product Recommender",
-      "description": "A chatbot for recommending products based on user preferences",
-      "ai_model": "claude-2",
-      "status": "draft",
-      "created_at": "2023-12-01T15:20:00Z",
-      "updated_at": "2023-12-01T15:20:00Z"
-    },
-    {
-      "id": "4",
-      "user_id": "1",
-      "name": "Product Recommender",
-      "description": "A chatbot for recommending products based on user preferences",
-      "ai_model": "claude-2",
-      "status": "draft",
-      "created_at": "2023-12-01T15:20:00Z",
-      "updated_at": "2023-12-01T15:20:00Z"
+      "name": "Bolq",
+      "description": "Bolq helpes with administrative duties",
+      "agent_type": "text",
+      "ai_model": "o1-mini",
+      "ai_provider": "OpenAI",
+      "credits_per_1k": 10,
+      "status": "active",
+      "created_at": "2025-09-28T13:14:59.525Z",
+      "updated_at": "2025-09-28T13:16:00.778Z"
     }
   ],
-  "chatbot_appearance": [
+  "agent_appearance": [
     {
-      "id": "1",
-      "chatbot_id": "1",
-      "primary_color": "#0ea5e9",
-      "font_family": "Inter",
-      "chat_icon": "chat-bubble",
-      "welcome_message": "Hi there! How can I help you today?",
+      "id": "glzn2o7k5",
+      "agent_id": "4k8afeknd",
+      "welcome_message": "Hi! How can I help you today?",
+      "primary_color": "#030411",
       "position": "bottom-right",
       "icon_size": "small",
-      "bubble_style": "round",
-      "created_at": "2023-11-15T10:30:00Z",
-      "updated_at": "2023-12-05T14:22:00Z"
+      "bubble_style": "square",
+      "chat_icon": "default",
+      "font_family": "Inter",
+      "created_at": "2025-09-02T17:32:09.518Z",
+      "updated_at": "2025-09-02T17:32:09.518Z"
     },
     {
-      "id": "2",
-      "chatbot_id": "2",
-      "primary_color": "#8b5cf6",
-      "font_family": "Lexend",
-      "chat_icon": "shopping-cart",
-      "welcome_message": "Hello! Looking for product recommendations?",
+      "id": "tglcx0c80",
+      "agent_id": "bx1dek6bf",
+      "welcome_message": "Hi, Welcome to Walmart",
+      "primary_color": "#248f5d",
       "position": "bottom-left",
-      "icon_size": "medium",
-      "bubble_style": "round",
-      "created_at": "2023-10-20T09:15:00Z",
-      "updated_at": "2023-12-01T11:45:00Z"
-    },
-    {
-      "id": "3",
-      "chatbot_id": "3",
-      "primary_color": "#10b981",
-      "font_family": "Inter",
-      "chat_icon": "gift",
-      "welcome_message": "Hi! I can help you find the perfect product. What are you looking for today?",
-      "position": "bottom-right",
       "icon_size": "large",
-      "bubble_style": "round",
-      "created_at": "2023-12-01T15:20:00Z",
-      "updated_at": "2023-12-01T15:20:00Z"
-    },
-    {
-      "id": "4",
-      "chatbot_id": "4",
-      "primary_color": "#10ac81",
+      "bubble_style": "square",
+      "chat_icon": "default",
       "font_family": "Inter",
-      "chat_icon": "gift",
-      "welcome_message": "Hi! I can help you find the perfect product. What are you looking for today?",
-      "position": "bottom-right",
-      "icon_size": "large",
-      "bubble_style": "round",
-      "created_at": "2023-12-01T15:20:00Z",
-      "updated_at": "2023-12-01T15:20:00Z"
+      "created_at": "2025-09-28T13:16:00.778Z",
+      "updated_at": "2025-09-28T13:16:00.778Z"
     }
   ],
-  "chatbot_behavior": [
+  "agent_behavior": [
     {
-      "id": "1",
-      "chatbot_id": "1",
-      "initial_messages": "[\"Hi there! How can I help you today?\",\"You can ask me about our products, services, or support issues.\"]",
+      "id": "ldfjhs0t9",
+      "agent_id": "4k8afeknd",
+      "initial_messages": "[\"Hi! How can I help you today?\"]",
       "fallback_message": "I'm sorry, I don't understand that question. Could you rephrase it?",
-      "enable_human_handoff": true,
-      "offline_message": "Our support team is currently offline. Please leave a message and we'll get back to you.",
-      "created_at": "2023-11-15T10:30:00Z",
-      "updated_at": "2023-12-05T14:22:00Z"
-    },
-    {
-      "id": "2",
-      "chatbot_id": "2",
-      "initial_messages": "[\"Hello! Looking for product recommendations?\",\"I can help you find the perfect product based on your needs.\"]",
-      "fallback_message": "I'm not sure I understand. Could you tell me more about what you're looking for?",
-      "enable_human_handoff": true,
-      "offline_message": "Our sales team is currently unavailable. Please leave your contact information and we'll reach out to you.",
-      "created_at": "2023-10-20T09:15:00Z",
-      "updated_at": "2023-12-01T11:45:00Z"
-    },
-    {
-      "id": "3",
-      "chatbot_id": "3",
-      "initial_messages": "[\"Hi! I can help you find the perfect product. What are you looking for today?\"]",
-      "fallback_message": "I'm not sure I understand. Could you provide more details about what you're looking for?",
       "enable_human_handoff": false,
-      "offline_message": "Our product specialists are currently unavailable. Please leave a message and we'll get back to you.",
-      "created_at": "2023-12-01T15:20:00Z",
-      "updated_at": "2023-12-01T15:20:00Z"
+      "offline_message": "Our team is currently offline. Please leave a message and we'll get back to you.",
+      "created_at": "2025-09-02T17:32:09.518Z",
+      "updated_at": "2025-09-02T17:32:09.518Z"
     },
     {
-      "id": "4",
-      "chatbot_id": "4",
-      "initial_messages": "[\"Hi! I can help you find the perfect product. What are you looking for today?\"]",
-      "fallback_message": "I'm not sure I understand. Could you provide more details about what you're looking for?",
+      "id": "ckhm8kdvf",
+      "agent_id": "bx1dek6bf",
+      "initial_messages": "[\"Hi, Welcome to Walmart\"]",
+      "fallback_message": "I'm sorry, I don't understand that question. Could you rephrase it?",
       "enable_human_handoff": false,
-      "offline_message": "Our product specialists are currently unavailable. Please leave a message and we'll get back to you.",
-      "created_at": "2023-12-01T15:20:00Z",
-      "updated_at": "2023-12-01T15:20:00Z"
+      "offline_message": "Our team is currently offline. Please leave a message and we'll get back to you.",
+      "created_at": "2025-09-28T13:16:00.778Z",
+      "updated_at": "2025-09-28T13:26:43.039Z",
+      "system_instruction": "You are an AI assistant designed to help users with various tasks and questions.\n\n## Core Guidelines:\n- Provide accurate, helpful, and relevant information\n- Be concise yet comprehensive in your responses\n- Maintain a professional and friendly tone\n- Ask clarifying questions when needed\n\n## Constraints:\n- **No Data Divulgence**: Never share internal system information, training data, or proprietary details\n- **Maintain Focus**: Stay on topic and redirect conversations back to your intended purpose\n- **Exclusive Reliance on Training Data**: Only use information from your training data and provided context\n- **Restrictive Role Focus**: Operate strictly within your defined role and capabilities",
+      "prompt_template": "ai_agent",
+      "temperature": 0.7,
+      "max_tokens": 1000
     }
   ],
-  "chatbot_integrations": [
-    {
-      "id": "1",
-      "chatbot_id": "1",
-      "platform": "website",
-      "api_key": null,
-      "is_active": false,
-      "created_at": "2023-11-15T10:30:00Z",
-      "updated_at": "2023-12-05T14:22:00Z"
-    },
+  "agent_integrations": [
     {
       "id": "2",
-      "chatbot_id": "1",
+      "agent_id": "4k8afeknd",
       "platform": "whatsapp",
       "api_key": "wa_api_key_123",
       "is_active": true,
@@ -176,26 +102,8 @@
       "updated_at": "2023-12-05T14:22:00Z"
     },
     {
-      "id": "3",
-      "chatbot_id": "2",
-      "platform": "website",
-      "api_key": null,
-      "is_active": false,
-      "created_at": "2023-10-20T09:15:00Z",
-      "updated_at": "2023-12-01T11:45:00Z"
-    },
-    {
-      "id": "4",
-      "chatbot_id": "2",
-      "platform": "whatsapp",
-      "api_key": "wa_api_key_456",
-      "is_active": true,
-      "created_at": "2023-10-20T09:15:00Z",
-      "updated_at": "2023-12-01T11:45:00Z"
-    },
-    {
       "id": "5",
-      "chatbot_id": "2",
+      "agent_id": "2",
       "platform": "shopify",
       "api_key": "shopify_api_key_789",
       "is_active": true,
@@ -204,7 +112,7 @@
     },
     {
       "id": "6",
-      "chatbot_id": "3",
+      "agent_id": "4k8afeknd",
       "platform": "website",
       "api_key": null,
       "is_active": false,
@@ -212,456 +120,136 @@
       "updated_at": "2023-12-01T15:20:00Z"
     }
   ],
-  "chatbot_stats": [
-    {
-      "id": "1",
-      "chatbot_id": "1",
-      "total_messages": 1245,
-      "unique_users": 342,
-      "average_rating": 4.7,
-      "response_rate": 0.92,
-      "conversions_count": 56,
-      "last_calculated_at": "2025-07-26T00:40:46.092Z"
-    },
-    {
-      "id": "2",
-      "chatbot_id": "2",
-      "total_messages": 876,
-      "unique_users": 215,
-      "average_rating": 4.5,
-      "response_rate": 0.88,
-      "conversions_count": 42,
-      "last_calculated_at": "2025-07-26T00:40:46.092Z"
-    },
+  "agent_stats": [
     {
       "id": "3",
-      "chatbot_id": "3",
+      "agent_id": "3",
+      "total_messages": 156,
+      "unique_users": 42,
+      "average_rating": 4.2,
+      "response_rate": 0.87,
+      "conversions_count": 8,
+      "last_calculated_at": "2025-07-26T00:40:46.092Z"
+    },
+    {
+      "id": "rzj4yuh17",
+      "agent_id": "4k8afeknd",
+      "total_messages": 2847,
+      "unique_users": 486,
+      "average_rating": 4.6,
+      "response_rate": 0.92,
+      "conversions_count": 73,
+      "last_calculated_at": "2025-09-02T17:32:09.518Z"
+    },
+    {
+      "id": "xo820tgct",
+      "agent_id": "bx1dek6bf",
       "total_messages": 0,
       "unique_users": 0,
       "average_rating": 0,
       "response_rate": 0,
       "conversions_count": 0,
-      "last_calculated_at": "2025-07-26T00:40:46.092Z"
-    }
-  ],
-  "training_data": [
-    {
-      "id": "1",
-      "chatbot_id": "1",
-      "content_type": "faq",
-      "category": "Customer Support",
-      "title": "Product Return Policy",
-      "content": "Our return policy allows customers to return products within 30 days of purchase. Items must be in original condition with tags attached. Refunds are processed within 5-7 business days.",
-      "intent": "return_policy_inquiry",
-      "keywords": "return,refund,policy,30 days,original condition",
-      "confidence_score": 0.95,
-      "source_url": null,
-      "is_active": true,
-      "created_at": "2023-11-15T10:30:00Z",
-      "updated_at": "2023-12-05T14:22:00Z"
-    },
-    {
-      "id": "2",
-      "chatbot_id": "1",
-      "content_type": "faq",
-      "category": "Customer Support",
-      "title": "Shipping Information",
-      "content": "We offer free shipping on orders over $50. Standard shipping takes 3-5 business days, express shipping takes 1-2 business days. International shipping is available to select countries.",
-      "intent": "shipping_inquiry",
-      "keywords": "shipping,delivery,free shipping,express,international",
-      "confidence_score": 0.92,
-      "source_url": null,
-      "is_active": true,
-      "created_at": "2023-11-15T10:30:00Z",
-      "updated_at": "2023-12-05T14:22:00Z"
-    },
-    {
-      "id": "3",
-      "chatbot_id": "1",
-      "content_type": "knowledge_base",
-      "category": "Product Information",
-      "title": "Product Specifications",
-      "content": "Our premium headphones feature noise-cancelling technology, 20-hour battery life, wireless Bluetooth 5.0 connectivity, and come with a carrying case.",
-      "intent": "product_specifications",
-      "keywords": "headphones,noise-cancelling,battery,bluetooth,wireless",
-      "confidence_score": 0.88,
-      "source_url": null,
-      "is_active": true,
-      "created_at": "2023-11-15T10:30:00Z",
-      "updated_at": "2023-12-05T14:22:00Z"
-    },
-    {
-      "id": "4",
-      "chatbot_id": "1",
-      "content_type": "procedure",
-      "category": "Support Process",
-      "title": "Troubleshooting Steps",
-      "content": "If experiencing connectivity issues: 1) Check device compatibility 2) Reset network settings 3) Update firmware 4) Contact support if issues persist",
-      "intent": "troubleshooting_guide",
-      "keywords": "troubleshooting,connectivity,reset,firmware,support",
-      "confidence_score": 0.9,
-      "source_url": null,
-      "is_active": true,
-      "created_at": "2023-11-15T10:30:00Z",
-      "updated_at": "2023-12-05T14:22:00Z"
-    },
-    {
-      "id": "5",
-      "chatbot_id": "1",
-      "content_type": "external_link",
-      "category": "Documentation",
-      "title": "User Manual",
-      "content": "Complete user manual with setup instructions, troubleshooting guides, and warranty information.",
-      "intent": "documentation_access",
-      "keywords": "manual,setup,instructions,warranty,guide",
-      "confidence_score": 0.85,
-      "source_url": "https://docs.example.com/user-manual",
-      "is_active": true,
-      "created_at": "2023-11-15T10:30:00Z",
-      "updated_at": "2023-12-05T14:22:00Z"
-    },
-    {
-      "id": "6",
-      "chatbot_id": "1",
-      "content_type": "website_content",
-      "category": "Company Information",
-      "title": "About Our Company",
-      "content": "We are a leading technology company specializing in innovative AI solutions and customer service automation. Founded in 2020, we serve over 10,000 businesses worldwide.",
-      "intent": "company_information",
-      "keywords": "company,about,technology,AI,automation,founded",
-      "confidence_score": 0.87,
-      "source_url": "https://example.com/about",
-      "is_active": true,
-      "created_at": "2023-11-15T10:30:00Z",
-      "updated_at": "2023-12-05T14:22:00Z"
-    },
-    {
-      "id": "7",
-      "chatbot_id": "2",
-      "content_type": "faq",
-      "category": "Customer Support",
-      "title": "Product Return Policy",
-      "content": "Our return policy allows customers to return products within 30 days of purchase. Items must be in original condition with tags attached. Refunds are processed within 5-7 business days.",
-      "intent": "return_policy_inquiry",
-      "keywords": "return,refund,policy,30 days,original condition",
-      "confidence_score": 0.95,
-      "source_url": null,
-      "is_active": true,
-      "created_at": "2023-10-20T09:15:00Z",
-      "updated_at": "2023-12-01T11:45:00Z"
-    },
-    {
-      "id": "8",
-      "chatbot_id": "2",
-      "content_type": "faq",
-      "category": "Customer Support",
-      "title": "Shipping Information",
-      "content": "We offer free shipping on orders over $50. Standard shipping takes 3-5 business days, express shipping takes 1-2 business days. International shipping is available to select countries.",
-      "intent": "shipping_inquiry",
-      "keywords": "shipping,delivery,free shipping,express,international",
-      "confidence_score": 0.92,
-      "source_url": null,
-      "is_active": true,
-      "created_at": "2023-10-20T09:15:00Z",
-      "updated_at": "2023-12-01T11:45:00Z"
-    },
-    {
-      "id": "9",
-      "chatbot_id": "2",
-      "content_type": "knowledge_base",
-      "category": "Product Information",
-      "title": "Product Specifications",
-      "content": "Our premium headphones feature noise-cancelling technology, 20-hour battery life, wireless Bluetooth 5.0 connectivity, and come with a carrying case.",
-      "intent": "product_specifications",
-      "keywords": "headphones,noise-cancelling,battery,bluetooth,wireless",
-      "confidence_score": 0.88,
-      "source_url": null,
-      "is_active": true,
-      "created_at": "2023-10-20T09:15:00Z",
-      "updated_at": "2023-12-01T11:45:00Z"
-    },
-    {
-      "id": "10",
-      "chatbot_id": "2",
-      "content_type": "procedure",
-      "category": "Support Process",
-      "title": "Troubleshooting Steps",
-      "content": "If experiencing connectivity issues: 1) Check device compatibility 2) Reset network settings 3) Update firmware 4) Contact support if issues persist",
-      "intent": "troubleshooting_guide",
-      "keywords": "troubleshooting,connectivity,reset,firmware,support",
-      "confidence_score": 0.9,
-      "source_url": null,
-      "is_active": true,
-      "created_at": "2023-10-20T09:15:00Z",
-      "updated_at": "2023-12-01T11:45:00Z"
-    },
-    {
-      "id": "11",
-      "chatbot_id": "2",
-      "content_type": "external_link",
-      "category": "Documentation",
-      "title": "User Manual",
-      "content": "Complete user manual with setup instructions, troubleshooting guides, and warranty information.",
-      "intent": "documentation_access",
-      "keywords": "manual,setup,instructions,warranty,guide",
-      "confidence_score": 0.85,
-      "source_url": "https://docs.example.com/user-manual",
-      "is_active": true,
-      "created_at": "2023-10-20T09:15:00Z",
-      "updated_at": "2023-12-01T11:45:00Z"
-    },
-    {
-      "id": "12",
-      "chatbot_id": "2",
-      "content_type": "website_content",
-      "category": "Company Information",
-      "title": "About Our Company",
-      "content": "We are a leading technology company specializing in innovative AI solutions and customer service automation. Founded in 2020, we serve over 10,000 businesses worldwide.",
-      "intent": "company_information",
-      "keywords": "company,about,technology,AI,automation,founded",
-      "confidence_score": 0.87,
-      "source_url": "https://example.com/about",
-      "is_active": true,
-      "created_at": "2023-10-20T09:15:00Z",
-      "updated_at": "2023-12-01T11:45:00Z"
-    },
-    {
-      "id": "13",
-      "chatbot_id": "3",
-      "content_type": "faq",
-      "category": "Customer Support",
-      "title": "Product Return Policy",
-      "content": "Our return policy allows customers to return products within 30 days of purchase. Items must be in original condition with tags attached. Refunds are processed within 5-7 business days.",
-      "intent": "return_policy_inquiry",
-      "keywords": "return,refund,policy,30 days,original condition",
-      "confidence_score": 0.95,
-      "source_url": null,
-      "is_active": true,
-      "created_at": "2023-12-01T15:20:00Z",
-      "updated_at": "2023-12-01T15:20:00Z"
-    },
-    {
-      "id": "14",
-      "chatbot_id": "3",
-      "content_type": "faq",
-      "category": "Customer Support",
-      "title": "Shipping Information",
-      "content": "We offer free shipping on orders over $50. Standard shipping takes 3-5 business days, express shipping takes 1-2 business days. International shipping is available to select countries.",
-      "intent": "shipping_inquiry",
-      "keywords": "shipping,delivery,free shipping,express,international",
-      "confidence_score": 0.92,
-      "source_url": null,
-      "is_active": true,
-      "created_at": "2023-12-01T15:20:00Z",
-      "updated_at": "2023-12-01T15:20:00Z"
-    },
-    {
-      "id": "15",
-      "chatbot_id": "3",
-      "content_type": "knowledge_base",
-      "category": "Product Information",
-      "title": "Product Specifications",
-      "content": "Our premium headphones feature noise-cancelling technology, 20-hour battery life, wireless Bluetooth 5.0 connectivity, and come with a carrying case.",
-      "intent": "product_specifications",
-      "keywords": "headphones,noise-cancelling,battery,bluetooth,wireless",
-      "confidence_score": 0.88,
-      "source_url": null,
-      "is_active": true,
-      "created_at": "2023-12-01T15:20:00Z",
-      "updated_at": "2023-12-01T15:20:00Z"
-    },
-    {
-      "id": "16",
-      "chatbot_id": "3",
-      "content_type": "procedure",
-      "category": "Support Process",
-      "title": "Troubleshooting Steps",
-      "content": "If experiencing connectivity issues: 1) Check device compatibility 2) Reset network settings 3) Update firmware 4) Contact support if issues persist",
-      "intent": "troubleshooting_guide",
-      "keywords": "troubleshooting,connectivity,reset,firmware,support",
-      "confidence_score": 0.9,
-      "source_url": null,
-      "is_active": true,
-      "created_at": "2023-12-01T15:20:00Z",
-      "updated_at": "2023-12-01T15:20:00Z"
-    },
-    {
-      "id": "17",
-      "chatbot_id": "3",
-      "content_type": "external_link",
-      "category": "Documentation",
-      "title": "User Manual",
-      "content": "Complete user manual with setup instructions, troubleshooting guides, and warranty information.",
-      "intent": "documentation_access",
-      "keywords": "manual,setup,instructions,warranty,guide",
-      "confidence_score": 0.85,
-      "source_url": "https://docs.example.com/user-manual",
-      "is_active": true,
-      "created_at": "2023-12-01T15:20:00Z",
-      "updated_at": "2023-12-01T15:20:00Z"
-    },
-    {
-      "id": "18",
-      "chatbot_id": "3",
-      "content_type": "website_content",
-      "category": "Company Information",
-      "title": "About Our Company",
-      "content": "We are a leading technology company specializing in innovative AI solutions and customer service automation. Founded in 2020, we serve over 10,000 businesses worldwide.",
-      "intent": "company_information",
-      "keywords": "company,about,technology,AI,automation,founded",
-      "confidence_score": 0.87,
-      "source_url": "https://example.com/about",
-      "is_active": true,
-      "created_at": "2023-12-01T15:20:00Z",
-      "updated_at": "2023-12-01T15:20:00Z"
+      "last_calculated_at": "2025-09-28T13:16:00.778Z"
     }
   ],
   "conversations": [
     {
       "id": "convo_1",
-      "agent_id": "1",
+      "agent_id": "4k8afeknd",
       "platform": "Website",
-      "client_id": null,
-      "title": "Laptop Return Request",
-      "created_at": "2025-07-01T10:01:00Z"
+      "client_id": "user_001",
+      "title": "Product Inquiry",
+      "created_at": "2025-01-14T09:15:00Z",
+      "status": "closed",
+      "escalated_to_human": false,
+      "escalation_reason": null
     },
     {
       "id": "convo_2",
-      "agent_id": "2",
-      "platform": "Website",
-      "client_id": "+2348161769197",
-      "title": "Cardiology Appointment",
-      "created_at": "2025-07-01T10:01:00Z"
+      "agent_id": "4k8afeknd",
+      "platform": "WhatsApp",
+      "client_id": "user_002",
+      "title": "Order Status Check",
+      "created_at": "2025-01-14T11:30:00Z",
+      "status": "closed",
+      "escalated_to_human": false,
+      "escalation_reason": null
     },
     {
       "id": "convo_3",
       "agent_id": "3",
       "platform": "Website",
-      "client_id": null,
+      "client_id": "user_003",
       "title": "Business Loan Application",
-      "created_at": "2025-07-01T10:01:00Z"
+      "created_at": "2025-01-13T10:01:00Z",
+      "status": "open",
+      "escalated_to_human": true,
+      "escalation_reason": "Complex financial inquiry"
     },
     {
       "id": "convo_4",
-      "agent_id": "1",
+      "agent_id": "4k8afeknd",
       "platform": "Website",
-      "client_id": null,
+      "client_id": "user_004",
       "title": "Data Science Course Inquiry",
-      "created_at": "2025-07-01T10:01:00Z"
+      "created_at": "2025-01-13T14:20:00Z",
+      "status": "closed",
+      "escalated_to_human": false,
+      "escalation_reason": null
     },
     {
       "id": "convo_5",
-      "agent_id": "2",
+      "agent_id": "4k8afeknd",
       "platform": "Website",
-      "client_id": null,
-      "title": "Employment Contract Dispute",
-      "created_at": "2025-07-06T10:01:00Z"
+      "client_id": "user_005",
+      "title": "Shipping Information",
+      "created_at": "2025-01-12T16:45:00Z",
+      "status": "closed",
+      "escalated_to_human": false,
+      "escalation_reason": null
     },
     {
       "id": "convo_6",
-      "agent_id": "3",
+      "agent_id": "4k8afeknd",
       "platform": "Website",
-      "client_id": null,
-      "title": "House Purchase Inquiry",
-      "created_at": "2025-07-01T10:01:00Z"
+      "client_id": "user_006",
+      "title": "Return Request",
+      "created_at": "2025-01-11T13:20:00Z",
+      "status": "closed",
+      "escalated_to_human": true,
+      "escalation_reason": "Customer dissatisfaction"
     },
     {
       "id": "convo_7",
-      "agent_id": "1",
+      "agent_id": "4k8afeknd",
       "platform": "Website",
-      "client_id": null,
-      "title": "Brake Inspection Appointment",
-      "created_at": "2025-07-01T10:01:00Z"
+      "client_id": "user_007",
+      "title": "Payment Issue",
+      "created_at": "2025-01-10T08:30:00Z",
+      "status": "closed",
+      "escalated_to_human": false,
+      "escalation_reason": null
+    },
+    {
+      "id": "convo_8",
+      "agent_id": "4k8afeknd",
+      "platform": "Website",
+      "client_id": "user_008",
+      "title": "General Support",
+      "created_at": "2025-01-09T15:10:00Z",
+      "status": "closed",
+      "escalated_to_human": false,
+      "escalation_reason": null
     }
   ],
   "messages": [
-    {
-      "id": "msg_001",
-      "convo_id": "convo_1",
-      "role": "assistant",
-      "text": "Hello! Welcome to TechStore. I'm here to help you with any questions about our products or services. How can I assist you today?",
-      "timestamp": "2025-07-01T10:01:00Z"
-    },
-    {
-      "id": "msg_002",
-      "convo_id": "convo_1",
-      "role": "user",
-      "text": "I bought a laptop last week but it's not working properly. Can I return it?",
-      "timestamp": "2025-07-01T10:02:00Z"
-    },
-    {
-      "id": "msg_003",
-      "convo_id": "convo_1",
-      "role": "assistant",
-      "text": "I'm sorry to hear about the issue with your laptop. Yes, we have a 30-day return policy for all products. Since you purchased it last week, you're well within the return window. Could you please provide your order number so I can process this for you?",
-      "confidence_score": 0.95,
-      "timestamp": "2025-07-01T10:03:00Z"
-    },
-    {
-      "id": "msg_004",
-      "convo_id": "convo_1",
-      "role": "user",
-      "text": "The order number is TS-2024-001234",
-      "timestamp": "2025-07-01T10:04:00Z"
-    },
-    {
-      "id": "msg_005",
-      "convo_id": "convo_1",
-      "role": "assistant",
-      "text": "Perfect! I found your order for the Dell XPS 15 purchased on June 24th. I've initiated the return process. You'll receive a prepaid return label via email within 2 hours. Once we receive the laptop, your refund will be processed within 5-7 business days. Is there anything else I can help you with?",
-      "confidence_score": 0.92,
-      "timestamp": "2025-07-01T10:05:00Z"
-    },
-    {
-      "id": "msg_006",
-      "convo_id": "convo_2",
-      "role": "assistant",
-      "text": "Hi there! Welcome to HealthFirst Medical Center. I'm your virtual assistant and I'm here to help you with appointments, services, and general inquiries. What can I do for you today?",
-      "timestamp": "2025-07-01T10:01:00Z"
-    },
-    {
-      "id": "msg_007",
-      "convo_id": "convo_2",
-      "role": "user",
-      "text": "I need to schedule a consultation with a cardiologist",
-      "timestamp": "2025-07-01T10:02:00Z"
-    },
-    {
-      "id": "msg_008",
-      "convo_id": "convo_2",
-      "role": "assistant",
-      "text": "I'd be happy to help you schedule a cardiology consultation. We have Dr. Sarah Johnson and Dr. Michael Chen available. Dr. Johnson has availability next Tuesday at 2:30 PM or Thursday at 10:00 AM. Dr. Chen has slots on Wednesday at 3:00 PM or Friday at 9:30 AM. Which would work better for you?",
-      "confidence_score": 0.88,
-      "timestamp": "2025-07-01T10:03:00Z"
-    },
-    {
-      "id": "msg_009",
-      "convo_id": "convo_2",
-      "role": "user",
-      "text": "Tuesday at 2:30 PM with Dr. Johnson sounds perfect",
-      "timestamp": "2025-07-01T10:04:00Z"
-    },
-    {
-      "id": "msg_010",
-      "convo_id": "convo_2",
-      "role": "assistant",
-      "text": "Excellent! I've scheduled your appointment with Dr. Sarah Johnson for Tuesday, July 8th at 2:30 PM. Please arrive 15 minutes early for check-in and bring your insurance card and a valid ID. You'll receive a confirmation email shortly with all the details and pre-appointment instructions. Is there anything else I can help you with?",
-      "confidence_score": 0.94,
-      "timestamp": "2025-07-01T10:05:00Z"
-    },
-    {
-      "id": "msg_011",
-      "convo_id": "convo_3",
-      "role": "assistant",
-      "text": "Good day! Welcome to Premier Bank. I'm here to assist you with your banking needs, account inquiries, and financial services. How may I help you today?",
-      "timestamp": "2025-07-01T10:01:00Z"
-    },
     {
       "id": "msg_012",
       "convo_id": "convo_3",
       "role": "user",
       "text": "I want to apply for a business loan for my restaurant",
-      "timestamp": "2025-07-01T10:02:00Z"
+      "timestamp": "2025-07-01T10:02:00Z",
+      "confidence_score": 0.88
     },
     {
       "id": "msg_013",
@@ -676,7 +264,8 @@
       "convo_id": "convo_3",
       "role": "user",
       "text": "Yes, that would be great. I'm looking for around $200,000",
-      "timestamp": "2025-07-01T10:04:00Z"
+      "timestamp": "2025-07-01T10:04:00Z",
+      "confidence_score": 0.99
     },
     {
       "id": "msg_015",
@@ -687,18 +276,12 @@
       "timestamp": "2025-07-01T10:05:00Z"
     },
     {
-      "id": "msg_016",
-      "convo_id": "convo_4",
-      "role": "assistant",
-      "text": "Hello! Welcome to EduLearn Online Academy. I'm here to help you with course information, enrollment, and academic support. What would you like to know today?",
-      "timestamp": "2025-07-01T10:01:00Z"
-    },
-    {
       "id": "msg_017",
       "convo_id": "convo_4",
       "role": "user",
       "text": "I'm interested in your data science certification program",
-      "timestamp": "2025-07-01T10:02:00Z"
+      "timestamp": "2025-07-01T10:02:00Z",
+      "confidence_score": 0.88
     },
     {
       "id": "msg_018",
@@ -713,7 +296,8 @@
       "convo_id": "convo_4",
       "role": "user",
       "text": "Yes, please send the curriculum. Also, do you offer job placement assistance?",
-      "timestamp": "2025-07-01T10:04:00Z"
+      "timestamp": "2025-07-01T10:04:00Z",
+      "confidence_score": 0.99
     },
     {
       "id": "msg_020",
@@ -722,117 +306,194 @@
       "text": "Absolutely! I'll email you the complete curriculum within the next 10 minutes. Yes, we provide comprehensive career support including resume review, interview preparation, and access to our partner network of 200+ hiring companies. Our job placement rate is 87% within 6 months of graduation. We also offer a job guarantee - if you don't find a position within 12 months, we'll refund 50% of your tuition. Would you like to schedule a call with our admissions counselor?",
       "confidence_score": 0.96,
       "timestamp": "2025-07-01T10:05:00Z"
+    }
+  ],
+  "message_metadata": [
+    {
+      "id": "meta_012",
+      "msg_id": "msg_012",
+      "sentiment": "neutral",
+      "intent": "loan_inquiry",
+      "msg_type": "text",
+      "token_count": 14
     },
     {
-      "id": "msg_021",
-      "convo_id": "convo_5",
-      "role": "assistant",
-      "text": "Welcome to LegalAid Pro! I'm here to help you with legal information, consultation scheduling, and general legal guidance. Please note that I provide information only and this doesn't constitute legal advice. How can I assist you today?",
-      "timestamp": "2025-07-06T10:01:00Z"
+      "id": "meta_013",
+      "msg_id": "msg_013",
+      "sentiment": "positive",
+      "intent": "loan_info",
+      "msg_type": "text",
+      "token_count": 58
     },
     {
-      "id": "msg_022",
-      "convo_id": "convo_5",
-      "role": "user",
-      "text": "I need help with a contract dispute with my former employer",
-      "timestamp": "2025-07-06T10:02:00Z"
+      "id": "meta_014",
+      "msg_id": "msg_014",
+      "sentiment": "positive",
+      "intent": "loan_amount",
+      "msg_type": "text",
+      "token_count": 12
     },
     {
-      "id": "msg_023",
-      "convo_id": "convo_5",
-      "role": "assistant",
-      "text": "I understand you're dealing with an employment contract dispute. This is a complex area that requires personalized legal advice. I'd recommend scheduling a consultation with one of our employment law specialists. Attorney Jennifer Walsh has 15 years of experience in employment disputes and is available Thursday at 2:00 PM or Friday at 10:30 AM. The initial consultation is $200 for 60 minutes. Would you like me to book one of these slots?",
-      "confidence_score": 0.87,
-      "timestamp": "2025-07-06T10:03:00Z"
+      "id": "meta_015",
+      "msg_id": "msg_015",
+      "sentiment": "positive",
+      "intent": "scheduling",
+      "msg_type": "text",
+      "token_count": 45
     },
     {
-      "id": "msg_024",
-      "convo_id": "convo_5",
-      "role": "user",
-      "text": "Thursday at 2:00 PM works for me",
-      "timestamp": "2025-07-06T10:04:00Z"
+      "id": "meta_017",
+      "msg_id": "msg_017",
+      "sentiment": "neutral",
+      "intent": "course_inquiry",
+      "msg_type": "text",
+      "token_count": 9
     },
     {
-      "id": "msg_025",
-      "convo_id": "convo_5",
-      "role": "assistant",
-      "text": "Perfect! I've scheduled your consultation with Attorney Jennifer Walsh for Thursday, July 10th at 2:00 PM. Please bring all relevant documents including your employment contract, any correspondence with your employer, and termination paperwork if applicable. You'll receive a confirmation email with intake forms to complete before your appointment. The consultation fee of $200 is due at the time of service. Is there anything else I can help you with?",
-      "confidence_score": 0.92,
-      "timestamp": "2025-07-06T10:05:00Z"
+      "id": "meta_018",
+      "msg_id": "msg_018",
+      "sentiment": "positive",
+      "intent": "course_info",
+      "msg_type": "text",
+      "token_count": 55
     },
     {
-      "id": "msg_026",
-      "convo_id": "convo_6",
-      "role": "assistant",
-      "text": "Hi! Welcome to GreenThumb Real Estate. I'm here to help you with property searches, market information, and connecting you with our expert agents. Whether you're buying, selling, or renting, I'm here to assist. What are you looking for today?",
-      "timestamp": "2025-07-01T10:01:00Z"
+      "id": "meta_019",
+      "msg_id": "msg_019",
+      "sentiment": "positive",
+      "intent": "additional_info",
+      "msg_type": "text",
+      "token_count": 15
     },
     {
-      "id": "msg_027",
-      "convo_id": "convo_6",
-      "role": "user",
-      "text": "I'm looking to buy a 3-bedroom house in the downtown area, budget around $400,000",
-      "timestamp": "2025-07-01T10:02:00Z"
+      "id": "meta_020",
+      "msg_id": "msg_020",
+      "sentiment": "positive",
+      "intent": "comprehensive_info",
+      "msg_type": "text",
+      "token_count": 68
     },
     {
-      "id": "msg_028",
-      "convo_id": "convo_6",
-      "role": "assistant",
-      "text": "Great! I found 12 properties matching your criteria in the downtown area. The average price for 3-bedroom homes there is $385,000, so you're right in the sweet spot. I can show you listings with modern kitchens, updated bathrooms, and some with parking included. Would you like me to email you the top 5 properties, or would you prefer to schedule a viewing tour with one of our agents this weekend?",
-      "confidence_score": 0.90,
-      "timestamp": "2025-07-01T10:03:00Z"
+      "id": "meta_021",
+      "msg_id": "msg_021",
+      "sentiment": "negative",
+      "intent": "complaint",
+      "msg_type": "text",
+      "token_count": 25
     },
     {
-      "id": "msg_029",
-      "convo_id": "convo_6",
-      "role": "user",
-      "text": "Please email me the top 5 and let's schedule viewings for this Saturday",
-      "timestamp": "2025-07-01T10:04:00Z"
+      "id": "meta_022",
+      "msg_id": "msg_022",
+      "sentiment": "neutral",
+      "intent": "product_inquiry",
+      "msg_type": "text",
+      "token_count": 18
     },
     {
-      "id": "msg_030",
-      "convo_id": "convo_6",
-      "role": "assistant",
-      "text": "Excellent! I'm sending you the top 5 properties right now, including photos, floor plans, and neighborhood details. I've also scheduled you with Sarah Mitchell, our downtown specialist, for Saturday starting at 10:00 AM. The tour will take about 3 hours to see all properties comfortably. Sarah will call you tomorrow to confirm and discuss any specific features you're looking for. You'll receive all the details via email within 5 minutes!",
-      "confidence_score": 0.94,
-      "timestamp": "2025-07-01T10:05:00Z"
+      "id": "meta_023",
+      "msg_id": "msg_023",
+      "sentiment": "positive",
+      "intent": "product_info",
+      "msg_type": "text",
+      "token_count": 42
     },
     {
-      "id": "msg_031",
-      "convo_id": "convo_7",
-      "role": "assistant",
-      "text": "Hello! Welcome to AutoCare Plus, your trusted automotive service center. I can help you with service appointments, maintenance reminders, warranty information, and general automotive questions. How can I help you today?",
-      "timestamp": "2025-07-01T10:01:00Z"
+      "id": "meta_024",
+      "msg_id": "msg_024",
+      "sentiment": "neutral",
+      "intent": "shipping_inquiry",
+      "msg_type": "text",
+      "token_count": 12
     },
     {
-      "id": "msg_032",
-      "convo_id": "convo_7",
-      "role": "user",
-      "text": "My car is making a strange noise when I brake. Can I get it checked?",
-      "timestamp": "2025-07-01T10:02:00Z"
+      "id": "meta_025",
+      "msg_id": "msg_025",
+      "sentiment": "positive",
+      "intent": "shipping_info",
+      "msg_type": "text",
+      "token_count": 35
+    }
+  ],
+  "analytics_questions": [
+    {
+      "id": "q_001",
+      "agent_id": "4k8afeknd",
+      "question": "What are your business hours?",
+      "category": "General",
+      "count": 78,
+      "last_asked": "2025-01-15T16:30:00Z"
     },
     {
-      "id": "msg_033",
-      "convo_id": "convo_7",
-      "role": "assistant",
-      "text": "That's definitely something we should check right away - brake issues are a safety priority. It could be worn brake pads, warped rotors, or low brake fluid. We have an opening tomorrow at 9:00 AM or 2:30 PM for a brake inspection. The diagnostic fee is $89, which gets applied toward any repairs needed. Our certified technicians will have you back on the road safely. Which time slot works better for you?",
-      "confidence_score": 0.91,
-      "timestamp": "2025-07-01T10:03:00Z"
+      "id": "q_002",
+      "agent_id": "4k8afeknd",
+      "question": "How do I reset my password?",
+      "category": "Account",
+      "count": 65,
+      "last_asked": "2025-01-15T15:45:00Z"
     },
     {
-      "id": "msg_034",
-      "convo_id": "convo_7",
-      "role": "user",
-      "text": "9:00 AM tomorrow works perfect. What should I bring?",
-      "timestamp": "2025-07-01T10:04:00Z"
+      "id": "q_003",
+      "agent_id": "4k8afeknd",
+      "question": "Do you offer free shipping?",
+      "category": "Shipping",
+      "count": 52,
+      "last_asked": "2025-01-15T14:20:00Z"
     },
     {
-      "id": "msg_035",
-      "convo_id": "convo_7",
-      "role": "assistant",
-      "text": "Perfect! You're all set for tomorrow at 9:00 AM. Please bring your driver's license, vehicle registration, and any maintenance records if you have them. If your car is still under warranty, bring those documents too. We'll provide a free shuttle service to nearby locations if you need to leave your car for repairs. You'll receive a confirmation text tonight with our address and contact information. Drive safely and we'll see you tomorrow!",
-      "confidence_score": 0.95,
-      "timestamp": "2025-07-01T10:05:00Z"
+      "id": "q_004",
+      "agent_id": "4k8afeknd",
+      "question": "What is your return policy?",
+      "category": "Returns",
+      "count": 48,
+      "last_asked": "2025-01-15T13:15:00Z"
+    },
+    {
+      "id": "q_005",
+      "agent_id": "4k8afeknd",
+      "question": "How can I track my order?",
+      "category": "Orders",
+      "count": 45,
+      "last_asked": "2025-01-15T12:30:00Z"
+    },
+    {
+      "id": "q_006",
+      "agent_id": "4k8afeknd",
+      "question": "Do you ship internationally?",
+      "category": "Shipping",
+      "count": 42,
+      "last_asked": "2025-01-15T11:45:00Z"
+    },
+    {
+      "id": "q_007",
+      "agent_id": "4k8afeknd",
+      "question": "What payment methods do you accept?",
+      "category": "Payment",
+      "count": 38,
+      "last_asked": "2025-01-15T10:20:00Z"
+    },
+    {
+      "id": "q_008",
+      "agent_id": "4k8afeknd",
+      "question": "How long does shipping take?",
+      "category": "Shipping",
+      "count": 35,
+      "last_asked": "2025-01-15T09:55:00Z"
+    },
+    {
+      "id": "q_009",
+      "agent_id": "3",
+      "question": "Is there a warranty on your products?",
+      "category": "Product",
+      "count": 32,
+      "last_asked": "2025-01-15T09:30:00Z"
+    },
+    {
+      "id": "q_010",
+      "agent_id": "4k8afeknd",
+      "question": "How do I contact customer support?",
+      "category": "Support",
+      "count": 30,
+      "last_asked": "2025-01-15T14:00:00Z"
     }
   ],
   "contacts": [
@@ -853,122 +514,892 @@
       "platform": "WhatsApp",
       "phone_number": "+2348033333333",
       "email": null
-    },
-    {
-      "id": "contact_004",
-      "platform": "Website",
-      "phone_number": null,
-      "email": null
-    },
-    {
-      "id": "contact_005",
-      "platform": "Email",
-      "phone_number": null,
-      "email": "user5@example.com"
-    },
-    {
-      "id": "contact_006",
-      "platform": "WhatsApp",
-      "phone_number": "+2348066666666",
-      "email": null
     }
   ],
-  "message_metadata": [
+  "training_data": [
     {
-      "id": "meta_001",
-      "msg_id": "msg_001",
-      "sentiment": "neutral",
-      "intent": "order_help",
-      "msg_type": "text",
-      "token_count": 8
+      "id": "1",
+      "agent_id": "4k8afeknd",
+      "content_type": "faq",
+      "category": "General",
+      "title": "What are your business hours?",
+      "content": "Our business hours are Monday to Friday, 9 AM to 6 PM EST. We're closed on weekends and major holidays.",
+      "intent": "business_hours_inquiry",
+      "keywords": "hours,open,closed,time,schedule",
+      "confidence_score": 0.98,
+      "source_url": null,
+      "is_active": true,
+      "created_at": "2023-11-01T10:00:00Z",
+      "updated_at": "2023-12-01T15:20:00Z"
     },
     {
-      "id": "meta_002",
-      "msg_id": "msg_002",
-      "sentiment": "helpful",
-      "intent": "request_info",
-      "msg_type": "text",
-      "token_count": 9
+      "id": "2",
+      "agent_id": "4k8afeknd",
+      "content_type": "faq",
+      "category": "Account",
+      "title": "How do I reset my password?",
+      "content": "To reset your password, click on 'Forgot Password' on the login page, enter your email address, and follow the instructions sent to your email.",
+      "intent": "password_reset",
+      "keywords": "password,reset,forgot,login,email",
+      "confidence_score": 0.96,
+      "source_url": null,
+      "is_active": true,
+      "created_at": "2023-11-01T10:00:00Z",
+      "updated_at": "2023-12-01T15:20:00Z"
     },
     {
-      "id": "meta_003",
-      "msg_id": "msg_003",
-      "sentiment": "curious",
-      "intent": "discount_inquiry",
-      "msg_type": "text",
-      "token_count": 6
+      "id": "3",
+      "agent_id": "4k8afeknd",
+      "content_type": "faq",
+      "category": "Shipping",
+      "title": "Do you offer free shipping?",
+      "content": "Yes, we offer free shipping on orders over $50 within the continental US. International shipping rates vary by location.",
+      "intent": "shipping_inquiry",
+      "keywords": "free shipping,delivery,cost,international",
+      "confidence_score": 0.94,
+      "source_url": null,
+      "is_active": true,
+      "created_at": "2023-11-01T10:00:00Z",
+      "updated_at": "2023-12-01T15:20:00Z"
     },
     {
-      "id": "meta_004",
-      "msg_id": "msg_004",
-      "sentiment": "positive",
-      "intent": "promotion_reply",
-      "msg_type": "text",
-      "token_count": 7
+      "id": "4",
+      "agent_id": "4k8afeknd",
+      "content_type": "faq",
+      "category": "Returns",
+      "title": "What is your return policy?",
+      "content": "We accept returns within 30 days of purchase. Items must be unused and in original packaging. Return shipping is free for defective items.",
+      "intent": "return_policy_inquiry",
+      "keywords": "return,policy,30 days,unused,packaging",
+      "confidence_score": 0.97,
+      "source_url": null,
+      "is_active": true,
+      "created_at": "2023-11-01T10:00:00Z",
+      "updated_at": "2023-12-01T15:20:00Z"
     },
     {
-      "id": "meta_005",
-      "msg_id": "msg_005",
-      "sentiment": "frustrated",
-      "intent": "human_request",
-      "msg_type": "text",
-      "token_count": 6
+      "id": "5",
+      "agent_id": "4k8afeknd",
+      "content_type": "faq",
+      "category": "Orders",
+      "title": "How can I track my order?",
+      "content": "You can track your order by logging into your account and viewing the order status, or by using the tracking number sent to your email.",
+      "intent": "order_tracking",
+      "keywords": "track,order,status,tracking number,email",
+      "confidence_score": 0.95,
+      "source_url": null,
+      "is_active": true,
+      "created_at": "2023-11-01T10:00:00Z",
+      "updated_at": "2023-12-01T15:20:00Z"
     },
     {
-      "id": "meta_006",
-      "msg_id": "msg_006",
-      "sentiment": "neutral",
-      "intent": "transfer",
-      "msg_type": "text",
-      "token_count": 5
+      "id": "6",
+      "agent_id": "4k8afeknd",
+      "content_type": "faq",
+      "category": "Payment",
+      "title": "What payment methods do you accept?",
+      "content": "We accept all major credit cards (Visa, MasterCard, American Express), PayPal, Apple Pay, and Google Pay.",
+      "intent": "payment_methods",
+      "keywords": "payment,credit card,paypal,apple pay,google pay",
+      "confidence_score": 0.93,
+      "source_url": null,
+      "is_active": true,
+      "created_at": "2023-11-01T10:00:00Z",
+      "updated_at": "2023-12-01T15:20:00Z"
     },
     {
-      "id": "meta_007",
-      "msg_id": "msg_007",
-      "sentiment": "worried",
-      "intent": "delivery_status",
-      "msg_type": "text",
-      "token_count": 5
+      "id": "7",
+      "agent_id": "4k8afeknd",
+      "content_type": "faq",
+      "category": "Support",
+      "title": "How do I contact customer support?",
+      "content": "You can contact our customer support team via email at support@company.com, phone at 1-800-123-4567, or through this chat.",
+      "intent": "contact_support",
+      "keywords": "contact,support,email,phone,chat",
+      "confidence_score": 0.99,
+      "source_url": null,
+      "is_active": true,
+      "created_at": "2023-11-01T10:00:00Z",
+      "updated_at": "2023-12-01T15:20:00Z"
     },
     {
-      "id": "meta_008",
-      "msg_id": "msg_008",
-      "sentiment": "reassuring",
-      "intent": "delivery_update",
-      "msg_type": "text",
-      "token_count": 6
+      "id": "13",
+      "agent_id": "3",
+      "content_type": "faq",
+      "category": "Customer Support",
+      "title": "Product Return Policy",
+      "content": "Our return policy allows customers to return products within 30 days of purchase. Items must be in original condition with tags attached. Refunds are processed within 5-7 business days.",
+      "intent": "return_policy_inquiry",
+      "keywords": "return,refund,policy,30 days,original condition",
+      "confidence_score": 0.95,
+      "source_url": null,
+      "is_active": true,
+      "created_at": "2023-12-01T15:20:00Z",
+      "updated_at": "2023-12-01T15:20:00Z"
     },
     {
-      "id": "meta_009",
-      "msg_id": "msg_009",
-      "sentiment": "dissatisfied",
-      "intent": "return_request",
-      "msg_type": "text",
-      "token_count": 6
+      "id": "kpi9f7czp",
+      "agent_id": "bx1dek6bf",
+      "content_type": "faq",
+      "category": "Q&A",
+      "title": "What is your refund policy",
+      "content": "We do not offer refunds",
+      "intent": "qa_knowledge",
+      "keywords": "what,is,your,refund,policy",
+      "confidence_score": 1,
+      "is_active": true,
+      "created_at": "2025-09-28T13:15:23.177Z",
+      "updated_at": "2025-09-28T13:15:23.177Z"
+    }
+  ],
+  "core_actions": [
+    {
+      "id": "core_1",
+      "name": "Answer FAQs",
+      "description": "Instantly answer frequently asked questions about shipping, refunds, and account help",
+      "category": "core",
+      "type": "conversation",
+      "status": "active",
+      "triggers": [
+        {
+          "type": "intent",
+          "value": "faq_inquiry"
+        }
+      ],
+      "steps": [
+        {
+          "id": "1",
+          "type": "message",
+          "config": {
+            "template": "faq_response"
+          },
+          "nextStep": null
+        }
+      ],
+      "isBuiltIn": true,
+      "created_at": "2023-11-15T10:30:00Z",
+      "updated_at": "2023-12-05T14:22:00Z"
     },
     {
-      "id": "meta_010",
-      "msg_id": "msg_010",
-      "sentiment": "supportive",
-      "intent": "return_help",
-      "msg_type": "text",
-      "token_count": 7
+      "id": "core_2",
+      "name": "Escalate to Human",
+      "description": "Transfer conversation to human agent with full context when needed",
+      "category": "core",
+      "type": "task",
+      "status": "active",
+      "triggers": [
+        {
+          "type": "keyword",
+          "value": "human agent"
+        },
+        {
+          "type": "sentiment",
+          "value": "negative"
+        }
+      ],
+      "steps": [
+        {
+          "id": "1",
+          "type": "escalate",
+          "config": {
+            "department": "support"
+          },
+          "nextStep": null
+        }
+      ],
+      "isBuiltIn": true,
+      "created_at": "2023-11-15T10:30:00Z",
+      "updated_at": "2023-12-05T14:22:00Z"
+    }
+  ],
+  "system_actions": [
+    {
+      "id": "book_meeting",
+      "name": "Book Meeting",
+      "description": "Allow customers to book meetings directly through the chat interface with calendar integration",
+      "category": "system",
+      "type": "booking",
+      "status": "inactive",
+      "configurable": true,
+      "isBuiltIn": false,
+      "triggers": [
+        {
+          "type": "keyword",
+          "value": "book meeting",
+          "conditions": {}
+        },
+        {
+          "type": "keyword",
+          "value": "schedule appointment",
+          "conditions": {}
+        },
+        {
+          "type": "intent",
+          "value": "booking_request",
+          "conditions": {}
+        }
+      ],
+      "steps": [
+        {
+          "id": "check_availability",
+          "type": "api_call",
+          "config": {
+            "description": "Check calendar availability",
+            "integration_required": true
+          }
+        },
+        {
+          "id": "present_slots",
+          "type": "message",
+          "config": {
+            "template": "Here are the available time slots: {{available_slots}}"
+          }
+        },
+        {
+          "id": "confirm_booking",
+          "type": "api_call",
+          "config": {
+            "description": "Create calendar event",
+            "integration_required": true
+          }
+        }
+      ],
+      "defaultConfig": {
+        "meeting_duration": 30,
+        "buffer_time": 15,
+        "advance_booking_days": 30
+      },
+      "requiredIntegrations": [
+        {
+          "id": "google_calendar",
+          "name": "Google Calendar",
+          "type": "calendar",
+          "icon": "/images/googlecalendar.png",
+          "authType": "oauth",
+          "configFields": []
+        }
+      ],
+      "supportedProviders": [
+        {
+          "id": "google_calendar",
+          "name": "Google Calendar",
+          "type": "calendar",
+          "icon": "/images/googlecalendar.png",
+          "authType": "oauth",
+          "configFields": []
+        },
+        {
+          "id": "outlook_calendar",
+          "name": "Outlook Calendar",
+          "type": "calendar",
+          "icon": "/images/outlook.png",
+          "authType": "oauth",
+          "configFields": []
+        },
+        {
+          "id": "calendly",
+          "name": "Calendly",
+          "type": "calendar",
+          "icon": "/images/calendly.png",
+          "authType": "api_key",
+          "configFields": []
+        }
+      ],
+      "created_at": "2023-11-15T10:30:00Z",
+      "updated_at": "2023-12-05T14:22:00Z"
     },
     {
-      "id": "meta_011",
-      "msg_id": "msg_011",
-      "sentiment": "neutral",
-      "intent": "quote_request",
-      "msg_type": "text",
-      "token_count": 5
+      "id": "cancel_meeting",
+      "name": "Cancel Meeting",
+      "description": "Allow customers to cancel their existing meetings with automatic calendar updates",
+      "category": "system",
+      "type": "booking",
+      "status": "inactive",
+      "configurable": true,
+      "isBuiltIn": false,
+      "triggers": [
+        {
+          "type": "keyword",
+          "value": "cancel meeting",
+          "conditions": {}
+        },
+        {
+          "type": "keyword",
+          "value": "cancel appointment",
+          "conditions": {}
+        },
+        {
+          "type": "intent",
+          "value": "cancellation_request",
+          "conditions": {}
+        }
+      ],
+      "steps": [
+        {
+          "id": "find_booking",
+          "type": "api_call",
+          "config": {
+            "description": "Find customer's booking",
+            "integration_required": true
+          }
+        },
+        {
+          "id": "confirm_cancellation",
+          "type": "condition",
+          "config": {
+            "field": "booking_found",
+            "operator": "equals",
+            "value": "true"
+          }
+        },
+        {
+          "id": "cancel_booking",
+          "type": "api_call",
+          "config": {
+            "description": "Cancel the booking",
+            "integration_required": true
+          }
+        }
+      ],
+      "defaultConfig": {
+        "cancellation_notice_hours": 24,
+        "send_confirmation": true
+      },
+      "requiredIntegrations": [
+        {
+          "id": "google_calendar",
+          "name": "Google Calendar",
+          "type": "calendar",
+          "icon": "/images/googlecalendar.png",
+          "authType": "oauth",
+          "configFields": []
+        }
+      ],
+      "supportedProviders": [
+        {
+          "id": "google_calendar",
+          "name": "Google Calendar",
+          "type": "calendar",
+          "icon": "/images/googlecalendar.png",
+          "authType": "oauth",
+          "configFields": []
+        },
+        {
+          "id": "outlook_calendar",
+          "name": "Outlook Calendar",
+          "type": "calendar",
+          "icon": "/images/outlook.png",
+          "authType": "oauth",
+          "configFields": []
+        },
+        {
+          "id": "calendly",
+          "name": "Calendly",
+          "type": "calendar",
+          "icon": "/images/calendly.png",
+          "authType": "api_key",
+          "configFields": []
+        }
+      ],
+      "created_at": "2023-11-15T10:30:00Z",
+      "updated_at": "2023-12-05T14:22:00Z"
     },
     {
-      "id": "meta_012",
-      "msg_id": "msg_012",
-      "sentiment": "engaging",
-      "intent": "quote_followup",
-      "msg_type": "text",
-      "token_count": 8
+      "id": "check_order_status",
+      "name": "Check Order Status",
+      "description": "Allow customers to check their order status by providing order number or email",
+      "category": "system",
+      "type": "order",
+      "status": "inactive",
+      "configurable": true,
+      "isBuiltIn": false,
+      "triggers": [
+        {
+          "type": "keyword",
+          "value": "order status",
+          "conditions": {}
+        },
+        {
+          "type": "keyword",
+          "value": "track order",
+          "conditions": {}
+        },
+        {
+          "type": "intent",
+          "value": "order_inquiry",
+          "conditions": {}
+        }
+      ],
+      "steps": [
+        {
+          "id": "request_order_info",
+          "type": "message",
+          "config": {
+            "text": "Please provide your order number or email address to check your order status."
+          }
+        },
+        {
+          "id": "lookup_order",
+          "type": "api_call",
+          "config": {
+            "description": "Look up order in system",
+            "integration_required": true
+          }
+        },
+        {
+          "id": "display_status",
+          "type": "message",
+          "config": {
+            "template": "Your order #{{order_number}} is {{status}}. {{tracking_info}}"
+          }
+        }
+      ],
+      "defaultConfig": {
+        "require_verification": true,
+        "show_tracking_link": true
+      },
+      "requiredIntegrations": [
+        {
+          "id": "salesforce",
+          "name": "Salesforce",
+          "type": "crm",
+          "icon": "/images/salesforce.png",
+          "authType": "oauth",
+          "configFields": []
+        }
+      ],
+      "supportedProviders": [
+        {
+          "id": "salesforce",
+          "name": "Salesforce",
+          "type": "crm",
+          "icon": "/images/salesforce.png",
+          "authType": "oauth",
+          "configFields": []
+        },
+        {
+          "id": "hubspot",
+          "name": "HubSpot",
+          "type": "crm",
+          "icon": "/images/hubspot.png",
+          "authType": "api_key",
+          "configFields": []
+        },
+        {
+          "id": "pipedrive",
+          "name": "Pipedrive",
+          "type": "crm",
+          "icon": "/images/pipedrive.png",
+          "authType": "api_key",
+          "configFields": []
+        }
+      ],
+      "created_at": "2023-11-15T10:30:00Z",
+      "updated_at": "2023-12-05T14:22:00Z"
+    },
+    {
+      "id": "initiate_return",
+      "name": "Initiate Return/Refund",
+      "description": "Help customers start the return or refund process for their orders",
+      "category": "system",
+      "type": "order",
+      "status": "inactive",
+      "configurable": true,
+      "isBuiltIn": false,
+      "triggers": [
+        {
+          "type": "keyword",
+          "value": "return",
+          "conditions": {}
+        },
+        {
+          "type": "keyword",
+          "value": "refund",
+          "conditions": {}
+        },
+        {
+          "type": "intent",
+          "value": "return_request",
+          "conditions": {}
+        }
+      ],
+      "steps": [
+        {
+          "id": "verify_order",
+          "type": "api_call",
+          "config": {
+            "description": "Verify order eligibility for return",
+            "integration_required": true
+          }
+        },
+        {
+          "id": "collect_return_reason",
+          "type": "message",
+          "config": {
+            "text": "Please select the reason for your return: {{return_reasons}}"
+          }
+        },
+        {
+          "id": "create_return_request",
+          "type": "api_call",
+          "config": {
+            "description": "Create return request in system",
+            "integration_required": true
+          }
+        }
+      ],
+      "defaultConfig": {
+        "return_window_days": 30,
+        "require_photos": false
+      },
+      "requiredIntegrations": [
+        {
+          "id": "salesforce",
+          "name": "Salesforce",
+          "type": "crm",
+          "icon": "/images/salesforce.png",
+          "authType": "oauth",
+          "configFields": []
+        }
+      ],
+      "supportedProviders": [
+        {
+          "id": "salesforce",
+          "name": "Salesforce",
+          "type": "crm",
+          "icon": "/images/salesforce.png",
+          "authType": "oauth",
+          "configFields": []
+        },
+        {
+          "id": "hubspot",
+          "name": "HubSpot",
+          "type": "crm",
+          "icon": "/images/hubspot.png",
+          "authType": "api_key",
+          "configFields": []
+        }
+      ],
+      "created_at": "2023-11-15T10:30:00Z",
+      "updated_at": "2023-12-05T14:22:00Z"
+    },
+    {
+      "id": "escalate_to_human",
+      "name": "Escalate to Human Agent",
+      "description": "Automatically escalate complex issues to human agents with context and priority",
+      "category": "system",
+      "type": "business",
+      "status": "inactive",
+      "configurable": true,
+      "isBuiltIn": false,
+      "triggers": [
+        {
+          "type": "keyword",
+          "value": "human agent",
+          "conditions": {}
+        },
+        {
+          "type": "keyword",
+          "value": "speak to person",
+          "conditions": {}
+        },
+        {
+          "type": "sentiment",
+          "value": "frustrated",
+          "conditions": {}
+        }
+      ],
+      "steps": [
+        {
+          "id": "collect_context",
+          "type": "message",
+          "config": {
+            "text": "I'll connect you with a human agent. Can you briefly describe your issue?"
+          }
+        },
+        {
+          "id": "create_ticket",
+          "type": "api_call",
+          "config": {
+            "description": "Create support ticket with conversation context",
+            "integration_required": true
+          }
+        },
+        {
+          "id": "notify_agents",
+          "type": "webhook",
+          "config": {
+            "description": "Notify available human agents",
+            "integration_required": true
+          }
+        }
+      ],
+      "defaultConfig": {
+        "priority_levels": [
+          "low",
+          "medium",
+          "high",
+          "urgent"
+        ],
+        "include_chat_history": true,
+        "max_wait_time_minutes": 15
+      },
+      "requiredIntegrations": [
+        {
+          "id": "salesforce",
+          "name": "Salesforce",
+          "type": "crm",
+          "icon": "/images/salesforce.png",
+          "authType": "oauth",
+          "configFields": []
+        }
+      ],
+      "supportedProviders": [
+        {
+          "id": "salesforce",
+          "name": "Salesforce",
+          "type": "crm",
+          "icon": "/images/salesforce.png",
+          "authType": "oauth",
+          "configFields": []
+        },
+        {
+          "id": "hubspot",
+          "name": "HubSpot",
+          "type": "crm",
+          "icon": "/images/hubspot.png",
+          "authType": "api_key",
+          "configFields": []
+        }
+      ],
+      "created_at": "2023-11-15T10:30:00Z",
+      "updated_at": "2023-12-05T14:22:00Z"
+    },
+    {
+      "id": "payment_reminder",
+      "name": "Payment Reminders",
+      "description": "Send automated reminders for pending payments, subscription renewals, or overdue invoices",
+      "category": "system",
+      "type": "alert",
+      "status": "inactive",
+      "configurable": true,
+      "isBuiltIn": false,
+      "triggers": [
+        {
+          "type": "schedule",
+          "value": "daily_check",
+          "conditions": {}
+        },
+        {
+          "type": "condition",
+          "value": "payment_overdue",
+          "conditions": {}
+        }
+      ],
+      "steps": [
+        {
+          "id": "check_overdue_payments",
+          "type": "api_call",
+          "config": {
+            "description": "Check for overdue payments",
+            "integration_required": true
+          }
+        },
+        {
+          "id": "send_reminder",
+          "type": "message",
+          "config": {
+            "template": "Your payment of {{amount}} is {{days_overdue}} days overdue. Please update your payment method."
+          }
+        },
+        {
+          "id": "update_reminder_log",
+          "type": "api_call",
+          "config": {
+            "description": "Log reminder sent",
+            "integration_required": true
+          }
+        }
+      ],
+      "defaultConfig": {
+        "reminder_frequency_days": 7,
+        "max_reminders": 3
+      },
+      "requiredIntegrations": [
+        {
+          "id": "stripe",
+          "name": "Stripe",
+          "type": "payment",
+          "icon": "/images/stripe.png",
+          "authType": "api_key",
+          "configFields": []
+        }
+      ],
+      "supportedProviders": [
+        {
+          "id": "stripe",
+          "name": "Stripe",
+          "type": "payment",
+          "icon": "/images/stripe.png",
+          "authType": "api_key",
+          "configFields": []
+        },
+        {
+          "id": "paystack",
+          "name": "Paystack",
+          "type": "payment",
+          "icon": "/images/paystack.png",
+          "authType": "api_key",
+          "configFields": []
+        }
+      ],
+      "created_at": "2023-11-15T10:30:00Z",
+      "updated_at": "2023-12-05T14:22:00Z"
+    }
+  ],
+  "custom_actions": [],
+  "api_functions": [
+    {
+      "id": "api_func_1756813659246",
+      "agentId": "1",
+      "name": "asdad",
+      "description": "asdfsd",
+      "method": "GET",
+      "url": "https://localhost:3000/login",
+      "headers": {},
+      "queryParams": {
+        "limit": "12"
+      },
+      "authType": "bearer",
+      "bearerToken": "122423325452452352",
+      "errorHandling": {
+        "retries": 2,
+        "timeout": 10000,
+        "fallbackMessage": ""
+      },
+      "created_at": "2025-09-02T11:47:39.246Z",
+      "updated_at": "2025-09-02T11:47:39.246Z"
+    }
+  ],
+  "integration_providers": [
+    {
+      "id": "google_calendar",
+      "name": "Google Calendar",
+      "type": "calendar",
+      "icon": "/images/googlecalendar.png",
+      "authType": "oauth",
+      "configFields": [
+        {
+          "name": "client_id",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "client_secret",
+          "type": "password",
+          "required": true
+        },
+        {
+          "name": "redirect_uri",
+          "type": "url",
+          "required": true
+        }
+      ]
+    },
+    {
+      "id": "calendly",
+      "name": "Calendly",
+      "type": "calendar",
+      "icon": "/images/calendly.png",
+      "authType": "api_key",
+      "configFields": [
+        {
+          "name": "api_key",
+          "type": "password",
+          "required": true
+        },
+        {
+          "name": "organization_uri",
+          "type": "url",
+          "required": true
+        }
+      ]
+    },
+    {
+      "id": "salesforce",
+      "name": "Salesforce",
+      "type": "crm",
+      "icon": "/images/salesforce.png",
+      "authType": "oauth",
+      "configFields": [
+        {
+          "name": "client_id",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "client_secret",
+          "type": "password",
+          "required": true
+        },
+        {
+          "name": "instance_url",
+          "type": "url",
+          "required": true
+        }
+      ]
+    },
+    {
+      "id": "hubspot",
+      "name": "HubSpot",
+      "type": "crm",
+      "icon": "/images/hubspot.png",
+      "authType": "api_key",
+      "configFields": [
+        {
+          "name": "api_key",
+          "type": "password",
+          "required": true
+        }
+      ]
+    },
+    {
+      "id": "stripe",
+      "name": "Stripe",
+      "type": "payment",
+      "icon": "/images/stripe.png",
+      "authType": "api_key",
+      "configFields": [
+        {
+          "name": "secret_key",
+          "type": "password",
+          "required": true
+        },
+        {
+          "name": "publishable_key",
+          "type": "text",
+          "required": true
+        }
+      ]
+    },
+    {
+      "id": "paystack",
+      "name": "Paystack",
+      "type": "payment",
+      "icon": "/images/paystack.png",
+      "authType": "api_key",
+      "configFields": [
+        {
+          "name": "secret_key",
+          "type": "password",
+          "required": true
+        },
+        {
+          "name": "public_key",
+          "type": "text",
+          "required": true
+        }
+      ]
     }
   ]
 }

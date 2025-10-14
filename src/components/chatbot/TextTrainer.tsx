@@ -1,7 +1,8 @@
-'use client';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+"use client";
 
-import { useState } from 'react';
-import { DocumentTextIcon, PlusIcon } from '@heroicons/react/24/outline';
+import { useState } from "react";
+import { PlusIcon } from "@heroicons/react/24/outline";
 
 interface TextTrainerProps {
   onSubmit: (data: TextTrainerData) => void;
@@ -10,13 +11,15 @@ interface TextTrainerProps {
 export interface TextTrainerData {
   title: string;
   content: string;
-  type: 'article' | 'description' | 'conversation';
+  type: "article" | "description" | "conversation";
 }
 
 export function TextTrainer({ onSubmit }: TextTrainerProps) {
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-  const [type, setType] = useState<'article' | 'description' | 'conversation'>('article');
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [type, setType] = useState<"article" | "description" | "conversation">(
+    "article"
+  );
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,12 +27,12 @@ export function TextTrainer({ onSubmit }: TextTrainerProps) {
       onSubmit({
         title,
         content,
-        type
+        type,
       });
-      
+
       // Reset form after submission
-      setTitle('');
-      setContent('');
+      setTitle("");
+      setContent("");
     }
   };
 
@@ -38,11 +41,14 @@ export function TextTrainer({ onSubmit }: TextTrainerProps) {
       <h3 className="text-lg font-medium text-gray-900 mb-4">
         Train Agent with Text Content
       </h3>
-      
+
       <form onSubmit={handleSubmit}>
         <div className="space-y-4">
           <div>
-            <label htmlFor="contentType" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="contentType"
+              className="block text-sm font-medium text-gray-700"
+            >
               Content Type
             </label>
             <select
@@ -56,9 +62,12 @@ export function TextTrainer({ onSubmit }: TextTrainerProps) {
               <option value="conversation">Conversation</option>
             </select>
           </div>
-          
+
           <div>
-            <label htmlFor="title" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="title"
+              className="block text-sm font-medium text-gray-700"
+            >
               Title
             </label>
             <input
@@ -71,9 +80,12 @@ export function TextTrainer({ onSubmit }: TextTrainerProps) {
               required
             />
           </div>
-          
+
           <div>
-            <label htmlFor="content" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="content"
+              className="block text-sm font-medium text-gray-700"
+            >
               Content
             </label>
             <textarea
@@ -82,11 +94,15 @@ export function TextTrainer({ onSubmit }: TextTrainerProps) {
               onChange={(e) => setContent(e.target.value)}
               rows={8}
               className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
-              placeholder={type === 'conversation' ? "Paste your conversation history here..." : "Enter or paste your content here..."}
+              placeholder={
+                type === "conversation"
+                  ? "Paste your conversation history here..."
+                  : "Enter or paste your content here..."
+              }
               required
             />
           </div>
-          
+
           <div className="pt-4">
             <button
               type="submit"

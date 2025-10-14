@@ -30,7 +30,7 @@ export default function RegisterPage() {
 
   const Submit = async (value: SignupFormInputs) => {
     try {
-      const response = await fetch("/api/auth/register", {
+      const response = await fetch("/v1/auth/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(value),
@@ -60,6 +60,7 @@ export default function RegisterPage() {
 
       // TODO: Fetch user details from the db
     } catch (error) {
+      console.log(error);
       // TODO: Toast error
     }
   };

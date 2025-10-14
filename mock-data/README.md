@@ -14,4 +14,4 @@ DELETE /users/:id       - Delete user
 
 #### Repeat for other routes
 
-/chatbots /messages
+/chatagents /messages

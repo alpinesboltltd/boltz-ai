@@ -21,23 +21,36 @@ export interface ApiResponse<T> {
 // User Types
 export interface Profile extends User {
   id?: string;
-  plan: SubscriptionPlans;
+  firebase_uid: string;
+  name: string;
+  plan?: SubscriptionPlans;
   role: UserRoles;
-  createdAt?: string;
   company?: string;
   avatar?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 // Message Types
 export interface Message {
   id: string;
-  chatbotId: string;
+  chatagentId: string;
   sessionId: string;
-  content: string;
-  role: "user" | "bot";
+  // content: string;
+  parts: string;
+  role: "user" | "system";
   timestamp: string;
-  metadata?: Record<string, any>;
+  metadata?: MessageMetadata;
 }
+
+// Narrow metadata shape to common JSON-compatible primitives/arrays/objects
+export type JSONPrimitive = string | number | boolean | null;
+export interface JSONObject {
+  [key: string]: JSONValue;
+}
+export type JSONArray = JSONValue[];
+export type JSONValue = JSONPrimitive | JSONObject | JSONArray;
+export type MessageMetadata = Record<string, JSONValue>;
 
 // Integration Types
 export interface Integration {
@@ -52,7 +65,7 @@ export interface Integration {
 // Knowledge Base Types
 export interface KnowledgeBase {
   id: string;
-  chatbotId: string;
+  chatagentId: string;
   name: string;
   description: string;
   sources: KnowledgeSource[];
@@ -110,8 +123,10 @@ export enum SubscriptionPlans {
 }
 
 export enum UserRoles {
+  superAdmin = "superadmin",
   admin = "admin",
   user = "user",
+  staff = "staff",
 }
 export enum FirebaseErrorMessage {
   userNotFound = "auth/user-not-found",
@@ -125,3 +140,7 @@ export enum FirebaseErrorMessage {
   popupBlocked = "auth/popup/blocked",
   networkFailure = "auth/network-request-failed",
 }
+
+// Re-export new types
+export * from "./sources";
+export * from "./actions";
