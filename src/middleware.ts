@@ -19,10 +19,18 @@ export function middleware(request: NextRequest) {
     path === "/terms" ||
     path.startsWith("/dashboard/") ||
     path.startsWith("/chatagent/") ||
-    path.startsWith("/api/public/");
+    path.startsWith("/api/") ||
+    path.startsWith("/v1/");
 
-  // Get the token from cookies
-  const token = request.cookies.get("auth_token")?.value;
+  // Check for Bearer token in Authorization header first
+  let token: string | undefined = undefined;
+  const authHeader = request.headers.get("authorization");
+  if (authHeader && authHeader.startsWith("Bearer ")) {
+    token = authHeader.substring(7);
+  } else {
+    // Fallback to cookie
+    token = request.cookies.get("auth_token")?.value;
+  }
 
   // If the path requires authentication and there's no token, redirect to login
   if (!isPublicPath && !token) {

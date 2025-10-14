@@ -21,11 +21,14 @@ export interface ApiResponse<T> {
 // User Types
 export interface Profile extends User {
   id?: string;
-  plan: SubscriptionPlans;
+  firebase_uid: string;
+  name: string;
+  plan?: SubscriptionPlans;
   role: UserRoles;
-  createdAt?: string;
   company?: string;
   avatar?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 // Message Types
@@ -120,8 +123,10 @@ export enum SubscriptionPlans {
 }
 
 export enum UserRoles {
+  superAdmin = "superadmin",
   admin = "admin",
   user = "user",
+  staff = "staff",
 }
 export enum FirebaseErrorMessage {
   userNotFound = "auth/user-not-found",

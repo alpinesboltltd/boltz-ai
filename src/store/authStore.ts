@@ -2,21 +2,13 @@ import { Profile } from "@/types";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-// interface Profile {
-//   id: string;
-//   uid: string;
-//   name: string;
-//   email: string;
-//   role: string;
-//   avatar?: string;
-// }
-
 interface AuthState {
   user: Profile | null;
   token: string | null;
   isAuthenticated: boolean;
   isLoading: boolean;
   setUser: (user: Profile) => void;
+  setToken: (token: string) => void;
   logout: () => void;
   updateUser: (userData: Partial<Profile>) => void;
 }
@@ -31,7 +23,10 @@ export const useAuthStore = create<AuthState>()(
       error: null,
 
       setUser(user) {
-        return set({ user });
+        return set({ user, isAuthenticated: true });
+      },
+      setToken(token) {
+        return set({ token });
       },
       logout: () => {
         // Clear auth data

@@ -7,6 +7,14 @@ const nextConfig = {
   images: {
     domains: ["i.pravatar.cc"],
   },
+  rewrites: async () => {
+    return [
+      {
+        source: "/v1/:path*",
+        destination: `${process.env.API_BASE_URL}/api/v1/:path*`,
+      },
+    ];
+  },
 };
 
 module.exports = nextConfig;

@@ -16,7 +16,7 @@ import { useAuthStore } from "@/store/authStore";
 export default function LoginPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { setUser } = useAuthStore();
+  const { setUser, setToken } = useAuthStore();
 
   const {
     register,
@@ -38,12 +38,11 @@ export default function LoginPage() {
 
   const Submit = async (value: SigninFormInputs) => {
     setLoading(true);
-
     try {
-      const response = await fetch("/api/auth/login", {
+      const response = await fetch("/v1/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ value }),
+        body: JSON.stringify({ ...value }),
       });
 
       if (!response.ok) {
@@ -51,10 +50,16 @@ export default function LoginPage() {
         throw new Error(errorData.message || "Login failed");
       }
 
-      const { user } = await response.json();
-      setUser({ ...user, role: UserRoles.user, plan: SubscriptionPlans.free });
+      const data = await response.json();
+      const { user, token } = data;
+      
+      // Store token in cookie for middleware
+      document.cookie = `auth_token=${token}; path=/; max-age=${7 * 24 * 60 * 60}; secure; samesite=strict`;
+      
+      // Update auth store
+      setToken(token);
+      setUser({ ...user, plan: SubscriptionPlans.free });
 
-      // TODO: Store user session
       router.push("/dashboard");
     } catch (err) {
       // TODO: display error in a toast
@@ -63,7 +68,7 @@ export default function LoginPage() {
       setLoading(false);
     }
   };
-  console.time();
+
   const handleSocialSignin = async (method: AuthRequestMethods) => {
     console.timeEnd();
     if (!method) {

@@ -1,5 +1,5 @@
 import { auth } from "@/configs/firebase";
-import { AuthRequestMethods, FirebaseErrorMessage } from "@/types";
+import { AuthRequestMethods, FirebaseErrorMessage, Profile } from "@/types";
 import {
   GithubAuthProvider,
   GoogleAuthProvider,
@@ -43,7 +43,9 @@ export function handleFirebaseErrorMessage(code: string): string {
   }
 }
 
-export async function socialSignIn(method: AuthRequestMethods): Promise<User> {
+export async function socialSignIn(
+  method: AuthRequestMethods
+): Promise<Profile> {
   let user: User | undefined;
   switch (method) {
     case AuthRequestMethods.google:
@@ -81,7 +83,19 @@ export async function socialSignIn(method: AuthRequestMethods): Promise<User> {
   if (!user) {
     throw new Error("Credentials not found");
   }
-  return user;
+
+  const payload = { id_token: user.getIdToken() };
+  const response = await fetch("api/v1/auth/verify", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+    throw new Error("Signin failed");
+  }
+  const profile = response.json();
+  console.log(profile);
+  return profile as unknown as Profile;
 }
 
 /*
