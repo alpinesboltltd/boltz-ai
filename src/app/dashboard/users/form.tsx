@@ -104,7 +104,7 @@ const Forms: React.FC<FormProps> = ({ user }) => {
         {/* Submit */}
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white rounded-lg py-2 mt-2 hover:bg-blue-700 transition"
+          className="w-full bg-primary-600 text-white rounded-lg py-2 mt-2 hover:bg-primary-700 transition"
         >
           Add User
         </button>

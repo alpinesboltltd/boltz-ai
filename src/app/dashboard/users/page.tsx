@@ -153,7 +153,7 @@ export default function UsersPage() {
             >
               <XMarkIcon className="h-6 w-6" />
             </button>
-            <h2 className="text-lg font-semibold mb-4 text-center bg-blue-600 text-white p-2 rounded-lg">
+            <h2 className="text-lg font-semibold mb-4 text-center bg-primary-600 text-white p-2 rounded-lg">
               Add New User
             </h2>
             <Forms />
@@ -384,7 +384,7 @@ export default function UsersPage() {
                         >
                           <XMarkIcon className="h-6 w-6" />
                         </button>
-                        <h2 className="text-xl font-semibold mb-4 text-center bg-blue-600 text-white p-2 rounded">
+                        <h2 className="text-xl font-semibold mb-4 text-center bg-primary-600 text-white p-2 rounded-lg">
                           Edit User
                         </h2>
                         <Forms user={userToEdit} />
