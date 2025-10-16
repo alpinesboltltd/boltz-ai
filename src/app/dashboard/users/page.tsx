@@ -12,8 +12,7 @@ import {
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import Image from "next/image";
-import userForm from "@/components/form/UserForm";
-import UserForm from "@/components/form/UserForm";
+import UserForm from "@/components/form/userForm";
 
 interface User {
   id: string;
