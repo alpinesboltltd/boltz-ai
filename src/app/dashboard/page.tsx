@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { MessageSquare } from "lucide-react";
-import { agentsAPI } from "@/lib/api";
+import { agentApi} from "@/lib/agent-api"
 import { cn } from "@/lib/utils";
 import { useAgentStore } from "@/store/agentStore";
 
@@ -13,19 +13,38 @@ enum ActiveTabs {
 }
 
 export default function Dashboard() {
-  const { agents, setAgents } = useAgentStore();
+  const { agents, setAgents, deleteAgent } = useAgentStore();
   const [activeTab, setActiveTab] = useState(ActiveTabs.AGENTS);
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   useEffect(() => {
     const getChatbot = async () => {
       // TODO: replace userId with actual user Id
-      const { data } = await agentsAPI.getAll("1");
+      const { data } = await agentApi.getAll("1");
       console.log(data);
       if (data) setAgents(data);
     };
 
     getChatbot();
   }, []);
+
+  const handleDeleteAgent = async (agentId, agentName) => {
+    if (!window.confirm(`Are you sure you want to permanently delete the agent "${agentName}"?`)) {
+      //to be replaced with a proper modal
+      return;
+    }
+    setIsLoading(true)
+    try{
+      await agentApi.deleteAgent(agentId)
+      deleteAgent(agentId)
+    } catch (e) {
+      console.error("Deletion failed:", e);
+       alert(`Unable to delete ${agentName}. Please check console for details.`);
+    } finally {
+      setIsLoading(false)
+    }
+
+  }
 
   return (
     <>
@@ -77,17 +96,24 @@ export default function Dashboard() {
                         <div className="flex-grow flex items-center justify-center bg-gray-200">
                           <MessageSquare width={88} height={88} />
                         </div>
-                        <div className=" p-3 flex-col flex-shrink-0 flex items-center justify-center">
+                        <div className={`p-3 flex-col flex-shrink-0 flex items-center justify-center
+                              ${
+                                chatagent.status === "active"
+                                ? "bg-green-100 text-green-800"
+                                : "bg-yellow-100 text-yellow-800" 
+                              }
+                                  `}>
                           <p className="text-sm font-medium truncate text-center text-gray-800 break-words w-full px-2">
                             {chatagent.name}
                           </p>
+                          <button onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation(); 
+                            handleDeleteAgent(chatagent.id, chatagent.name);
+                          }}> Delete</button>
                           <div className={`ml-2 flex-shrink-0 flex`}>
                             <p
-                              className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                                chatagent.status === "active"
-                                  ? "bg-green-100 text-green-800"
-                                  : "bg-yellow-100 text-yellow-800"
-                              }`}
+                              className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full`}
                             >
                               {chatagent.status}
                             </p>
