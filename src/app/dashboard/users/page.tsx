@@ -12,7 +12,8 @@ import {
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import Image from "next/image";
-import Forms from "./form";
+import userForm from "@/components/form/UserForm";
+import UserForm from "@/components/form/UserForm";
 
 interface User {
   id: string;
@@ -145,18 +146,28 @@ export default function UsersPage() {
       </div>
       {/* Add User Modal */}
       {showForm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50">
-          <div className="bg-white rounded-2xl shadow-xl max-w-lg w-full relative p-6">
-            <button
-              onClick={() => setShowForm(false)}
-              className="absolute top-3 right-3 text-gray-400 hover:text-gray-600"
-            >
-              <XMarkIcon className="h-6 w-6" />
-            </button>
-            <h2 className="text-lg font-semibold mb-4 text-center bg-blue-600 text-white p-2 rounded-lg">
-              Add New User
-            </h2>
-            <Forms />
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50"
+          onClick={() => setShowForm(false)}
+        >
+          <div
+            className="bg-white rounded-lg shadow-xl max-w-lg w-full mx-4 relative"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between p-6 border-b border-gray-200">
+              <h2 className="text-lg font-semibold text-gray-900">
+                Add New User
+              </h2>
+              <button
+                onClick={() => setShowForm(false)}
+                className="p-1 rounded-full hover:bg-gray-100 transition-colors duration-200"
+              >
+                <XMarkIcon className="h-6 w-6 text-gray-500 hover:text-gray-700" />
+              </button>
+            </div>
+            <div className="p-6">
+              <UserForm />
+            </div>
           </div>
         </div>
       )}
@@ -373,21 +384,34 @@ export default function UsersPage() {
                     </tr>
                   ))}
                   {editForm && userToEdit && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50">
-                      <div className="bg-white rounded-2xl shadow-xl max-w-lg w-full relative p-6">
-                        <button
-                          onClick={() => {
-                            setEditForm(false);
-                            setUserToEdit(null);
-                          }}
-                          className="absolute top-3 right-3 text-gray-400 hover:text-gray-600"
-                        >
-                          <XMarkIcon className="h-6 w-6" />
-                        </button>
-                        <h2 className="text-xl font-semibold mb-4 text-center bg-blue-600 text-white p-2 rounded">
-                          Edit User
-                        </h2>
-                        <Forms user={userToEdit} />
+                    <div
+                      className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50"
+                      onClick={() => {
+                        setEditForm(false);
+                        setUserToEdit(null);
+                      }}
+                    >
+                      <div
+                        className="bg-white rounded-lg shadow-xl max-w-lg w-full mx-4 relative"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <div className="flex items-center justify-between p-6 border-b border-gray-200">
+                          <h2 className="text-lg font-semibold text-gray-900">
+                            Edit User
+                          </h2>
+                          <button
+                            onClick={() => {
+                              setEditForm(false);
+                              setUserToEdit(null);
+                            }}
+                            className="p-1 rounded-full hover:bg-gray-100 transition-colors duration-200"
+                          >
+                            <XMarkIcon className="h-6 w-6 text-gray-500 hover:text-gray-700" />
+                          </button>
+                        </div>
+                        <div className="p-6">
+                          <UserForm user={userToEdit} />
+                        </div>
                       </div>
                     </div>
                   )}
@@ -400,58 +424,54 @@ export default function UsersPage() {
 
       {/* Delete Confirmation Modal */}
       {showDeleteModal && (
-        <div className="fixed z-10 inset-0 overflow-y-auto">
-          <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div
-              className="fixed inset-0 transition-opacity"
-              aria-hidden="true"
-            >
-              <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50"
+          onClick={() => setShowDeleteModal(false)}
+        >
+          <div
+            className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 relative"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between p-6 border-b border-gray-200">
+              <h3 className="text-lg font-semibold text-gray-900">
+                Delete User
+              </h3>
+              <button
+                onClick={() => setShowDeleteModal(false)}
+                className="p-1 rounded-full hover:bg-gray-100 transition-colors duration-200"
+                disabled={isDeleting}
+              >
+                <XMarkIcon className="h-6 w-6 text-gray-500 hover:text-gray-700" />
+              </button>
             </div>
-
-            <span
-              className="hidden sm:inline-block sm:align-middle sm:h-screen"
-              aria-hidden="true"
-            >
-              &#8203;
-            </span>
-
-            <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
-              <div>
-                <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100">
-                  <TrashIcon
-                    className="h-6 w-6 text-red-600"
-                    aria-hidden="true"
-                  />
+            <div className="p-6">
+              <div className="flex items-center mb-4">
+                <div className="flex-shrink-0 w-10 h-10 mx-auto flex items-center justify-center rounded-full bg-red-100">
+                  <TrashIcon className="h-6 w-6 text-red-600" />
                 </div>
-                <div className="mt-3 text-center sm:mt-5">
-                  <h3 className="text-lg leading-6 font-medium text-gray-900">
-                    Delete User
-                  </h3>
-                  <div className="mt-2">
-                    <p className="text-sm text-gray-500">
-                      Are you sure you want to delete this user? This action
-                      cannot be undone.
-                    </p>
-                  </div>
+                <div className="ml-4">
+                  <p className="text-sm text-gray-500">
+                    Are you sure you want to delete this user? This action
+                    cannot be undone.
+                  </p>
                 </div>
               </div>
-              <div className="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
+              <div className="flex space-x-3">
                 <button
                   type="button"
-                  className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:col-start-2 sm:text-sm"
-                  onClick={handleDeleteUser}
-                  disabled={isDeleting}
-                >
-                  {isDeleting ? <Spinner size="sm" color="white" /> : "Delete"}
-                </button>
-                <button
-                  type="button"
-                  className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 sm:mt-0 sm:col-start-1 sm:text-sm"
+                  className="flex-1 inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
                   onClick={() => setShowDeleteModal(false)}
                   disabled={isDeleting}
                 >
                   Cancel
+                </button>
+                <button
+                  type="button"
+                  className="flex-1 inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-sm font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                  onClick={handleDeleteUser}
+                  disabled={isDeleting}
+                >
+                  {isDeleting ? <Spinner size="sm" color="white" /> : "Delete"}
                 </button>
               </div>
             </div>
