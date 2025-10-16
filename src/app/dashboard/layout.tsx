@@ -8,12 +8,15 @@ import { useGSAP } from "@gsap/react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import { Menu } from "@headlessui/react";
+import { useCurrentUser } from "@/store/authStore";
+import { User } from "lucide-react";
 
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const user = useCurrentUser();
   const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -276,10 +279,24 @@ export default function DashboardLayout({
             <div className="flex flex-shrink-0 border-t border-gray-200 p-4 transition-opacity duration-300">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
-                  <div className="h-8 w-8 rounded-full bg-gray-300"></div>
+                  <div className="h-8 w-8 rounded-full bg-gray-300 flex justify-center items-center">
+                    {user && user.avatar ? (
+                      <Image
+                        src={user.avatar}
+                        height={50}
+                        width={50}
+                        alt={user.name}
+                        className="rounded-full h-full w-full"
+                      />
+                    ) : (
+                      <User />
+                    )}
+                  </div>
                 </div>
                 <div className="ml-3">
-                  <p className="text-sm font-medium text-gray-700">John Doe</p>
+                  <p className="text-sm font-medium text-gray-700">
+                    {user!.name}
+                  </p>
                   <Link
                     href="/dashboard/settings"
                     className="text-xs font-medium text-gray-500 hover:text-gray-700"
