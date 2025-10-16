@@ -10,6 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { AuthRequestMethods, SubscriptionPlans, UserRoles } from "@/types";
 import { socialSignIn } from "@/lib/utils";
 import { useAuthStore } from "@/store/authStore";
+import { toast } from "@/store/toastStore";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -40,9 +41,11 @@ export default function RegisterPage() {
         const errorData = await response.json();
         throw new Error(errorData.message || "Registration failed");
       }
+      toast.success("Account Created!", "Please sign in to continue");
       router.push("/auth/login");
     } catch (err) {
-      console.error("Registration failed:", err);
+      const errorMessage = err instanceof Error ? err.message : "Registration failed";
+      toast.error("Registration Failed", errorMessage);
     } finally {
       setLoading(false);
     }
@@ -50,18 +53,18 @@ export default function RegisterPage() {
 
   const handleSocialSignup = async (method: AuthRequestMethods) => {
     if (!method) {
-      // TODO: Toast new errors
+      toast.error("Invalid Method", "Please select a valid sign-up method");
+      return;
     }
     try {
       const u = await socialSignIn(method);
-      // TODO: Update user record from the db
       const user = { ...u, role: UserRoles.user, plan: SubscriptionPlans.free };
       setUser(user);
-
-      // TODO: Fetch user details from the db
+      toast.success("Welcome!", "Your account has been created successfully");
+      router.push("/dashboard");
     } catch (error) {
-      console.log(error);
-      // TODO: Toast error
+      const errorMessage = error instanceof Error ? error.message : "Social sign-up failed";
+      toast.error("Sign-up Failed", errorMessage);
     }
   };
 

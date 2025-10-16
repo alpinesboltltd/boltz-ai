@@ -1,6 +1,7 @@
 import { Profile } from "@/types";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { toast } from "@/store/toastStore";
 
 interface AuthState {
   user: Profile | null;
@@ -41,6 +42,8 @@ export const useAuthStore = create<AuthState>()(
 
         // Clear cookie
         document.cookie = "auth_token=; path=/; max-age=0";
+
+        toast.info("Signed Out", "You have been successfully signed out");
 
         // In production, this would also call an API endpoint
         // fetch('/api/auth/logout', { method: 'POST' });
