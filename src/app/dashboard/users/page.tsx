@@ -9,8 +9,10 @@ import {
   EnvelopeIcon,
   PhoneIcon,
   UserPlusIcon,
+  XMarkIcon,
 } from "@heroicons/react/24/outline";
 import Image from "next/image";
+import Forms from "./form";
 
 interface User {
   id: string;
@@ -26,6 +28,9 @@ interface User {
 export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showForm, setShowForm] = useState(false);
+  const [editForm, setEditForm] = useState(false);
+  const [userToEdit, setUserToEdit] = useState<User | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [roleFilter, setRoleFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
@@ -130,6 +135,7 @@ export default function UsersPage() {
         <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
           <button
             type="button"
+            onClick={() => setShowForm(true)}
             className="inline-flex items-center justify-center rounded-md border border-transparent bg-primary-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 sm:w-auto"
           >
             <UserPlusIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
@@ -137,7 +143,23 @@ export default function UsersPage() {
           </button>
         </div>
       </div>
-
+      {/* Add User Modal */}
+      {showForm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50">
+          <div className="bg-white rounded-2xl shadow-xl max-w-lg w-full relative p-6">
+            <button
+              onClick={() => setShowForm(false)}
+              className="absolute top-3 right-3 text-gray-400 hover:text-gray-600"
+            >
+              <XMarkIcon className="h-6 w-6" />
+            </button>
+            <h2 className="text-lg font-semibold mb-4 text-center bg-blue-600 text-white p-2 rounded-lg">
+              Add New User
+            </h2>
+            <Forms />
+          </div>
+        </div>
+      )}
       {/* Filters */}
       <div className="mt-8 flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
         <div className="flex flex-col sm:flex-row sm:items-center space-y-4 sm:space-y-0 sm:space-x-4">
@@ -325,11 +347,16 @@ export default function UsersPage() {
                           )}
                           <button
                             type="button"
+                            onClick={() => {
+                              setUserToEdit(user);
+                              setEditForm(true);
+                            }}
                             className="text-primary-600 hover:text-primary-900"
                             title="Edit"
                           >
                             <PencilIcon className="h-5 w-5" />
                           </button>
+
                           <button
                             type="button"
                             className="text-red-600 hover:text-red-900"
@@ -345,6 +372,25 @@ export default function UsersPage() {
                       </td>
                     </tr>
                   ))}
+                  {editForm && userToEdit && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50">
+                      <div className="bg-white rounded-2xl shadow-xl max-w-lg w-full relative p-6">
+                        <button
+                          onClick={() => {
+                            setEditForm(false);
+                            setUserToEdit(null);
+                          }}
+                          className="absolute top-3 right-3 text-gray-400 hover:text-gray-600"
+                        >
+                          <XMarkIcon className="h-6 w-6" />
+                        </button>
+                        <h2 className="text-xl font-semibold mb-4 text-center bg-blue-600 text-white p-2 rounded">
+                          Edit User
+                        </h2>
+                        <Forms user={userToEdit} />
+                      </div>
+                    </div>
+                  )}
                 </tbody>
               </table>
             </div>
