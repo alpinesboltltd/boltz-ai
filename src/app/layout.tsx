@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ToastProvider } from "@/components/ui/ToastProvider";
 
 import "./globals.css";
 
@@ -38,7 +39,9 @@ export default function RootLayout({
         <script src="http://192.168.1.162:3000/widget.js" async />
       </head>
       <body className="min-h-screen bg-gray-50 font-sans w-full overflow-x-hidden">
-        {children}
+        <ToastProvider>
+          {children}
+        </ToastProvider>
       </body>
     </html>
   );
