@@ -10,9 +10,9 @@ import {
   PhoneIcon,
   UserPlusIcon,
   XMarkIcon,
+  InformationCircleIcon,
 } from "@heroicons/react/24/outline";
 import Image from "next/image";
-import userForm from "@/components/form/UserForm";
 import UserForm from "@/components/form/UserForm";
 
 interface User {
@@ -38,6 +38,10 @@ export default function UsersPage() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [userToDelete, setUserToDelete] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [currentUser, setCurrentUser] = useState<{ role: string }>({
+    role: "Viewer",
+  });
+  const [selectedUserInfo, setSelectedUserInfo] = useState<User | null>(null);
 
   useEffect(() => {
     async function loadUsers() {
@@ -133,7 +137,9 @@ export default function UsersPage() {
             role and status.
           </p>
         </div>
-        <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
+
+        {(currentUser.role === "Admin" ||
+          currentUser.role === "SuperAdmin") && (
           <button
             type="button"
             onClick={() => setShowForm(true)}
@@ -142,7 +148,7 @@ export default function UsersPage() {
             <UserPlusIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
             Add User
           </button>
-        </div>
+        )}
       </div>
       {/* Add User Modal */}
       {showForm && (
@@ -343,10 +349,20 @@ export default function UsersPage() {
                           <button
                             type="button"
                             className="text-gray-400 hover:text-gray-500"
-                            title="Email"
+                            title="Role Info"
+                            onClick={() => setSelectedUserInfo(user)}
                           >
-                            <EnvelopeIcon className="h-5 w-5" />
+                            <InformationCircleIcon className="h-5 w-5" />
                           </button>
+                          {user.email && (
+                            <button
+                              type="button"
+                              className="text-gray-400 hover:text-gray-500"
+                              title="Email"
+                            >
+                              <EnvelopeIcon className="h-5 w-5" />
+                            </button>
+                          )}
                           {user.phone && (
                             <button
                               type="button"
@@ -356,29 +372,36 @@ export default function UsersPage() {
                               <PhoneIcon className="h-5 w-5" />
                             </button>
                           )}
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setUserToEdit(user);
-                              setEditForm(true);
-                            }}
-                            className="text-primary-600 hover:text-primary-900"
-                            title="Edit"
-                          >
-                            <PencilIcon className="h-5 w-5" />
-                          </button>
-
-                          <button
-                            type="button"
-                            className="text-red-600 hover:text-red-900"
-                            title="Delete"
-                            onClick={() => {
-                              setUserToDelete(user.id);
-                              setShowDeleteModal(true);
-                            }}
-                          >
-                            <TrashIcon className="h-5 w-5" />
-                          </button>
+                          {(currentUser.role === "Admin" ||
+                            currentUser.role === "SuperAdmin" ||
+                            currentUser.role === "Editor") && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setUserToEdit(user);
+                                setEditForm(true);
+                              }}
+                              className="text-primary-600 hover:text-primary-900"
+                              title="Edit"
+                            >
+                              <PencilIcon className="h-5 w-5" />
+                            </button>
+                          )}
+                          {(currentUser.role === "Admin" ||
+                            currentUser.role === "SuperAdmin" ||
+                            currentUser.role === "Editor") && (
+                            <button
+                              type="button"
+                              className="text-red-600 hover:text-red-900"
+                              title="Delete"
+                              onClick={() => {
+                                setUserToDelete(user.id);
+                                setShowDeleteModal(true);
+                              }}
+                            >
+                              <TrashIcon className="h-5 w-5" />
+                            </button>
+                          )}
                         </div>
                       </td>
                     </tr>
@@ -420,6 +443,64 @@ export default function UsersPage() {
             </div>
           </div>
         </div>
+        {/* Role Info Modal (per-user) */}
+        {selectedUserInfo && (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50"
+            onClick={() => setSelectedUserInfo(null)}
+          >
+            <div
+              className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 relative"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between p-4 border-b border-gray-200">
+                <h3 className="text-lg font-semibold text-gray-900">
+                  {selectedUserInfo.name} — {selectedUserInfo.role}
+                </h3>
+                <button
+                  onClick={() => setSelectedUserInfo(null)}
+                  className="text-gray-500 hover:text-red-500"
+                  aria-label="Close"
+                >
+                  <XMarkIcon className="h-5 w-5" />
+                </button>
+              </div>
+
+              <div className="p-4 text-sm text-gray-700 space-y-3">
+                {(() => {
+                  const perms: Record<string, string[]> = {
+                    Admin: [
+                      "Create editors & viewers",
+                      "Create agents",
+                      "Retrain agents",
+                      "Delete agents",
+                      "Reply to messages",
+                    ],
+                    Editor: [
+                      "Retrain agents",
+                      "Reply to messages",
+                      "Cannot create agents or users",
+                    ],
+                    Viewer: ["View data only", "No creation or editing rights"],
+                  };
+                  const list = perms[selectedUserInfo.role] || [
+                    "No permissions defined",
+                  ];
+                  return (
+                    <>
+                      <p className="text-sm text-gray-600">Role duties:</p>
+                      <ul className="list-disc ml-5 space-y-1">
+                        {list.map((p) => (
+                          <li key={p}>{p}</li>
+                        ))}
+                      </ul>
+                    </>
+                  );
+                })()}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Delete Confirmation Modal */}

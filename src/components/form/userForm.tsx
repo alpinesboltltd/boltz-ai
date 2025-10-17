@@ -1,11 +1,13 @@
 import React, { useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { UserRoles } from "@/types";
 
 type User = {
   name: string;
   email: string;
   phone?: string;
   whatsapp?: string;
+  role: UserRoles;
 };
 
 type FormValues = {
@@ -13,6 +15,7 @@ type FormValues = {
   email: string;
   phone?: string;
   whatsapp?: string;
+  role: UserRoles;
 };
 interface FormProps {
   user?: User;
@@ -30,6 +33,8 @@ const UserForm: React.FC<FormProps> = ({ user }) => {
       setValue("fullName", user.name);
       setValue("email", user.email);
       setValue("phone", user.phone || "");
+      setValue("whatsapp", user.whatsapp || "");
+      setValue("role", user.role);
     }
   }, [user, setValue]);
 
@@ -97,6 +102,24 @@ const UserForm: React.FC<FormProps> = ({ user }) => {
           className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
           placeholder="Enter WhatsApp number"
         />
+      </div>
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          Role *
+        </label>
+        <select
+          {...register("role", { required: "Role is required" })}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+          defaultValue={user?.role || ""}
+        >
+          <option value="">Select role</option>
+          <option value={UserRoles.editor}>Editor</option>
+          <option value={UserRoles.viewer}>Viewer</option>
+          <option value={UserRoles.admin}>Admin</option>
+        </select>
+        {errors.role && (
+          <p className="mt-1 text-sm text-red-600">{errors.role.message}</p>
+        )}
       </div>
 
       <div className="flex space-x-3 pt-4">
