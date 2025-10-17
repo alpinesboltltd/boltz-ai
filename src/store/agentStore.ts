@@ -25,6 +25,7 @@ interface AgentState {
     agent: Agent | undefined;
     data: AgentData | undefined;
   };
+  deleteAgent: (id: string) => void;
 }
 
 export const useAgentStore = create<AgentState>()(
