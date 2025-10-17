@@ -489,6 +489,7 @@ export const Chat = {
       history,
       agentId,
     });
+    console.log(response.data)
     return response.data;
   },
 };

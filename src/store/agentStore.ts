@@ -46,6 +46,18 @@ export const useAgentStore = create<AgentState>()(
         );
         return { agent, data };
       },
+      deleteAgent: (id: string) => {
+        set((state) => {
+          const updatedAgents = state.agents.filter((a) => a.id !== id);
+          const updatedAgentData = state.agentData.filter(
+            (item) => item.appearance.agent_id !== id
+          );
+          return {
+            agents: updatedAgents,
+            agentData: updatedAgentData,
+          };
+        });
+      },
     }),
     {
       name: "boltz-agent-storage",
