@@ -6,21 +6,11 @@ export function middleware(request: NextRequest) {
   // Get the path of the request
   const path = request.nextUrl.pathname;
 
-  // Define public paths that don't require authentication
-  const isPublicPath =
-    path === "/auth/login" ||
-    path === "/auth/register" ||
-    path === "/auth/forgot-password" ||
-    path === "/" ||
-    path === "/pricing" ||
-    path === "/enterprise" ||
-    path === "/contact" ||
-    path === "/privacy" ||
-    path === "/terms" ||
-    path.startsWith("/dashboard/") ||
-    path.startsWith("/chatagent/") ||
-    path.startsWith("/api/") ||
-    path.startsWith("/v1/");
+  // Define protected paths that require authentication
+  const isProtectedPath = path.startsWith("/dashboard") || path.startsWith("/chatagent");
+
+  // Define auth paths
+  const isAuthPath = path.startsWith("/auth/");
 
   // Check for Bearer token in Authorization header first
   let token: string | undefined = undefined;
@@ -32,17 +22,15 @@ export function middleware(request: NextRequest) {
     token = request.cookies.get("auth_token")?.value;
   }
 
-  // If the path requires authentication and there's no token, redirect to login
-  if (!isPublicPath && !token) {
-    // Store the original URL to redirect back after login
+  // If accessing protected path without token, redirect to login
+  if (isProtectedPath && !token) {
     const url = new URL("/auth/login", request.url);
     url.searchParams.set("redirect", encodeURI(request.nextUrl.pathname));
-
     return NextResponse.redirect(url);
   }
 
-  // If the user is logged in and trying to access auth pages, redirect to dashboard
-  if (token && (path === "/auth/login" || path === "/auth/register")) {
+  // If logged in and trying to access auth pages, redirect to dashboard
+  if (token && isAuthPath) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 

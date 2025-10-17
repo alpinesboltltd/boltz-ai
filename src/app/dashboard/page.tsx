@@ -138,7 +138,7 @@ export default function Dashboard() {
               </ul>
             ) : (
               // TODO: add a proper cta
-              <div>Create your Customer Support</div>
+              <div>Create your autonomous agent</div>
             )}
           </div>
         </div>

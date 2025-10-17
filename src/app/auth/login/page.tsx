@@ -12,6 +12,7 @@ import { socialSignIn } from "@/lib/utils";
 import Link from "next/link";
 import { Spinner } from "@/components/common/Spinner";
 import { useAuthStore } from "@/store/authStore";
+import { toast } from "@/store/toastStore";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -60,27 +61,28 @@ export default function LoginPage() {
       setToken(token);
       setUser({ ...user, plan: SubscriptionPlans.free });
 
+      toast.success("Welcome back!", "You have been successfully signed in");
       router.push("/dashboard");
     } catch (err) {
-      // TODO: display error in a toast
-      console.log(err);
+      const errorMessage = err instanceof Error ? err.message : "Login failed";
+      toast.error("Login Failed", errorMessage);
     } finally {
       setLoading(false);
     }
   };
 
   const handleSocialSignin = async (method: AuthRequestMethods) => {
-    console.timeEnd();
     if (!method) {
-      // TODO: toast error
+      toast.error("Invalid Method", "Please select a valid sign-in method");
+      return;
     }
     try {
       const u = await socialSignIn(method);
       const user = { ...u, role: UserRoles.user, plan: SubscriptionPlans.free };
       setUser(user);
     } catch (error) {
-      // TODO: display error in a toast
-      console.log(error);
+      const errorMessage = error instanceof Error ? error.message : "Social sign-in failed";
+      toast.error("Sign-in Failed", errorMessage);
     }
   };
 

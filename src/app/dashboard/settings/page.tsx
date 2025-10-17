@@ -4,25 +4,37 @@ import { useState } from "react";
 import { Spinner } from "@/components/common/Spinner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Image from "next/image";
+import { useCurrentUser } from "@/store/authStore";
+import { Profile } from "@/types";
+import { Switch } from "@headlessui/react";
+import { toast } from "@/store/toastStore";
 
 export default function SettingsPage() {
+  const user = useCurrentUser();
   const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
   const [activeTab, setActiveTab] = useState("profile");
-
+  const [liveMode, setLiveMode] = useState<boolean>(false);
   // Mock user data
-  const [userData, setUserData] = useState({
-    name: "John Doe",
-    email: "john.doe@example.com",
+  const [userData, setUserData] = useState<
+    Profile & {
+      notifications: { email: boolean; push: boolean; marketing: boolean };
+      api_key: { test_key: string; live_key: string };
+      company?: string;
+      avatar?: string;
+    }
+  >({
+    ...user!,
     company: "Acme Inc.",
-    role: "Marketing Manager",
     avatar: "/images/logo.webp",
     notifications: {
       email: true,
       push: true,
       marketing: false,
     },
-    apiKey: "sk_test_" + Math.random().toString(36).substring(2, 15),
+    api_key: {
+      test_key: "alp_test_" + Math.random().toString(36).substring(2, 15),
+      live_key: "alp_live_" + Math.random().toString(36).substring(2, 15),
+    },
   });
 
   // Mock payment methods
@@ -93,10 +105,9 @@ export default function SettingsPage() {
       // For development, simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      setSuccess(true);
-      setTimeout(() => setSuccess(false), 3000);
-    } catch (error) {
-      console.error("Failed to update profile:", error);
+      toast.success("Profile Updated", "Your profile has been updated successfully");
+    } catch  {
+      toast.error("Update Failed", "Failed to update profile. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -129,8 +140,9 @@ export default function SettingsPage() {
           isDefault: method.id === id,
         }))
       );
-    } catch (error) {
-      console.error("Failed to set default payment method:", error);
+      toast.success("Payment Method Updated", "Default payment method has been updated");
+    } catch  {
+      toast.error("Update Failed", "Failed to set default payment method");
     } finally {
       setLoading(false);
     }
@@ -147,8 +159,9 @@ export default function SettingsPage() {
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       setPaymentMethods((prev) => prev.filter((method) => method.id !== id));
-    } catch (error) {
-      console.error("Failed to remove payment method:", error);
+      toast.success("Payment Method Removed", "Payment method has been removed successfully");
+    } catch  {
+      toast.error("Removal Failed", "Failed to remove payment method");
     } finally {
       setLoading(false);
     }
@@ -167,10 +180,18 @@ export default function SettingsPage() {
 
       setUserData((prev) => ({
         ...prev,
-        apiKey: "sk_test_" + Math.random().toString(36).substring(2, 15),
+        api_key: {
+          live_key: liveMode
+            ? `alp_live_${Math.random().toString(36).substring(2, 15)}`
+            : userData.api_key.live_key,
+          test_key: !liveMode
+            ? `alp_test_${Math.random().toString(36).substring(2, 15)}`
+            : userData.api_key.test_key,
+        },
       }));
-    } catch (error) {
-      console.error("Failed to regenerate API key:", error);
+      toast.success("API Key Regenerated", "Your API key has been regenerated successfully");
+    } catch  {
+      toast.error("Regeneration Failed", "Failed to regenerate API key");
     } finally {
       setLoading(false);
     }
@@ -258,7 +279,8 @@ export default function SettingsPage() {
                         type="email"
                         name="email"
                         id="email"
-                        value={userData.email}
+                        value={userData!.email}
+                        disabled
                         onChange={(e) =>
                           setUserData({ ...userData, email: e.target.value })
                         }
@@ -306,11 +328,6 @@ export default function SettingsPage() {
                   </div>
 
                   <div className="flex justify-end">
-                    {success && (
-                      <span className="mr-4 inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-green-100 text-green-800">
-                        Profile updated successfully
-                      </span>
-                    )}
                     <button
                       type="submit"
                       disabled={loading}
@@ -417,6 +434,7 @@ export default function SettingsPage() {
                   <div className="flex justify-end">
                     <button
                       type="button"
+                      onClick={() => toast.success("Preferences Saved", "Your notification preferences have been updated")}
                       className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
                     >
                       Save Preferences
@@ -605,32 +623,49 @@ export default function SettingsPage() {
                 </p>
 
                 <div className="mt-6">
-                  <label
-                    htmlFor="api-key"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    API Key
-                  </label>
+                  <div className="flex justify-start items-center gap-4">
+                    <label
+                      htmlFor="api-key"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      API Key
+                    </label>
+                    <Switch onClick={() => setLiveMode(!liveMode)}>
+                      {liveMode ? "Test keys" : "Live keys"}
+                    </Switch>
+                  </div>
                   <div className="mt-1 flex rounded-md shadow-sm">
-                    <input
-                      type="text"
-                      name="api-key"
-                      id="api-key"
-                      value={userData.apiKey}
-                      readOnly
-                      className="flex-1 min-w-0 block w-full px-3 py-2 rounded-none rounded-l-md focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300"
-                    />
+                    {liveMode ? (
+                      <input
+                        type="text"
+                        name="api-key"
+                        id="api-key"
+                        value={userData.api_key.live_key}
+                        readOnly
+                        className="flex-1 min-w-0 block w-full px-3 py-2 rounded-none rounded-l-md focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300"
+                      />
+                    ) : (
+                      <input
+                        type="text"
+                        name="api-key"
+                        id="api-key"
+                        value={userData.api_key.test_key}
+                        readOnly
+                        className="flex-1 min-w-0 block w-full px-3 py-2 rounded-none rounded-l-md focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300"
+                      />
+                    )}
                     <button
                       type="button"
                       onClick={async () => {
                         try {
-                          await navigator.clipboard.writeText(userData.apiKey);
-                          alert("API key copied to clipboard!");
-                        } catch (err) {
-                          console.error("Failed to copy:", err);
-                          alert(
-                            "Failed to copy API key. Please copy manually."
+                          await navigator.clipboard.writeText(
+                            liveMode
+                              ? userData.api_key.live_key
+                              : userData.api_key.test_key
                           );
+                          toast.success("Copied!", "API key copied to clipboard");
+                        } catch (err) {
+                          toast.error("Copy Failed", "Failed to copy API key. Please copy manually.");
                         }
                       }}
                       className="inline-flex items-center px-3 py-2 border border-l-0 border-gray-300 bg-gray-50 text-gray-500 rounded-r-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
