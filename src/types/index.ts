@@ -127,6 +127,8 @@ export enum UserRoles {
   admin = "admin",
   user = "user",
   staff = "staff",
+  viewer = "viewer",
+  editor = "editor",
 }
 export enum FirebaseErrorMessage {
   userNotFound = "auth/user-not-found",
