@@ -14,16 +14,19 @@ import {
 } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import UserForm from "@/components/form/userForm";
+import { useUserPermissions } from "@/hooks/useUserPermissions";
+import { UserRoles } from "@/types";
 
 interface User {
   id: string;
   name: string;
   email: string;
-  role: string;
+  role: UserRoles;
   status: "active" | "inactive";
   lastActive: string;
   phone?: string;
   avatar?: string;
+  whatsapp?: string;
 }
 
 export default function UsersPage() {
@@ -38,10 +41,12 @@ export default function UsersPage() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [userToDelete, setUserToDelete] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [currentUser, setCurrentUser] = useState<{ role: string }>({
-    role: "Viewer",
-  });
   const [selectedUserInfo, setSelectedUserInfo] = useState<User | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Mock current user - in production, get from auth context
+  const currentUserRole = UserRoles.superAdmin; // Change to test different roles
+  const permissions = useUserPermissions({ currentUserRole });
 
   useEffect(() => {
     async function loadUsers() {
@@ -53,9 +58,9 @@ export default function UsersPage() {
         // For development, use mock data
         await new Promise((resolve) => setTimeout(resolve, 1000));
 
-        const roles = ["Admin", "Editor", "Viewer"];
+        const roles = [UserRoles.staff, UserRoles.admin];
         const mockUsers = Array.from({ length: 20 }, (_, i) => {
-          const roleIndex = i % 3;
+          const roleIndex = i % 2;
           return {
             id: `user_${i}`,
             name: `User ${i + 1}`,
@@ -66,6 +71,7 @@ export default function UsersPage() {
               Date.now() - Math.floor(Math.random() * 30) * 24 * 60 * 60 * 1000
             ).toISOString(),
             phone: `+1 ${Math.floor(Math.random() * 900) + 100}-${Math.floor(Math.random() * 900) + 100}-${Math.floor(Math.random() * 9000) + 1000}`,
+            whatsapp: `+1 ${Math.floor(Math.random() * 900) + 100}-${Math.floor(Math.random() * 900) + 100}-${Math.floor(Math.random() * 9000) + 1000}`,
             avatar: `https://i.pravatar.cc/150?u=${i}`,
           } as User;
         });
@@ -81,18 +87,84 @@ export default function UsersPage() {
     loadUsers();
   }, []);
 
+  const handleCreateUser = async (data: {
+    name: string;
+    email: string;
+    phone?: string;
+    whatsapp?: string;
+    role: UserRoles;
+  }) => {
+    setIsSubmitting(true);
+    try {
+      // In production, call API
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      const newUser: User = {
+        id: `user_${Date.now()}`,
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        whatsapp: data.whatsapp,
+        role: data.role,
+        status: "active",
+        lastActive: new Date().toISOString(),
+        avatar: `https://i.pravatar.cc/150?u=${Date.now()}`,
+      };
+
+      setUsers((prev) => [...prev, newUser]);
+      setShowForm(false);
+    } catch (error) {
+      console.error("Failed to create user:", error);
+      throw error;
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleUpdateUser = async (data: {
+    name: string;
+    email: string;
+    phone?: string;
+    whatsapp?: string;
+    role: UserRoles;
+  }) => {
+    if (!userToEdit) return;
+
+    setIsSubmitting(true);
+    try {
+      // In production, call API
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      setUsers((prev) =>
+        prev.map((user) =>
+          user.id === userToEdit.id
+            ? {
+                ...user,
+                name: data.name,
+                email: data.email,
+                phone: data.phone,
+                whatsapp: data.whatsapp,
+                role: data.role,
+              }
+            : user
+        )
+      );
+      setEditForm(false);
+      setUserToEdit(null);
+    } catch (error) {
+      console.error("Failed to update user:", error);
+      throw error;
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const handleDeleteUser = async () => {
-    if (!userToDelete) return;
+    if (!userToDelete || !permissions.canDeleteUsers) return;
 
     setIsDeleting(true);
-
     try {
-      // In production, this would call the real API
-      // await fetch(`/api/users/${userToDelete}`, {
-      //   method: 'DELETE'
-      // });
-
-      // For development, simulate API call
+      // In production, call API
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       setUsers(users.filter((user) => user.id !== userToDelete));
@@ -138,8 +210,7 @@ export default function UsersPage() {
           </p>
         </div>
 
-        {(currentUser.role === "Admin" ||
-          currentUser.role === "SuperAdmin") && (
+        {permissions.canCreateUsers && (
           <button
             type="button"
             onClick={() => setShowForm(true)}
@@ -172,7 +243,12 @@ export default function UsersPage() {
               </button>
             </div>
             <div className="p-6">
-              <UserForm />
+              <UserForm
+                currentUserRole={currentUserRole}
+                onSubmit={handleCreateUser}
+                onCancel={() => setShowForm(false)}
+                isLoading={isSubmitting}
+              />
             </div>
           </div>
         </div>
@@ -223,8 +299,7 @@ export default function UsersPage() {
               >
                 <option value="all">All Roles</option>
                 <option value="admin">Admin</option>
-                <option value="editor">Editor</option>
-                <option value="viewer">Viewer</option>
+                <option value="staff">Staff</option>
               </select>
             </div>
 
@@ -320,14 +395,12 @@ export default function UsersPage() {
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                         <span
                           className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${
-                            user.role === "Admin"
-                              ? "bg-purple-100 text-purple-800"
-                              : user.role === "Editor"
-                                ? "bg-blue-100 text-blue-800"
-                                : "bg-green-100 text-green-800"
+                            user.role === UserRoles.admin
+                              ? "bg-blue-100 text-blue-800"
+                              : "bg-green-100 text-green-800"
                           }`}
                         >
-                          {user.role}
+                          {user.role === UserRoles.admin ? "Admin" : "Staff"}
                         </span>
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
@@ -372,9 +445,7 @@ export default function UsersPage() {
                               <PhoneIcon className="h-5 w-5" />
                             </button>
                           )}
-                          {(currentUser.role === "Admin" ||
-                            currentUser.role === "SuperAdmin" ||
-                            currentUser.role === "Editor") && (
+                          {permissions.canEditUsers && (
                             <button
                               type="button"
                               onClick={() => {
@@ -387,9 +458,7 @@ export default function UsersPage() {
                               <PencilIcon className="h-5 w-5" />
                             </button>
                           )}
-                          {(currentUser.role === "Admin" ||
-                            currentUser.role === "SuperAdmin" ||
-                            currentUser.role === "Editor") && (
+                          {permissions.canDeleteUsers && (
                             <button
                               type="button"
                               className="text-red-600 hover:text-red-900"
@@ -433,7 +502,16 @@ export default function UsersPage() {
                           </button>
                         </div>
                         <div className="p-6">
-                          <UserForm user={userToEdit} />
+                          <UserForm
+                            user={userToEdit}
+                            currentUserRole={currentUserRole}
+                            onSubmit={handleUpdateUser}
+                            onCancel={() => {
+                              setEditForm(false);
+                              setUserToEdit(null);
+                            }}
+                            isLoading={isSubmitting}
+                          />
                         </div>
                       </div>
                     </div>
@@ -455,7 +533,10 @@ export default function UsersPage() {
             >
               <div className="flex items-center justify-between p-4 border-b border-gray-200">
                 <h3 className="text-lg font-semibold text-gray-900">
-                  {selectedUserInfo.name} — {selectedUserInfo.role}
+                  {selectedUserInfo.name} —{" "}
+                  {selectedUserInfo.role === UserRoles.admin
+                    ? "Admin"
+                    : "Staff"}
                 </h3>
                 <button
                   onClick={() => setSelectedUserInfo(null)}
@@ -468,27 +549,33 @@ export default function UsersPage() {
 
               <div className="p-4 text-sm text-gray-700 space-y-3">
                 {(() => {
-                  const perms: Record<string, string[]> = {
-                    Admin: [
-                      "Create editors & viewers",
+                  const perms: Record<UserRoles, string[]> = {
+                    [UserRoles.superAdmin]: [
+                      "Full system access",
+                      "Create all user types",
+                      "Delete any user",
+                      "Manage all agents",
+                    ],
+                    [UserRoles.admin]: [
+                      "Create staff users",
                       "Create agents",
                       "Retrain agents",
                       "Delete agents",
                       "Reply to messages",
                     ],
-                    Editor: [
+                    [UserRoles.staff]: [
                       "Retrain agents",
                       "Reply to messages",
-                      "Cannot create agents or users",
+                      "Manage content",
                     ],
-                    Viewer: ["View data only", "No creation or editing rights"],
+                    [UserRoles.user]: ["Basic user access"],
                   };
                   const list = perms[selectedUserInfo.role] || [
                     "No permissions defined",
                   ];
                   return (
                     <>
-                      <p className="text-sm text-gray-600">Role duties:</p>
+                      <p className="text-sm text-gray-600">Role permissions:</p>
                       <ul className="list-disc ml-5 space-y-1">
                         {list.map((p) => (
                           <li key={p}>{p}</li>

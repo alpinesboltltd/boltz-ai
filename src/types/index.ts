@@ -27,6 +27,8 @@ export interface Profile extends User {
   role: UserRoles;
   company?: string;
   avatar?: string;
+  phone?: string;
+  whatsapp?: string;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -127,8 +129,6 @@ export enum UserRoles {
   admin = "admin",
   user = "user",
   staff = "staff",
-  viewer = "viewer",
-  editor = "editor",
 }
 export enum FirebaseErrorMessage {
   userNotFound = "auth/user-not-found",
