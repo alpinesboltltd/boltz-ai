@@ -113,6 +113,7 @@ export function AgentPlayground() {
         parts: reply,
       };
       setMessages((prev) => [...prev, assistantMessage]);
+      console.log(reply)
     } catch (error) {
       console.error("Failed to send message:", error);
     } finally {

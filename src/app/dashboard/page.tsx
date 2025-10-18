@@ -1,10 +1,12 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { MessageSquare } from "lucide-react";
+import { MessageSquare, Trash2 } from "lucide-react";
 import { agentsAPI } from "@/lib/api";
+import { agentApi } from "@/lib/agent-api";
 import { cn } from "@/lib/utils";
 import { useAgentStore } from "@/store/agentStore";
+import { useCurrentUser } from "@/store/authStore";
 
 enum ActiveTabs {
   AGENTS = "agents",
@@ -13,19 +15,41 @@ enum ActiveTabs {
 }
 
 export default function Dashboard() {
-  const { agents, setAgents } = useAgentStore();
+  const user = useCurrentUser();
+  const { agents, setAgents, deleteAgent } = useAgentStore();
   const [activeTab, setActiveTab] = useState(ActiveTabs.AGENTS);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const getChatbot = async () => {
-      // TODO: replace userId with actual user Id
-      const { data } = await agentsAPI.getAll("1");
+      const { data } = await agentsAPI.getAll(user?.id);
       console.log(data);
       if (data) setAgents(data);
     };
 
     getChatbot();
   }, []);
+
+  const handleDeleteAgent = async (agentId: string, agentName: string) => {
+    if (
+      !window.confirm(
+        `Are you sure you want to permanently delete the agent "${agentName}"?`
+      )
+    ) {
+      //to be replaced with a proper modal
+      return;
+    }
+    setIsLoading(true);
+    try {
+      await agentApi.deleteAgent(agentId);
+      deleteAgent(agentId);
+    } catch (e) {
+      console.error("Deletion failed:", e);
+      alert(`Unable to delete ${agentName}. Please check console for details.`);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <>
@@ -55,7 +79,20 @@ export default function Dashboard() {
       {activeTab === ActiveTabs.AGENTS && (
         <div className="px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex justify-between items-center mb-6">
-            <h1 className="text-2xl font-semibold text-gray-900">AI Agents</h1>
+            <div className="flex gap-2 items-center">
+              <h1 className="text-2xl font-semibold text-gray-900">
+                AI Agents
+              </h1>
+              <div className="flex items-center gap-1 mt-2">
+                <p className=" font-medium text-[12px]">Active</p>
+                <div className=" h-2 w-2 bg-green-500 rounded-full "></div>
+              </div>
+              <div className="flex items-center gap-1 mt-2">
+                <p className=" font-medium text-[12px]">Draft</p>
+                <div className="h-2 w-2 bg-yellow-500 rounded-full"></div>
+              </div>
+            </div>
+
             <Link
               href="/dashboard/chatagent/create"
               className="inline-flex items-center justify-center rounded-md border border-transparent bg-primary-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
@@ -77,20 +114,34 @@ export default function Dashboard() {
                         <div className="flex-grow flex items-center justify-center bg-gray-200">
                           <MessageSquare width={88} height={88} />
                         </div>
-                        <div className=" p-3 flex-col flex-shrink-0 flex items-center justify-center">
-                          <p className="text-sm font-medium truncate text-center text-gray-800 break-words w-full px-2">
-                            {chatagent.name}
-                          </p>
-                          <div className={`ml-2 flex-shrink-0 flex`}>
-                            <p
-                              className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                        <div
+                          className={`p-3 flex-col flex-shrink-0 flex items-center justify-center
+                              ${
                                 chatagent.status === "active"
                                   ? "bg-green-100 text-green-800"
                                   : "bg-yellow-100 text-yellow-800"
-                              }`}
+                              }
+                                  `}
+                        >
+                          <p className="text-sm font-medium truncate text-center text-gray-800 break-words w-full px-2">
+                            {chatagent.name}
+                          </p>
+                          <button
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              handleDeleteAgent(chatagent.id, chatagent.name);
+                            }}
+                          >
+                            {" "}
+                            <Trash2 className="text-red-400" />
+                          </button>
+                          <div className={`ml-2 flex-shrink-0 flex`}>
+                            {/*<p
+                              className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full`}
                             >
                               {chatagent.status}
-                            </p>
+                            </p>*/}
                           </div>
                         </div>
                       </div>
@@ -100,7 +151,7 @@ export default function Dashboard() {
               </ul>
             ) : (
               // TODO: add a proper cta
-              <div>Create your Customer Support</div>
+              <div>Create your autonomous agent</div>
             )}
           </div>
         </div>

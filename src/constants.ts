@@ -13,6 +13,7 @@ export const highlights = [
   },
   {
     src: "/img/logo.webp",
+
     title: "Secure, Scalable, Always Smarter",
     description:
       "Enterprise-grade security meets real-time learning and analytics — built to grow with you.",

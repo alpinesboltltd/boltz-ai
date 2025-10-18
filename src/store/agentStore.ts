@@ -25,6 +25,7 @@ interface AgentState {
     agent: Agent | undefined;
     data: AgentData | undefined;
   };
+  deleteAgent: (id: string) => void;
 }
 
 export const useAgentStore = create<AgentState>()(
@@ -45,6 +46,18 @@ export const useAgentStore = create<AgentState>()(
           (item) => item.appearance.agent_id === agent.id
         );
         return { agent, data };
+      },
+      deleteAgent: (id: string) => {
+        set((state) => {
+          const updatedAgents = state.agents.filter((a) => a.id !== id);
+          const updatedAgentData = state.agentData.filter(
+            (item) => item.appearance.agent_id !== id
+          );
+          return {
+            agents: updatedAgents,
+            agentData: updatedAgentData,
+          };
+        });
       },
     }),
     {

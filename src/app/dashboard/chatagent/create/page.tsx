@@ -169,7 +169,7 @@ export default function CreateAgentPage() {
       ]);
 
       // Redirect to agent dashboard
-      router.push(`/dashboard/chatagent`);
+      router.push(`/dashboard/chatagent/${agentId}`); // did the routing to the playground page after agrent creation here
     } catch (error) {
       console.error("Error finalizing agent:", error);
       alert("Failed to create agent. Please try again.");
