@@ -29,6 +29,7 @@ export interface Profile extends User {
   avatar?: string;
   phone?: string;
   whatsapp?: string;
+  onlineStatus?: boolean;
   createdAt?: string;
   updatedAt?: string;
 }

@@ -27,6 +27,7 @@ interface User {
   phone?: string;
   avatar?: string;
   whatsapp?: string;
+  onlineStatus: boolean;
 }
 
 export default function UsersPage() {
@@ -73,6 +74,7 @@ export default function UsersPage() {
             phone: `+1 ${Math.floor(Math.random() * 900) + 100}-${Math.floor(Math.random() * 900) + 100}-${Math.floor(Math.random() * 9000) + 1000}`,
             whatsapp: `+1 ${Math.floor(Math.random() * 900) + 100}-${Math.floor(Math.random() * 900) + 100}-${Math.floor(Math.random() * 9000) + 1000}`,
             avatar: `https://i.pravatar.cc/150?u=${i}`,
+            onlineStatus: Math.random() > 0.5,
           } as User;
         });
 
@@ -369,19 +371,39 @@ export default function UsersPage() {
                     <tr key={user.id}>
                       <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
                         <div className="flex items-center">
-                          <div className="h-10 w-10 flex-shrink-0">
+                          <div className="relative h-10 w-10 flex-shrink-0">
                             {user.avatar ? (
-                              <Image
-                                height={40}
-                                width={40}
-                                className="h-10 w-10 rounded-full"
-                                src={user.avatar}
-                                alt={user.name}
-                              />
+                              <>
+                                <Image
+                                  height={40}
+                                  width={40}
+                                  className="h-10 w-10 rounded-full"
+                                  src={user.avatar}
+                                  alt={user.name}
+                                />
+                                {/* Status Dot */}
+                                <span
+                                  className={`absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-white ${
+                                    user.onlineStatus
+                                      ? "bg-green-500"
+                                      : "bg-yellow-500"
+                                  }`}
+                                ></span>
+                              </>
                             ) : (
-                              <div className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
-                                <UserIcon className="h-6 w-6 text-gray-400" />
-                              </div>
+                              <>
+                                <div className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
+                                  <UserIcon className="h-6 w-6 text-gray-400" />
+                                </div>
+                                {/* Status Dot */}
+                                <span
+                                  className={`absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-white ${
+                                    user.onlineStatus
+                                      ? "bg-green-500"
+                                      : "bg-yellow-500"
+                                  }`}
+                                ></span>
+                              </>
                             )}
                           </div>
                           <div className="ml-4">
