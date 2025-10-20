@@ -17,6 +17,7 @@ import { AI_MODELS, getModelsByType } from "@/mock-data/ai-models";
 import { TrainingSources } from "@/components/dashboard/TrainingSources";
 import { BotPreview } from "@/components/chatbot/BotPreview";
 import { agentApi } from "@/lib/agent-api";
+import { useCurrentUser } from "@/store/authStore";
 
 interface AgentAppearanceForm {
   welcome_message: string;
@@ -33,11 +34,13 @@ interface AgentPreviewData {
 }
 
 export default function CreateAgentPage() {
+  const user = useCurrentUser();
   const router = useRouter();
   const [step, setStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [agentId, setAgentId] = useState<string | null>(null);
   const [agentData, setAgentData] = useState<AgentPreviewData | null>(null);
+
 
   const agentForm = useForm<AgentSchemaInput>({
     resolver: zodResolver(AgentSchema),
@@ -87,7 +90,7 @@ export default function CreateAgentPage() {
       const newAgentId = agentApi.generateId();
       const agentPayload = {
         id: newAgentId,
-        user_id: "1",
+        user_id: user!.id,
         ...data,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),

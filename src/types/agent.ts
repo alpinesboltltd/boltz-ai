@@ -12,6 +12,7 @@ export interface Agent {
   status: AgentStatus;
   created_at: string;
   updated_at: string;
+  template: string;
 }
 
 export interface AgentAppearance {

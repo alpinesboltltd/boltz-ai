@@ -1,12 +1,15 @@
 "use client";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { MessageSquare, Trash2 } from "lucide-react";
+import { gsap } from "gsap";
+import { useGSAP } from "@gsap/react";
 import { agentsAPI } from "@/lib/api";
 import { agentApi } from "@/lib/agent-api";
 import { cn } from "@/lib/utils";
 import { useAgentStore } from "@/store/agentStore";
 import { useCurrentUser } from "@/store/authStore";
+import { Button } from "@/components/ui/Button"
 
 enum ActiveTabs {
   AGENTS = "agents",
@@ -19,16 +22,63 @@ export default function Dashboard() {
   const { agents, setAgents, deleteAgent } = useAgentStore();
   const [activeTab, setActiveTab] = useState(ActiveTabs.AGENTS);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false); //state to nmonitor the two buttons dropdown
+  
+  // Refs for the two buttons
+  const button1Ref = useRef<HTMLDivElement>(null);
+  const button2Ref = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const getChatbot = async () => {
       const { data } = await agentsAPI.getAll(user?.id);
       console.log(data);
+      console.log(user?.id);
       if (data) setAgents(data);
     };
 
     getChatbot();
   }, []);
+
+  // Initialize buttons to hidden state
+  useGSAP(() => {
+    if (button1Ref.current && button2Ref.current) {
+      gsap.set([button1Ref.current, button2Ref.current], {
+        opacity: 0,
+        scale: 0,
+        y: -20,
+      });
+    }
+  }, { scope: containerRef });
+
+  // Animation for dropdown toggle
+  useGSAP(() => {
+    if (button1Ref.current && button2Ref.current) {
+      const tl = gsap.timeline();
+
+      if (isOpen) {
+        // Opening animation
+        tl.to([button1Ref.current, button2Ref.current], {
+          opacity: 1,
+          scale: 1,
+          y: 0,
+          duration: 0.5,
+          stagger: 0.12,
+          ease: 'back.out(1.7)',
+        });
+      } else {
+        // Closing animation
+        tl.to([button2Ref.current, button1Ref.current], {
+          opacity: 0,
+          scale: 0,
+          y: -20,
+          duration: 0.4,
+          stagger: 0.1,
+          ease: 'back.in(1.7)',
+        });
+      }
+    }
+  }, { dependencies: [isOpen], scope: containerRef });
 
   const handleDeleteAgent = async (agentId: string, agentName: string) => {
     if (
@@ -50,6 +100,10 @@ export default function Dashboard() {
       setIsLoading(false);
     }
   };
+
+  const handleDropdown = () => {
+    setIsOpen(prev => !prev);
+  }
 
   return (
     <>
@@ -92,13 +146,27 @@ export default function Dashboard() {
                 <div className="h-2 w-2 bg-yellow-500 rounded-full"></div>
               </div>
             </div>
-
-            <Link
-              href="/dashboard/chatagent/create"
-              className="inline-flex items-center justify-center rounded-md border border-transparent bg-primary-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
-            >
-              New Agents
-            </Link>
+            <div ref={containerRef} className="relative mr-20 flex flex-col justify-center items-center">
+              <button
+                onClick={handleDropdown}
+                className="inline-flex items-center justify-center rounded-md border border-transparent bg-primary-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none"
+              >
+                New Agents
+              </button>
+                
+              <div className="absolute flex gap-2 mt-24 z-10">
+                <div ref={button1Ref}>
+                  <Button size="md" variant="primary" className="w-fit text-nowrap text-sm shadow-md">
+                    <Link href="/dashboard/create"> Create new agent </Link>
+                  </Button>
+                </div>
+                <div ref={button2Ref}>
+                  <Button size="md" variant="primary" className="w-fit text-nowrap text-sm shadow-md">
+                    <Link href="/dashboard/chatagent/nb848xqfz"> Use our template </Link>
+                  </Button>
+                </div>
+              </div>
+            </div>
           </div>
           {/* Chatbots List */}
           <div className="mt-8">
