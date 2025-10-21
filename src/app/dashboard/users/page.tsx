@@ -23,11 +23,11 @@ interface User {
   email: string;
   role: UserRoles;
   status: "active" | "inactive";
-  lastActive: string;
+  lastActive: null | string;
   phone?: string;
   avatar?: string;
   whatsapp?: string;
-  onlineStatus: boolean;
+  onlineStatus?: boolean;
 }
 
 export default function UsersPage() {
@@ -109,8 +109,9 @@ export default function UsersPage() {
         whatsapp: data.whatsapp,
         role: data.role,
         status: "active",
-        lastActive: new Date().toISOString(),
+        lastActive: null,
         avatar: `https://i.pravatar.cc/150?u=${Date.now()}`,
+        onlineStatus: false,
       };
 
       setUsers((prev) => [...prev, newUser]);
@@ -437,7 +438,9 @@ export default function UsersPage() {
                         </span>
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        {new Date(user.lastActive).toLocaleDateString()}
+                        {user.lastActive
+                          ? new Date(user.lastActive).toLocaleDateString()
+                          : "N/A"}
                       </td>
                       <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                         <div className="flex justify-end space-x-3">
