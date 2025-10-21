@@ -118,7 +118,7 @@ export const authAPI = {
 
 // Agents API
 export const agentsAPI = {
-  getAll: async (userId = "1"): Promise<{ data: Agent[] }> => {
+  getAll: async (userId: string): Promise<{ data: Agent[] }> => {
     const response = await api.post("/chatagents", { userId });
     return response.data;
   },

@@ -303,6 +303,33 @@ export default function CreateAgentPage() {
               Set up a new AI agent for your business in just a few steps.
             </p>
           </div>
+
+          {/* Animated Quick Create Button */}
+          <div ref={containerRef} className="relative mt-4 sm:mt-0 flex flex-col items-end">
+            <button
+              onClick={() => setIsQuickCreateOpen(!isQuickCreateOpen)}
+              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+            >
+              Quick Create
+            </button>
+
+            <div className="absolute flex gap-2 mt-12 z-10">
+              <button
+                ref={button1Ref}
+                onClick={() => handleQuickCreate('scratch')}
+                className="px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-md shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 whitespace-nowrap"
+              >
+                Start from Scratch
+              </button>
+              <button
+                ref={button2Ref}
+                onClick={() => handleQuickCreate('template')}
+                className="px-4 py-2 bg-purple-600 text-white text-sm font-medium rounded-md shadow-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 whitespace-nowrap"
+              >
+                Use Template
+              </button>
+            </div>
+          </div>
         </div>
 
         {/* Progress Steps */}

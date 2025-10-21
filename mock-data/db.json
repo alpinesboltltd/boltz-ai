@@ -48,6 +48,58 @@
       "status": "active",
       "created_at": "2025-10-16T22:44:05.586Z",
       "updated_at": "2025-10-16T22:44:40.437Z"
+    },
+    {
+      "id": "nb848xqfz",
+      "user_id": "9c1a7782-a3c9-403f-a011-ff3436b2aebb",
+      "name": "test",
+      "description": "test",
+      "agent_type": "text",
+      "ai_model": "grok-3",
+      "ai_provider": "xAI",
+      "credits_per_1k": 25,
+      "status": "active",
+      "created_at": "2025-10-17T20:54:51.196Z",
+      "updated_at": "2025-10-17T20:54:58.064Z"
+    },
+    {
+      "id": "umejxpd3a",
+      "user_id": "9c1a7782-a3c9-403f-a011-ff3436b2aebb",
+      "name": "Victor Arinde",
+      "description": "arinde bot",
+      "agent_type": "text",
+      "ai_model": "GPT-5 nano",
+      "ai_provider": "OpenAI",
+      "credits_per_1k": 5,
+      "status": "active",
+      "created_at": "2025-10-20T22:54:45.860Z",
+      "updated_at": "2025-10-20T22:55:04.093Z"
+    },
+    {
+      "id": "8l0rpio56",
+      "user_id": "9c1a7782-a3c9-403f-a011-ff3436b2aebb",
+      "name": "Victor Arinde",
+      "description": "jvj",
+      "agent_type": "text",
+      "ai_model": "o1",
+      "ai_provider": "OpenAI",
+      "credits_per_1k": 20,
+      "status": "draft",
+      "created_at": "2025-10-20T22:55:58.131Z",
+      "updated_at": "2025-10-20T22:56:03.314Z"
+    },
+    {
+      "id": "aqlboz9x8",
+      "user_id": "9c1a7782-a3c9-403f-a011-ff3436b2aebb",
+      "name": "Victor Arinde",
+      "description": "b nnb",
+      "agent_type": "text",
+      "ai_model": "grok-3",
+      "ai_provider": "xAI",
+      "credits_per_1k": 25,
+      "status": "draft",
+      "created_at": "2025-10-20T22:56:32.375Z",
+      "updated_at": "2025-10-20T22:56:34.599Z"
     }
   ],
   "agent_appearance": [
@@ -180,6 +232,71 @@
       "font_family": "Inter",
       "created_at": "2025-10-16T22:50:25.579Z",
       "updated_at": "2025-10-16T22:50:25.579Z"
+    },
+    {
+      "id": "bba9",
+      "agent_id": "4o1bmxyw0",
+      "welcome_message": "Hi! How can I help you today?",
+      "primary_color": "#6366f1",
+      "position": "bottom-right",
+      "icon_size": "medium",
+      "bubble_style": "round",
+      "chat_icon": "default",
+      "font_family": "Inter",
+      "created_at": "2025-10-17T20:44:42.503Z",
+      "updated_at": "2025-10-17T20:44:42.503Z"
+    },
+    {
+      "id": "1b17",
+      "agent_id": "4o1bmxyw0",
+      "welcome_message": "Hi! How can I help you today?",
+      "primary_color": "#6366f1",
+      "position": "bottom-right",
+      "icon_size": "medium",
+      "bubble_style": "round",
+      "chat_icon": "default",
+      "font_family": "Inter",
+      "created_at": "2025-10-17T20:44:58.065Z",
+      "updated_at": "2025-10-17T20:44:58.065Z"
+    },
+    {
+      "id": "982c",
+      "agent_id": "nb848xqfz",
+      "welcome_message": "Hi! How can I help you today?",
+      "primary_color": "#6366f1",
+      "position": "bottom-right",
+      "icon_size": "medium",
+      "bubble_style": "round",
+      "chat_icon": "default",
+      "font_family": "Inter",
+      "created_at": "2025-10-17T20:54:58.064Z",
+      "updated_at": "2025-10-17T20:54:58.064Z"
+    },
+    {
+      "id": "af17",
+      "agent_id": "am3npm1ym",
+      "welcome_message": "Hi! How can I help you today?",
+      "primary_color": "#6366f1",
+      "position": "bottom-right",
+      "icon_size": "medium",
+      "bubble_style": "round",
+      "chat_icon": "default",
+      "font_family": "Inter",
+      "created_at": "2025-10-20T22:30:20.799Z",
+      "updated_at": "2025-10-20T22:30:20.799Z"
+    },
+    {
+      "id": "e15f",
+      "agent_id": "umejxpd3a",
+      "welcome_message": "Hi! How can I help you today?",
+      "primary_color": "#6366f1",
+      "position": "bottom-right",
+      "icon_size": "medium",
+      "bubble_style": "round",
+      "chat_icon": "default",
+      "font_family": "Inter",
+      "created_at": "2025-10-20T22:55:04.093Z",
+      "updated_at": "2025-10-20T22:55:04.093Z"
     }
   ],
   "agent_behavior": [
@@ -318,6 +435,76 @@
       "max_tokens": 500,
       "created_at": "2025-10-16T22:50:25.579Z",
       "updated_at": "2025-10-16T22:50:25.579Z"
+    },
+    {
+      "id": "7daf",
+      "agent_id": "4o1bmxyw0",
+      "initial_messages": "[\"Hi! How can I help you today?\"]",
+      "fallback_message": "I'm sorry, I don't understand that question. Could you rephrase it?",
+      "enable_human_handoff": false,
+      "offline_message": "Our team is currently offline. Please leave a message and we'll get back to you.",
+      "system_instruction": "You are a helpful AI assistant.",
+      "prompt_template": "{{conversation}}",
+      "temperature": 0.7,
+      "max_tokens": 500,
+      "created_at": "2025-10-17T20:44:42.503Z",
+      "updated_at": "2025-10-17T20:44:42.503Z"
+    },
+    {
+      "id": "0a59",
+      "agent_id": "4o1bmxyw0",
+      "initial_messages": "[\"Hi! How can I help you today?\"]",
+      "fallback_message": "I'm sorry, I don't understand that question. Could you rephrase it?",
+      "enable_human_handoff": false,
+      "offline_message": "Our team is currently offline. Please leave a message and we'll get back to you.",
+      "system_instruction": "You are a helpful AI assistant.",
+      "prompt_template": "{{conversation}}",
+      "temperature": 0.7,
+      "max_tokens": 500,
+      "created_at": "2025-10-17T20:44:58.065Z",
+      "updated_at": "2025-10-17T20:44:58.065Z"
+    },
+    {
+      "id": "2f32",
+      "agent_id": "nb848xqfz",
+      "initial_messages": "[\"Hi! How can I help you today?\"]",
+      "fallback_message": "I'm sorry, I don't understand that question. Could you rephrase it?",
+      "enable_human_handoff": false,
+      "offline_message": "Our team is currently offline. Please leave a message and we'll get back to you.",
+      "system_instruction": "You are a helpful AI assistant.",
+      "prompt_template": "{{conversation}}",
+      "temperature": 0.7,
+      "max_tokens": 500,
+      "created_at": "2025-10-17T20:54:58.064Z",
+      "updated_at": "2025-10-17T20:54:58.064Z"
+    },
+    {
+      "id": "fb4d",
+      "agent_id": "am3npm1ym",
+      "initial_messages": "[\"Hi! How can I help you today?\"]",
+      "fallback_message": "I'm sorry, I don't understand that question. Could you rephrase it?",
+      "enable_human_handoff": false,
+      "offline_message": "Our team is currently offline. Please leave a message and we'll get back to you.",
+      "system_instruction": "You are a helpful AI assistant.",
+      "prompt_template": "{{conversation}}",
+      "temperature": 0.7,
+      "max_tokens": 500,
+      "created_at": "2025-10-20T22:30:20.799Z",
+      "updated_at": "2025-10-20T22:30:20.799Z"
+    },
+    {
+      "id": "fc85",
+      "agent_id": "umejxpd3a",
+      "initial_messages": "[\"Hi! How can I help you today?\"]",
+      "fallback_message": "I'm sorry, I don't understand that question. Could you rephrase it?",
+      "enable_human_handoff": false,
+      "offline_message": "Our team is currently offline. Please leave a message and we'll get back to you.",
+      "system_instruction": "You are a helpful AI assistant.",
+      "prompt_template": "{{conversation}}",
+      "temperature": 0.7,
+      "max_tokens": 500,
+      "created_at": "2025-10-20T22:55:04.093Z",
+      "updated_at": "2025-10-20T22:55:04.093Z"
     }
   ],
   "agent_integrations": [
@@ -459,6 +646,56 @@
       "response_rate": 0,
       "conversions_count": 0,
       "last_calculated_at": "2025-10-16T22:50:25.579Z"
+    },
+    {
+      "id": "9c29",
+      "agent_id": "4o1bmxyw0",
+      "total_messages": 0,
+      "unique_users": 0,
+      "average_rating": 0,
+      "response_rate": 0,
+      "conversions_count": 0,
+      "last_calculated_at": "2025-10-17T20:44:42.503Z"
+    },
+    {
+      "id": "f677",
+      "agent_id": "4o1bmxyw0",
+      "total_messages": 0,
+      "unique_users": 0,
+      "average_rating": 0,
+      "response_rate": 0,
+      "conversions_count": 0,
+      "last_calculated_at": "2025-10-17T20:44:58.065Z"
+    },
+    {
+      "id": "214f",
+      "agent_id": "nb848xqfz",
+      "total_messages": 0,
+      "unique_users": 0,
+      "average_rating": 0,
+      "response_rate": 0,
+      "conversions_count": 0,
+      "last_calculated_at": "2025-10-17T20:54:58.064Z"
+    },
+    {
+      "id": "f263",
+      "agent_id": "am3npm1ym",
+      "total_messages": 0,
+      "unique_users": 0,
+      "average_rating": 0,
+      "response_rate": 0,
+      "conversions_count": 0,
+      "last_calculated_at": "2025-10-20T22:30:20.799Z"
+    },
+    {
+      "id": "a1f9",
+      "agent_id": "umejxpd3a",
+      "total_messages": 0,
+      "unique_users": 0,
+      "average_rating": 0,
+      "response_rate": 0,
+      "conversions_count": 0,
+      "last_calculated_at": "2025-10-20T22:55:04.093Z"
     }
   ],
   "conversations": [
@@ -1029,6 +1266,20 @@
       "is_active": true,
       "created_at": "2025-10-16T22:44:12.192Z",
       "updated_at": "2025-10-16T22:44:12.192Z"
+    },
+    {
+      "id": "m99gf9lmm",
+      "agent_id": "umejxpd3a",
+      "content_type": "knowledge_base",
+      "category": "File Upload",
+      "title": "Arinde Victor Adeshina_CV.pdf",
+      "content": "%PDF-1.7\r\n%����\r\n1 0 obj\r\n<</Type/Catalog/Pages 2 0 R/Lang(en) /StructTreeRoot 40 0 R/Outlines 33 0 R/MarkInfo<</Marked true>>/Metadata 183 0 R/ViewerPreferences 184 0 R>>\r\nendobj\r\n2 0 obj\r\n<</Type/Pages/Count 2/Kids[ 3 0 R 30 0 R] >>\r\nendobj\r\n3 0 obj\r\n<</Type/Page/Parent 2 0 R/Resources<</Font<</F1 5 0 R/F2 10 0 R/F3 15 0 R/F4 17 0 R/F5 19 0 R/F6 24 0 R/F7 26 0 R/F8 28 0 R>>/ExtGState<</GS7 7 0 R/GS8 8 0 R>>/ProcSet[/PDF/Text/ImageB/ImageC/ImageI] >>/Annots[ 9 0 R] /MediaBox[ 0 0 612 792] /Contents 4 0 R/Group<</Type/Group/S/Transparency/CS/DeviceRGB>>/Tabs/S/StructParents 0>>\r\nendobj\r\n4 0 obj\r\n<</Filter/FlateDecode/Length 4536>>\r\nstream\r\nx��]�r�6\u0012}W��\u0001�3Y�&.$�T*���u�e;YKIv+�\u000fc�4R\"��X����E7\b\u000e�\u0000c�l(\u000f�*ɑ5��\u0001\u001a�\u000b�\u0001���nQ���z���䈥�_/�\u0015�]T\u0007ߟο���<:d���I\nJ.X�r�(\u0005[_����\u0005���^���=�\u0007gB����=n>�2�8�\u0013��2K�`g��3�N\u000b��`�c+�I7?����i��ݼ���\u000f���\\ώ��������{Ǧ����\u0010�#Y�'؁\u0006�Q�H��C ?\u0018:'�lvxf�}��\bR*���yIU&|p�^�\\\u001dì��9�}s2�go_\u0010A�2O�g�c�o\u000e\u0019ەg>M��/v&8׉�,/t�\n�;�\u0017���� �=\u001b=�=<�fI.���\u0002��\\����,����6_\u000b*p%@��؟1�t�y^&�\u0019�\\%e�u��v\u0001�o�חD�E��t\u0010�3�KZ�K�\u000e&���p�_�L,�\u001b����@������^����\u000e�]m\u0007,�\u000f�\u0007��O�R���,A�>k�'\t2l_a��\u000bb����\u0002�pd���OH���\u0011Ri��\u0005��\f���,%Q\u0007\u0014l\u000f�\u0002\u0019Z\u001f�_��/\u0017����\t?�J�HTƸ���y\"2Ŀ�\",��\u0014\u0019\u0014}\"����@J�8\r\u0003\f�Jӗ�_r9�S�\"���=��\n���T��\u001a�mv���\\��\u0018���\u0017��;��\u001f*��LO�60\u0011Ŕ�P��\u0016\"I�\u0010�#���70T�}��>,`[5_��,Ǎ���\u0005\u0007�ك\u001e)\u0005��\u0015J�\u0007\u0000d*2\u0016*2\u000b���//pJ\u000e�D>V�\u0011A\u0016i�C�\u0007d\u0000*\f`\u0014�S�@��\u00169a\u0010y��\u0012�\b�h,\u000e=�� ;GjM\u0005\n\u001a2&)�\f��?�\u0019Z�\u0013V]8^��\u00174��x���D�'\u0005�f^����X���v�#�3�+�GƧ�h�y\u0000�Y7\nv\f�sE�g|V^�$T\u0016h�\u0005�q\u001a\u0000�ʸ\f�qo�\fЋ��X�d\u000bFI\u0003&b�1�M\u0010`��_�7���F1�S!k\t��'���&\u001d�nʌ![t;rYo�%�\u001b�r�+v�����\u0015g��q���\u0019\u001b�\u0000�����j�\u000b��T{!�:�GƧ���z\u0001��kgb�7�\u001dž�_Uh��2�`wM�\u0003>R�T�J-\u001ao��D\u0006گ/�\u0000�0\u0000ٞ���\u0000��D]4\u001b�\u0015\ncUCT�^}L���K����k��\u0004B.V\u0005\f�\tC~���\u0012>%PaG�D\u0001��k�=�BJΦb��,�/�#+\\��ְ\\����sn��*Q\u001d��\u001d��t�����R\r�.\u0012Q�Xt#mV�\u000e4��//�\u000e­�ݿ�jA�#*m��x�x�!*�\u0003�\fT6�\n\b~|�N�4E\u0001!�x�D��\u0001�\u0016V�\u0010�\b\t\u0007�\u0011y\u0018�\u0007�G��Ѐ�\u0019��;Rǽ�P�ģU�0\u0000��!���\\1`S\u0004\u0019�\u000eИ8ׄs\"�\u0012ut4F��0������}�\u001e�%m�A��FGd�e\u0018��H��A(bR(s�$��\u0014ZS�KO��\\�\u00020�qQ<M��������{*(���ȸ(��}\u00004���fE\u0015�Q\u001a�\u0016\"21\u000eb\u0019Z$Wv� ��x����B\u0015��D���9�+j�6/aQv `����\r�^����,\u001c~B\u0011g�M\u0013�e�q|d[\u0003��XW�I�R�آ\r%�w�l�i\u0018����Uc�W6\u001ad\u000f�]�\b,\u0005�\u001d4�����&pb��m�Ƒ\u001c\u001a�\u0015\t;�u麼u$��\u0006\\\f���3�hG;�=�\u0017\u0005۵�[5�=g�c�t\u0003������H�\u001fUKf#���7-\u0001;�u{0��w\\�*0���b7���g\fS\"p�q4�o:��'\u00165�\f\\�\u0004�\u0019O��\u001d���m'�u��G^��RB��j�ύ6��cg\n����(җ��ֈ��[\u0014���+\b�=l�ӝx-\u0003q�o�\u0006��N�P,m'�f�h�N7͗\u001d�f�۱b��Tm��.!���\u0017�\u0012�_l��y\"\u001ef�P\u0018e�\u0019f\u0017�X`?��.���\u0000\u001f�3B�e��.��\u001f�\u0011>)�t aC��f�\u0019\u001b�\u000b1���APgb�\u0000�G�t��\u0018� ���qv\u0002��-d����F����М�f^6ҧ�\u0012�����r~�� \u0000osޘ\rb��\u0003�&\f�.� ��Ճ˚�Ʋ?BH�\fb(M\u001c���\u000b�R�\u0016\u001a\u0011�2��,;�\u0000\u0018%@\u0006�\u001b�\u0005�#'\u001f�[�+5U����\u0010��\u0019�>�R\u0007\u0001�:�X���b���B��|fl�n�^.Z�t��5�q#�����Kʠ��~�\\>Gk\u0018[�m3\"�d\bg\u0016\u0011�Cؠ��#\u0006�\u0013,��,d���\u001e����;7 `\u000f��LrQ\u0012}f�7ᡶ���E�5\u0015D.�\u0000�H\u0006��|\u0006+��<\u0018\u000b|��\u0010�\u000b}\u0004­V��\u00073\u0011��l�s��\u0005�x\u0011\te\u0010�\n,\u0017�\n5\u000e\"� $O\n\n\nC�ͤ�bh��Xg���+\f\u0001�Lchw�\u000e�\r\u0010��2\u0000x�<�ڸ^�7f7_t\u001c)�����\r���^����M�<ѡ� ��I�\u0019C�\bǣ���H\u001f��\u001f�\u0000��\r3�\u001d�\u001eǘ\u000f���1�\u0012�m���Uz�S�A�\u000b\u0001͡���^1>\u0014,[�5\u001cau���k���v�\r�\u0010���f\u0001��d\u0012\u0001����q�[���<@\u000f�\td`ZF$Vh8A�\u0001�C�\u0014\f�\u001a\u000b�6n��Gnl��'\u0014\u001cB��&D\u0011\u0006x}m'�,�{�n��v��k�1s=懝\u0019��?�\u0007\"K*�ƒ�G\u0007}�\u0015@m*�\u0003\u001a0�|�gd�\u0017p\u0000D&J\u0001�8\r�U��tB�i�0(��&\u0002RC����1�ls�������_�Pn��\u0000�߇�\u001c'�5\u000b=F`\u0016\u0006�~�j�\f�\f���\bg�6�O\u0004�cŭ\u000fN�./�\u0000�՜gM�\u001d�m�\u0006\u0011��\u0002�e���m��;6Yn\u0001\u001eU�Â!��jӞ+��a`�L�\u0010(Y�A\u000bܚ�\u0000�!\u0007{�OF\"��c|�\u0007��� \u0005�!��\\�a8�\u0012�NmH\tL�����)\u0001U��ڝn^�O\u0017\u0010�I�������z�!\u0013�\u0012\u001dE��6\u001cU5��D��2G�\u0014�\u000f�e\u0018\u0000��C[nY��ҟ���tLJF\b�\u001b�\u0003�e�AVp\u0010����\u0007h��(��\fT�*K� 5<$i@�WLk�k\u000b\u001bZ��r\u0018�1\"y�)�����\u000f��FŐ��I�\u0001���6����\u0004O�\"R-�\u0010�o��r����S�\n��bN��%\u001c�\f���͔Zmֶ�o��C�k�t\tvY<�Ƥ)}��Q�5�^�Y21E0K1�\u0011�K\u0016[�,���q ��x���j\u0012'�)p�ωl��>���M�s�u��݄J�=�ʴ\u0012�\u0006ϼޓ\u0019��jm\u0007\rO��~��9)=l���������?�]� \nH���[E+KV��\u0013�\u001f�\u0005��\u001e@��\t��іx�t\u001e&t���\u001f&\u001c\u0019\u0006.\u0018�v=,�<u��0��:�)D�zB���,�&I�9\u0018�^�~R3�T�\n��\u0011)\u0019�D�r�-e�\u001f��\u00160z�d �)@�I�)�df�TX�\u0015���a��\\�ʛK�&�'�ٓTL�Ɔ���\u0007�S/�Z�\u0014\u0000�]��Ɖ�{@WD%�\u0017�\u0000Ȣ\u000b*�h<ǣ��`<{��UM���m�A���J�І�R����ߐ��\u0017x\u0003\u0010x�\u0017\u00025E<��\u001aW��S��|*�k��N�7Tƽ�T�0d�C�r�x�^LJ�\u001f����!6���O����MG),��b\\�D�c\u0006�\u0014j��&��\u0004Tڒ%:V%:+�h�\u0014}\u0015�}�\u001b$\u0005/�\u0011�GB�m�^�;wGV�WIVԗ7��(R�ݐ\u0007�\u0000���4�\u0007�%��E�\u0005W\u001f�x\r�4�zN��r��\u0011�\u0015h�{�\u001f\u001eB��\u000f�L���<�<�\u0014����\u0012pkS^D$!\f���U\u0017����z�\u000bY5D�ĤS@�ÀB�ܱ�+YF�\u0004��hb��l�L���t�C�Ϥ��A[��`�xclR���1��\r�5��J����!VU\u0002d<fp���\u0001|\u0000ڛ���4\n\u0011\u0006\u0018�\u0017�*7�yF'\u001e5av� @�h�N\u0011�\u0002���H�(�\u0000�\u000e��V��S��r\u001e��\u0014\u0005�\u0015D^SRA!WD\u0016�\b���N\"���`d\u0019��.!R�\u0003t�<1Z}��{��\u0016\u0005��\b\njC:uR!���\u0016\"��6\u000f�7ؕI9�C5EB��\fEM�\u000fM[S��D5E\u0011�ٚ\"\u001f��j��qkj�|\u0000���\b0\u001f\u0000�?�W�\u0007��+m*�b\"\rG\td2\u0014,&*C\u0000�k6\u0004y5Q�^�tVC;��D�j\"��6���cT\u0013�a\"V\u0013������\u0007'�&\n�3VU�=[�!µ��\u0001bO]F4������\u001f�#gK�K�\"ܻbÂT�\u0015<��E\u0000@�b�\u0013~�X#\u0014��q\b\\��E�\u001e\u0000��+2�A\u00181��\u0000X�v��|a,K\u0005�\u0004�W�/S�\u0019e\u0014\u000fl��ev\u0019<w\u0010\u0012`2�;�rj(ʋG�#���r{�����\u0010�x��\u001bg\u001f�:t��.�\u0006\u0018�\u000e\u001c���l�\u0001�\u001d��\u0012܁.ٛ\u000ff�dLv\u001aO���7p�\u0015\n\t���=\u001a\u001b!y��u�4\u0007��\u000f�%A\u0010�:\"���(h��\u0018\u0017��ՑQ��2�~�d�\u0010�\b\f\u001ee�\u001a+���\u0013%\u001fX*��*\u001e\u0015\t!c�y[\\\u0003����{���\u001f�9\u0010��\u001d��\u000er��ހ�R�\u001f��\u001dS\n�\b�Q��\u0007��~��3�MQDd�.À�uB�׈?}�)T�dY]��?�~���;�>4��;�Lk���K\u0018�G��rR�렙��\r����?L�wAO\bc\u0007\u0004#\u0003��F\r^\u001a\u000br���\u0016v�-�RMs��\"�4{M\u0010�8�\u00143\u001b�рl� ��\u0015��4��4��3\u0003��<$�}m@e��0\u001f�\u001a?�\r\b\u0002�ߩ�&�i\u0010xMA���J�\u0000@\f�\u0004\n�ʘTT\u001e\u001e+{c\u0006<�Rt2\u0017��U��(*N2UCzuR�Ơ���U�Z~R�䠖���Z�{�7�ѻ����\u0003tE�x�\u0018�\u0019�\f�%\u000f�W�+��\u0004#'���E���S�@dU�\u0002\u000b���<\f\u001eh\u001f�\u000e����l\u001eg#�ԙe�c�Q�6�\u000fоb_oK���V�\u000b}2�o'\u001eO���\r>�λVd�d\u0000�.�\u0002\u0005*��w�]׷d7\u0013���b<6p\u00198�f<�m���q���\u001d�u�p�\u0018�_�7\u0005\r�^�Y4�S@\u001e�R�\u0015a�\u0005\u000f�=}`H£��r��y�\u0005����u����{~����y{����\u001cݵD�q�s 3='��\f��F�f#�e���Aӳߛ���\u0007\u0004�k�t3όs���#\u001ejv1�>�p�V\u0006�\"ш�C�`��\u0000P��iޣ�����ػ�|������\u0005�.�\u001eh�\u0007��\u001e\u001e0��<\"��Y��,q���ig>\u0014D\u0013bR�Yp�`\u0001��q�d\u0018e��֘��\u0005���hi\u001b$�\u0000�|��\u000bmf_�2�q3�4˃�P\u0012\u001b��\u0014:̩��z.�fÛ\u000b\t�pt�����h>O'�4��\u0000�R��\r\nendstream\r\nendobj\r\n5 0 obj\r\n<</Type/Font/Subtype/TrueType/Name/F1/BaseFont/BCDEEE+TimesNewRomanPS-BoldMT/Encoding/WinAnsiEncoding/FontDescriptor 6 0 R/FirstChar 32/LastChar 121/Widths 166 0 R>>\r\nendobj\r\n6 0 obj\r\n<</Type/FontDescriptor/FontName/BCDEEE+TimesNewRomanPS-BoldMT/Flags 32/ItalicAngle 0/Ascent 891/Descent -216/CapHeight 677/AvgWidth 427/MaxWidth 2558/FontWeight 700/XHeight 250/StemV 42/FontBBox[ -558 -216 2000 677] /FontFile2 167 0 R>>\r\nendobj\r\n7 0 obj\r\n<</Type/ExtGState/BM/Normal/ca 1>>\r\nendobj\r\n8 0 obj\r\n<</Type/ExtGState/BM/Normal/CA 1>>\r\nendobj\r\n9 0 obj\r\n<</Subtype/Link/Rect[ 204.13 662.46 342.09 675.9] /BS<</W 0>>/F 4/A<</Type/Action/S/URI/URI(mailto:arindevictor8@gmail.com) >>/StructParent 1>>\r\nendobj\r\n10 0 obj\r\n<</Type/Font/Subtype/Type0/BaseFont/BCDFEE+Wingdings-Regular/Encoding/Identity-H/DescendantFonts 11 0 R/ToUnicode 168 0 R>>\r\nendobj\r\n11 0 obj\r\n[ 12 0 R] \r\nendobj\r\n12 0 obj\r\n<</BaseFont/BCDFEE+Wingdings-Regular/Subtype/CIDFontType2/Type/Font/CIDToGIDMap/Identity/DW 1000/CIDSystemInfo 13 0 R/FontDescriptor 14 0 R/W 170 0 R>>\r\nendobj\r\n13 0 obj\r\n<</Ordering(Identity) /Registry(Adobe) /Supplement 0>>\r\nendobj\r\n14 0 obj\r\n<</Type/FontDescriptor/FontName/BCDFEE+Wingdings-Regular/Flags 32/ItalicAngle 0/Ascent 899/Descent 205/CapHeight 771/AvgWidth 890/MaxWidth 1359/FontWeight 400/XHeight 250/StemV 89/FontBBox[ 0 205 1359 771] /FontFile2 169 0 R>>\r\nendobj\r\n15 0 obj\r\n<</Type/Font/Subtype/TrueType/Name/F3/BaseFont/BCDGEE+ArialMT/Encoding/WinAnsiEncoding/FontDescriptor 16 0 R/FirstChar 32/LastChar 32/Widths 171 0 R>>\r\nendobj\r\n16 0 obj\r\n<</Type/FontDescriptor/FontName/BCDGEE+ArialMT/Flags 32/ItalicAngle 0/Ascent 905/Descent -210/CapHeight 728/AvgWidth 441/MaxWidth 2665/FontWeight 400/XHeight 250/StemV 44/FontBBox[ -665 -210 2000 728] /FontFile2 172 0 R>>\r\nendobj\r\n17 0 obj\r\n<</Type/Font/Subtype/TrueType/Name/F4/BaseFont/BCDHEE+TimesNewRomanPSMT/Encoding/WinAnsiEncoding/FontDescriptor 18 0 R/FirstChar 32/LastChar 122/Widths 176 0 R>>\r\nendobj\r\n18 0 obj\r\n<</Type/FontDescriptor/FontName/BCDHEE+TimesNewRomanPSMT/Flags 32/ItalicAngle 0/Ascent 891/Descent -216/CapHeight 693/AvgWidth 401/MaxWidth 2614/FontWeight 400/XHeight 250/StemV 40/FontBBox[ -568 -216 2046 693] /FontFile2 174 0 R>>\r\nendobj\r\n19 0 obj\r\n<</Type/Font/Subtype/Type0/BaseFont/BCDIEE+TimesNewRomanPSMT/Encoding/Identity-H/DescendantFonts 20 0 R/ToUnicode 173 0 R>>\r\nendobj\r\n20 0 obj\r\n[ 21 0 R] \r\nendobj\r\n21 0 obj\r\n<</BaseFont/BCDIEE+TimesNewRomanPSMT/Subtype/CIDFontType2/Type/Font/CIDToGIDMap/Identity/DW 1000/CIDSystemInfo 22 0 R/FontDescriptor 23 0 R/W 175 0 R>>\r\nendobj\r\n22 0 obj\r\n<</Ordering(Identity) /Registry(Adobe) /Supplement 0>>\r\nendobj\r\n23 0 obj\r\n<</Type/FontDescriptor/FontName/BCDIEE+TimesNewRomanPSMT/Flags 32/ItalicAngle 0/Ascent 891/Descent -216/CapHeight 693/AvgWidth 401/MaxWidth 2614/FontWeight 400/XHeight 250/StemV 40/FontBBox[ -568 -216 2046 693] /FontFile2 174 0 R>>\r\nendobj\r\n24 0 obj\r\n<</Type/Font/Subtype/TrueType/Name/F6/BaseFont/BCDJEE+TimesNewRomanPS-ItalicMT/Encoding/WinAnsiEncoding/FontDescriptor 25 0 R/FirstChar 32/LastChar 115/Widths 177 0 R>>\r\nendobj\r\n25 0 obj\r\n<</Type/FontDescriptor/FontName/BCDJEE+TimesNewRomanPS-ItalicMT/Flags 32/ItalicAngle -16.4/Ascent 891/Descent -216/CapHeight 694/AvgWidth 402/MaxWidth 1831/FontWeight 400/XHeight 250/StemV 40/FontBBox[ -498 -216 1333 694] /FontFile2 178 0 R>>\r\nendobj\r\n26 0 obj\r\n<</Type/Font/Subtype/TrueType/Name/F7/BaseFont/BCDKEE+TimesNewRomanPS-BoldItalicMT/Encoding/WinAnsiEncoding/FontDescriptor 27 0 R/FirstChar 32/LastChar 119/Widths 179 0 R>>\r\nendobj\r\n27 0 obj\r\n<</Type/FontDescriptor/FontName/BCDKEE+TimesNewRomanPS-BoldItalicMT/Flags 32/ItalicAngle -16.4/Ascent 891/Descent -216/CapHeight 677/AvgWidth 412/MaxWidth 1948/FontWeight 700/XHeight 250/StemV 41/FontBBox[ -547 -216 1401 677] /FontFile2 180 0 R>>\r\nendobj\r\n28 0 obj\r\n<</Type/Font/Subtype/TrueType/Name/F8/BaseFont/BCDLEE+Calibri/Encoding/WinAnsiEncoding/FontDescriptor 29 0 R/FirstChar 32/LastChar 121/Widths 181 0 R>>\r\nendobj\r\n29 0 obj\r\n<</Type/FontDescriptor/FontName/BCDLEE+Calibri/Flags 32/ItalicAngle 0/Ascent 952/Descent -250/CapHeight 750/AvgWidth 521/MaxWidth 1743/FontWeight 400/XHeight 250/StemV 52/FontBBox[ -503 -250 1240 750] /FontFile2 182 0 R>>\r\nendobj\r\n30 0 obj\r\n<</Type/Page/Parent 2 0 R/Resources<</Font<</F1 5 0 R/F4 17 0 R/F7 26 0 R/F5 19 0 R/F3 15 0 R/F2 10 0 R/F8 28 0 R>>/ExtGState<</GS7 7 0 R/GS8 8 0 R>>/ProcSet[/PDF/Text/ImageB/ImageC/ImageI] >>/MediaBox[ 0 0 612 792] /Contents 31 0 R/Group<</Type/Group/S/Transparency/CS/DeviceRGB>>/Tabs/S/StructParents 2>>\r\nendobj\r\n31 0 obj\r\n<</Filter/FlateDecode/Length 3875>>\r\nstream\r\nx��]io\u001b9\u0012�n���?J��ë�A\u0010 v<\u0019�8�ƞ\r\u0016�~�om�n�l9ɿ_V�ْ,��m\u00155;��H���5�zu�L�\u001fݎ��ŋ�o�\u000e^'��ᨾL\u0006���\u001fG×/���{ɟ�[\"\u0015�_%U\"���,*�Lη�>�-���v�����*\u0013�\u000f�\u0017�[���HdR��MeI^eiU$�7���\u001c\u0015�����\u0012ߕ��7�[�\u0007GÝ|p3�\f������u������[������ջ\u001dR�T,�\u0003�[Ԅ\r%O3\u0012�Ͱ\u0018\\�Ws\u0002$G�\\��HKMRK�Jڟ�\u001f�go6\u0001��)��O�d&U�C>��:����\u000e��\u0019\u0017f���{�\u0006Pʴ�@�\u0001�1P;\u001f�b0\u0019#S\u001e�Li��g)���$��\\g=+����i������}�5����$��\u000b\u001bJ�\u0002�� [znRT��@~�A5��v�����\u0011.�f\u0016��e#��T�\u0014�~=��\u0006�0sjǭ���O-����-�\u001a:\u0019��R\u0005\rr\u0000t��=2U-՚\u000b<+W0�߬�S\u001fm��",
+      "intent": "file_knowledge",
+      "keywords": "Arinde Victor Adeshina_CV",
+      "confidence_score": 0.9,
+      "is_active": true,
+      "created_at": "2025-10-20T22:54:55.364Z",
+      "updated_at": "2025-10-20T22:54:55.364Z"
     }
   ],
   "core_actions": [
