@@ -11,9 +11,9 @@ import { useAgentStore } from "@/store/agentStore";
 import { useCurrentUser } from "@/store/authStore";
 import { Button } from "@/components/ui/Button";
 import { useRouter } from "next/navigation";
+import TemplateSelectionModal from "@/components/ui/TemplateSelectionModal";
 import {
   AgentStatus,
-  AgentType,
   AgentPosition,
   AgentIconSize,
   AgentBubbleStyle,
@@ -32,6 +32,7 @@ export default function Dashboard() {
   const [activeTab, setActiveTab] = useState(ActiveTabs.AGENTS);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [showTemplateModal, setShowTemplateModal] = useState<boolean>(false);
 
   // Refs for the two buttons
   const button1Ref = useRef<HTMLDivElement>(null);
@@ -49,8 +50,8 @@ export default function Dashboard() {
     getChatbot();
   }, []);
 
-  // Function to create a complete agent from template
-  const handleCreateFromTemplate = async () => {
+  // Function to create agent from selected template
+  const handleTemplateSelect = async (template: any) => {
     if (!user?.id) {
       alert("Please log in to create an agent");
       return;
@@ -61,15 +62,16 @@ export default function Dashboard() {
       const newAgentId = agentApi.generateId();
       const timestamp = new Date().toISOString();
 
+      // Create agent with template configuration
       const agentPayload = {
         id: newAgentId,
         user_id: user.id,
-        name: "Boltz Agent",
-        description: "A ready-to-use customer support agent with pre-configured settings",
-        agent_type: AgentType.TEXT,
-        ai_model: "gpt-3.5-turbo",
-        ai_provider: "OpenAI",
-        credits_per_1k: 10,
+        name: template.name,
+        description: template.description,
+        agent_type: template.config.agent_type,
+        ai_model: template.config.ai_model,
+        ai_provider: template.config.ai_provider,
+        credits_per_1k: template.config.credits_per_1k,
         status: AgentStatus.ACTIVE,
         created_at: timestamp,
         updated_at: timestamp,
@@ -77,11 +79,11 @@ export default function Dashboard() {
 
       await agentApi.createAgent(agentPayload);
 
-       //Create appearance settings
+      // Create appearance settings
       await agentApi.createAppearance({
         agent_id: newAgentId,
-        welcome_message: "Hi! I'm Boltz, your AI assistant. How can I help you today?",
-        primary_color: "#6366f1",
+        welcome_message: template.config.welcome_message,
+        primary_color: template.config.primary_color,
         position: AgentPosition.BOTTOM_RIGHT,
         icon_size: AgentIconSize.MEDIUM,
         bubble_style: AgentBubbleStyle.ROUND,
@@ -94,24 +96,20 @@ export default function Dashboard() {
       // Create behavior settings
       await agentApi.createBehavior({
         agent_id: newAgentId,
-        initial_messages: JSON.stringify([
-          "Hi! I'm your AI assistant. How can I help you today?",
-        ]),
-        fallback_message:
-          "I'm sorry, I don't understand that question. Could you rephrase it?",
+        initial_messages: JSON.stringify([template.config.welcome_message]),
+        fallback_message: template.config.fallback_message,
         enable_human_handoff: false,
         offline_message:
           "Our team is currently offline. Please leave a message and we'll get back to you.",
-        system_instruction:
-          "You are a helpful AI assistant focused on providing excellent customer support. Be friendly, professional, and helpful.",
+        system_instruction: template.config.system_instruction,
         prompt_template: "{{conversation}}",
-        temperature: 0.7,
-        max_tokens: 500,
+        temperature: template.config.temperature,
+        max_tokens: template.config.max_tokens,
         created_at: timestamp,
         updated_at: timestamp,
       });
 
-      // Step 4: Create stats
+      // Create stats
       await agentApi.createStats({
         agent_id: newAgentId,
         total_messages: 0,
@@ -122,10 +120,15 @@ export default function Dashboard() {
         last_calculated_at: timestamp,
       });
 
-      // Close dropdown
+      // Close modal
+      setShowTemplateModal(false);
       setIsOpen(false);
-      //const { data } = await agentsAPI.getAll(user.id);
-      //if (data) setAgents(data);
+
+      // Refresh agents list
+      const { data } = await agentsAPI.getAll(user.id);
+      if (data) setAgents(data);
+
+      // Route to the newly created agent
       router.push(`/dashboard/chatagent/${newAgentId}`);
     } catch (error) {
       console.error("Error creating agent from template:", error);
@@ -205,8 +208,21 @@ export default function Dashboard() {
     setIsOpen((prev) => !prev);
   };
 
+  const handleUseTemplate = () => {
+    setIsOpen(false);
+    setShowTemplateModal(true); 
+  };
+
   return (
     <>
+      {/* Template Selection Modal */}
+      <TemplateSelectionModal
+        isOpen={showTemplateModal}
+        onClose={() => setShowTemplateModal(false)}
+        onSelectTemplate={handleTemplateSelect}
+        isLoading={isLoading}
+      />
+
       {/* Tabs */}
       <div className="border-b border-gray-200 py-2">
         <nav
@@ -277,58 +293,107 @@ export default function Dashboard() {
                     size="md"
                     variant="primary"
                     className="w-fit text-nowrap text-sm shadow-md"
-                    onClick={handleCreateFromTemplate}
+                    onClick={handleUseTemplate}
                     disabled={isLoading}
                   >
-                    {isLoading ? "Creating..." : "Use our template"}
+                    Use our template
                   </Button>
                 </div>
               </div>
             </div>
           </div>
-          {/* Chatbots List */}
+          
+          {/* Modern Agent Cards List */}
           <div className="mt-8">
             {agents && agents.length ? (
-              <ul className="flex gap-x-6 flex-wrap">
+              <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {agents.map((chatagent) => (
-                  <li key={chatagent.id}>
+                  <li key={chatagent.id} className="group">
                     <Link
                       href={`/dashboard/chatagent/${chatagent.id}`}
-                      className="block hover:bg-gray-50 w-40"
+                      className="block"
                     >
-                      <div className="h-52 border-gray-400 border rounded-lg flex flex-col hover:shadow-lg transition-all duration-300">
-                        <div className="flex-grow flex items-center justify-center bg-gray-200">
-                          <MessageSquare width={88} height={88} />
-                        </div>
-                        <div
-                          className={`p-3 flex-col flex-shrink-0 flex items-center justify-center
-                              ${
-                                chatagent.status === "active"
-                                  ? "bg-green-100 text-green-800"
-                                  : "bg-yellow-100 text-yellow-800"
-                              }
-                                  `}
-                        >
-                          <p className="text-sm font-medium truncate text-center text-gray-800 break-words w-full px-2">
-                            {chatagent.name}
-                          </p>
-                          <button
-                            onClick={(e) => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              handleDeleteAgent(chatagent.id, chatagent.name);
-                            }}
+                      <div className="relative bg-white rounded-2xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                        {/* Status Badge - Top Right */}
+                        <div className="absolute top-3 right-1 z-10">
+                          <span
+                            className={cn(
+                              "inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-xs font-medium",
+                              chatagent.status === "active"
+                                ? "bg-green-100 text-green-700 ring-1 ring-green-600/20"
+                                : "bg-yellow-100 text-yellow-700 ring-1 ring-yellow-600/20"
+                            )}
                           >
-                            <Trash2 className="text-red-400" />
-                          </button>
+                            <span
+                              className={cn(
+                                "w-1.5 h-1.5 rounded-full",
+                                chatagent.status === "active"
+                                  ? "bg-green-600 animate-pulse"
+                                  : "bg-yellow-600"
+                              )}
+                            />
+                            {chatagent.status === "active" ? "Active" : "Draft"}
+                          </span>
                         </div>
+
+                        {/* Delete Button - Top Left (appears on hover) */}
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            handleDeleteAgent(chatagent.id, chatagent.name);
+                          }}
+                          className="absolute top-3 left-3 z-10 p-2 bg-white/90 backdrop-blur-sm rounded-lg shadow-md opacity-0 group-hover:opacity-100 transition-all duration-200 hover:bg-red-50 hover:scale-110"
+                          title="Delete agent"
+                        >
+                          <Trash2 className="w-4 h-4 text-gray-600 hover:text-red-600" />
+                        </button>
+
+                        {/* Icon Section */}
+                        <div className="flex items-center justify-center h-44 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50">
+                          <div className="p-5 bg-white rounded-2xl shadow-sm group-hover:shadow-md transition-all group-hover:scale-110">
+                            <MessageSquare className="w-14 h-14 text-indigo-600" strokeWidth={1.5} />
+                          </div>
+                        </div>
+
+                        {/* Name Section */}
+                        <div className={cn(
+                                "p-4 border-t bg-gray-800 border-gray-100",
+                                chatagent.status === "active"
+                                  ? "bg-green-100"
+                                  : "bg-yellow-600"
+                              )}>
+                          <h3 className="text-base font-semibold text-gray-900 truncate text-center mb-1">
+                            {chatagent.name}
+                          </h3>
+                        </div>
+
+                        {/* Hover Overlay Effect */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-indigo-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
                       </div>
                     </Link>
                   </li>
                 ))}
               </ul>
             ) : (
-              <div>Create your autonomous agent</div>
+              // Modern Empty State
+              <div className="text-center py-16 bg-white rounded-2xl border-2 border-dashed border-gray-300 hover:border-indigo-400 transition-colors">
+                <div className="inline-flex p-4 bg-gray-100 rounded-2xl mb-4">
+                  <MessageSquare className="w-12 h-12 text-gray-400" />
+                </div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  No agents yet
+                </h3>
+                <p className="text-gray-600 mb-6 max-w-sm mx-auto">
+                  Create your first autonomous agent to start engaging with your users
+                </p>
+                <button
+                  onClick={handleDropdown}
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-indigo-600 text-white font-medium rounded-xl hover:bg-indigo-700 transition-colors shadow-lg hover:shadow-xl"
+                >
+                  Create Your First Agent
+                </button>
+              </div>
             )}
           </div>
         </div>

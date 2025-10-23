@@ -61,6 +61,19 @@
       "status": "active",
       "created_at": "2025-10-20T22:54:45.860Z",
       "updated_at": "2025-10-20T22:55:04.093Z"
+    },
+    {
+      "id": "oeima36b6",
+      "user_id": "9c1a7782-a3c9-403f-a011-ff3436b2aebb",
+      "name": "David Kim",
+      "description": "Experienced academic counselor who helps students map out their educational journey",
+      "agent_type": "text",
+      "ai_model": "gpt-3.5-turbo",
+      "ai_provider": "OpenAI",
+      "credits_per_1k": 10,
+      "status": "active",
+      "created_at": "2025-10-21T22:54:12.698Z",
+      "updated_at": "2025-10-21T22:54:12.698Z"
     }
   ],
   "agent_appearance": [
@@ -284,6 +297,45 @@
       "font_family": "Inter",
       "created_at": "2025-10-21T21:28:56.374Z",
       "updated_at": "2025-10-21T21:28:56.374Z"
+    },
+    {
+      "id": "63ec",
+      "agent_id": "5eg7jrf64",
+      "welcome_message": "Hi! I'm Boltz, your AI assistant. How can I help you today?",
+      "primary_color": "#6366f1",
+      "position": "bottom-right",
+      "icon_size": "medium",
+      "bubble_style": "round",
+      "chat_icon": "default",
+      "font_family": "Inter",
+      "created_at": "2025-10-21T21:40:39.596Z",
+      "updated_at": "2025-10-21T21:40:39.596Z"
+    },
+    {
+      "id": "07f9",
+      "agent_id": "wa92gmajz",
+      "welcome_message": "Hi! I'm Boltz, your AI assistant. How can I help you today?",
+      "primary_color": "#6366f1",
+      "position": "bottom-right",
+      "icon_size": "medium",
+      "bubble_style": "round",
+      "chat_icon": "default",
+      "font_family": "Inter",
+      "created_at": "2025-10-21T21:42:14.721Z",
+      "updated_at": "2025-10-21T21:42:14.721Z"
+    },
+    {
+      "id": "0879",
+      "agent_id": "hbgra5023",
+      "welcome_message": "Hi! I'm Boltz, your AI assistant. How can I help you today?",
+      "primary_color": "#6366f1",
+      "position": "bottom-right",
+      "icon_size": "medium",
+      "bubble_style": "round",
+      "chat_icon": "default",
+      "font_family": "Inter",
+      "created_at": "2025-10-21T21:43:16.318Z",
+      "updated_at": "2025-10-21T21:43:16.318Z"
     }
   ],
   "agent_behavior": [
@@ -520,6 +572,76 @@
       "max_tokens": 500,
       "created_at": "2025-10-21T21:28:56.374Z",
       "updated_at": "2025-10-21T21:28:56.374Z"
+    },
+    {
+      "id": "6d73",
+      "agent_id": "5eg7jrf64",
+      "initial_messages": "[\"Hi! I'm your AI assistant. How can I help you today?\"]",
+      "fallback_message": "I'm sorry, I don't understand that question. Could you rephrase it?",
+      "enable_human_handoff": false,
+      "offline_message": "Our team is currently offline. Please leave a message and we'll get back to you.",
+      "system_instruction": "You are a helpful AI assistant focused on providing excellent customer support. Be friendly, professional, and helpful.",
+      "prompt_template": "{{conversation}}",
+      "temperature": 0.7,
+      "max_tokens": 500,
+      "created_at": "2025-10-21T21:40:39.596Z",
+      "updated_at": "2025-10-21T21:40:39.596Z"
+    },
+    {
+      "id": "8dc6",
+      "agent_id": "wa92gmajz",
+      "initial_messages": "[\"Hi! I'm your AI assistant. How can I help you today?\"]",
+      "fallback_message": "I'm sorry, I don't understand that question. Could you rephrase it?",
+      "enable_human_handoff": false,
+      "offline_message": "Our team is currently offline. Please leave a message and we'll get back to you.",
+      "system_instruction": "You are a helpful AI assistant focused on providing excellent customer support. Be friendly, professional, and helpful.",
+      "prompt_template": "{{conversation}}",
+      "temperature": 0.7,
+      "max_tokens": 500,
+      "created_at": "2025-10-21T21:42:14.721Z",
+      "updated_at": "2025-10-21T21:42:14.721Z"
+    },
+    {
+      "id": "d6b4",
+      "agent_id": "hbgra5023",
+      "initial_messages": "[\"Hi! I'm your AI assistant. How can I help you today?\"]",
+      "fallback_message": "I'm sorry, I don't understand that question. Could you rephrase it?",
+      "enable_human_handoff": false,
+      "offline_message": "Our team is currently offline. Please leave a message and we'll get back to you.",
+      "system_instruction": "You are a helpful AI assistant focused on providing excellent customer support. Be friendly, professional, and helpful.",
+      "prompt_template": "{{conversation}}",
+      "temperature": 0.7,
+      "max_tokens": 500,
+      "created_at": "2025-10-21T21:43:16.318Z",
+      "updated_at": "2025-10-21T21:43:16.318Z"
+    },
+    {
+      "id": "a868",
+      "agent_id": "r22fn8ci0",
+      "initial_messages": "[\"Hi there! 👋 I'm here to help with any questions or concerns. How can I assist you today?\"]",
+      "fallback_message": "I'm not sure about that. Would you like me to connect you with a human agent who can help?",
+      "enable_human_handoff": false,
+      "offline_message": "Our team is currently offline. Please leave a message and we'll get back to you.",
+      "system_instruction": "You are a helpful and empathetic customer support agent. Always be polite, patient, and solution-oriented. If you cannot solve an issue, offer to escalate to a human agent.",
+      "prompt_template": "{{conversation}}",
+      "temperature": 0.5,
+      "max_tokens": 500,
+      "created_at": "2025-10-21T22:49:40.063Z",
+      "updated_at": "2025-10-21T22:49:40.063Z"
+    },
+    {
+      "id": "6ada",
+      "agent_id": "oeima36b6",
+      "initial_messages": "[\"Hi, I'm David! 🎓 I'm here to help you plan your academic journey. Let's chat about your interests and goals - what excites you?\"]",
+      "fallback_message": "That's an excellent question! Let me help you explore all your options...",
+      "enable_human_handoff": false,
+      "offline_message": "Our team is currently offline. Please leave a message and we'll get back to you.",
+      "system_instruction": "You are David Kim, a dedicated academic advisor with 10 years of experience helping students achieve their goals. You have a background in career counseling and genuinely care about each student's unique path. You ask thoughtful questions about interests, strengths, and aspirations before making recommendations. You're supportive, realistic, and always encourage students to pursue what they're passionate about.",
+      "prompt_template": "{{conversation}}",
+      "temperature": 0.7,
+      "max_tokens": 500,
+      "created_at": "2025-10-21T22:54:12.698Z",
+      "updated_at": "2025-10-21T22:54:12.698Z"
     }
   ],
   "agent_integrations": [
@@ -731,6 +853,56 @@
       "response_rate": 0,
       "conversions_count": 0,
       "last_calculated_at": "2025-10-21T21:28:56.374Z"
+    },
+    {
+      "id": "20a1",
+      "agent_id": "5eg7jrf64",
+      "total_messages": 0,
+      "unique_users": 0,
+      "average_rating": 0,
+      "response_rate": 0,
+      "conversions_count": 0,
+      "last_calculated_at": "2025-10-21T21:40:39.596Z"
+    },
+    {
+      "id": "9dbd",
+      "agent_id": "wa92gmajz",
+      "total_messages": 0,
+      "unique_users": 0,
+      "average_rating": 0,
+      "response_rate": 0,
+      "conversions_count": 0,
+      "last_calculated_at": "2025-10-21T21:42:14.721Z"
+    },
+    {
+      "id": "12a6",
+      "agent_id": "hbgra5023",
+      "total_messages": 0,
+      "unique_users": 0,
+      "average_rating": 0,
+      "response_rate": 0,
+      "conversions_count": 0,
+      "last_calculated_at": "2025-10-21T21:43:16.318Z"
+    },
+    {
+      "id": "f19d",
+      "agent_id": "r22fn8ci0",
+      "total_messages": 0,
+      "unique_users": 0,
+      "average_rating": 0,
+      "response_rate": 0,
+      "conversions_count": 0,
+      "last_calculated_at": "2025-10-21T22:49:40.063Z"
+    },
+    {
+      "id": "0e90",
+      "agent_id": "oeima36b6",
+      "total_messages": 0,
+      "unique_users": 0,
+      "average_rating": 0,
+      "response_rate": 0,
+      "conversions_count": 0,
+      "last_calculated_at": "2025-10-21T22:54:12.698Z"
     }
   ],
   "conversations": [
