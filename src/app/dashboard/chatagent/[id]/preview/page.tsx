@@ -11,6 +11,7 @@ import {
 import { BotCustomizer } from "@/components/chatbot/BotCustomizer";
 import { AgentPlayground } from "@/components/chatbot/AgentPlayground";
 import { Tab, TabGroup, TabList, TabPanels, TabPanel } from "@headlessui/react";
+import { toast } from "@/store/toastStore";
 
 export default function ChatbotPreviewPage({
   params,
@@ -163,7 +164,7 @@ export default function ChatbotPreviewPage({
                       type="button"
                       onClick={() => {
                         navigator.clipboard.writeText(embedCode);
-                        alert("Code copied to clipboard!");
+                        toast.success("Copied!", "Code copied to clipboard!");
                       }}
                       className="absolute top-2 right-2 inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-primary-700 bg-primary-100 hover:bg-primary-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
                     >

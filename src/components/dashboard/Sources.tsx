@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { useParams } from "next/navigation";
+import { useTrainingData } from "@/store/agentDetailStore";
 import {
   DocumentTextIcon,
   GlobeAltIcon,
@@ -44,8 +44,7 @@ enum ActiveTab {
 }
 
 export function Sources() {
-  const params = useParams();
-  const agentId = (params?.id as string) || "default";
+  const trainingData = useTrainingData();
   const [sources, setSources] = useState<TrainingSource[]>([]);
   const [vectorStore, setVectorStore] = useState<VectorStore>({});
   const [activeTab, setActiveTab] = useState<ActiveTab>(ActiveTab.document);

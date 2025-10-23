@@ -27,6 +27,9 @@ export interface Profile extends User {
   role: UserRoles;
   company?: string;
   avatar?: string;
+  phone?: string;
+  whatsapp?: string;
+  onlineStatus?: boolean;
   createdAt?: string;
   updatedAt?: string;
 }

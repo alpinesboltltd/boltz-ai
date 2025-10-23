@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { use } from "react";
 import { Sources } from "@/components/dashboard/Sources";
 import { Activity } from "@/components/dashboard/Activity";
 import { ConversationLogs } from "@/components/dashboard/ConversationLogs";
@@ -8,11 +9,27 @@ import { ConversationLogs } from "@/components/dashboard/ConversationLogs";
 import { useDashboardStore, DetailsTab } from "@/store/dashboardStore";
 import { AgentPlayground } from "@/components/chatbot/AgentPlayground";
 import { BotCustomizer } from "@/components/chatbot/BotCustomizer";
+import { useAgentDetailStore } from "@/store/agentDetailStore";
+import { Spinner } from "@/components/common/Spinner";
 
-export default function AgentDetailPage() {
+export default function AgentDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const resolvedParams = use(params);
+  const agentId = resolvedParams.id;
+  
   const { activeTab, setActiveTab } = useDashboardStore();
+  const { fetchAgentDetails, loading, error } = useAgentDetailStore();
   const [showSavedMessage, setShowSavedMessage] = useState(false);
   const tabNavRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (agentId) {
+      fetchAgentDetails(agentId);
+    }
+  }, [agentId, fetchAgentDetails]);
 
   const handleSaveConfig = () => {
     setShowSavedMessage(true);
@@ -40,6 +57,24 @@ export default function AgentDetailPage() {
       }
     }
   }, [activeTab]);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-64">
+        <Spinner size="lg" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="px-4 sm:px-6 lg:px-8 py-8">
+        <div className="text-center">
+          <p className="text-red-600">Error: {error}</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="px-4 sm:px-6 lg:px-8 pb-8">

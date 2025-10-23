@@ -24,6 +24,66 @@ export default function DashboardLayout({
   const contentRef = useRef<HTMLDivElement>(null);
   const container = useRef<HTMLDivElement>(null);
 
+  // Handle sidebar collapse animation using GSAP hooks
+  const toggleSidebar = () => {
+    setSidebarCollapsed(!sidebarCollapsed);
+  };
+
+  useGSAP(
+    () => {
+      if (!user) return;
+      // Only run animations on desktop (md breakpoint and above)
+      const isDesktop = window.matchMedia("(min-width: 768px)").matches;
+
+      if (isDesktop && sidebarRef.current && contentRef.current) {
+        const tl = gsap.timeline();
+
+        if (sidebarCollapsed) {
+          tl.to(sidebarRef.current, {
+            width: "4rem",
+            duration: 0.3,
+            ease: "power2.out",
+          }).to(
+            contentRef.current,
+            {
+              paddingLeft: "4rem",
+              duration: 0.3,
+              ease: "power2.out",
+            },
+            "<"
+          );
+        } else {
+          tl.to(sidebarRef.current, {
+            width: "16rem",
+            duration: 0.3,
+            ease: "power2.out",
+          }).to(
+            contentRef.current,
+            {
+              paddingLeft: "16rem",
+              duration: 0.3,
+              ease: "power2.out",
+            },
+            "<"
+          );
+        }
+      }
+    },
+    { dependencies: [sidebarCollapsed, user], scope: container }
+  );
+  
+  // Show loading or redirect if no user
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600 mx-auto"></div>
+          <p className="mt-2 text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
   const navigation = [
     {
       name: "Dashboard",
@@ -64,53 +124,6 @@ export default function DashboardLayout({
     }
     return pathname.startsWith(href) && href !== "/dashboard";
   };
-
-  // Handle sidebar collapse animation using GSAP hooks
-  const toggleSidebar = () => {
-    setSidebarCollapsed(!sidebarCollapsed);
-  };
-
-  useGSAP(
-    () => {
-      // Only run animations on desktop (md breakpoint and above)
-      const isDesktop = window.matchMedia("(min-width: 768px)").matches;
-
-      if (isDesktop && sidebarRef.current && contentRef.current) {
-        const tl = gsap.timeline();
-
-        if (sidebarCollapsed) {
-          tl.to(sidebarRef.current, {
-            width: "4rem",
-            duration: 0.3,
-            ease: "power2.out",
-          }).to(
-            contentRef.current,
-            {
-              paddingLeft: "4rem",
-              duration: 0.3,
-              ease: "power2.out",
-            },
-            "<"
-          );
-        } else {
-          tl.to(sidebarRef.current, {
-            width: "16rem",
-            duration: 0.3,
-            ease: "power2.out",
-          }).to(
-            contentRef.current,
-            {
-              paddingLeft: "16rem",
-              duration: 0.3,
-              ease: "power2.out",
-            },
-            "<"
-          );
-        }
-      }
-    },
-    { dependencies: [sidebarCollapsed], scope: container }
-  );
 
   return (
     <div ref={container} className="min-h-screen bg-gray-100">
@@ -280,12 +293,12 @@ export default function DashboardLayout({
               <div className="flex items-center">
                 <div className="flex-shrink-0">
                   <div className="h-8 w-8 rounded-full bg-gray-300 flex justify-center items-center">
-                    {user && user.avatar ? (
+                    {user?.avatar ? (
                       <Image
                         src={user.avatar}
                         height={50}
                         width={50}
-                        alt={user.name}
+                        alt={user.name || user.displayName || "User"}
                         className="rounded-full h-full w-full"
                       />
                     ) : (
@@ -295,7 +308,7 @@ export default function DashboardLayout({
                 </div>
                 <div className="ml-3">
                   <p className="text-sm font-medium text-gray-700">
-                    {user!.name}
+                    {user?.name || user?.displayName || "User"}
                   </p>
                   <Link
                     href="/dashboard/settings"

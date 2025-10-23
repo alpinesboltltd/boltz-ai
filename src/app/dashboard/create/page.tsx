@@ -22,6 +22,7 @@ import { agentApi } from "@/lib/agent-api";
 import { useCurrentUser } from "@/store/authStore";
 import { Spinner } from "@/components/common/Spinner";
 import { ArrowPathIcon, CheckCircleIcon } from "@heroicons/react/24/outline";
+import { toast } from "@/store/toastStore";
 
 interface AgentAppearanceForm {
   welcome_message: string;
@@ -190,7 +191,7 @@ export default function CreateAgentPage() {
       setStep(2);
     } catch (error) {
       console.error("Error creating agent:", error);
-      alert("Failed to create agent. Please try again.");
+      toast.error("Creation Failed", "Failed to create agent. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -207,7 +208,7 @@ export default function CreateAgentPage() {
       setStep(3);
     } catch (error) {
       console.error("Error updating training:", error);
-      alert("Failed to save training data. Please try again.");
+      toast.error("Training Failed", "Failed to save training data. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -260,7 +261,7 @@ export default function CreateAgentPage() {
       router.push(`/dashboard/chatagent/${agentId}`);
     } catch (error) {
       console.error("Error finalizing agent:", error);
-      alert("Failed to create agent. Please try again.");
+      toast.error("Creation Failed", "Failed to create agent. Please try again.");
     } finally {
       setIsLoading(false);
     }

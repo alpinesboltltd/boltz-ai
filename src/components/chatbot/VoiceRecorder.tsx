@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { MicrophoneIcon, StopIcon } from '@heroicons/react/24/solid';
+import { toast } from '@/store/toastStore';
 
 interface VoiceRecorderProps {
   onRecordingComplete: (audioBlob: Blob) => void;
@@ -65,7 +66,7 @@ export default function VoiceRecorder({ onRecordingComplete, isDisabled = false 
       
     } catch (error) {
       console.error('Error accessing microphone:', error);
-      alert('Could not access microphone. Please check your browser permissions.');
+      toast.error('Microphone Access', 'Could not access microphone. Please check your browser permissions.');
     }
   };
 

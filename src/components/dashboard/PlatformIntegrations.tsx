@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Spinner } from "@/components/common/Spinner";
+import { toast } from "@/store/toastStore";
 import {
   WhatsAppIntegrationModal,
   SlackIntegrationModal,
@@ -291,7 +292,7 @@ export default function PlatformIntegrations({
                               navigator.clipboard.writeText(
                                 getWebsiteEmbedCode()
                               );
-                              alert("Embed code copied to clipboard!");
+                              toast.success("Copied!", "Embed code copied to clipboard!");
                             }}
                             className="inline-flex items-center px-2.5 py-1.5 border border-gray-300 text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50"
                           >

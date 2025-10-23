@@ -7,7 +7,8 @@ export function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
 
   // Define protected paths that require authentication
-  const isProtectedPath = path.startsWith("/dashboard") || path.startsWith("/chatagent");
+  const isProtectedPath =
+    path.startsWith("/dashboard") || path.startsWith("/chatagent");
 
   // Define auth paths
   const isAuthPath = path.startsWith("/auth/");
@@ -25,13 +26,20 @@ export function middleware(request: NextRequest) {
   // If accessing protected path without token, redirect to login
   if (isProtectedPath && !token) {
     const url = new URL("/auth/login", request.url);
-    url.searchParams.set("redirect", encodeURI(request.nextUrl.pathname));
+    url.searchParams.set(
+      "redirect",
+      encodeURIComponent(request.nextUrl.pathname + request.nextUrl.search)
+    );
     return NextResponse.redirect(url);
   }
 
-  // If logged in and trying to access auth pages, redirect to dashboard
+  // If logged in and trying to access auth pages, redirect to dashboard or intended page
   if (token && isAuthPath) {
-    return NextResponse.redirect(new URL("/dashboard", request.url));
+    const redirectTo = request.nextUrl.searchParams.get("redirect");
+    const targetUrl = redirectTo
+      ? decodeURIComponent(redirectTo)
+      : "/dashboard";
+    return NextResponse.redirect(new URL(targetUrl, request.url));
   }
 
   return NextResponse.next();
@@ -39,14 +47,5 @@ export function middleware(request: NextRequest) {
 
 // See "Matching Paths" below to learn more
 export const config = {
-  matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * - public folder
-     */
-    "/((?!_next/static|_next/image|favicon.ico|public).*)",
-  ],
+  matcher: ["/((?!_next/static|_next/image|favicon.ico|public|v1).*)"],
 };

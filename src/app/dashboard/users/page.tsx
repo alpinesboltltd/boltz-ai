@@ -10,19 +10,24 @@ import {
   PhoneIcon,
   UserPlusIcon,
   XMarkIcon,
+  InformationCircleIcon,
 } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import UserForm from "@/components/form/userForm";
+import { useUserPermissions } from "@/hooks/useUserPermissions";
+import { UserRoles } from "@/types";
 
 interface User {
   id: string;
   name: string;
   email: string;
-  role: string;
+  role: UserRoles;
   status: "active" | "inactive";
-  lastActive: string;
+  lastActive: null | string;
   phone?: string;
   avatar?: string;
+  whatsapp?: string;
+  onlineStatus?: boolean;
 }
 
 export default function UsersPage() {
@@ -37,6 +42,12 @@ export default function UsersPage() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [userToDelete, setUserToDelete] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [selectedUserInfo, setSelectedUserInfo] = useState<User | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Mock current user - in production, get from auth context
+  const currentUserRole = UserRoles.superAdmin; // Change to test different roles
+  const permissions = useUserPermissions({ currentUserRole });
 
   useEffect(() => {
     async function loadUsers() {
@@ -48,9 +59,9 @@ export default function UsersPage() {
         // For development, use mock data
         await new Promise((resolve) => setTimeout(resolve, 1000));
 
-        const roles = ["Admin", "Editor", "Viewer"];
+        const roles = [UserRoles.staff, UserRoles.admin];
         const mockUsers = Array.from({ length: 20 }, (_, i) => {
-          const roleIndex = i % 3;
+          const roleIndex = i % 2;
           return {
             id: `user_${i}`,
             name: `User ${i + 1}`,
@@ -61,7 +72,9 @@ export default function UsersPage() {
               Date.now() - Math.floor(Math.random() * 30) * 24 * 60 * 60 * 1000
             ).toISOString(),
             phone: `+1 ${Math.floor(Math.random() * 900) + 100}-${Math.floor(Math.random() * 900) + 100}-${Math.floor(Math.random() * 9000) + 1000}`,
+            whatsapp: `+1 ${Math.floor(Math.random() * 900) + 100}-${Math.floor(Math.random() * 900) + 100}-${Math.floor(Math.random() * 9000) + 1000}`,
             avatar: `https://i.pravatar.cc/150?u=${i}`,
+            onlineStatus: Math.random() > 0.5,
           } as User;
         });
 
@@ -76,18 +89,85 @@ export default function UsersPage() {
     loadUsers();
   }, []);
 
+  const handleCreateUser = async (data: {
+    name: string;
+    email: string;
+    phone?: string;
+    whatsapp?: string;
+    role: UserRoles;
+  }) => {
+    setIsSubmitting(true);
+    try {
+      // In production, call API
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      const newUser: User = {
+        id: `user_${Date.now()}`,
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        whatsapp: data.whatsapp,
+        role: data.role,
+        status: "active",
+        lastActive: null,
+        avatar: `https://i.pravatar.cc/150?u=${Date.now()}`,
+        onlineStatus: false,
+      };
+
+      setUsers((prev) => [...prev, newUser]);
+      setShowForm(false);
+    } catch (error) {
+      console.error("Failed to create user:", error);
+      throw error;
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleUpdateUser = async (data: {
+    name: string;
+    email: string;
+    phone?: string;
+    whatsapp?: string;
+    role: UserRoles;
+  }) => {
+    if (!userToEdit) return;
+
+    setIsSubmitting(true);
+    try {
+      // In production, call API
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      setUsers((prev) =>
+        prev.map((user) =>
+          user.id === userToEdit.id
+            ? {
+                ...user,
+                name: data.name,
+                email: data.email,
+                phone: data.phone,
+                whatsapp: data.whatsapp,
+                role: data.role,
+              }
+            : user
+        )
+      );
+      setEditForm(false);
+      setUserToEdit(null);
+    } catch (error) {
+      console.error("Failed to update user:", error);
+      throw error;
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const handleDeleteUser = async () => {
-    if (!userToDelete) return;
+    if (!userToDelete || !permissions.canDeleteUsers) return;
 
     setIsDeleting(true);
-
     try {
-      // In production, this would call the real API
-      // await fetch(`/api/users/${userToDelete}`, {
-      //   method: 'DELETE'
-      // });
-
-      // For development, simulate API call
+      // In production, call API
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       setUsers(users.filter((user) => user.id !== userToDelete));
@@ -132,7 +212,8 @@ export default function UsersPage() {
             role and status.
           </p>
         </div>
-        <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
+
+        {permissions.canCreateUsers && (
           <button
             type="button"
             onClick={() => setShowForm(true)}
@@ -141,7 +222,7 @@ export default function UsersPage() {
             <UserPlusIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
             Add User
           </button>
-        </div>
+        )}
       </div>
       {/* Add User Modal */}
       {showForm && (
@@ -165,7 +246,12 @@ export default function UsersPage() {
               </button>
             </div>
             <div className="p-6">
-              <UserForm />
+              <UserForm
+                currentUserRole={currentUserRole}
+                onSubmit={handleCreateUser}
+                onCancel={() => setShowForm(false)}
+                isLoading={isSubmitting}
+              />
             </div>
           </div>
         </div>
@@ -216,8 +302,7 @@ export default function UsersPage() {
               >
                 <option value="all">All Roles</option>
                 <option value="admin">Admin</option>
-                <option value="editor">Editor</option>
-                <option value="viewer">Viewer</option>
+                <option value="staff">Staff</option>
               </select>
             </div>
 
@@ -287,19 +372,39 @@ export default function UsersPage() {
                     <tr key={user.id}>
                       <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
                         <div className="flex items-center">
-                          <div className="h-10 w-10 flex-shrink-0">
+                          <div className="relative h-10 w-10 flex-shrink-0">
                             {user.avatar ? (
-                              <Image
-                                height={40}
-                                width={40}
-                                className="h-10 w-10 rounded-full"
-                                src={user.avatar}
-                                alt={user.name}
-                              />
+                              <>
+                                <Image
+                                  height={40}
+                                  width={40}
+                                  className="h-10 w-10 rounded-full"
+                                  src={user.avatar}
+                                  alt={user.name}
+                                />
+                                {/* Status Dot */}
+                                <span
+                                  className={`absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-white ${
+                                    user.onlineStatus
+                                      ? "bg-green-500"
+                                      : "bg-yellow-500"
+                                  }`}
+                                ></span>
+                              </>
                             ) : (
-                              <div className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
-                                <UserIcon className="h-6 w-6 text-gray-400" />
-                              </div>
+                              <>
+                                <div className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
+                                  <UserIcon className="h-6 w-6 text-gray-400" />
+                                </div>
+                                {/* Status Dot */}
+                                <span
+                                  className={`absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-white ${
+                                    user.onlineStatus
+                                      ? "bg-green-500"
+                                      : "bg-yellow-500"
+                                  }`}
+                                ></span>
+                              </>
                             )}
                           </div>
                           <div className="ml-4">
@@ -313,14 +418,12 @@ export default function UsersPage() {
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                         <span
                           className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${
-                            user.role === "Admin"
-                              ? "bg-purple-100 text-purple-800"
-                              : user.role === "Editor"
-                                ? "bg-blue-100 text-blue-800"
-                                : "bg-green-100 text-green-800"
+                            user.role === UserRoles.admin
+                              ? "bg-blue-100 text-blue-800"
+                              : "bg-green-100 text-green-800"
                           }`}
                         >
-                          {user.role}
+                          {user.role === UserRoles.admin ? "Admin" : "Staff"}
                         </span>
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
@@ -335,17 +438,29 @@ export default function UsersPage() {
                         </span>
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        {new Date(user.lastActive).toLocaleDateString()}
+                        {user.lastActive
+                          ? new Date(user.lastActive).toLocaleDateString()
+                          : "N/A"}
                       </td>
                       <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                         <div className="flex justify-end space-x-3">
                           <button
                             type="button"
                             className="text-gray-400 hover:text-gray-500"
-                            title="Email"
+                            title="Role Info"
+                            onClick={() => setSelectedUserInfo(user)}
                           >
-                            <EnvelopeIcon className="h-5 w-5" />
+                            <InformationCircleIcon className="h-5 w-5" />
                           </button>
+                          {user.email && (
+                            <button
+                              type="button"
+                              className="text-gray-400 hover:text-gray-500"
+                              title="Email"
+                            >
+                              <EnvelopeIcon className="h-5 w-5" />
+                            </button>
+                          )}
                           {user.phone && (
                             <button
                               type="button"
@@ -355,29 +470,32 @@ export default function UsersPage() {
                               <PhoneIcon className="h-5 w-5" />
                             </button>
                           )}
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setUserToEdit(user);
-                              setEditForm(true);
-                            }}
-                            className="text-primary-600 hover:text-primary-900"
-                            title="Edit"
-                          >
-                            <PencilIcon className="h-5 w-5" />
-                          </button>
-
-                          <button
-                            type="button"
-                            className="text-red-600 hover:text-red-900"
-                            title="Delete"
-                            onClick={() => {
-                              setUserToDelete(user.id);
-                              setShowDeleteModal(true);
-                            }}
-                          >
-                            <TrashIcon className="h-5 w-5" />
-                          </button>
+                          {permissions.canEditUsers && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setUserToEdit(user);
+                                setEditForm(true);
+                              }}
+                              className="text-primary-600 hover:text-primary-900"
+                              title="Edit"
+                            >
+                              <PencilIcon className="h-5 w-5" />
+                            </button>
+                          )}
+                          {permissions.canDeleteUsers && (
+                            <button
+                              type="button"
+                              className="text-red-600 hover:text-red-900"
+                              title="Delete"
+                              onClick={() => {
+                                setUserToDelete(user.id);
+                                setShowDeleteModal(true);
+                              }}
+                            >
+                              <TrashIcon className="h-5 w-5" />
+                            </button>
+                          )}
                         </div>
                       </td>
                     </tr>
@@ -409,7 +527,16 @@ export default function UsersPage() {
                           </button>
                         </div>
                         <div className="p-6">
-                          <UserForm user={userToEdit} />
+                          <UserForm
+                            user={userToEdit}
+                            currentUserRole={currentUserRole}
+                            onSubmit={handleUpdateUser}
+                            onCancel={() => {
+                              setEditForm(false);
+                              setUserToEdit(null);
+                            }}
+                            isLoading={isSubmitting}
+                          />
                         </div>
                       </div>
                     </div>
@@ -419,6 +546,73 @@ export default function UsersPage() {
             </div>
           </div>
         </div>
+        {/* Role Info Modal (per-user) */}
+        {selectedUserInfo && (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50"
+            onClick={() => setSelectedUserInfo(null)}
+          >
+            <div
+              className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 relative"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between p-4 border-b border-gray-200">
+                <h3 className="text-lg font-semibold text-gray-900">
+                  {selectedUserInfo.name} —{" "}
+                  {selectedUserInfo.role === UserRoles.admin
+                    ? "Admin"
+                    : "Staff"}
+                </h3>
+                <button
+                  onClick={() => setSelectedUserInfo(null)}
+                  className="text-gray-500 hover:text-red-500"
+                  aria-label="Close"
+                >
+                  <XMarkIcon className="h-5 w-5" />
+                </button>
+              </div>
+
+              <div className="p-4 text-sm text-gray-700 space-y-3">
+                {(() => {
+                  const perms: Record<UserRoles, string[]> = {
+                    [UserRoles.superAdmin]: [
+                      "Full system access",
+                      "Create all user types",
+                      "Delete any user",
+                      "Manage all agents",
+                    ],
+                    [UserRoles.admin]: [
+                      "Create staff users",
+                      "Create agents",
+                      "Retrain agents",
+                      "Delete agents",
+                      "Reply to messages",
+                    ],
+                    [UserRoles.staff]: [
+                      "Retrain agents",
+                      "Reply to messages",
+                      "Manage content",
+                    ],
+                    [UserRoles.user]: ["Basic user access"],
+                  };
+                  const list = perms[selectedUserInfo.role] || [
+                    "No permissions defined",
+                  ];
+                  return (
+                    <>
+                      <p className="text-sm text-gray-600">Role permissions:</p>
+                      <ul className="list-disc ml-5 space-y-1">
+                        {list.map((p) => (
+                          <li key={p}>{p}</li>
+                        ))}
+                      </ul>
+                    </>
+                  );
+                })()}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Delete Confirmation Modal */}
