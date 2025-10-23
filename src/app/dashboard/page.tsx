@@ -20,6 +20,7 @@ enum ActiveTabs {
 }
 
 export default function Dashboard() {
+  const router = useRouter();
   const user = useCurrentUser();
   const { token } = useAuthStore();
   const { agents, setAgents, deleteAgent } = useAgentStore();
@@ -65,13 +66,54 @@ export default function Dashboard() {
     },
     { scope: containerRef }
   );
+  useGSAP(
+    () => {
+      if (button1Ref.current && button2Ref.current) {
+        gsap.set([button1Ref.current, button2Ref.current], {
+          opacity: 0,
+          scale: 0,
+          y: -20,
+        });
+      }
+    },
+    { scope: containerRef }
+  );
 
   // Animation for dropdown toggle
   useGSAP(
     () => {
       if (button1Ref.current && button2Ref.current) {
         const tl = gsap.timeline();
+  useGSAP(
+    () => {
+      if (button1Ref.current && button2Ref.current) {
+        const tl = gsap.timeline();
 
+        if (isOpen) {
+          // Opening animation
+          tl.to([button1Ref.current, button2Ref.current], {
+            opacity: 1,
+            scale: 1,
+            y: 0,
+            duration: 0.5,
+            stagger: 0.12,
+            ease: "back.out(1.7)",
+          });
+        } else {
+          // Closing animation
+          tl.to([button2Ref.current, button1Ref.current], {
+            opacity: 0,
+            scale: 0,
+            y: -20,
+            duration: 0.4,
+            stagger: 0.1,
+            ease: "back.in(1.7)",
+          });
+        }
+      }
+    },
+    { dependencies: [isOpen], scope: containerRef }
+  );
         if (isOpen) {
           // Opening animation
           tl.to([button1Ref.current, button2Ref.current], {
@@ -128,6 +170,8 @@ export default function Dashboard() {
   const handleDropdown = () => {
     setIsOpen((prev) => !prev);
   };
+    setIsOpen((prev) => !prev);
+  };
 
   return (
     <>
@@ -174,12 +218,18 @@ export default function Dashboard() {
               ref={containerRef}
               className="relative mr-20 flex flex-col justify-center items-center"
             >
+            <div
+              ref={containerRef}
+              className="relative mr-20 flex flex-col justify-center items-center"
+            >
               <button
                 onClick={handleDropdown}
-                className="inline-flex items-center justify-center rounded-md border border-transparent bg-primary-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none"
+                disabled={isLoading}
+                className="inline-flex items-center justify-center rounded-md border border-transparent bg-primary-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                New Agents
+                {isLoading ? "Creating..." : "New Agents"}
               </button>
+
 
               <div className="absolute flex gap-2 mt-24 z-10">
                 <div ref={button1Ref}>
@@ -239,16 +289,8 @@ export default function Dashboard() {
                               handleDeleteAgent(chatagent.id, chatagent.name);
                             }}
                           >
-                            {" "}
                             <Trash2 className="text-red-400" />
                           </button>
-                          <div className={`ml-2 flex-shrink-0 flex`}>
-                            {/*<p
-                              className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full`}
-                            >
-                              {chatagent.status}
-                            </p>*/}
-                          </div>
                         </div>
                       </div>
                     </Link>
@@ -256,7 +298,6 @@ export default function Dashboard() {
                 ))}
               </ul>
             ) : (
-              // TODO: add a proper cta
               <div>Create your autonomous agent</div>
             )}
           </div>

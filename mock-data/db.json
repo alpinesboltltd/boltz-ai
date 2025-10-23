@@ -50,19 +50,6 @@
       "updated_at": "2025-10-16T22:44:40.437Z"
     },
     {
-      "id": "nb848xqfz",
-      "user_id": "9c1a7782-a3c9-403f-a011-ff3436b2aebb",
-      "name": "test",
-      "description": "test",
-      "agent_type": "text",
-      "ai_model": "grok-3",
-      "ai_provider": "xAI",
-      "credits_per_1k": 25,
-      "status": "active",
-      "created_at": "2025-10-17T20:54:51.196Z",
-      "updated_at": "2025-10-17T20:54:58.064Z"
-    },
-    {
       "id": "umejxpd3a",
       "user_id": "9c1a7782-a3c9-403f-a011-ff3436b2aebb",
       "name": "Victor Arinde",
@@ -74,32 +61,6 @@
       "status": "active",
       "created_at": "2025-10-20T22:54:45.860Z",
       "updated_at": "2025-10-20T22:55:04.093Z"
-    },
-    {
-      "id": "8l0rpio56",
-      "user_id": "9c1a7782-a3c9-403f-a011-ff3436b2aebb",
-      "name": "Victor Arinde",
-      "description": "jvj",
-      "agent_type": "text",
-      "ai_model": "o1",
-      "ai_provider": "OpenAI",
-      "credits_per_1k": 20,
-      "status": "draft",
-      "created_at": "2025-10-20T22:55:58.131Z",
-      "updated_at": "2025-10-20T22:56:03.314Z"
-    },
-    {
-      "id": "aqlboz9x8",
-      "user_id": "9c1a7782-a3c9-403f-a011-ff3436b2aebb",
-      "name": "Victor Arinde",
-      "description": "b nnb",
-      "agent_type": "text",
-      "ai_model": "grok-3",
-      "ai_provider": "xAI",
-      "credits_per_1k": 25,
-      "status": "draft",
-      "created_at": "2025-10-20T22:56:32.375Z",
-      "updated_at": "2025-10-20T22:56:34.599Z"
     }
   ],
   "agent_appearance": [
@@ -297,6 +258,32 @@
       "font_family": "Inter",
       "created_at": "2025-10-20T22:55:04.093Z",
       "updated_at": "2025-10-20T22:55:04.093Z"
+    },
+    {
+      "id": "be38",
+      "agent_id": "spd4gfniw",
+      "welcome_message": "Hi! I'm Boltz, your AI assistant. How can I help you today?",
+      "primary_color": "#6366f1",
+      "position": "bottom-right",
+      "icon_size": "medium",
+      "bubble_style": "round",
+      "chat_icon": "default",
+      "font_family": "Inter",
+      "created_at": "2025-10-21T21:27:56.256Z",
+      "updated_at": "2025-10-21T21:27:56.256Z"
+    },
+    {
+      "id": "5938",
+      "agent_id": "94uglzqx1",
+      "welcome_message": "Hi! I'm Boltz, your AI assistant. How can I help you today?",
+      "primary_color": "#6366f1",
+      "position": "bottom-right",
+      "icon_size": "medium",
+      "bubble_style": "round",
+      "chat_icon": "default",
+      "font_family": "Inter",
+      "created_at": "2025-10-21T21:28:56.374Z",
+      "updated_at": "2025-10-21T21:28:56.374Z"
     }
   ],
   "agent_behavior": [
@@ -505,6 +492,34 @@
       "max_tokens": 500,
       "created_at": "2025-10-20T22:55:04.093Z",
       "updated_at": "2025-10-20T22:55:04.093Z"
+    },
+    {
+      "id": "cf2b",
+      "agent_id": "spd4gfniw",
+      "initial_messages": "[\"Hi! I'm your AI assistant. How can I help you today?\"]",
+      "fallback_message": "I'm sorry, I don't understand that question. Could you rephrase it?",
+      "enable_human_handoff": false,
+      "offline_message": "Our team is currently offline. Please leave a message and we'll get back to you.",
+      "system_instruction": "You are a helpful AI assistant focused on providing excellent customer support. Be friendly, professional, and helpful.",
+      "prompt_template": "{{conversation}}",
+      "temperature": 0.7,
+      "max_tokens": 500,
+      "created_at": "2025-10-21T21:27:56.256Z",
+      "updated_at": "2025-10-21T21:27:56.256Z"
+    },
+    {
+      "id": "225d",
+      "agent_id": "94uglzqx1",
+      "initial_messages": "[\"Hi! I'm your AI assistant. How can I help you today?\"]",
+      "fallback_message": "I'm sorry, I don't understand that question. Could you rephrase it?",
+      "enable_human_handoff": false,
+      "offline_message": "Our team is currently offline. Please leave a message and we'll get back to you.",
+      "system_instruction": "You are a helpful AI assistant focused on providing excellent customer support. Be friendly, professional, and helpful.",
+      "prompt_template": "{{conversation}}",
+      "temperature": 0.7,
+      "max_tokens": 500,
+      "created_at": "2025-10-21T21:28:56.374Z",
+      "updated_at": "2025-10-21T21:28:56.374Z"
     }
   ],
   "agent_integrations": [
@@ -696,6 +711,26 @@
       "response_rate": 0,
       "conversions_count": 0,
       "last_calculated_at": "2025-10-20T22:55:04.093Z"
+    },
+    {
+      "id": "aadd",
+      "agent_id": "spd4gfniw",
+      "total_messages": 0,
+      "unique_users": 0,
+      "average_rating": 0,
+      "response_rate": 0,
+      "conversions_count": 0,
+      "last_calculated_at": "2025-10-21T21:27:56.256Z"
+    },
+    {
+      "id": "aa9a",
+      "agent_id": "94uglzqx1",
+      "total_messages": 0,
+      "unique_users": 0,
+      "average_rating": 0,
+      "response_rate": 0,
+      "conversions_count": 0,
+      "last_calculated_at": "2025-10-21T21:28:56.374Z"
     }
   ],
   "conversations": [
