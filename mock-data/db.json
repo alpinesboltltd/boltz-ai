@@ -74,6 +74,32 @@
       "status": "active",
       "created_at": "2025-10-21T22:54:12.698Z",
       "updated_at": "2025-10-21T22:54:12.698Z"
+    },
+    {
+      "id": "aunfp3abc",
+      "user_id": "9c1a7782-a3c9-403f-a011-ff3436b2aebb",
+      "name": "Patricia",
+      "description": "Compassionate healthcare advisor specializing in Medicare plans and coverage options",
+      "agent_type": "text",
+      "ai_model": "gpt-3.5-turbo",
+      "ai_provider": "OpenAI",
+      "credits_per_1k": 10,
+      "status": "active",
+      "created_at": "2025-10-23T20:52:03.536Z",
+      "updated_at": "2025-10-23T20:52:03.536Z"
+    },
+    {
+      "id": "4i5duflf1",
+      "user_id": "9c1a7782-a3c9-403f-a011-ff3436b2aebb",
+      "name": "Ben",
+      "description": "Energetic sales expert who helps customers discover perfect products and close deals",
+      "agent_type": "text",
+      "ai_model": "gpt-3.5-turbo",
+      "ai_provider": "OpenAI",
+      "credits_per_1k": 10,
+      "status": "active",
+      "created_at": "2025-10-23T21:06:41.632Z",
+      "updated_at": "2025-10-23T21:06:41.632Z"
     }
   ],
   "agent_appearance": [
@@ -336,6 +362,32 @@
       "font_family": "Inter",
       "created_at": "2025-10-21T21:43:16.318Z",
       "updated_at": "2025-10-21T21:43:16.318Z"
+    },
+    {
+      "id": "6f65",
+      "agent_id": "aunfp3abc",
+      "welcome_message": "Hello, I'm Dr. Williams 👋 I'm here to help you understand your Medicare options in plain English. What questions do you have?",
+      "primary_color": "#ef4444",
+      "position": "bottom-right",
+      "icon_size": "medium",
+      "bubble_style": "round",
+      "chat_icon": "default",
+      "font_family": "Inter",
+      "created_at": "2025-10-23T20:52:03.536Z",
+      "updated_at": "2025-10-23T20:52:03.536Z"
+    },
+    {
+      "id": "c516",
+      "agent_id": "4i5duflf1",
+      "welcome_message": "Hey there! Marcus here 🌟 I'd love to help you find exactly what you need. What brings you in today?",
+      "primary_color": "#10b981",
+      "position": "bottom-right",
+      "icon_size": "medium",
+      "bubble_style": "round",
+      "chat_icon": "default",
+      "font_family": "Inter",
+      "created_at": "2025-10-23T21:06:41.632Z",
+      "updated_at": "2025-10-23T21:06:41.632Z"
     }
   ],
   "agent_behavior": [
@@ -642,6 +694,34 @@
       "max_tokens": 500,
       "created_at": "2025-10-21T22:54:12.698Z",
       "updated_at": "2025-10-21T22:54:12.698Z"
+    },
+    {
+      "id": "ab88",
+      "agent_id": "aunfp3abc",
+      "initial_messages": "[\"Hello, I'm Dr. Williams 👋 I'm here to help you understand your Medicare options in plain English. What questions do you have?\"]",
+      "fallback_message": "That's a really important question for your specific situation. I'd recommend speaking with one of our licensed Medicare advisors who can give you personalized guidance. Shall I connect you?",
+      "enable_human_handoff": false,
+      "offline_message": "Our team is currently offline. Please leave a message and we'll get back to you.",
+      "system_instruction": "You are Patricia, a licensed healthcare advisor with 15 years of experience helping people navigate Medicare. You have a medical background and a gift for explaining complex healthcare terms in ways anyone can understand. You're patient, compassionate, and always remind people to verify important details with official sources. You genuinely care about helping people make the best healthcare decisions.",
+      "prompt_template": "{{conversation}}",
+      "temperature": 0.4,
+      "max_tokens": 600,
+      "created_at": "2025-10-23T20:52:03.536Z",
+      "updated_at": "2025-10-23T20:52:03.536Z"
+    },
+    {
+      "id": "41d4",
+      "agent_id": "4i5duflf1",
+      "initial_messages": "[\"Hey there! Marcus here 🌟 I'd love to help you find exactly what you need. What brings you in today?\"]",
+      "fallback_message": "Great question! Let me get you connected with our product specialist who can dive deeper into those details.",
+      "enable_human_handoff": false,
+      "offline_message": "Our team is currently offline. Please leave a message and we'll get back to you.",
+      "system_instruction": "You are Ben, a charismatic sales professional with a passion for helping customers find the right solutions. You've been in sales for 8 years and pride yourself on understanding customer needs. You're enthusiastic but never pushy, and you love celebrating when customers find what they're looking for. You ask insightful questions, highlight key benefits, and always focus on value over features.",
+      "prompt_template": "{{conversation}}",
+      "temperature": 0.7,
+      "max_tokens": 500,
+      "created_at": "2025-10-23T21:06:41.632Z",
+      "updated_at": "2025-10-23T21:06:41.632Z"
     }
   ],
   "agent_integrations": [
@@ -903,6 +983,26 @@
       "response_rate": 0,
       "conversions_count": 0,
       "last_calculated_at": "2025-10-21T22:54:12.698Z"
+    },
+    {
+      "id": "1565",
+      "agent_id": "aunfp3abc",
+      "total_messages": 0,
+      "unique_users": 0,
+      "average_rating": 0,
+      "response_rate": 0,
+      "conversions_count": 0,
+      "last_calculated_at": "2025-10-23T20:52:03.536Z"
+    },
+    {
+      "id": "b42c",
+      "agent_id": "4i5duflf1",
+      "total_messages": 0,
+      "unique_users": 0,
+      "average_rating": 0,
+      "response_rate": 0,
+      "conversions_count": 0,
+      "last_calculated_at": "2025-10-23T21:06:41.632Z"
     }
   ],
   "conversations": [

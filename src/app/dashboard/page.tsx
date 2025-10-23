@@ -209,8 +209,8 @@ export default function Dashboard() {
   };
 
   const handleUseTemplate = () => {
-    setIsOpen(false);
-    setShowTemplateModal(true); 
+    setIsOpen(false); // Close dropdown
+    setShowTemplateModal(true); // Open template modal
   };
 
   return (
@@ -315,10 +315,10 @@ export default function Dashboard() {
                     >
                       <div className="relative bg-white rounded-2xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                         {/* Status Badge - Top Right */}
-                        <div className="absolute top-3 right-1 z-10">
+                        <div className="absolute top-3 right-3 z-10">
                           <span
                             className={cn(
-                              "inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-xs font-medium",
+                              "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium",
                               chatagent.status === "active"
                                 ? "bg-green-100 text-green-700 ring-1 ring-green-600/20"
                                 : "bg-yellow-100 text-yellow-700 ring-1 ring-yellow-600/20"
@@ -357,15 +357,13 @@ export default function Dashboard() {
                         </div>
 
                         {/* Name Section */}
-                        <div className={cn(
-                                "p-4 border-t bg-gray-800 border-gray-100",
-                                chatagent.status === "active"
-                                  ? "bg-green-100"
-                                  : "bg-yellow-600"
-                              )}>
+                        <div className="p-4 bg-white border-t border-gray-100">
                           <h3 className="text-base font-semibold text-gray-900 truncate text-center mb-1">
                             {chatagent.name}
                           </h3>
+                          <p className="text-xs text-gray-500 text-center">
+                            Click to configure
+                          </p>
                         </div>
 
                         {/* Hover Overlay Effect */}
