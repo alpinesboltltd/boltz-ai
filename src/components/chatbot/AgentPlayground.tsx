@@ -18,9 +18,7 @@ import {
 } from "@/types/agent";
 import { Chat, agentsAPI } from "@/lib/api";
 import { playgroundAPI } from "@/lib/playground-api";
-import { useParams } from "next/navigation";
-import { useAgentStore } from "@/store/agentStore";
-import { useAgentDetailStore } from "@/store/agentDetailStore";
+import { useAgentData, useAgentBehavior } from "@/store/agentDetailStore";
 import { SYSTEM_PROMPT_TEMPLATES } from "@/data/systemPrompts";
 import { AI_MODELS, AIModel } from "@/mock-data/ai-models";
 import Image from "next/image";
@@ -28,10 +26,9 @@ import Select from "react-select";
 import { Message } from "@/types";
 
 export function AgentPlayground() {
-  const agentId = useParams().id as string;
-  const { getAgent } = useAgentStore();
-  const { fetchAppearance } = useAgentDetailStore();
-  const [agent, setAgent] = useState<Agent>();
+  const agent = useAgentData();
+  const behavior = useAgentBehavior();
+  const agentId = agent?.id;
   const [messages, setMessages] = useState<any[]>([]);
   const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
@@ -50,30 +47,29 @@ export function AgentPlayground() {
   const [testQueries, setTestQueries] = useState<string[]>([]);
 
   useEffect(() => {
-    const { agent: agnt } = getAgent(agentId);
-    if (agnt) {
-      setAgent(agnt);
-      setConfig((prev) => ({ ...prev, model: agnt.ai_model }));
+    if (agent) {
+      setConfig((prev) => ({ ...prev, model: agent.ai_model }));
     }
-    fetchAppearance(agentId);
-    loadBehaviorConfig();
-  }, [agentId, getAgent, fetchAppearance]);
+    if (agentId) {
+      loadBehaviorConfig();
+    }
+  }, [agent, agentId]);
+
+  useEffect(() => {
+    if (behavior) {
+      setConfig({
+        model: agent?.ai_model || "GPT-3.5 Turbo",
+        temperature: behavior.temperature || 0.7,
+        maxTokens: behavior.max_tokens || 1000,
+        systemInstruction: behavior.system_instruction || SYSTEM_PROMPT_TEMPLATES[0].template,
+        selectedTemplate: behavior.prompt_template || "ai_agent",
+      });
+    }
+  }, [behavior, agent?.ai_model]);
 
   const loadBehaviorConfig = async () => {
+    if (!agentId) return;
     try {
-      const behaviorConfig = await playgroundAPI.loadBehaviorConfig(agentId);
-      if (behaviorConfig) {
-        setConfig({
-          model: agent?.ai_model || "GPT-3.5 Turbo",
-          temperature: behaviorConfig.temperature || 0.7,
-          maxTokens: behaviorConfig.max_tokens || 1000,
-          systemInstruction:
-            behaviorConfig.system_instruction ||
-            SYSTEM_PROMPT_TEMPLATES[0].template,
-          selectedTemplate: behaviorConfig.prompt_template || "ai_agent",
-        });
-      }
-
       // Load test queries
       const queries = await playgroundAPI.loadTestQueries(agentId);
       setTestQueries(queries);
@@ -106,6 +102,7 @@ export function AgentPlayground() {
     setMessages((prev) => [...prev, userMessage]);
 
     try {
+      if (!agentId) return;
       const { reply } = await Chat.sendMessage(query, messages, agentId);
 
       const assistantMessage = {
@@ -133,6 +130,7 @@ export function AgentPlayground() {
   };
 
   const handleConfigSave = async () => {
+    if (!agentId) return;
     try {
       // Update agent model if changed
       if (agent && config.model !== agent.ai_model) {
@@ -175,6 +173,7 @@ export function AgentPlayground() {
   };
 
   const saveTestQueries = async (queries: string[]) => {
+    if (!agentId) return;
     await playgroundAPI.saveTestQueries(agentId, queries);
   };
 

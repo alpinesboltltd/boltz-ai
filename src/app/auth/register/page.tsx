@@ -15,7 +15,7 @@ import { toast } from "@/store/toastStore";
 export default function RegisterPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const { setUser } = useAuthStore();
+  const { setUser, setToken } = useAuthStore();
   const {
     register,
     handleSubmit,
@@ -57,8 +57,9 @@ export default function RegisterPage() {
       return;
     }
     try {
-      const u = await socialSignIn(method);
+      const { user: u, token } = await socialSignIn(method);
       const user = { ...u, role: UserRoles.user, plan: SubscriptionPlans.free };
+      setToken(token);
       setUser(user);
       toast.success("Welcome!", "Your account has been created successfully");
       router.push("/dashboard");

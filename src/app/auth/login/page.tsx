@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { SigninFormInputs, signinSchema } from "@/types/schema";
 import { useForm } from "react-hook-form";
@@ -17,7 +17,16 @@ import { toast } from "@/store/toastStore";
 export default function LoginPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { setUser, setToken } = useAuthStore();
+  const { setUser, setToken, clearAuth } = useAuthStore();
+  // Check if redirected from session expired
+  const sessionExpired = searchParams?.get("session_expired") === "true";
+
+  // Clear auth on component mount if session expired
+  useEffect(() => {
+    if (sessionExpired) {
+      clearAuth();
+    }
+  }, [sessionExpired, clearAuth]);
 
   const {
     register,
@@ -33,9 +42,6 @@ export default function LoginPage() {
   });
 
   const [loading, setLoading] = useState(false);
-
-  // Check if redirected from session expired
-  const sessionExpired = searchParams?.get("session_expired") === "true";
 
   const Submit = async (value: SigninFormInputs) => {
     setLoading(true);
@@ -54,15 +60,17 @@ export default function LoginPage() {
       const data = await response.json();
       const { user, token } = data;
 
-      // Store token in cookie for middleware
-      document.cookie = `auth_token=${token}; path=/; max-age=${7 * 24 * 60 * 60}; secure; samesite=strict`;
-
-      // Update auth store
       setToken(token);
       setUser({ ...user, plan: SubscriptionPlans.free });
 
       toast.success("Welcome back!", "You have been successfully signed in");
-      router.push("/dashboard");
+
+      // Redirect to intended page or dashboard
+      const redirectTo = searchParams?.get("redirect");
+      const targetUrl = redirectTo
+        ? decodeURIComponent(redirectTo)
+        : "/dashboard";
+      router.push(targetUrl);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Login failed";
       toast.error("Login Failed", errorMessage);
@@ -85,14 +93,17 @@ export default function LoginPage() {
 
       const user = { ...u, plan: SubscriptionPlans.free };
 
-      // Store token in cookie for middleware
-      document.cookie = `auth_token=${token}; path=/; max-age=${7 * 24 * 60 * 60}; secure; samesite=strict`;
-
-      // Update auth store
+      // Update auth store (setToken will handle localStorage and cookie)
       setToken(token);
       setUser({ ...user, plan: SubscriptionPlans.free });
       toast.success("Welcome back!", "You have been successfully signed in");
-      router.push("/dashboard");
+
+      // Redirect to intended page or dashboard
+      const redirectTo = searchParams?.get("redirect");
+      const targetUrl = redirectTo
+        ? decodeURIComponent(redirectTo)
+        : "/dashboard";
+      router.push(targetUrl);
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : "Social sign-in failed";

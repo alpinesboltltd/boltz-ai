@@ -75,12 +75,6 @@ export const agentApi = {
       body: JSON.stringify(data),
     });
   },
-  
-  async deleteAgent(id: string): Promise<void> {
-    await requestJSON<void>(`${API_BASE}/agents/${id}`, {
-      method: "DELETE",
-    });
-  },
 
   generateId(): string {
     return Math.random().toString(36).slice(2, 11);

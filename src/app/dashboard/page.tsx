@@ -8,8 +8,10 @@ import { agentsAPI } from "@/lib/api";
 import { agentApi } from "@/lib/agent-api";
 import { cn } from "@/lib/utils";
 import { useAgentStore } from "@/store/agentStore";
-import { useCurrentUser } from "@/store/authStore";
-import { Button } from "@/components/ui/Button"
+import { useAuthStore, useCurrentUser } from "@/store/authStore";
+import { Button } from "@/components/ui/Button";
+import { ConfirmationModal } from "@/components/ui/ConfirmationModal";
+import { toast } from "@/store/toastStore";
 
 enum ActiveTabs {
   AGENTS = "agents",
@@ -19,11 +21,17 @@ enum ActiveTabs {
 
 export default function Dashboard() {
   const user = useCurrentUser();
+  const { token } = useAuthStore();
   const { agents, setAgents, deleteAgent } = useAgentStore();
   const [activeTab, setActiveTab] = useState(ActiveTabs.AGENTS);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false); //state to nmonitor the two buttons dropdown
-  
+  const [deleteModal, setDeleteModal] = useState<{
+    isOpen: boolean;
+    agentId: string;
+    agentName: string;
+  }>({ isOpen: false, agentId: "", agentName: "" });
+
   // Refs for the two buttons
   const button1Ref = useRef<HTMLDivElement>(null);
   const button2Ref = useRef<HTMLDivElement>(null);
@@ -31,79 +39,95 @@ export default function Dashboard() {
 
   useEffect(() => {
     const getChatbot = async () => {
-      const { data } = await agentsAPI.getAll(user?.id);
-      console.log(data);
-      console.log(user?.id);
-      if (data) setAgents(data);
+      if (!user?.id || !token) return;
+
+      try {
+        const { agents } = await agentsAPI.getAll(user.id, token);
+        if (agents) setAgents(agents);
+      } catch (error) {
+        console.error("Failed to fetch agents:", error);
+      }
     };
 
     getChatbot();
-  }, []);
+  }, [user?.id, token, setAgents]);
 
   // Initialize buttons to hidden state
-  useGSAP(() => {
-    if (button1Ref.current && button2Ref.current) {
-      gsap.set([button1Ref.current, button2Ref.current], {
-        opacity: 0,
-        scale: 0,
-        y: -20,
-      });
-    }
-  }, { scope: containerRef });
-
-  // Animation for dropdown toggle
-  useGSAP(() => {
-    if (button1Ref.current && button2Ref.current) {
-      const tl = gsap.timeline();
-
-      if (isOpen) {
-        // Opening animation
-        tl.to([button1Ref.current, button2Ref.current], {
-          opacity: 1,
-          scale: 1,
-          y: 0,
-          duration: 0.5,
-          stagger: 0.12,
-          ease: 'back.out(1.7)',
-        });
-      } else {
-        // Closing animation
-        tl.to([button2Ref.current, button1Ref.current], {
+  useGSAP(
+    () => {
+      if (button1Ref.current && button2Ref.current) {
+        gsap.set([button1Ref.current, button2Ref.current], {
           opacity: 0,
           scale: 0,
           y: -20,
-          duration: 0.4,
-          stagger: 0.1,
-          ease: 'back.in(1.7)',
         });
       }
-    }
-  }, { dependencies: [isOpen], scope: containerRef });
+    },
+    { scope: containerRef }
+  );
 
-  const handleDeleteAgent = async (agentId: string, agentName: string) => {
-    if (
-      !window.confirm(
-        `Are you sure you want to permanently delete the agent "${agentName}"?`
-      )
-    ) {
-      //to be replaced with a proper modal
-      return;
-    }
+  // Animation for dropdown toggle
+  useGSAP(
+    () => {
+      if (button1Ref.current && button2Ref.current) {
+        const tl = gsap.timeline();
+
+        if (isOpen) {
+          // Opening animation
+          tl.to([button1Ref.current, button2Ref.current], {
+            opacity: 1,
+            scale: 1,
+            y: 0,
+            duration: 0.5,
+            stagger: 0.12,
+            ease: "back.out(1.7)",
+          });
+        } else {
+          // Closing animation
+          tl.to([button2Ref.current, button1Ref.current], {
+            opacity: 0,
+            scale: 0,
+            y: -20,
+            duration: 0.4,
+            stagger: 0.1,
+            ease: "back.in(1.7)",
+          });
+        }
+      }
+    },
+    { dependencies: [isOpen], scope: containerRef }
+  );
+
+  const handleDeleteAgent = (agentId: string, agentName: string) => {
+    setDeleteModal({ isOpen: true, agentId, agentName });
+  };
+
+  const confirmDelete = async () => {
     setIsLoading(true);
     try {
-      await agentApi.deleteAgent(agentId);
-      deleteAgent(agentId);
+      if (!token) throw Error("User not authenticated");
+
+      await agentsAPI.delete(deleteModal.agentId, token);
+      deleteAgent(deleteModal.agentId);
+      toast.success(
+        "Deletion Successful",
+        `${deleteModal.agentName} has been deleted successfully.`
+      );
+      setDeleteModal({ isOpen: false, agentId: "", agentName: "" });
     } catch (e) {
       console.error("Deletion failed:", e);
-      alert(`Unable to delete ${agentName}. Please check console for details.`);
+      toast.error(
+        "Deletion Failed",
+        `Unable to delete ${deleteModal.agentName}. Please check console for details.`
+      );
     } finally {
       setIsLoading(false);
     }
   };
 
   const handleDropdown = () => {
-    setIsOpen(prev => !prev);
-  }
+    setIsOpen((prev) => !prev);
+  };
 
   return (
     <>
@@ -146,23 +170,37 @@ export default function Dashboard() {
                 <div className="h-2 w-2 bg-yellow-500 rounded-full"></div>
               </div>
             </div>
-            <div ref={containerRef} className="relative mr-20 flex flex-col justify-center items-center">
+            <div
+              ref={containerRef}
+              className="relative mr-20 flex flex-col justify-center items-center"
+            >
               <button
                 onClick={handleDropdown}
                 className="inline-flex items-center justify-center rounded-md border border-transparent bg-primary-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none"
               >
                 New Agents
               </button>
-                
+
               <div className="absolute flex gap-2 mt-24 z-10">
                 <div ref={button1Ref}>
-                  <Button size="md" variant="primary" className="w-fit text-nowrap text-sm shadow-md">
+                  <Button
+                    size="md"
+                    variant="primary"
+                    className="w-fit text-nowrap text-sm shadow-md"
+                  >
                     <Link href="/dashboard/create"> Create new agent </Link>
                   </Button>
                 </div>
                 <div ref={button2Ref}>
-                  <Button size="md" variant="primary" className="w-fit text-nowrap text-sm shadow-md">
-                    <Link href="/dashboard/chatagent/nb848xqfz"> Use our template </Link>
+                  <Button
+                    size="md"
+                    variant="primary"
+                    className="w-fit text-nowrap text-sm shadow-md"
+                  >
+                    <Link href="/dashboard/chatagent/nb848xqfz">
+                      {" "}
+                      Use our template{" "}
+                    </Link>
                   </Button>
                 </div>
               </div>
@@ -224,6 +262,20 @@ export default function Dashboard() {
           </div>
         </div>
       )}
+
+      <ConfirmationModal
+        isOpen={deleteModal.isOpen}
+        onClose={() =>
+          setDeleteModal({ isOpen: false, agentId: "", agentName: "" })
+        }
+        onConfirm={confirmDelete}
+        title="Delete Agent"
+        message={`Are you sure you want to permanently delete the agent "${deleteModal.agentName}"? This action cannot be undone.`}
+        confirmText="Delete Agent"
+        requireTyping={true}
+        expectedText={`DELETE ${deleteModal.agentName}`}
+        isLoading={isLoading}
+      />
     </>
   );
 }

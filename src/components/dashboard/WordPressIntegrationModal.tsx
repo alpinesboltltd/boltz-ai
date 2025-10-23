@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Spinner } from "@/components/common/Spinner";
+import { toast } from "@/store/toastStore";
 
 interface WordPressIntegrationModalProps {
   chatagentId: string;
@@ -27,7 +28,7 @@ export default function WordPressIntegrationModal({
     // window.location.href = `/api/integrations/wordpress/download-plugin?chatagentId=${chatagentId}`;
 
     // For development, show a message
-    alert("In production, this would download the WordPress plugin.");
+    toast.info("Download", "In production, this would download the WordPress plugin.");
     setStep(2);
   };
 

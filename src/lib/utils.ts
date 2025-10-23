@@ -45,7 +45,7 @@ export function handleFirebaseErrorMessage(code: string): string {
 
 export async function socialSignIn(
   method: AuthRequestMethods
-): Promise<{ user:Profile, token: string }> {
+): Promise<{ user: Profile; token: string }> {
   let user: User | undefined;
   switch (method) {
     case AuthRequestMethods.google:
@@ -99,6 +99,7 @@ export async function socialSignIn(
     user: Profile;
     token: string;
   };
+  console.log(token);
 
   return { user: profileUser, token };
 }

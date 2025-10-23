@@ -11,6 +11,7 @@ interface AuthState {
   setUser: (user: Profile) => void;
   setToken: (token: string) => void;
   logout: () => void;
+  clearAuth: () => void;
   updateUser: (userData: Partial<Profile>) => void;
 }
 
@@ -24,10 +25,18 @@ export const useAuthStore = create<AuthState>()(
       error: null,
 
       setUser(user) {
-        return set({ user, isAuthenticated: true });
+        set({ user, isAuthenticated: true });
       },
       setToken(token) {
-        return set({ token });
+        // Set token in state
+        set({ token });
+
+        // Also set in localStorage and cookie for middleware
+        if (typeof window !== "undefined") {
+          localStorage.setItem("auth_token", token);
+          // Set cookie for middleware
+          document.cookie = `auth_token=${token}; path=/; secure; samesite=strict; max-age=${7 * 24 * 60 * 60}`; // 7 days
+        }
       },
       logout: () => {
         // Clear auth data
@@ -37,16 +46,38 @@ export const useAuthStore = create<AuthState>()(
           isAuthenticated: false,
         });
 
-        // Remove token from localStorage
-        localStorage.removeItem("auth_token");
+        // Clear all storage
+        if (typeof window !== "undefined") {
+          localStorage.removeItem("auth_token");
+          localStorage.removeItem("boltz-auth-storage");
+          sessionStorage.clear();
 
-        // Clear cookie
-        document.cookie = "auth_token=; path=/; max-age=0";
+          // Clear cookie
+          document.cookie =
+            "auth_token=; path=/; max-age=0; secure; samesite=strict";
+        }
 
         toast.info("Signed Out", "You have been successfully signed out");
+      },
 
-        // In production, this would also call an API endpoint
-        // fetch('/api/auth/logout', { method: 'POST' });
+      clearAuth: () => {
+        // Silent auth clearing without toast (for expired sessions)
+        set({
+          user: null,
+          token: null,
+          isAuthenticated: false,
+        });
+
+        // Clear all storage
+        if (typeof window !== "undefined") {
+          localStorage.removeItem("auth_token");
+          localStorage.removeItem("boltz-auth-storage");
+          sessionStorage.clear();
+
+          // Clear cookie
+          document.cookie =
+            "auth_token=; path=/; max-age=0; secure; samesite=strict";
+        }
       },
 
       updateUser: (userData) => {
@@ -65,6 +96,12 @@ export const useAuthStore = create<AuthState>()(
         token: state.token,
         isAuthenticated: state.isAuthenticated,
       }),
+      onRehydrateStorage: () => (state) => {
+        // Sync token with cookie after hydration
+        if (state?.token && typeof window !== "undefined") {
+          document.cookie = `auth_token=${state.token}; path=/; secure; samesite=strict; max-age=${7 * 24 * 60 * 60}`;
+        }
+      },
     }
   )
 );
