@@ -5,7 +5,6 @@ import { MessageSquare, Trash2 } from "lucide-react";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { agentsAPI } from "@/lib/api";
-import { agentApi } from "@/lib/agent-api";
 import { cn } from "@/lib/utils";
 import { useAgentStore } from "@/store/agentStore";
 import { useAuthStore, useCurrentUser } from "@/store/authStore";
@@ -20,7 +19,6 @@ enum ActiveTabs {
 }
 
 export default function Dashboard() {
-  const router = useRouter();
   const user = useCurrentUser();
   const { token } = useAuthStore();
   const { agents, setAgents, deleteAgent } = useAgentStore();
@@ -66,54 +64,13 @@ export default function Dashboard() {
     },
     { scope: containerRef }
   );
-  useGSAP(
-    () => {
-      if (button1Ref.current && button2Ref.current) {
-        gsap.set([button1Ref.current, button2Ref.current], {
-          opacity: 0,
-          scale: 0,
-          y: -20,
-        });
-      }
-    },
-    { scope: containerRef }
-  );
 
   // Animation for dropdown toggle
   useGSAP(
     () => {
       if (button1Ref.current && button2Ref.current) {
         const tl = gsap.timeline();
-  useGSAP(
-    () => {
-      if (button1Ref.current && button2Ref.current) {
-        const tl = gsap.timeline();
 
-        if (isOpen) {
-          // Opening animation
-          tl.to([button1Ref.current, button2Ref.current], {
-            opacity: 1,
-            scale: 1,
-            y: 0,
-            duration: 0.5,
-            stagger: 0.12,
-            ease: "back.out(1.7)",
-          });
-        } else {
-          // Closing animation
-          tl.to([button2Ref.current, button1Ref.current], {
-            opacity: 0,
-            scale: 0,
-            y: -20,
-            duration: 0.4,
-            stagger: 0.1,
-            ease: "back.in(1.7)",
-          });
-        }
-      }
-    },
-    { dependencies: [isOpen], scope: containerRef }
-  );
         if (isOpen) {
           // Opening animation
           tl.to([button1Ref.current, button2Ref.current], {
@@ -170,8 +127,6 @@ export default function Dashboard() {
   const handleDropdown = () => {
     setIsOpen((prev) => !prev);
   };
-    setIsOpen((prev) => !prev);
-  };
 
   return (
     <>
@@ -218,10 +173,6 @@ export default function Dashboard() {
               ref={containerRef}
               className="relative mr-20 flex flex-col justify-center items-center"
             >
-            <div
-              ref={containerRef}
-              className="relative mr-20 flex flex-col justify-center items-center"
-            >
               <button
                 onClick={handleDropdown}
                 disabled={isLoading}
@@ -229,7 +180,6 @@ export default function Dashboard() {
               >
                 {isLoading ? "Creating..." : "New Agents"}
               </button>
-
 
               <div className="absolute flex gap-2 mt-24 z-10">
                 <div ref={button1Ref}>
