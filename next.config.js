@@ -5,7 +5,7 @@ const nextConfig = {
     ignoreDuringBuilds: false,
   },
   images: {
-    domains: ["i.pravatar.cc"],
+    domains: ["i.pravatar.cc", "images.unsplash.com"],
   },
   rewrites: async () => {
     return [

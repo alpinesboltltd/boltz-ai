@@ -126,7 +126,7 @@ export const authAPI = {
 export const agentsAPI = {
   getAll: async (
     userId: string,
-    token: string
+    token?: string
   ): Promise<{ agents: Agent[] }> => {
     return await apiRequest(`/agent/agents/${userId}`, {}, token);
   },
