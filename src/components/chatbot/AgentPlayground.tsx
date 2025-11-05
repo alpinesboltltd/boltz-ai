@@ -10,7 +10,6 @@ import {
   Cog6ToothIcon,
 } from "@heroicons/react/24/outline";
 import {
-  Agent,
   MessageRoles,
   SystemPromptTemplate,
   PlaygroundConfig,
@@ -18,17 +17,29 @@ import {
 } from "@/types/agent";
 import { Chat, agentsAPI } from "@/lib/api";
 import { playgroundAPI } from "@/lib/playground-api";
-import { useAgentData, useAgentBehavior } from "@/store/agentDetailStore";
+import {
+  useAgentData,
+  useAgentBehavior,
+  useAgentAppearance,
+} from "@/store/agentDetailStore";
+import { useMemo } from "react";
 import { SYSTEM_PROMPT_TEMPLATES } from "@/data/systemPrompts";
 import { AI_MODELS, AIModel } from "@/mock-data/ai-models";
 import Image from "next/image";
 import Select from "react-select";
 import { Message } from "@/types";
+import { cn } from "@/lib/utils";
 
 export function AgentPlayground() {
   const agent = useAgentData();
   const behavior = useAgentBehavior();
+  const appearance = useAgentAppearance();
   const agentId = agent?.id;
+
+  const primaryColor = useMemo(
+    () => appearance?.primary_color || "#0284c7",
+    [appearance?.primary_color]
+  );
   const [messages, setMessages] = useState<any[]>([]);
   const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
@@ -61,7 +72,8 @@ export function AgentPlayground() {
         model: agent?.ai_model || "GPT-3.5 Turbo",
         temperature: behavior.temperature || 0.7,
         maxTokens: behavior.max_tokens || 1000,
-        systemInstruction: behavior.system_instruction || SYSTEM_PROMPT_TEMPLATES[0].template,
+        systemInstruction:
+          behavior.system_instruction || SYSTEM_PROMPT_TEMPLATES[0].template,
         selectedTemplate: behavior.prompt_template || "ai_agent",
       });
     }
@@ -82,10 +94,12 @@ export function AgentPlayground() {
     setMessages([
       {
         role: MessageRoles.ASSISTANT,
-        parts: `Hello! I'm ${agent?.name}. How can I help you today?`,
+        parts:
+          appearance?.welcome_message ||
+          "Hi, welcome; How can I help you today",
       },
     ]);
-  }, [agent?.name, config.systemInstruction]);
+  }, [agent?.name, config.systemInstruction, appearance]);
 
   const handleSendMessage = async (
     e?: React.FormEvent,
@@ -110,7 +124,7 @@ export function AgentPlayground() {
         parts: reply,
       };
       setMessages((prev) => [...prev, assistantMessage]);
-      console.log(reply)
+      console.log(reply);
     } catch (error) {
       console.error("Failed to send message:", error);
     } finally {
@@ -273,8 +287,8 @@ export function AgentPlayground() {
   const selectStyles = {
     control: (provided: any, state: any) => ({
       ...provided,
-      borderColor: state.isFocused ? "#3B82F6" : "#D1D5DB",
-      boxShadow: state.isFocused ? "0 0 0 2px rgba(59, 130, 246, 0.1)" : "none",
+      borderColor: state.isFocused ? primaryColor : "#D1D5DB",
+      boxShadow: state.isFocused ? `0 0 0 2px ${primaryColor}20` : "none",
       "&:hover": {
         borderColor: "#9CA3AF",
       },
@@ -307,7 +321,7 @@ export function AgentPlayground() {
     option: (provided: any, state: any) => ({
       ...provided,
       backgroundColor: state.isSelected
-        ? "#3B82F6"
+        ? primaryColor
         : state.isFocused
           ? "#F3F4F6"
           : "white",
@@ -330,8 +344,15 @@ export function AgentPlayground() {
       <div className="block lg:hidden">
         <div className="space-y-4">
           {/* Chat Interface - Mobile */}
-          <div className="bg-white rounded-lg shadow overflow-hidden flex flex-col h-[60vh]">
-            <div className="text-white px-4 py-3 flex justify-between items-center bg-primary-600">
+          <div
+            className={cn(
+              "bg-white rounded-lg shadow overflow-hidden flex flex-col h-[60vh]"
+            )}
+          >
+            <div
+              className="text-white px-4 py-3 flex justify-between items-center"
+              style={{ backgroundColor: primaryColor }}
+            >
               <div>
                 <h3 className="font-medium">Testing: {agent?.name}</h3>
                 <p className="text-xs text-primary-100">
@@ -357,11 +378,17 @@ export function AgentPlayground() {
                     className={`mb-4 flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
                   >
                     <div
-                      className={`max-w-[85%] px-3 py-2 rounded-lg text-sm ${
+                      className={cn(
+                        "max-w-[85%] px-3 py-2 rounded-lg text-sm",
                         message.role === "user"
-                          ? "bg-primary-600 text-white"
+                          ? "text-white"
                           : "bg-gray-100 text-gray-800"
-                      }`}
+                      )}
+                      style={
+                        message.role === "user"
+                          ? { backgroundColor: primaryColor }
+                          : {}
+                      }
                     >
                       <p className="whitespace-pre-wrap">{message.parts}</p>
                     </div>
@@ -395,12 +422,21 @@ export function AgentPlayground() {
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
                   placeholder="Type your test message..."
-                  className="flex-1 text-sm rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
+                  className="flex-1 text-sm rounded-md border-gray-300 shadow-sm focus:outline-none focus:ring-2"
+                  style={
+                    {
+                      borderColor: "#D1D5DB",
+                      "--tw-ring-color": primaryColor,
+                    } as any
+                  }
+                  onFocus={(e) => (e.target.style.borderColor = primaryColor)}
+                  onBlur={(e) => (e.target.style.borderColor = "#D1D5DB")}
                 />
                 <button
                   type="submit"
                   disabled={isTyping}
-                  className="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50"
+                  className="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50"
+                  style={{ backgroundColor: primaryColor }}
                 >
                   <PaperAirplaneIcon className="h-4 w-4" />
                 </button>
@@ -450,6 +486,7 @@ export function AgentPlayground() {
                   selectStyles={selectStyles}
                   ModelOption={ModelOption}
                   ModelSingleValue={ModelSingleValue}
+                  primaryColor={primaryColor}
                 />
               ) : (
                 <MobileTestQueries
@@ -486,6 +523,7 @@ export function AgentPlayground() {
               selectStyles={selectStyles}
               ModelOption={ModelOption}
               ModelSingleValue={ModelSingleValue}
+              primaryColor={primaryColor}
             />
           </div>
 
@@ -500,6 +538,7 @@ export function AgentPlayground() {
               setInputValue={setInputValue}
               handleSendMessage={handleSendMessage}
               handleReset={handleReset}
+              primaryColor={primaryColor}
             />
           </div>
 
@@ -537,6 +576,7 @@ export function AgentPlayground() {
               selectStyles={selectStyles}
               ModelOption={ModelOption}
               ModelSingleValue={ModelSingleValue}
+              primaryColor={primaryColor}
             />
           </div>
 
@@ -551,6 +591,7 @@ export function AgentPlayground() {
               setInputValue={setInputValue}
               handleSendMessage={handleSendMessage}
               handleReset={handleReset}
+              primaryColor={primaryColor}
             />
           </div>
 
@@ -583,6 +624,7 @@ function ConfigPanel({
   selectStyles,
   ModelOption,
   ModelSingleValue,
+  primaryColor,
 }: any) {
   return (
     <div className="space-y-4">
@@ -725,7 +767,8 @@ function ConfigPanel({
 
       <button
         onClick={handleConfigSave}
-        className="w-full px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm"
+        className="w-full px-4 py-2 text-white rounded-md focus:outline-none focus:ring-2 text-sm transition-opacity hover:opacity-90"
+        style={{ backgroundColor: primaryColor }}
       >
         Save Configuration
       </button>
@@ -748,10 +791,14 @@ function ChatInterface({
   setInputValue,
   handleSendMessage,
   handleReset,
+  primaryColor,
 }: any) {
   return (
     <>
-      <div className="text-white px-4 py-3 flex justify-between items-center bg-primary-600">
+      <div
+        className="text-white px-4 py-3 flex justify-between items-center"
+        style={{ backgroundColor: primaryColor }}
+      >
         <div>
           <h3 className="font-medium">Testing: {agent?.name}</h3>
           <p className="text-xs text-primary-100">
@@ -780,9 +827,14 @@ function ChatInterface({
               <div
                 className={`max-w-[80%] px-4 py-2 rounded-lg ${
                   message.role === "user"
-                    ? "bg-primary-600 text-white"
+                    ? "text-white"
                     : "bg-gray-100 text-gray-800"
                 }`}
+                style={
+                  message.role === "user"
+                    ? { backgroundColor: primaryColor }
+                    : {}
+                }
               >
                 <p className="text-sm whitespace-pre-wrap">{message.parts}</p>
               </div>
@@ -816,12 +868,18 @@ function ChatInterface({
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             placeholder="Type your test message..."
-            className="flex-1 rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
+            className="flex-1 rounded-md border-gray-300 shadow-sm focus:outline-none focus:ring-2"
+            style={
+              { borderColor: "#D1D5DB", "--tw-ring-color": primaryColor } as any
+            }
+            onFocus={(e) => (e.target.style.borderColor = primaryColor)}
+            onBlur={(e) => (e.target.style.borderColor = "#D1D5DB")}
           />
           <button
             type="submit"
             disabled={isTyping}
-            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50"
+            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50"
+            style={{ backgroundColor: primaryColor }}
           >
             <PaperAirplaneIcon className="h-5 w-5" />
           </button>

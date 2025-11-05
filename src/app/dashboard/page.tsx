@@ -165,7 +165,7 @@ export default function Dashboard() {
                     agent={chatagent}
                     onDelete={handleDeleteAgent}
                     onManage={() =>
-                      router.push(`/dashboard/playground/${chatagent.id}`)
+                      router.push(`/dashboard/agent/${chatagent.id}`)
                     }
                   />
                 ))}
@@ -203,7 +203,7 @@ export default function Dashboard() {
                   <AgentCard
                     key={mockAgent.id}
                     agent={mockAgent}
-                    onDelete={() => {}}
+                    onDelete={() => { }}
                     onHire={() => {
                       handleHireTemplate(mockAgent.id);
                       setShowSidebar(false);

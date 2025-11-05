@@ -198,14 +198,11 @@ export function Header() {
                 </Link>  */}
           </nav>
           <div className="hidden md:flex md:items-center md:space-x-4">
-            <Link
-              href="/auth/login"
-              className="text-gray-500 hover:text-gray-900"
-            >
+            <Link href="/login" className="text-gray-500 hover:text-gray-900">
               Log in
             </Link>
             <Link
-              href="/auth/register"
+              href="/register"
               className="inline-flex items-center justify-center rounded-md border border-transparent bg-primary-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary-700"
             >
               Sign up free
@@ -290,13 +287,13 @@ export function Header() {
           <div className="border-t border-gray-200 pb-3 pt-4">
             <div className="flex items-center px-5">
               <Link
-                href="/auth/login"
+                href="/login"
                 className="block w-full px-3 py-2 text-center text-base font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900"
               >
                 Log in
               </Link>
               <Link
-                href="/auth/register"
+                href="/register"
                 className="block w-full px-3 py-2 text-center text-base font-medium text-primary-600 hover:bg-gray-50"
               >
                 Sign up free

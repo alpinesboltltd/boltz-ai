@@ -25,7 +25,7 @@ export function middleware(request: NextRequest) {
 
   // If accessing protected path without token, redirect to login
   if (isProtectedPath && !token) {
-    const url = new URL("/auth/login", request.url);
+    const url = new URL("/login", request.url);
     url.searchParams.set(
       "redirect",
       encodeURIComponent(request.nextUrl.pathname + request.nextUrl.search)

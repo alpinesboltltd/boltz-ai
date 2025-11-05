@@ -1,14 +1,15 @@
 import { create } from "zustand";
-import { 
-  Agent, 
-  AgentAppearance, 
-  AgentBehavior, 
-  AgentIntegration, 
-  AgentStats, 
+import {
+  Agent,
+  AgentAppearance,
+  AgentBehavior,
+  AgentIntegration,
+  AgentStats,
   TrainingData,
-  SystemPromptTemplate 
+  SystemPromptTemplate
 } from "@/types/agent";
 import { agentsAPI } from "@/lib/api";
+import { accessToken } from "./authStore";
 
 interface AgentDetailData {
   agent: Agent;
@@ -32,6 +33,9 @@ interface AgentDetailState {
   clearAgent: () => void;
 }
 
+const token = accessToken()
+
+
 export const useAgentDetailStore = create<AgentDetailState>((set, get) => ({
   currentAgentId: null,
   data: null,
@@ -48,18 +52,17 @@ export const useAgentDetailStore = create<AgentDetailState>((set, get) => ({
 
     set({ loading: true, error: null });
     try {
-      const response = await agentsAPI.getById(agentId);
-      
+      const response = await agentsAPI.getById(agentId, token);
       set({
-        data: response.data,
-        currentAgentId: agentId,
+        data: response,
+        currentAgentId: response.agent.id,
         loading: false,
         error: null,
       });
     } catch (error) {
       console.error("Failed to fetch agent details:", error);
-      set({ 
-        loading: false, 
+      set({
+        loading: false,
         error: error instanceof Error ? error.message : "Failed to fetch agent details"
       });
     }
@@ -68,11 +71,11 @@ export const useAgentDetailStore = create<AgentDetailState>((set, get) => ({
   updateAppearance: (appearance: AgentAppearance) => {
     const { data } = get();
     if (data) {
-      set({ 
-        data: { 
-          ...data, 
-          agent_appearance: appearance 
-        } 
+      set({
+        data: {
+          ...data,
+          agent_appearance: appearance
+        }
       });
     }
   },
@@ -80,11 +83,11 @@ export const useAgentDetailStore = create<AgentDetailState>((set, get) => ({
   updateBehavior: (behavior: AgentBehavior) => {
     const { data } = get();
     if (data) {
-      set({ 
-        data: { 
-          ...data, 
-          agent_behavior: behavior 
-        } 
+      set({
+        data: {
+          ...data,
+          agent_behavior: behavior
+        }
       });
     }
   },

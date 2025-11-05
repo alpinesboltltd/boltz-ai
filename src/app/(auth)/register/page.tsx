@@ -1,113 +1,73 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { SigninFormInputs, signinSchema } from "@/types/schema";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { AuthRequestMethods, SubscriptionPlans } from "@/types";
-
-import { socialSignIn } from "@/lib/utils";
-
+import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Spinner } from "@/components/common/Spinner";
+import { useForm } from "react-hook-form";
+import { SignupFormInputs, SignupSchema } from "@/types/schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { AuthRequestMethods, SubscriptionPlans, UserRoles } from "@/types";
+import { socialSignIn } from "@/lib/utils";
 import { useAuthStore } from "@/store/authStore";
 import { toast } from "@/store/toastStore";
 
-export default function LoginPage() {
+export default function RegisterPage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const { setUser, setToken, clearAuth } = useAuthStore();
-  // Check if redirected from session expired
-  const sessionExpired = searchParams?.get("session_expired") === "true";
-
-  // Clear auth on component mount if session expired
-  useEffect(() => {
-    if (sessionExpired) {
-      clearAuth();
-    }
-  }, [sessionExpired, clearAuth]);
-
+  const [loading, setLoading] = useState(false);
+  const { setUser, setToken } = useAuthStore();
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<SigninFormInputs>({
-    resolver: zodResolver(signinSchema),
+  } = useForm<SignupFormInputs>({
+    resolver: zodResolver(SignupSchema),
     defaultValues: {
       email: "",
       password: "",
-      method: AuthRequestMethods.password,
+      method: "password",
     },
   });
 
-  const [loading, setLoading] = useState(false);
-
-  const Submit = async (value: SigninFormInputs) => {
-    setLoading(true);
+  const Submit = async (value: SignupFormInputs) => {
     try {
-      const response = await fetch("/v1/auth/login", {
+      const response = await fetch("/v1/auth/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...value }),
+        body: JSON.stringify(value),
       });
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || "Login failed");
+        throw new Error(errorData.message || "Registration failed");
       }
-
-      const data = await response.json();
-      const { user, token } = data;
-
-      setToken(token);
-      setUser({ ...user, plan: SubscriptionPlans.free });
-
-      toast.success("Welcome back!", "You have been successfully signed in");
-
-      // Redirect to intended page or dashboard
-      const redirectTo = searchParams?.get("redirect");
-      const targetUrl = redirectTo
-        ? decodeURIComponent(redirectTo)
-        : "/dashboard";
-      router.push(targetUrl);
+      toast.success("Account Created!", "Please sign in to continue");
+      router.push("/login");
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : "Login failed";
-      toast.error("Login Failed", errorMessage);
+      const errorMessage =
+        err instanceof Error ? err.message : "Registration failed";
+      toast.error("Registration Failed", errorMessage);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleSocialSignin = async (method: AuthRequestMethods) => {
+  const handleSocialSignup = async (method: AuthRequestMethods) => {
     if (!method) {
-      toast.error("Invalid Method", "Please select a valid sign-in method");
+      toast.error("Invalid Method", "Please select a valid sign-up method");
       return;
     }
     try {
       const { user: u, token } = await socialSignIn(method);
-      if (!u) {
-        toast.error("Sign-in Failed", "Social sign-in was unsuccessful");
-        return;
-      }
-
-      const user = { ...u, plan: SubscriptionPlans.free };
-
-      // Update auth store (setToken will handle localStorage and cookie)
+      const user = { ...u, role: UserRoles.user, plan: SubscriptionPlans.free };
       setToken(token);
-      setUser({ ...user, plan: SubscriptionPlans.free });
-      toast.success("Welcome back!", "You have been successfully signed in");
-
-      // Redirect to intended page or dashboard
-      const redirectTo = searchParams?.get("redirect");
-      const targetUrl = redirectTo
-        ? decodeURIComponent(redirectTo)
-        : "/dashboard";
-      router.push(targetUrl);
+      setUser(user);
+      toast.success("Welcome!", "Your account has been created successfully");
+      router.push("/dashboard");
     } catch (error) {
       const errorMessage =
-        error instanceof Error ? error.message : "Social sign-in failed";
-      toast.error("Sign-in Failed", errorMessage);
+        error instanceof Error ? error.message : "Social sign-up failed";
+      toast.error("Sign-up Failed", errorMessage);
     }
   };
 
@@ -115,52 +75,44 @@ export default function LoginPage() {
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-          Sign in to your account
+          Create your account
         </h2>
         <p className="mt-2 text-center text-sm text-gray-600">
-          Or{" "}
+          Already have an account?{" "}
           <Link
-            href="/auth/register"
+            href="/auth/login"
             className="font-medium text-primary-600 hover:text-primary-500"
           >
-            create a new account
+            Sign in
           </Link>
         </p>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-          {sessionExpired && (
-            <div className="mb-4 rounded-md bg-yellow-50 p-4">
-              <div className="flex">
-                <div className="flex-shrink-0">
-                  <svg
-                    className="h-5 w-5 text-yellow-400"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                    aria-hidden="true"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </div>
-                <div className="ml-3">
-                  <h3 className="text-sm font-medium text-yellow-800">
-                    Session expired
-                  </h3>
-                  <div className="mt-2 text-sm text-yellow-700">
-                    <p>Your session has expired. Please sign in again.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
           <form className="space-y-6" onSubmit={handleSubmit(Submit)}>
+            <div>
+              <label
+                htmlFor="name"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Full name
+              </label>
+              <div className="mt-1">
+                <input
+                  id="name"
+                  type="text"
+                  autoComplete="name"
+                  {...register("name")}
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+                  placeholder="John Doe"
+                />
+              </div>
+              {errors.name && (
+                <p className="text-red-500">{errors.name.message}</p>
+              )}
+            </div>
+
             <div>
               <label
                 htmlFor="email"
@@ -173,12 +125,11 @@ export default function LoginPage() {
                   id="email"
                   type="email"
                   autoComplete="email"
-                  required
                   {...register("email")}
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
                   placeholder="you@example.com"
                 />
-              </div>
+              </div>{" "}
               {errors.email && (
                 <p className="text-red-500">{errors.email.message}</p>
               )}
@@ -195,50 +146,80 @@ export default function LoginPage() {
                 <input
                   id="password"
                   type="password"
-                  autoComplete="current-password"
-                  required
+                  autoComplete="new-password"
                   {...register("password")}
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
                 />
-              </div>{" "}
+              </div>
               {errors.password && (
                 <p className="text-red-500">{errors.password.message}</p>
               )}
             </div>
 
-            <div className="flex items-center justify-between">
+            <div>
+              <label
+                htmlFor="confirmPassword"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Confirm password
+              </label>
+              <div className="mt-1">
+                <input
+                  id="confirmPassword"
+                  type="password"
+                  autoComplete="new-password"
+                  {...register("confirmPassword")}
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+                />
+              </div>
+              {errors.confirmPassword && (
+                <p className="text-red-500">{errors.confirmPassword.message}</p>
+              )}
+            </div>
+
+            <div>
               <div className="flex items-center">
                 <input
-                  id="remember-me"
-                  name="remember-me"
+                  id="terms"
                   type="checkbox"
+                  {...register("terms")}
                   className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
                 />
                 <label
-                  htmlFor="remember-me"
+                  htmlFor="terms"
                   className="ml-2 block text-sm text-gray-900"
                 >
-                  Remember me
+                  I agree to the{" "}
+                  <Link
+                    href="/terms"
+                    className="font-medium text-primary-600 hover:text-primary-500"
+                  >
+                    Terms of Service
+                  </Link>{" "}
+                  and{" "}
+                  <Link
+                    href="/privacy"
+                    className="font-medium text-primary-600 hover:text-primary-500"
+                  >
+                    Privacy Policy
+                  </Link>
                 </label>
               </div>
-
-              <div className="text-sm">
-                <Link
-                  href="/auth/forgot-password"
-                  className="font-medium text-primary-600 hover:text-primary-500"
-                >
-                  Forgot your password?
-                </Link>
-              </div>
+              {errors.terms && (
+                <p className="text-red-500">{errors.terms.message}</p>
+              )}
             </div>
-
             <div>
               <button
                 type="submit"
                 disabled={loading}
                 className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50"
               >
-                {loading ? <Spinner size="sm" color="white" /> : "Sign in"}
+                {loading ? (
+                  <Spinner size="sm" color="white" />
+                ) : (
+                  "Create account"
+                )}
               </button>
             </div>
           </form>
@@ -258,8 +239,7 @@ export default function LoginPage() {
             <div className="mt-6 grid grid-cols-2 gap-3">
               <div>
                 <button
-                  disabled={loading}
-                  onClick={() => handleSocialSignin(AuthRequestMethods.google)}
+                  onClick={() => handleSocialSignup(AuthRequestMethods.google)}
                   className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
                 >
                   <svg
@@ -276,8 +256,7 @@ export default function LoginPage() {
 
               <div>
                 <button
-                  disabled={loading}
-                  onClick={() => handleSocialSignin(AuthRequestMethods.github)}
+                  onClick={() => handleSocialSignup(AuthRequestMethods.github)}
                   className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
                 >
                   <svg

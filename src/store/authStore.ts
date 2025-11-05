@@ -130,3 +130,8 @@ export const useHasRole = (role: string | string[]) => {
 
   return user.role === role;
 };
+
+export const accessToken = () => {
+  const token = useAuthStore.getState().token;
+  return token || "";
+}; 

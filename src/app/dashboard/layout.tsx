@@ -10,6 +10,7 @@ import Image from "next/image";
 import { Menu } from "@headlessui/react";
 import { useCurrentUser } from "@/store/authStore";
 import { User } from "lucide-react";
+import { ErrorBoundary } from "@/components/common/ErrorBoundary";
 
 export default function DashboardLayout({
   children,
@@ -388,7 +389,9 @@ export default function DashboardLayout({
             </div>
           </div>
 
-          <main className="flex-1">{children}</main>
+          <main className="flex-1">
+            <ErrorBoundary>{children}</ErrorBoundary>
+          </main>
         </div>
       </div>
     </div>

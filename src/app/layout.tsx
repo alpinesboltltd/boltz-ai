@@ -31,7 +31,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{
             __html: `
               window.BOLTZ_CONFIG = {
-                id: "4k8afeknd",
+                id: "9e0c8d37-5520-4a16-903a-49dd0a30fa30",
               };
             `,
           }}
@@ -39,9 +39,7 @@ export default function RootLayout({
         <script src="http://192.168.1.162:3000/widget.js" async />
       </head>
       <body className="min-h-screen bg-gray-50 font-sans w-full overflow-x-hidden">
-        <ToastProvider>
-          {children}
-        </ToastProvider>
+        <ToastProvider>{children}</ToastProvider>
       </body>
     </html>
   );

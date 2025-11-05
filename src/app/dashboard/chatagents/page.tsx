@@ -118,7 +118,7 @@ export default function ChatbotsPage() {
                     <tr key={chatagent.id}>
                       <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
                         <Link
-                          href={`/dashboard/chatagent/${chatagent.id}`}
+                          href={`/dashboard/agent/${chatagent.id}`}
                           className="text-primary-600 hover:text-primary-900"
                         >
                           {chatagent.name}
@@ -126,13 +126,12 @@ export default function ChatbotsPage() {
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm">
                         <span
-                          className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${
-                            chatagent.status === "active"
+                          className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${chatagent.status === "active"
                               ? "bg-green-100 text-green-800"
                               : chatagent.status === "draft"
                                 ? "bg-yellow-100 text-yellow-800"
                                 : "bg-gray-100 text-gray-800"
-                          }`}
+                            }`}
                         >
                           {chatagent.status}
                         </span>
@@ -152,7 +151,7 @@ export default function ChatbotsPage() {
                       <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                         <div className="flex justify-end space-x-2">
                           <Link
-                            href={`/dashboard/chatagent/${chatagent.id}`}
+                            href={`/dashboard/agent/${chatagent.id}`}
                             className="text-primary-600 hover:text-primary-900"
                           >
                             <PencilIcon

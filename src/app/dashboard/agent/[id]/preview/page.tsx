@@ -13,7 +13,7 @@ import { AgentPlayground } from "@/components/chatbot/AgentPlayground";
 import { Tab, TabGroup, TabList, TabPanels, TabPanel } from "@headlessui/react";
 import { toast } from "@/store/toastStore";
 
-export default function ChatbotPreviewPage({
+export default function AgentPreviewPage({
   params,
 }: {
   params: Promise<{ id: string }>;
@@ -46,7 +46,7 @@ export default function ChatbotPreviewPage({
     <div className="px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
         <Link
-          href={`/dashboard/chatagent/${id}`}
+          href={`/dashboard/agent/${id}`}
           className="inline-flex items-center text-sm font-medium text-primary-600 hover:text-primary-500"
         >
           <ArrowLeftIcon className="mr-1 h-4 w-4" />
@@ -60,7 +60,7 @@ export default function ChatbotPreviewPage({
           </div>
           <div className="mt-4 flex md:mt-0 md:ml-4 space-x-3">
             <Link
-              href={`/chatagent/${id}`}
+              href={`/agent/${id}`}
               className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
             >
               <EyeIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
@@ -101,10 +101,9 @@ export default function ChatbotPreviewPage({
           <Tab
             className={({ selected }) =>
               `w-full rounded-lg py-2.5 text-sm font-medium leading-5 
-              ${
-                selected
-                  ? "bg-white text-primary-700 shadow"
-                  : "text-primary-600 hover:bg-white/[0.12] hover:text-primary-700"
+              ${selected
+                ? "bg-white text-primary-700 shadow"
+                : "text-primary-600 hover:bg-white/[0.12] hover:text-primary-700"
               }`
             }
           >
@@ -113,10 +112,9 @@ export default function ChatbotPreviewPage({
           <Tab
             className={({ selected }) =>
               `w-full rounded-lg py-2.5 text-sm font-medium leading-5 
-              ${
-                selected
-                  ? "bg-white text-primary-700 shadow"
-                  : "text-primary-600 hover:bg-white/[0.12] hover:text-primary-700"
+              ${selected
+                ? "bg-white text-primary-700 shadow"
+                : "text-primary-600 hover:bg-white/[0.12] hover:text-primary-700"
               }`
             }
           >
@@ -125,10 +123,9 @@ export default function ChatbotPreviewPage({
           <Tab
             className={({ selected }) =>
               `w-full rounded-lg py-2.5 text-sm font-medium leading-5 
-              ${
-                selected
-                  ? "bg-white text-primary-700 shadow"
-                  : "text-primary-600 hover:bg-white/[0.12] hover:text-primary-700"
+              ${selected
+                ? "bg-white text-primary-700 shadow"
+                : "text-primary-600 hover:bg-white/[0.12] hover:text-primary-700"
               }`
             }
           >

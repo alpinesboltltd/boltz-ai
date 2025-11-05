@@ -172,7 +172,7 @@ export default function CreateAgentPage() {
       ]);
 
       // Redirect to agent dashboard
-      router.push(`/dashboard/chatagent/${agentId}`); // did the routing to the playground page after agrent creation here
+      router.push(`/dashboard/agent/${agentId}`); // did the routing to the playground page after agrent creation here
     } catch (error) {
       console.error("Error finalizing agent:", error);
       alert("Failed to create agent. Please try again.");
@@ -195,11 +195,10 @@ export default function CreateAgentPage() {
               <div key={stepItem.number} className="flex items-center">
                 <div className="flex flex-col items-center min-w-0 flex-shrink-0">
                   <div
-                    className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-xs sm:text-sm font-medium ${
-                      step >= stepItem.number
+                    className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-xs sm:text-sm font-medium ${step >= stepItem.number
                         ? "bg-indigo-600 text-white"
                         : "bg-gray-200 text-gray-600"
-                    }`}
+                      }`}
                   >
                     {step > stepItem.number ? "✓" : stepItem.number}
                   </div>
@@ -214,9 +213,8 @@ export default function CreateAgentPage() {
                 </div>
                 {index < 2 && (
                   <div
-                    className={`flex-1 h-0.5 mx-2 sm:mx-4 ${
-                      step > stepItem.number ? "bg-indigo-600" : "bg-gray-200"
-                    }`}
+                    className={`flex-1 h-0.5 mx-2 sm:mx-4 ${step > stepItem.number ? "bg-indigo-600" : "bg-gray-200"
+                      }`}
                   />
                 )}
               </div>
@@ -304,11 +302,10 @@ export default function CreateAgentPage() {
                     ].map((type) => (
                       <label
                         key={type.value}
-                        className={`relative flex flex-col items-center p-6 border-2 rounded-xl cursor-pointer transition-all hover:shadow-md ${
-                          selectedAgentType === type.value
+                        className={`relative flex flex-col items-center p-6 border-2 rounded-xl cursor-pointer transition-all hover:shadow-md ${selectedAgentType === type.value
                             ? "border-indigo-500 bg-indigo-50 shadow-md"
                             : "border-gray-200 hover:border-gray-300"
-                        }`}
+                          }`}
                       >
                         <input
                           {...agentForm.register("agent_type")}

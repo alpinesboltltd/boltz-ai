@@ -251,7 +251,7 @@ export default function AgentCreationWizard() {
       console.log("Creating agent with data:", formData);
 
       // Navigate to chatagent page
-      router.push("/dashboard/chatagent/1");
+      router.push("/dashboard/agent/1");
     } catch (error) {
       console.error("Failed to create agent:", error);
     }
@@ -294,11 +294,10 @@ export default function AgentCreationWizard() {
                 <div
                   key={template.id}
                   onClick={() => handleTemplateSelect(template)}
-                  className={`relative p-6 rounded-xl border-2 cursor-pointer transition-all duration-200 hover:shadow-lg ${
-                    formData.templateId === template.id
+                  className={`relative p-6 rounded-xl border-2 cursor-pointer transition-all duration-200 hover:shadow-lg ${formData.templateId === template.id
                       ? "border-primary-500 bg-primary-50 shadow-md"
                       : "border-gray-200 hover:border-gray-300"
-                  }`}
+                    }`}
                 >
                   <div className="text-center">
                     <div className="text-4xl mb-3">{template.icon}</div>
@@ -394,11 +393,10 @@ export default function AgentCreationWizard() {
                       onClick={() =>
                         setFormData((prev) => ({ ...prev, agentType: type }))
                       }
-                      className={`p-3 rounded-lg border-2 text-center capitalize transition-all ${
-                        formData.agentType === type
+                      className={`p-3 rounded-lg border-2 text-center capitalize transition-all ${formData.agentType === type
                           ? "border-primary-500 bg-primary-50 text-primary-700"
                           : "border-gray-200 hover:border-gray-300"
-                      }`}
+                        }`}
                     >
                       {type}
                     </button>
@@ -433,7 +431,7 @@ export default function AgentCreationWizard() {
         const availableModels = AI_MODELS.filter((model) =>
           formData.agentType === AgentType.TEXT
             ? model.capabilities.includes("text") &&
-              !model.capabilities.includes("multimodal")
+            !model.capabilities.includes("multimodal")
             : formData.agentType === AgentType.VOICE
               ? model.capabilities.includes("voice")
               : model.capabilities.includes("multimodal")
@@ -455,11 +453,10 @@ export default function AgentCreationWizard() {
                 <div
                   key={`${model.provider}-${model.model}`}
                   onClick={() => handleModelSelect(model)}
-                  className={`p-4 rounded-lg border-2 cursor-pointer transition-all hover:shadow-md ${
-                    formData.aiModel === model.model
+                  className={`p-4 rounded-lg border-2 cursor-pointer transition-all hover:shadow-md ${formData.aiModel === model.model
                       ? "border-primary-500 bg-primary-50"
                       : "border-gray-200 hover:border-gray-300"
-                  }`}
+                    }`}
                 >
                   <div className="flex items-start space-x-3">
                     <Image
@@ -618,11 +615,10 @@ export default function AgentCreationWizard() {
               {WIZARD_STEPS.map((step) => (
                 <div key={step.id} className="text-center">
                   <div
-                    className={`text-xs font-medium ${
-                      currentStep >= step.id
+                    className={`text-xs font-medium ${currentStep >= step.id
                         ? "text-primary-600"
                         : "text-gray-400"
-                    }`}
+                      }`}
                   >
                     {step.title}
                   </div>

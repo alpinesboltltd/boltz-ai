@@ -6,6 +6,7 @@ import {
   AgentBehavior,
   AgentIntegration,
   AgentStats,
+  SystemPromptTemplate,
   TrainingData,
 } from "@/types/agent";
 import { ChatMessage, Conversation } from "@/types/conversations";
@@ -86,7 +87,17 @@ export const apiRequest = async (
   });
 
   if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
+    let errorMessage = `Request failed with status ${response.status}`;
+
+    try {
+      const errorData = await response.json();
+      errorMessage = errorData.message || errorData.error || errorMessage;
+    } catch {
+      // If response is not JSON, use status text
+      errorMessage = response.statusText || errorMessage;
+    }
+
+    throw new Error(errorMessage);
   }
 
   return response.json();
@@ -132,21 +143,24 @@ export const agentsAPI = {
   },
 
   getById: async (
-    id: string
+    id: string, token: string
   ): Promise<{
-    data: {
-      appearance: AgentAppearance;
-      behavior: AgentBehavior;
-      integrations: AgentIntegration;
-      stats: AgentStats;
-      training_data: TrainingData;
-    };
+
+    agent: Agent
+    agent_integration: AgentIntegration;
+    agent_appearance: AgentAppearance;
+    agent_behavior: AgentBehavior;
+    agent_integrations: AgentIntegration;
+    agent_stats: AgentStats;
+    training_data: TrainingData;
+    system_prompt_template: SystemPromptTemplate
+    ;
   }> => {
-    return await apiRequest(`/chatagents/${id}`);
+    return await apiRequest(`/agent/${id}`, {}, token);
   },
 
   create: async (data: CreateAgentPayload): Promise<{ data: Agent }> => {
-    return await apiRequest("/chatagents", {
+    return await apiRequest("/agent/create", {
       method: "POST",
       body: JSON.stringify(data),
     });
@@ -156,8 +170,8 @@ export const agentsAPI = {
     id: string,
     data: UpdateAgentPayload
   ): Promise<{ data: Agent }> => {
-    return await apiRequest(`/chatagents/${id}`, {
-      method: "PUT",
+    return await apiRequest(`/update/${id}`, {
+      method: "PATCH",
       body: JSON.stringify(data),
     });
   },
@@ -167,52 +181,52 @@ export const agentsAPI = {
   },
 
   regenerateApiKey: async (id: string) => {
-    return await apiRequest(`/chatagents/${id}/regenerate-key`, {
+    return await apiRequest(`/agent/${id}/regenerate-key`, {
       method: "POST",
     });
   },
 
   getAppearance: async (id: string) => {
-    return await apiRequest(`/chatagents/${id}/appearance`);
+    return await apiRequest(`/agent/${id}/appearance`, { method: 'GET' });
   },
 
   updateAppearance: async (
     id: string,
     data: UpdateAppearancePayload
   ): Promise<{ data: AgentAppearance }> => {
-    return await apiRequest(`/chatagents/${id}/appearance`, {
-      method: "PUT",
+    return await apiRequest(`/agent/${id}/appearance`, {
+      method: "PATCH",
       body: JSON.stringify(data),
     });
   },
 
   getActivity: async (id: string) => {
-    return await apiRequest(`/chatagents/${id}/activity`);
+    return await apiRequest(`/agent/${id}/activity`);
   },
 
   getSources: async (id: string) => {
-    return await apiRequest(`/chatagents/${id}/sources`);
+    return await apiRequest(`/agent/${id}/sources`);
   },
 
   addSource: async (
     id: string,
     data: AddSourcePayload
   ): Promise<{ data: unknown }> => {
-    return await apiRequest(`/chatagents/${id}/sources`, {
+    return await apiRequest(`/agent/${id}/sources`, {
       method: "POST",
       body: JSON.stringify(data),
     });
   },
 
   getActions: async (id: string) => {
-    return await apiRequest(`/chatagents/${id}/actions`);
+    return await apiRequest(`/agent/${id}/actions`);
   },
 
   updateActions: async (
     id: string,
     data: UpdateActionsRequest
   ): Promise<{ data: AgentActions }> => {
-    return await apiRequest(`/chatagents/${id}/actions`, {
+    return await apiRequest(`/agent/${id}/actions`, {
       method: "PUT",
       body: JSON.stringify(data),
     });
@@ -222,7 +236,7 @@ export const agentsAPI = {
     id: string,
     action: CreateCustomActionPayload
   ): Promise<{ data: CustomAction }> => {
-    return await apiRequest(`/chatagents/${id}/actions/custom`, {
+    return await apiRequest(`/agent/${id}/actions/custom`, {
       method: "POST",
       body: JSON.stringify(action),
     });
@@ -232,7 +246,7 @@ export const agentsAPI = {
     apiFunction: CreateApiFunctionPayload
   ): Promise<{ data: ApiFunction }> => {
     return await apiRequest(
-      `/chatagents/${apiFunction.agentId}/actions/api-functions`,
+      `/agent/${apiFunction.agentId}/actions/api-functions`,
       {
         method: "POST",
         body: JSON.stringify(apiFunction),
@@ -244,37 +258,37 @@ export const agentsAPI = {
     id: string,
     workflow: CreateWorkflowPayload
   ): Promise<{ data: unknown }> => {
-    return await apiRequest(`/chatagents/${id}/actions/workflows`, {
+    return await apiRequest(`/agent/${id}/actions/workflows`, {
       method: "POST",
       body: JSON.stringify(workflow),
     });
   },
 
   getApiFunctions: async (id: string) => {
-    return await apiRequest(`/chatagents/${id}/actions/api-functions`);
+    return await apiRequest(`/agent/${id}/actions/api-functions`);
   },
 
   toggleActionStatus: async (id: string, actionId: string) => {
-    return await apiRequest(`/chatagents/${id}/actions/${actionId}/toggle`, {
+    return await apiRequest(`/agent/${id}/actions/${actionId}/toggle`, {
       method: "PATCH",
     });
   },
 
   deleteCustomAction: async (id: string, actionId: string) => {
-    return await apiRequest(`/chatagents/${id}/actions/${actionId}`, {
+    return await apiRequest(`/agent/${id}/actions/${actionId}`, {
       method: "DELETE",
     });
   },
 
   getPlaygroundConfig: async (id: string) => {
-    return await apiRequest(`/chatagents/${id}/playground`);
+    return await apiRequest(`/agent/${id}/playground`);
   },
 
   updatePlaygroundConfig: async (
     id: string,
     data: UpdatePlaygroundConfigPayload
   ): Promise<{ data: PlaygroundConfig }> => {
-    return await apiRequest(`/chatagents/${id}/playground`, {
+    return await apiRequest(`/agent/${id}/playground`, {
       method: "PUT",
       body: JSON.stringify(data),
     });
@@ -289,7 +303,7 @@ export const integrationsAPI = {
     data: Record<string, unknown> = {}
   ): Promise<{ data: unknown }> => {
     return await apiRequest(
-      `/chatagents/${chatagentId}/integrations/${platform}`,
+      `/agent/${chatagentId}/integrations/${platform}`,
       {
         method: "POST",
         body: JSON.stringify(data),
@@ -299,7 +313,7 @@ export const integrationsAPI = {
 
   disconnect: async (chatagentId: string, platform: string) => {
     return await apiRequest(
-      `/chatagents/${chatagentId}/integrations/${platform}`,
+      `/agent/${chatagentId}/integrations/${platform}`,
       {
         method: "DELETE",
       }
@@ -308,7 +322,7 @@ export const integrationsAPI = {
 
   getStatus: async (chatagentId: string, platform: string) => {
     return await apiRequest(
-      `/chatagents/${chatagentId}/integrations/${platform}`
+      `/agent/${chatagentId}/integrations/${platform}`
     );
   },
 
@@ -319,7 +333,7 @@ export const integrationsAPI = {
     authToken: string
   ) => {
     return await apiRequest(
-      `/chatagents/${chatagentId}/integrations/twilio/configure`,
+      `/agent/${chatagentId}/integrations/twilio/configure`,
       {
         method: "POST",
         body: JSON.stringify({ phoneNumber, accountSid, authToken }),
@@ -333,7 +347,7 @@ export const integrationsAPI = {
     accessToken: string
   ) => {
     return await apiRequest(
-      `/chatagents/${chatagentId}/integrations/whatsapp/configure`,
+      `/agent/${chatagentId}/integrations/whatsapp/configure`,
       {
         method: "POST",
         body: JSON.stringify({ phoneNumberId, accessToken }),
@@ -342,21 +356,21 @@ export const integrationsAPI = {
   },
 
   getSlackOAuthUrl: (chatagentId: string) => {
-    return `${process.env.NEXT_PUBLIC_API_URL || "/api"}/chatagents/${chatagentId}/integrations/slack/oauth-url`;
+    return `${process.env.NEXT_PUBLIC_API_URL || "/api"}/agent/${chatagentId}/integrations/slack/oauth-url`;
   },
 };
 
 // Knowledge Base API
 export const knowledgeAPI = {
   getSources: async (chatagentId: string) => {
-    return await apiRequest(`/chatagents/${chatagentId}/knowledge/sources`);
+    return await apiRequest(`/agent/${chatagentId}/knowledge/sources`);
   },
 
   uploadDocument: async (chatagentId: string, file: File) => {
     const formData = new FormData();
     formData.append("file", file);
 
-    return await apiRequest(`/chatagents/${chatagentId}/knowledge/documents`, {
+    return await apiRequest(`/agent/${chatagentId}/knowledge/documents`, {
       method: "POST",
       body: formData,
       headers: {},
@@ -364,18 +378,18 @@ export const knowledgeAPI = {
   },
 
   addWebsite: async (chatagentId: string, url: string) => {
-    return await apiRequest(`/chatagents/${chatagentId}/knowledge/websites`, {
+    return await apiRequest(`/agent/${chatagentId}/knowledge/websites`, {
       method: "POST",
       body: JSON.stringify({ url }),
     });
   },
 
   getFaqs: async (chatagentId: string) => {
-    return await apiRequest(`/chatagents/${chatagentId}/knowledge/faqs`);
+    return await apiRequest(`/agent/${chatagentId}/knowledge/faqs`);
   },
 
   addFaq: async (chatagentId: string, question: string, answer: string) => {
-    return await apiRequest(`/chatagents/${chatagentId}/knowledge/faqs`, {
+    return await apiRequest(`/agent/${chatagentId}/knowledge/faqs`, {
       method: "POST",
       body: JSON.stringify({ question, answer }),
     });
@@ -383,7 +397,7 @@ export const knowledgeAPI = {
 
   deleteFaq: async (chatagentId: string, faqId: string) => {
     return await apiRequest(
-      `/chatagents/${chatagentId}/knowledge/faqs/${faqId}`,
+      `/agent/${chatagentId}/knowledge/faqs/${faqId}`,
       {
         method: "DELETE",
       }
@@ -395,7 +409,7 @@ export const knowledgeAPI = {
 export const analyticsAPI = {
   getOverview: async (chatagentId: string, period: string = "last30Days") => {
     return await apiRequest(
-      `/chatagents/${chatagentId}/analytics/overview?period=${period}`
+      `/agent/${chatagentId}/analytics/overview?period=${period}`
     );
   },
 
@@ -404,7 +418,7 @@ export const analyticsAPI = {
     period: string = "last30Days"
   ) => {
     return await apiRequest(
-      `/chatagents/${chatagentId}/analytics/messages?period=${period}`
+      `/agent/${chatagentId}/analytics/messages?period=${period}`
     );
   },
 
@@ -413,7 +427,7 @@ export const analyticsAPI = {
     period: string = "last30Days"
   ) => {
     return await apiRequest(
-      `/chatagents/${chatagentId}/analytics/satisfaction?period=${period}`
+      `/agent/${chatagentId}/analytics/satisfaction?period=${period}`
     );
   },
 
@@ -422,13 +436,13 @@ export const analyticsAPI = {
     period: string = "last30Days"
   ) => {
     return await apiRequest(
-      `/chatagents/${chatagentId}/analytics/platforms?period=${period}`
+      `/agent/${chatagentId}/analytics/platforms?period=${period}`
     );
   },
 
   getModelUsage: async (chatagentId: string, period: string = "last30Days") => {
     return await apiRequest(
-      `/chatagents/${chatagentId}/analytics/models?period=${period}`
+      `/agent/${chatagentId}/analytics/models?period=${period}`
     );
   },
 };

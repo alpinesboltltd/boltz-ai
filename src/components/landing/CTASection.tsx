@@ -8,11 +8,12 @@ export function CTASection() {
           Ready to Build Your AI Agent?
         </h2>
         <p className="text-xl text-primary-100 mb-12 max-w-3xl mx-auto">
-          Join thousands of businesses using AI agents to transform their customer experience.
+          Join thousands of businesses using AI agents to transform their
+          customer experience.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link
-            href="/auth/register"
+            href="/register"
             className="px-8 py-4 bg-white text-primary-600 font-semibold rounded-lg hover:bg-gray-100 transition-colors"
           >
             Start Building Free

@@ -407,7 +407,7 @@ The backend architecture for Boltz is designed to be scalable, maintainable, and
 
 ### Authentication API
 
-- `POST /api/auth/register` - Register a new user
+- `POST /api/register` - Register a new user
 - `POST /api/auth/login` - Login user
 - `POST /api/auth/logout` - Logout user
 - `POST /api/auth/refresh-token` - Refresh JWT token
