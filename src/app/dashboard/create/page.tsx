@@ -14,6 +14,7 @@ import {
   AgentIconSize,
   AgentBubbleStyle,
   type AgentSchemaInput,
+  Agent,
 } from "@/types/agent";
 import { AI_MODELS, getModelsByType } from "@/mock-data/ai-models";
 import { TrainingSources } from "@/components/dashboard/TrainingSources";
@@ -21,7 +22,7 @@ import { BotPreview } from "@/components/chatbot/BotPreview";
 import { agentApi } from "@/lib/agent-api";
 import { useCurrentUser } from "@/store/authStore";
 import { Spinner } from "@/components/common/Spinner";
-import { ArrowPathIcon, CheckCircleIcon } from "@heroicons/react/24/outline";
+import { CheckCircleIcon } from "@heroicons/react/24/outline";
 import { toast } from "@/store/toastStore";
 
 interface AgentAppearanceForm {
@@ -85,9 +86,9 @@ export default function CreateAgentPage() {
   const [step, setStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [agentId, setAgentId] = useState<string | null>(null);
-  const [agentData, setAgentData] = useState<any>(null);
+  const [agentData, setAgentData] = useState<Agent | null>(null);
   const [selectedTemplate, setSelectedTemplate] = useState("");
-  const [isQuickCreateOpen, setIsQuickCreateOpen] = useState(false);
+  // const [isQuickCreateOpen, setIsQuickCreateOpen] = useState(false);
 
   // Refs for animation
   const button1Ref = useRef<HTMLButtonElement>(null);
@@ -125,42 +126,48 @@ export default function CreateAgentPage() {
   const availableModels = getModelsByType(selectedAgentType);
 
   // Initialize buttons to hidden state
-  useGSAP(() => {
-    if (button1Ref.current && button2Ref.current) {
-      gsap.set([button1Ref.current, button2Ref.current], {
-        opacity: 0,
-        scale: 0,
-        y: -20,
-      });
-    }
-  }, { scope: containerRef });
-
-  // Animation for dropdown toggle
-  useGSAP(() => {
-    if (button1Ref.current && button2Ref.current) {
-      const tl = gsap.timeline();
-
-      if (isQuickCreateOpen) {
-        tl.to([button1Ref.current, button2Ref.current], {
-          opacity: 1,
-          scale: 1,
-          y: 0,
-          duration: 0.5,
-          stagger: 0.12,
-          ease: 'back.out(1.7)',
-        });
-      } else {
-        tl.to([button2Ref.current, button1Ref.current], {
+  useGSAP(
+    () => {
+      if (button1Ref.current && button2Ref.current) {
+        gsap.set([button1Ref.current, button2Ref.current], {
           opacity: 0,
           scale: 0,
           y: -20,
-          duration: 0.4,
-          stagger: 0.1,
-          ease: 'back.in(1.7)',
         });
       }
-    }
-  }, { dependencies: [isQuickCreateOpen], scope: containerRef });
+    },
+    { scope: containerRef }
+  );
+  // FIXME:INVESTIGATE
+  // Animation for dropdown toggle
+  // useGSAP(
+  //   () => {
+  //     if (button1Ref.current && button2Ref.current) {
+  //       const tl = gsap.timeline();
+
+  //       if (isQuickCreateOpen) {
+  //         tl.to([button1Ref.current, button2Ref.current], {
+  //           opacity: 1,
+  //           scale: 1,
+  //           y: 0,
+  //           duration: 0.5,
+  //           stagger: 0.12,
+  //           ease: "back.out(1.7)",
+  //         });
+  //       } else {
+  //         tl.to([button2Ref.current, button1Ref.current], {
+  //           opacity: 0,
+  //           scale: 0,
+  //           y: -20,
+  //           duration: 0.4,
+  //           stagger: 0.1,
+  //           ease: "back.in(1.7)",
+  //         });
+  //       }
+  //     }
+  //   },
+  //   { dependencies: [isQuickCreateOpen], scope: containerRef }
+  // );
 
   // Update AI provider and credits when model changes
   useEffect(() => {
@@ -191,7 +198,10 @@ export default function CreateAgentPage() {
       setStep(2);
     } catch (error) {
       console.error("Error creating agent:", error);
-      toast.error("Creation Failed", "Failed to create agent. Please try again.");
+      toast.error(
+        "Creation Failed",
+        "Failed to create agent. Please try again."
+      );
     } finally {
       setIsLoading(false);
     }
@@ -208,7 +218,10 @@ export default function CreateAgentPage() {
       setStep(3);
     } catch (error) {
       console.error("Error updating training:", error);
-      toast.error("Training Failed", "Failed to save training data. Please try again.");
+      toast.error(
+        "Training Failed",
+        "Failed to save training data. Please try again."
+      );
     } finally {
       setIsLoading(false);
     }
@@ -261,31 +274,36 @@ export default function CreateAgentPage() {
       router.push(`/dashboard/agent/${agentId}`);
     } catch (error) {
       console.error("Error finalizing agent:", error);
-      toast.error("Creation Failed", "Failed to create agent. Please try again.");
+      toast.error(
+        "Creation Failed",
+        "Failed to create agent. Please try again."
+      );
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleQuickCreate = (type: 'scratch' | 'template') => {
-    if (type === 'template') {
-      setSelectedTemplate(templates[0].id);
-    }
-    setIsQuickCreateOpen(false);
-  };
+  // FIXME: LOOK INTO ALL OF THESE
 
-  const isStepComplete = () => {
-    switch (step) {
-      case 1:
-        return agentForm.formState.isValid;
-      case 2:
-        return true;
-      case 3:
-        return appearanceForm.formState.isValid;
-      default:
-        return true;
-    }
-  };
+  // const handleQuickCreate = (type: "scratch" | "template") => {
+  //   if (type === "template") {
+  //     setSelectedTemplate(templates[0].id);
+  //   }
+  //   setIsQuickCreateOpen(false);
+  // };
+
+  // const isStepComplete = () => {
+  //   switch (step) {
+  //     case 1:
+  //       return agentForm.formState.isValid;
+  //     case 2:
+  //       return true;
+  //     case 3:
+  //       return appearanceForm.formState.isValid;
+  //     default:
+  //       return true;
+  //   }
+  // };
 
   const prevStep = () => {
     if (step === 2) setStep(1);
@@ -309,7 +327,10 @@ export default function CreateAgentPage() {
         {/* Progress Steps */}
         <div className="mt-8">
           <nav aria-label="Progress">
-            <ol role="list" className="space-y-4 md:flex md:space-y-0 md:space-x-8">
+            <ol
+              role="list"
+              className="space-y-4 md:flex md:space-y-0 md:space-x-8"
+            >
               {[
                 { id: 1, name: "Basic Info", description: "Name and model" },
                 { id: 2, name: "Training", description: "Knowledge base" },
@@ -317,16 +338,20 @@ export default function CreateAgentPage() {
               ].map((stepItem) => (
                 <li key={stepItem.id} className="md:flex-1">
                   <div
-                    className={`group flex flex-col border-l-4 py-2 pl-4 ${step > stepItem.id
+                    className={`group flex flex-col border-l-4 py-2 pl-4 ${
+                      step > stepItem.id
                         ? "border-primary-600"
                         : step === stepItem.id
                           ? "border-primary-600"
                           : "border-gray-200"
-                      } md:border-l-0 md:border-t-4 md:pl-0 md:pt-4 md:pb-0`}
+                    } md:border-l-0 md:border-t-4 md:pl-0 md:pt-4 md:pb-0`}
                   >
                     <span
-                      className={`text-xs font-semibold uppercase tracking-wide ${step >= stepItem.id ? "text-primary-600" : "text-gray-500"
-                        }`}
+                      className={`text-xs font-semibold uppercase tracking-wide ${
+                        step >= stepItem.id
+                          ? "text-primary-600"
+                          : "text-gray-500"
+                      }`}
                     >
                       Step {stepItem.id}
                     </span>
@@ -392,10 +417,11 @@ export default function CreateAgentPage() {
                         <div
                           key={template.id}
                           onClick={() => setSelectedTemplate(template.id)}
-                          className={`relative rounded-lg border p-4 cursor-pointer ${selectedTemplate === template.id
+                          className={`relative rounded-lg border p-4 cursor-pointer ${
+                            selectedTemplate === template.id
                               ? "border-primary-500 ring-2 ring-primary-500"
                               : "border-gray-300 hover:border-gray-400"
-                            }`}
+                          }`}
                         >
                           <div className="flex items-center space-x-3">
                             <div className="text-2xl">{template.icon}</div>
@@ -445,10 +471,11 @@ export default function CreateAgentPage() {
                       ].map((type) => (
                         <label
                           key={type.value}
-                          className={`relative flex flex-col items-center p-6 border-2 rounded-xl cursor-pointer transition-all hover:shadow-md ${selectedAgentType === type.value
+                          className={`relative flex flex-col items-center p-6 border-2 rounded-xl cursor-pointer transition-all hover:shadow-md ${
+                            selectedAgentType === type.value
                               ? "border-primary-500 bg-primary-50 shadow-md"
                               : "border-gray-200 hover:border-gray-300"
-                            }`}
+                          }`}
                         >
                           <input
                             {...agentForm.register("agent_type")}
@@ -481,10 +508,11 @@ export default function CreateAgentPage() {
                       {availableModels.map((model) => (
                         <label
                           key={model.model}
-                          className={`relative rounded-lg border p-4 cursor-pointer flex items-center ${selectedModel === model.model
+                          className={`relative rounded-lg border p-4 cursor-pointer flex items-center ${
+                            selectedModel === model.model
                               ? "border-primary-500 ring-2 ring-primary-500"
                               : "border-gray-300 hover:border-gray-400"
-                            }`}
+                          }`}
                         >
                           <input
                             {...agentForm.register("ai_model")}
@@ -524,7 +552,11 @@ export default function CreateAgentPage() {
                     disabled={isLoading}
                     className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50"
                   >
-                    {isLoading ? <Spinner size="sm" color="white" /> : "Continue"}
+                    {isLoading ? (
+                      <Spinner size="sm" color="white" />
+                    ) : (
+                      "Continue"
+                    )}
                   </button>
                 </div>
               </form>
@@ -537,13 +569,16 @@ export default function CreateAgentPage() {
                   Train Your Agent
                 </h2>
                 <p className="text-sm text-gray-500 mb-6">
-                  Add knowledge sources to help your agent provide accurate responses.
+                  Add knowledge sources to help your agent provide accurate
+                  responses.
                 </p>
 
                 {agentId && (
                   <TrainingSources
                     agentId={agentId}
-                    onDataAdded={(data) => console.log("Training data added:", data)}
+                    onDataAdded={(data) =>
+                      console.log("Training data added:", data)
+                    }
                   />
                 )}
 
@@ -559,7 +594,11 @@ export default function CreateAgentPage() {
                     disabled={isLoading}
                     className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 disabled:opacity-50"
                   >
-                    {isLoading ? <Spinner size="sm" color="white" /> : "Continue"}
+                    {isLoading ? (
+                      <Spinner size="sm" color="white" />
+                    ) : (
+                      "Continue"
+                    )}
                   </button>
                 </div>
               </div>
@@ -568,7 +607,9 @@ export default function CreateAgentPage() {
             {/* Step 3: Appearance */}
             {step === 3 && (
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <form onSubmit={appearanceForm.handleSubmit(handleAppearanceSubmit)}>
+                <form
+                  onSubmit={appearanceForm.handleSubmit(handleAppearanceSubmit)}
+                >
                   <h2 className="text-lg font-medium text-gray-900 mb-4">
                     Customize Appearance
                   </h2>
@@ -652,7 +693,11 @@ export default function CreateAgentPage() {
                       disabled={isLoading}
                       className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 disabled:opacity-50"
                     >
-                      {isLoading ? <Spinner size="sm" color="white" /> : "Create Agent"}
+                      {isLoading ? (
+                        <Spinner size="sm" color="white" />
+                      ) : (
+                        "Create Agent"
+                      )}
                     </button>
                   </div>
                 </form>

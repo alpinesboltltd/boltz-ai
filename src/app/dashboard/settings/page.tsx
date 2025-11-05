@@ -5,7 +5,7 @@ import { Spinner } from "@/components/common/Spinner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Image from "next/image";
 import { useCurrentUser } from "@/store/authStore";
-import { Profile } from "@/types";
+import { Profile, UserRoles } from "@/types";
 import { Switch } from "@headlessui/react";
 import { toast } from "@/store/toastStore";
 
@@ -248,7 +248,7 @@ export default function SettingsPage() {
                       <Image
                         width={40}
                         height={40}
-                        src={userData.avatar}
+                        src={userData.avatar || "hello world"} //FIXME: Default avater image for users
                         alt="Profile"
                         className="h-full w-full object-cover"
                       />
@@ -294,7 +294,7 @@ export default function SettingsPage() {
                         type="email"
                         name="email"
                         id="email"
-                        value={userData.email}
+                        value={userData.email!}
                         disabled
                         onChange={(e) =>
                           setUserData({ ...userData, email: e.target.value })
@@ -329,13 +329,17 @@ export default function SettingsPage() {
                       >
                         Role
                       </label>
+                      {/* FIXME:change to drop down option */}
                       <input
                         type="text"
                         name="role"
                         id="role"
                         value={userData.role}
                         onChange={(e) =>
-                          setUserData({ ...userData, role: e.target.value })
+                          setUserData({
+                            ...userData,
+                            role: e.target.value as UserRoles,
+                          })
                         }
                         className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
                       />
@@ -690,7 +694,9 @@ export default function SettingsPage() {
                         } catch (err) {
                           toast.error(
                             "Copy Failed",
-                            "Failed to copy API key. Please copy manually."
+                            err instanceof Error
+                              ? err.message
+                              : "Failed to copy API key. Please copy manually."
                           );
                         }
                       }}

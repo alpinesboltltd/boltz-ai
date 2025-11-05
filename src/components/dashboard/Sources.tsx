@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { useTrainingData } from "@/store/agentDetailStore";
 import {
   DocumentTextIcon,
   GlobeAltIcon,
@@ -44,7 +43,8 @@ enum ActiveTab {
 }
 
 export function Sources() {
-  const trainingData = useTrainingData();
+  // TODO: return training data
+  // const trainingData = useTrainingData();
   const [sources, setSources] = useState<TrainingSource[]>([]);
   const [vectorStore, setVectorStore] = useState<VectorStore>({});
   const [activeTab, setActiveTab] = useState<ActiveTab>(ActiveTab.document);
@@ -134,7 +134,7 @@ export function Sources() {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          agentId: agentId,
+          agentId: "agentId", //FIXME: WRONG API CALLS
           vectorStore: newVectorStore,
         }),
       });
