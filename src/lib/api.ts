@@ -6,8 +6,10 @@ import {
   AgentBehavior,
   AgentIntegration,
   AgentStats,
+  CreateAgentAPIRequest,
   SystemPromptTemplate,
   TrainingData,
+  UpdateAgentRequest,
 } from "@/types/agent";
 import { ChatMessage, Conversation } from "@/types/conversations";
 
@@ -18,20 +20,14 @@ import {
   CustomAction,
 } from "@/types/actions";
 import { PlaygroundConfig } from "@/types/agent";
+import {
+  AIModelResponse,
+  AIModelsListResponse,
+  CreateAIModelRequest,
+  UpdateAIModelRequest,
+} from "@/types/aiModels";
 
 // Payload Types
-export interface CreateAgentPayload {
-  name: string;
-  description: string;
-  agent_type: string; // could refine with AgentType but keep string to match backend
-  ai_model: string;
-  ai_provider: string;
-  credits_per_1k: number;
-  status?: string;
-}
-
-export type UpdateAgentPayload = Partial<CreateAgentPayload> & { id?: string };
-
 export interface UpdateAppearancePayload {
   primary_color?: string;
   font_family?: string;
@@ -143,37 +139,50 @@ export const agentsAPI = {
   },
 
   getById: async (
-    id: string, token: string
+    id: string,
+    token: string
   ): Promise<{
-
-    agent: Agent
+    agent: Agent;
     agent_integration: AgentIntegration;
     agent_appearance: AgentAppearance;
     agent_behavior: AgentBehavior;
     agent_integrations: AgentIntegration;
     agent_stats: AgentStats;
     training_data: TrainingData;
-    system_prompt_template: SystemPromptTemplate
-    ;
+    system_prompt_template: SystemPromptTemplate;
   }> => {
     return await apiRequest(`/agent/${id}`, {}, token);
   },
 
-  create: async (data: CreateAgentPayload): Promise<{ data: Agent }> => {
-    return await apiRequest("/agent/create", {
-      method: "POST",
-      body: JSON.stringify(data),
-    });
+  create: async (
+    data: CreateAgentAPIRequest,
+    token: string
+  ): Promise<{ data: Agent }> => {
+    const res = await apiRequest(
+      "/agent/create",
+      {
+        method: "POST",
+        body: JSON.stringify(data),
+      },
+      token
+    );
+    return { data: res.agent };
   },
 
   update: async (
     id: string,
-    data: UpdateAgentPayload
+    data: UpdateAgentRequest,
+    token?: string
   ): Promise<{ data: Agent }> => {
-    return await apiRequest(`/update/${id}`, {
-      method: "PATCH",
-      body: JSON.stringify(data),
-    });
+    const res = await apiRequest(
+      `/agent/update/${id}`,
+      {
+        method: "PATCH",
+        body: JSON.stringify(data),
+      },
+      token
+    );
+    return { data: res.agent };
   },
 
   delete: async (id: string, token: string): Promise<void> => {
@@ -187,7 +196,7 @@ export const agentsAPI = {
   },
 
   getAppearance: async (id: string) => {
-    return await apiRequest(`/agent/${id}/appearance`, { method: 'GET' });
+    return await apiRequest(`/agent/${id}/appearance`, { method: "GET" });
   },
 
   updateAppearance: async (
@@ -302,28 +311,20 @@ export const integrationsAPI = {
     platform: string,
     data: Record<string, unknown> = {}
   ): Promise<{ data: unknown }> => {
-    return await apiRequest(
-      `/agent/${chatagentId}/integrations/${platform}`,
-      {
-        method: "POST",
-        body: JSON.stringify(data),
-      }
-    );
+    return await apiRequest(`/agent/${chatagentId}/integrations/${platform}`, {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
   },
 
   disconnect: async (chatagentId: string, platform: string) => {
-    return await apiRequest(
-      `/agent/${chatagentId}/integrations/${platform}`,
-      {
-        method: "DELETE",
-      }
-    );
+    return await apiRequest(`/agent/${chatagentId}/integrations/${platform}`, {
+      method: "DELETE",
+    });
   },
 
   getStatus: async (chatagentId: string, platform: string) => {
-    return await apiRequest(
-      `/agent/${chatagentId}/integrations/${platform}`
-    );
+    return await apiRequest(`/agent/${chatagentId}/integrations/${platform}`);
   },
 
   configureTwilio: async (
@@ -396,12 +397,9 @@ export const knowledgeAPI = {
   },
 
   deleteFaq: async (chatagentId: string, faqId: string) => {
-    return await apiRequest(
-      `/agent/${chatagentId}/knowledge/faqs/${faqId}`,
-      {
-        method: "DELETE",
-      }
-    );
+    return await apiRequest(`/agent/${chatagentId}/knowledge/faqs/${faqId}`, {
+      method: "DELETE",
+    });
   },
 };
 
@@ -456,6 +454,160 @@ export const AdminChatLogAPI = {
     convoId: string
   ): Promise<{ data: ChatMessage[] }> => {
     return await apiRequest(`/admin/messages/${convoId}`);
+  },
+};
+
+export const aiModelsAPI = {
+  create: async (
+    data: CreateAIModelRequest,
+    token: string
+  ): Promise<AIModelResponse> => {
+    return await apiRequest(
+      "/ai-models",
+      {
+        method: "POST",
+        body: JSON.stringify(data),
+      },
+      token
+    );
+  },
+
+  getById: async (modelId: string, token: string): Promise<AIModelResponse> => {
+    return await apiRequest(`/ai-models/${modelId}`, {}, token);
+  },
+
+  getAll: async (
+    token: string,
+    provider?: string
+  ): Promise<AIModelsListResponse> => {
+    const url = provider ? `/ai-models?provider=${provider}` : "/ai-models";
+    return await apiRequest(url, {}, token);
+  },
+
+  update: async (
+    modelId: string,
+    data: UpdateAIModelRequest,
+    token: string
+  ): Promise<AIModelResponse> => {
+    return await apiRequest(
+      `/ai-models/${modelId}`,
+      {
+        method: "PUT",
+        body: JSON.stringify(data),
+      },
+      token
+    );
+  },
+
+  delete: async (modelId: string, token: string): Promise<void> => {
+    await apiRequest(`/ai-models/${modelId}`, { method: "DELETE" }, token);
+  },
+};
+// Training API
+export const trainingAPI = {
+  uploadFile: async (
+    file: File,
+    agentId: string,
+    token: string
+  ): Promise<{ message: string; file_id: string }> => {
+    // Validate file
+    const maxSize = 10 * 1024 * 1024; // 10MB
+    const allowedTypes = [
+      "application/pdf",
+      "text/plain",
+      "application/msword",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    ];
+
+    if (file.size > maxSize) {
+      throw new Error("File size exceeds 10MB limit");
+    }
+
+    if (!allowedTypes.includes(file.type)) {
+      throw new Error(
+        "Invalid file type. Only PDF, TXT, DOC, and DOCX files are allowed"
+      );
+    }
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("agent_id", agentId);
+    formData.append("data_type", "document");
+
+    const response = await fetch("/training/upload", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || "Upload failed");
+    }
+
+    return response.json();
+  },
+
+  processTraining: async (
+    agentId: string,
+    dataSource: string,
+    processingType: string,
+    token: string
+  ): Promise<{ message: string; job_id: string }> => {
+    return await apiRequest(
+      "/training/process",
+      {
+        method: "POST",
+        body: JSON.stringify({
+          agent_id: agentId,
+          data_source: dataSource,
+          processing_type: processingType,
+        }),
+      },
+      token
+    );
+  },
+
+  getStatus: async (
+    agentId: string,
+    token: string
+  ): Promise<{
+    status: string;
+    progress: number;
+    total_documents: number;
+    processed_documents: number;
+  }> => {
+    return await apiRequest(`/training/status/${agentId}`, {}, token);
+  },
+
+  searchKnowledge: async (
+    agentId: string,
+    query: string,
+    limit: number,
+    token: string
+  ): Promise<{ results: Array<{ content: string; score: number }> }> => {
+    if (!query || query.trim().length === 0) {
+      throw new Error("Query cannot be empty");
+    }
+
+    if (limit < 1 || limit > 20) {
+      throw new Error("Limit must be between 1 and 20");
+    }
+
+    return await apiRequest(
+      "/training/search",
+      {
+        method: "POST",
+        body: JSON.stringify({
+          agent_id: agentId,
+          query,
+          limit,
+        }),
+      },
+      token
+    );
   },
 };
 

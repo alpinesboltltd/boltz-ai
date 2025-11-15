@@ -24,17 +24,19 @@ import {
 } from "@/store/agentDetailStore";
 import { useMemo } from "react";
 import { SYSTEM_PROMPT_TEMPLATES } from "@/data/systemPrompts";
-import { AI_MODELS, AIModel } from "@/mock-data/ai-models";
 import Image from "next/image";
 import Select from "react-select";
 import { Message } from "@/types";
 import { cn } from "@/lib/utils";
+import { useAIModelsStore } from "@/store/aiModelsStore";
+import { AIModel } from "@/mock-data/ai-models";
 
 export function AgentPlayground() {
   const agent = useAgentData();
   const behavior = useAgentBehavior();
   const appearance = useAgentAppearance();
   const agentId = agent?.id;
+  const { models, getModelsByType } = useAIModelsStore();
 
   const primaryColor = useMemo(
     () => appearance?.primary_color || "#0284c7",
@@ -46,11 +48,13 @@ export function AgentPlayground() {
   const [showConfig, setShowConfig] = useState(true);
   const mobileTabContentRef = useRef<HTMLDivElement>(null);
   const [config, setConfig] = useState<PlaygroundConfig>({
-    model: "GPT-3.5 Turbo",
-    temperature: 0.7,
-    maxTokens: 1000,
-    systemInstruction: SYSTEM_PROMPT_TEMPLATES[0].template,
-    selectedTemplate: "ai_agent",
+    ai_model_id: agent?.ai_model_id || "adaf",
+    ai_model_name: agent?.name || "gpt-40",
+    maxTokens: behavior?.max_tokens || 500,
+    temperature: behavior?.temperature || 0.5,
+    systemInstruction:
+      behavior?.system_instruction || "You are a helpful assistant",
+    selectedTemplate: SYSTEM_PROMPT_TEMPLATES[0].template,
   });
   const [customPrompts, setCustomPrompts] = useState<SystemPromptTemplate[]>(
     []
@@ -59,7 +63,11 @@ export function AgentPlayground() {
 
   useEffect(() => {
     if (agent) {
-      setConfig((prev) => ({ ...prev, model: agent.ai_model }));
+      setConfig((prev) => ({
+        ...prev,
+        ai_model_id: agent.ai_model_id,
+        ai_model_name: agent.name,
+      }));
     }
     if (agentId) {
       loadBehaviorConfig();
@@ -69,7 +77,10 @@ export function AgentPlayground() {
   useEffect(() => {
     if (behavior) {
       setConfig({
-        model: agent?.ai_model || "GPT-3.5 Turbo",
+        ai_model_id: agent?.ai_model_id || "adaf",
+        ai_model_name:
+          models.find((model) => model.id === agent?.ai_model_id)?.name ||
+          "GPT-3.5 Turbo",
         temperature: behavior.temperature || 0.7,
         maxTokens: behavior.max_tokens || 1000,
         systemInstruction:
@@ -77,7 +88,7 @@ export function AgentPlayground() {
         selectedTemplate: behavior.prompt_template || "ai_agent",
       });
     }
-  }, [behavior, agent?.ai_model]);
+  }, [behavior, agent?.ai_model_id]);
 
   const loadBehaviorConfig = async () => {
     if (!agentId) return;
@@ -147,12 +158,15 @@ export function AgentPlayground() {
     if (!agentId) return;
     try {
       // Update agent model if changed
-      if (agent && config.model !== agent.ai_model) {
-        const modelData = AI_MODELS.find((m) => m.model === config.model);
+      if (agent && config.ai_model_id !== agent.ai_model_id) {
+        const modelData = models.find((m) => m.id === config.ai_model_id);
+        if (!modelData) {
+          console.error("Model not found");
+          return;
+        }
         await agentsAPI.update(agentId, {
-          ai_model: config.model,
-          ai_provider: modelData?.provider || agent.ai_provider,
-          credits_per_1k: modelData?.credits_per_1k || agent.credits_per_1k,
+          id: agentId,
+          ai_model_id: modelData?.id,
         });
       }
 
@@ -203,23 +217,6 @@ export function AgentPlayground() {
   const allPrompts = [...SYSTEM_PROMPT_TEMPLATES, ...customPrompts];
 
   // Filter models based on agent type
-  const getFilteredModels = () => {
-    if (!agent) return AI_MODELS;
-    switch (agent.agent_type) {
-      case AgentType.TEXT:
-        return AI_MODELS.filter((model) => model.capabilities.includes("text"));
-      case AgentType.VOICE:
-        return AI_MODELS.filter((model) =>
-          model.capabilities.includes("voice")
-        );
-      case AgentType.MULTIMODAL:
-        return AI_MODELS.filter((model) =>
-          model.capabilities.includes("multimodal")
-        );
-      default:
-        return AI_MODELS;
-    }
-  };
 
   // Custom option component for react-select
   const ModelOption = ({ data }: { data: AIModel }) => (
@@ -232,7 +229,7 @@ export function AgentPlayground() {
         className="mr-3"
       />
       <div>
-        <div className="font-medium">{data.model}</div>
+        <div className="font-medium">{data.name}</div>
         <div className="text-sm text-gray-500">
           {data.provider} - {data.credits_per_1k} credits/1k
         </div>
@@ -251,7 +248,7 @@ export function AgentPlayground() {
         className="mr-3 flex-shrink-0"
       />
       <div className="min-w-0">
-        <div className="font-medium text-sm truncate">{data.model}</div>
+        <div className="font-medium text-sm truncate">{data.name}</div>
         <div className="text-xs text-gray-500 truncate">
           {data.provider} • {data.credits_per_1k} credits/1k
         </div>
@@ -259,14 +256,14 @@ export function AgentPlayground() {
     </div>
   );
 
-  const modelOptions = getFilteredModels().map((model) => ({
-    value: model.model,
-    label: model.model,
+  const modelOptions = getModelsByType(agent!.agent_type).map((model) => ({
+    value: model.id,
+    label: model.name,
     data: model,
   }));
 
   const selectedModel = modelOptions.find(
-    (option) => option.value === config.model
+    (option) => option.value === config.ai_model_id
   );
 
   // Animate mobile tab transitions
@@ -356,7 +353,7 @@ export function AgentPlayground() {
               <div>
                 <h3 className="font-medium">Testing: {agent?.name}</h3>
                 <p className="text-xs text-primary-100">
-                  {config.model} | Temp: {config.temperature}
+                  {config.ai_model_name} | Temp: {config.temperature}
                 </p>
               </div>
               <button
@@ -641,7 +638,7 @@ function ConfigPanel({
             {agent?.agent_type === AgentType.TEXT && "Text-only conversations"}
             {agent?.agent_type === AgentType.VOICE &&
               "Voice and audio processing"}
-            {agent?.agent_type === AgentType.MULTIMODAL &&
+            {agent?.agent_type === AgentType.VISION &&
               "Text, images, and multimedia"}
           </div>
         </div>

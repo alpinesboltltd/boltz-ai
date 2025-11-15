@@ -1,29 +1,34 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import {
-  AgentSchema,
   AgentStatus,
   AgentType,
   AgentPosition,
   AgentIconSize,
   AgentBubbleStyle,
-  type AgentSchemaInput,
   Agent,
+  CreateAgentRequest,
+  CreateAgentRequestSchema,
 } from "@/types/agent";
-import { AI_MODELS, getModelsByType } from "@/mock-data/ai-models";
 import { TrainingSources } from "@/components/dashboard/TrainingSources";
 import { BotPreview } from "@/components/chatbot/BotPreview";
 import { agentApi } from "@/lib/agent-api";
-import { useCurrentUser } from "@/store/authStore";
+import { accessToken, useCurrentUser } from "@/store/authStore";
+import { useAIModelsStore } from "@/store/aiModelsStore";
 import { Spinner } from "@/components/common/Spinner";
+import { Input } from "@/components/common/Input";
+import { Textarea } from "@/components/common/Textarea";
+import { Select } from "@/components/common/Select";
 import { CheckCircleIcon } from "@heroicons/react/24/outline";
 import { toast } from "@/store/toastStore";
+import { agentsAPI } from "@/lib/api";
+import { agentTypeToEnum } from "@/lib/agentTypeSerializer";
 
 interface AgentAppearanceForm {
   welcome_message: string;
@@ -95,15 +100,13 @@ export default function CreateAgentPage() {
   const button2Ref = useRef<HTMLButtonElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const agentForm = useForm<AgentSchemaInput>({
-    resolver: zodResolver(AgentSchema),
+  const agentForm = useForm<CreateAgentRequest>({
+    resolver: zodResolver(CreateAgentRequestSchema),
     defaultValues: {
       name: "",
       description: "",
       agent_type: AgentType.TEXT,
-      ai_model: "",
-      ai_provider: "",
-      credits_per_1k: 0,
+      ai_model_id: "",
       status: AgentStatus.DRAFT,
     },
   });
@@ -121,9 +124,22 @@ export default function CreateAgentPage() {
   });
 
   const selectedAgentType = agentForm.watch("agent_type");
-  const selectedModel = agentForm.watch("ai_model");
+  const selectedModel = agentForm.watch("ai_model_id");
   const appearanceData = appearanceForm.watch();
+
+  const {
+    models,
+    isLoading: modelsLoading,
+    fetchModels,
+    getModelsByType,
+  } = useAIModelsStore();
   const availableModels = getModelsByType(selectedAgentType);
+
+  useEffect(() => {
+    if (models.length === 0) {
+      fetchModels();
+    }
+  }, [models.length, fetchModels]);
 
   // Initialize buttons to hidden state
   useGSAP(
@@ -170,38 +186,49 @@ export default function CreateAgentPage() {
   // );
 
   // Update AI provider and credits when model changes
-  useEffect(() => {
-    if (selectedModel) {
-      const model = AI_MODELS.find((m) => m.model === selectedModel);
-      if (model) {
-        agentForm.setValue("ai_provider", model.provider);
-        agentForm.setValue("credits_per_1k", model.credits);
-      }
-    }
-  }, [selectedModel, agentForm]);
 
-  const handleAgentSubmit = async (data: AgentSchemaInput) => {
-    setIsLoading(true);
+  const handleAgentSubmit = async (data: CreateAgentRequest) => {
     try {
-      const newAgentId = agentApi.generateId();
-      const agentPayload = {
-        id: newAgentId,
-        user_id: user!.id,
-        ...data,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-      };
+      setIsLoading(true);
+      if (!user || !user.id) {
+        toast.error(
+          "Creation Failed",
+          "No user found. Please login and try again."
+        );
+        return;
+      }
 
-      const savedAgent = await agentApi.createAgent(agentPayload);
-      setAgentId(newAgentId);
-      setAgentData(savedAgent);
+      if (agentId) {
+        // Update existing agent
+        await agentsAPI.update(
+          agentId,
+          {
+            ...data,
+            id: agentId,
+            agent_type: agentTypeToEnum(data.agent_type),
+          },
+          accessToken()
+        );
+        toast.success("Updated", "Agent details updated successfully");
+      } else {
+        // Create new agent
+        const agentPayload = {
+          ...data,
+          user_id: user.id,
+          agent_type: agentTypeToEnum(data.agent_type),
+        };
+
+        const { data: agent } = await agentsAPI.create(
+          agentPayload,
+          accessToken()
+        );
+        setAgentId(agent.id);
+        setAgentData(agent);
+      }
       setStep(2);
     } catch (error) {
-      console.error("Error creating agent:", error);
-      toast.error(
-        "Creation Failed",
-        "Failed to create agent. Please try again."
-      );
+      console.error("Error saving agent:", error);
+      toast.error("Save Failed", "Failed to save agent. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -212,9 +239,10 @@ export default function CreateAgentPage() {
 
     setIsLoading(true);
     try {
-      await agentApi.updateAgent(agentId, {
-        updated_at: new Date().toISOString(),
-      });
+      // NOTE: Implement actual training api
+      // await agentsAPI.update(agentId, {
+      //   updated_at: new Date().toISOString(),
+      // });
       setStep(3);
     } catch (error) {
       console.error("Error updating training:", error);
@@ -264,10 +292,6 @@ export default function CreateAgentPage() {
           response_rate: 0,
           conversions_count: 0,
           last_calculated_at: timestamp,
-        }),
-        agentApi.updateAgent(agentId, {
-          status: AgentStatus.ACTIVE,
-          updated_at: timestamp,
         }),
       ]);
 
@@ -324,6 +348,13 @@ export default function CreateAgentPage() {
           </div>
         </div>
 
+        {modelsLoading && (
+          <div className="mt-4 flex items-center gap-2 text-sm text-gray-600">
+            <Spinner size="sm" />
+            <span>Loading AI models...</span>
+          </div>
+        )}
+
         {/* Progress Steps */}
         <div className="mt-8">
           <nav aria-label="Progress">
@@ -376,37 +407,24 @@ export default function CreateAgentPage() {
                 </h2>
 
                 <div className="space-y-6">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">
-                      Agent Name <span className="text-red-500">*</span>
-                    </label>
-                    <div className="mt-1">
-                      <input
-                        {...agentForm.register("name")}
-                        className="shadow-sm focus:ring-primary-500 focus:border-primary-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                        placeholder="e.g., Customer Support Assistant"
-                      />
-                      {agentForm.formState.errors.name && (
-                        <p className="mt-2 text-sm text-red-600">
-                          {agentForm.formState.errors.name.message}
-                        </p>
-                      )}
-                    </div>
-                  </div>
+                  <Input
+                    {...agentForm.register("name")}
+                    label={
+                      <>
+                        Agent Name <span className="text-red-500">*</span>
+                      </>
+                    }
+                    type="text"
+                    placeholder="e.g., Customer Support Assistant"
+                    error={agentForm.formState.errors.name?.message}
+                  />
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">
-                      Description
-                    </label>
-                    <div className="mt-1">
-                      <textarea
-                        {...agentForm.register("description")}
-                        rows={3}
-                        className="shadow-sm focus:ring-primary-500 focus:border-primary-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                        placeholder="Describe what your AI agent will do"
-                      />
-                    </div>
-                  </div>
+                  <Textarea
+                    {...agentForm.register("description")}
+                    label="Description"
+                    rows={3}
+                    placeholder="Describe what your AI agent will do"
+                  />
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -451,20 +469,20 @@ export default function CreateAgentPage() {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       {[
                         {
-                          value: "text",
+                          value: AgentType.TEXT,
                           label: "Text Only",
                           icon: "💬",
                           desc: "Text-based conversations",
                         },
                         {
-                          value: "voice",
+                          value: AgentType.VOICE,
                           label: "Voice Only",
                           icon: "🎤",
                           desc: "Voice interactions",
                         },
                         {
-                          value: "multimodal",
-                          label: "Multimodal",
+                          value: AgentType.VISION,
+                          label: "Vision (Multimodal)",
                           icon: "🎭",
                           desc: "Text, voice & images",
                         },
@@ -504,43 +522,50 @@ export default function CreateAgentPage() {
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Select AI Model <span className="text-red-500">*</span>
                     </label>
-                    <div className="space-y-4">
-                      {availableModels.map((model) => (
-                        <label
-                          key={model.model}
-                          className={`relative rounded-lg border p-4 cursor-pointer flex items-center ${
-                            selectedModel === model.model
-                              ? "border-primary-500 ring-2 ring-primary-500"
-                              : "border-gray-300 hover:border-gray-400"
-                          }`}
-                        >
-                          <input
-                            {...agentForm.register("ai_model")}
-                            type="radio"
-                            value={model.model}
-                            className="sr-only"
-                          />
-                          <div className="flex-1">
-                            <div className="flex items-center justify-between">
-                              <h3 className="text-sm font-medium text-gray-900">
-                                {model.provider} - {model.model}
-                              </h3>
-                              <span className="text-xs text-gray-500">
-                                {model.credits} credits/1k tokens
-                              </span>
+                    {availableModels.length === 0 ? (
+                      <div className="text-sm text-gray-500 p-4 bg-gray-50 rounded-md">
+                        No models available for the selected agent type. Please
+                        try a different type.
+                      </div>
+                    ) : (
+                      <div className="space-y-4">
+                        {availableModels.map((model) => (
+                          <label
+                            key={model.id}
+                            className={`relative rounded-lg border p-4 cursor-pointer flex items-center ${
+                              selectedModel === model.id
+                                ? "border-primary-500 ring-2 ring-primary-500"
+                                : "border-gray-300 hover:border-gray-400"
+                            }`}
+                          >
+                            <input
+                              {...agentForm.register("ai_model_id")}
+                              type="radio"
+                              value={model.id}
+                              className="sr-only"
+                            />
+                            <div className="flex-1">
+                              <div className="flex items-center justify-between">
+                                <h3 className="text-sm font-medium text-gray-900">
+                                  {model.provider} - {model.name}
+                                </h3>
+                                <span className="text-xs text-gray-500">
+                                  {model.credits_per_1k} credits/1k tokens
+                                </span>
+                              </div>
                             </div>
-                          </div>
-                          {selectedModel === model.model && (
-                            <div className="ml-4 text-primary-600">
-                              <CheckCircleIcon className="h-5 w-5" />
-                            </div>
-                          )}
-                        </label>
-                      ))}
-                    </div>
-                    {agentForm.formState.errors.ai_model && (
+                            {selectedModel === model.id && (
+                              <div className="ml-4 text-primary-600">
+                                <CheckCircleIcon className="h-5 w-5" />
+                              </div>
+                            )}
+                          </label>
+                        ))}
+                      </div>
+                    )}
+                    {agentForm.formState.errors.ai_model_id && (
                       <p className="mt-2 text-sm text-red-600">
-                        {agentForm.formState.errors.ai_model.message}
+                        {agentForm.formState.errors.ai_model_id.message}
                       </p>
                     )}
                   </div>
@@ -550,10 +575,12 @@ export default function CreateAgentPage() {
                   <button
                     type="submit"
                     disabled={isLoading}
-                    className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50"
+                    className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {isLoading ? (
                       <Spinner size="sm" color="white" />
+                    ) : agentId ? (
+                      "Update & Continue"
                     ) : (
                       "Continue"
                     )}
@@ -584,15 +611,17 @@ export default function CreateAgentPage() {
 
                 <div className="flex justify-between mt-8">
                   <button
+                    type="button"
                     onClick={prevStep}
-                    className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+                    className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
                   >
                     Back
                   </button>
                   <button
+                    type="button"
                     onClick={handleTrainingComplete}
                     disabled={isLoading}
-                    className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 disabled:opacity-50"
+                    className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {isLoading ? (
                       <Spinner size="sm" color="white" />
@@ -615,68 +644,44 @@ export default function CreateAgentPage() {
                   </h2>
 
                   <div className="space-y-6">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">
-                        Welcome Message
-                      </label>
-                      <textarea
-                        {...appearanceForm.register("welcome_message")}
-                        rows={3}
-                        className="mt-1 shadow-sm focus:ring-primary-500 focus:border-primary-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                    <Textarea
+                      {...appearanceForm.register("welcome_message")}
+                      label="Welcome Message"
+                      rows={3}
+                    />
+
+                    <div className="grid grid-cols-2 gap-4">
+                      <Input
+                        {...appearanceForm.register("primary_color")}
+                        label="Primary Color"
+                        type="color"
+                        className="h-10"
                       />
+                      <Select
+                        {...appearanceForm.register("position")}
+                        label="Position"
+                      >
+                        <option value="bottom-right">Bottom Right</option>
+                        <option value="bottom-left">Bottom Left</option>
+                      </Select>
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700">
-                          Primary Color
-                        </label>
-                        <input
-                          {...appearanceForm.register("primary_color")}
-                          type="color"
-                          className="mt-1 h-10 w-full rounded-md border-gray-300"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700">
-                          Position
-                        </label>
-                        <select
-                          {...appearanceForm.register("position")}
-                          className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm rounded-md"
-                        >
-                          <option value="bottom-right">Bottom Right</option>
-                          <option value="bottom-left">Bottom Left</option>
-                        </select>
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700">
-                          Icon Size
-                        </label>
-                        <select
-                          {...appearanceForm.register("icon_size")}
-                          className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm rounded-md"
-                        >
-                          <option value="small">Small</option>
-                          <option value="medium">Medium</option>
-                          <option value="large">Large</option>
-                        </select>
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700">
-                          Bubble Style
-                        </label>
-                        <select
-                          {...appearanceForm.register("bubble_style")}
-                          className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm rounded-md"
-                        >
-                          <option value="round">Round</option>
-                          <option value="square">Square</option>
-                        </select>
-                      </div>
+                      <Select
+                        {...appearanceForm.register("icon_size")}
+                        label="Icon Size"
+                      >
+                        <option value="small">Small</option>
+                        <option value="medium">Medium</option>
+                        <option value="large">Large</option>
+                      </Select>
+                      <Select
+                        {...appearanceForm.register("bubble_style")}
+                        label="Bubble Style"
+                      >
+                        <option value="round">Round</option>
+                        <option value="square">Square</option>
+                      </Select>
                     </div>
                   </div>
 
@@ -684,14 +689,14 @@ export default function CreateAgentPage() {
                     <button
                       type="button"
                       onClick={prevStep}
-                      className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+                      className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
                     >
                       Back
                     </button>
                     <button
                       type="submit"
                       disabled={isLoading}
-                      className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 disabled:opacity-50"
+                      className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {isLoading ? (
                         <Spinner size="sm" color="white" />

@@ -1,15 +1,15 @@
 import { User } from "firebase/auth";
 
 // AI Model Types
-export interface AIModel {
-  id: string;
-  name: string;
-  provider: string;
-  description: string;
-  capabilities: string[];
-  pricing: string;
-  isPopular: boolean;
-}
+// export interface AIModel {
+//   id: string;
+//   name: string;
+//   provider: string;
+//   description: string;
+//   capabilities: string[];
+//   pricing: string;
+//   isPopular: boolean;
+// }
 
 // API Response types
 export interface ApiResponse<T> {
@@ -147,3 +147,4 @@ export enum FirebaseErrorMessage {
 // Re-export new types
 export * from "./sources";
 export * from "./actions";
+export * from "./aiModels";

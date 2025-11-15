@@ -8,7 +8,7 @@ import { useGSAP } from "@gsap/react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import { Menu } from "@headlessui/react";
-import { useCurrentUser } from "@/store/authStore";
+import { useCurrentUser, useAuthStore } from "@/store/authStore";
 import { User } from "lucide-react";
 import { ErrorBoundary } from "@/components/common/ErrorBoundary";
 
@@ -18,6 +18,7 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const user = useCurrentUser();
+  const logout = useAuthStore((state) => state.logout);
   const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -197,6 +198,25 @@ export default function DashboardLayout({
                   {item.name}
                 </Link>
               ))}
+              <button
+                onClick={logout}
+                className="group flex items-center w-full px-2 py-2 text-base font-medium rounded-md text-gray-600 hover:bg-red-50 hover:text-red-600"
+              >
+                <svg
+                  className="mr-4 h-6 w-6 text-gray-400 group-hover:text-red-500"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                  />
+                </svg>
+                Logout
+              </button>
             </nav>
           </div>
         </div>
@@ -288,6 +308,37 @@ export default function DashboardLayout({
                 </Link>
               ))}
             </nav>
+            {/* Logout Button */}
+            <div className="px-2 pb-2">
+              <button
+                onClick={logout}
+                className={`group flex items-center w-full px-2 py-2 text-sm font-medium rounded-md transition-all duration-200 text-gray-600 hover:bg-red-50 hover:text-red-600 ${sidebarCollapsed ? "justify-center" : ""}`}
+                title={sidebarCollapsed ? "Logout" : ""}
+              >
+                <svg
+                  className={`h-6 w-6 transition-all duration-200 text-gray-400 group-hover:text-red-500 ${sidebarCollapsed ? "mr-0" : "mr-3"}`}
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                  />
+                </svg>
+                <span
+                  className={`transition-opacity duration-300 ${
+                    sidebarCollapsed
+                      ? "opacity-0 w-0 overflow-hidden"
+                      : "opacity-100"
+                  }`}
+                >
+                  Logout
+                </span>
+              </button>
+            </div>
           </div>
           {!sidebarCollapsed && (
             <div className="flex flex-shrink-0 border-t border-gray-200 p-4 transition-opacity duration-300">

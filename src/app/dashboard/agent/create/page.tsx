@@ -12,12 +12,15 @@ import {
   AgentIconSize,
   AgentBubbleStyle,
   type AgentSchemaInput,
+  CreateAgentRequest,
 } from "@/types/agent";
 import { AI_MODELS, getModelsByType } from "@/mock-data/ai-models";
 import { TrainingSources } from "@/components/dashboard/TrainingSources";
 import { BotPreview } from "@/components/chatbot/BotPreview";
 import { agentApi } from "@/lib/agent-api";
 import { useCurrentUser } from "@/store/authStore";
+import { agentsAPI } from "@/lib/api";
+import { toast } from "@/store/toastStore";
 
 interface AgentAppearanceForm {
   welcome_message: string;
@@ -84,25 +87,25 @@ export default function CreateAgentPage() {
     }
   }, [selectedModel, agentForm]);
 
-  const handleAgentSubmit = async (data: AgentSchemaInput) => {
+ const handleAgentSubmit = async (data: CreateAgentRequest) => {
     setIsLoading(true);
     try {
-      const newAgentId = agentApi.generateId();
       const agentPayload = {
-        id: newAgentId,
         user_id: user!.id,
         ...data,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
       };
 
-      const savedAgent = await agentApi.createAgent(agentPayload);
-      setAgentId(newAgentId);
-      setAgentData(savedAgent);
+      const { data: agent } = await agentsAPI.create(agentPayload);
+      console.log("Agent created:", agent);
+      setAgentId(agent.id);
+      setAgentData(agent);
       setStep(2);
     } catch (error) {
       console.error("Error creating agent:", error);
-      alert("Failed to create agent. Please try again.");
+      toast.error(
+        "Creation Failed",
+        "Failed to create agent. Please try again."
+      );
     } finally {
       setIsLoading(false);
     }

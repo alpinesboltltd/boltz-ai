@@ -5,14 +5,12 @@ export interface Agent {
   user_id: string;
   name: string;
   description: string;
-  agent_type: AgentType;
-  ai_model: string;
-  ai_provider: string;
-  credits_per_1k: number;
+  agent_type: AgentType | number;
+  ai_model_id: string;
   status: AgentStatus;
   created_at: string;
   updated_at: string;
-  template: string;
+  template?: string;
 }
 
 export interface AgentAppearance {
@@ -114,21 +112,6 @@ export interface PaginatedResponse<T> {
   };
 }
 
-export interface CreateAgentRequest {
-  name: string;
-  description: string;
-  agent_type: AgentType;
-  ai_model: string;
-  ai_provider: string;
-  credits_per_1k: number;
-  status?: AgentStatus;
-}
-
-export interface UpdateAgentRequest extends Partial<CreateAgentRequest> {
-  id?: string; // id provided as path param in API call wrapper
-  updated_at?: string;
-}
-
 // Creation request types for related resources (omit server-managed fields)
 export type CreateAgentAppearanceRequest = Omit<AgentAppearance, "id">;
 export type CreateAgentBehaviorRequest = Omit<AgentBehavior, "id"> & {
@@ -168,7 +151,8 @@ export interface ChatHistoryItem {
 }
 
 export interface PlaygroundConfig {
-  model: string;
+  ai_model_id: string;
+  ai_model_name: string;
   temperature: number;
   maxTokens: number;
   systemInstruction: string;
@@ -183,9 +167,9 @@ export interface TestQuery {
 }
 
 export enum AgentType {
-  MULTIMODAL = "multimodal",
   TEXT = "text",
   VOICE = "voice",
+  VISION = "vision",
 }
 
 export enum AgentPosition {
@@ -240,20 +224,40 @@ const statusEnum = [
   AgentStatus.INACTIVE,
 ] as const;
 
-const agentTypeEnum = [
-  AgentType.MULTIMODAL,
-  AgentType.TEXT,
-  AgentType.VOICE,
-] as const;
+export const AgentTypeEnum = {
+  TEXT: 0,
+  VOICE: 1,
+  MULTIMODAL: 2,
+} as const;
 
-export const AgentSchema = z.object({
+export const CreateAgentRequestSchema = z.object({
   name: z.string().min(1, "Agent's name is required"),
   description: z.string().min(1, "describe your agent"),
-  agent_type: z.enum(agentTypeEnum),
-  ai_model: z.string().min(1, "AI model is required"),
-  ai_provider: z.string().min(1, "AI provider is required"),
-  credits_per_1k: z.number().min(1, "Credits must be specified"),
+  agent_type: z.nativeEnum(AgentType),
+  ai_model_id: z.string().min(1, "AI model is required"),
   status: z.enum(statusEnum),
 });
 
-export type AgentSchemaInput = z.infer<typeof AgentSchema>;
+export const CreateAgentAPIRequestSchema = CreateAgentRequestSchema.extend({
+  user_id: z.string(),
+  agent_type: z.union([z.nativeEnum(AgentType), z.number()]),
+});
+
+export const UpdateAgentRequestSchema = CreateAgentRequestSchema.extend({
+  id: z.string().min(1, "Agent ID is required"),
+  agent_type: z.union([z.nativeEnum(AgentType), z.number()]),
+})
+  .partial({
+    name: true,
+    description: true,
+    agent_type: true,
+    ai_model_id: true,
+    status: true,
+  })
+  .refine((data) => Object.values(data).some((value) => value !== undefined), {
+    message: "At least one field must be provided for update",
+  });
+
+export type CreateAgentRequest = z.infer<typeof CreateAgentRequestSchema>;
+export type CreateAgentAPIRequest = z.infer<typeof CreateAgentAPIRequestSchema>;
+export type UpdateAgentRequest = z.infer<typeof UpdateAgentRequestSchema>;

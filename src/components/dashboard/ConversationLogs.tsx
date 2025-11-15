@@ -1,4 +1,3 @@
-import ChatbotPage from "@/app/chatbot/[id]/page";
 import { RefreshCw, SlidersHorizontal, Download, Calendar } from "lucide-react";
 import { useState, useMemo, useEffect } from "react";
 import { AdminChatLogAPI } from "@/lib/api";
@@ -6,6 +5,7 @@ import { Conversation } from "@/types/conversations";
 import { sanitizedContent as DOMPurify } from "@/lib/utils";
 import { Button } from "@headlessui/react";
 import { useAgentData } from "@/store/agentDetailStore";
+import { AgentPlayground } from "../chatbot/AgentPlayground";
 
 enum Tabs {
   CHAT_LOG = "Chat Logs",
@@ -18,7 +18,7 @@ export function ConversationLogs() {
   const [activeTab, setActiveTab] = useState(Tabs.CHAT_LOG);
   const [chatLog, setChatLog] = useState<Conversation[]>([]);
   const [convoId, setConvoId] = useState<string>();
-  
+
   useEffect(() => {
     async function fetchChatLog() {
       if (!chatbotId) return;
@@ -100,7 +100,7 @@ export function ConversationLogs() {
               })}
             </div>
             <div className="flex flex-col w-full md:w-2/4 -mt-8">
-              {convoId && <ChatbotPage convoId={convoId} />}
+              {convoId && <AgentPlayground />}
             </div>
           </div>
         </div>
