@@ -30,6 +30,7 @@ import { Message } from "@/types";
 import { cn } from "@/lib/utils";
 import { useAIModelsStore } from "@/store/aiModelsStore";
 import { AIModel } from "@/mock-data/ai-models";
+import { agentTypeToEnum, enumToAgentType } from "@/lib/agentTypeSerializer";
 
 export function AgentPlayground() {
   const agent = useAgentData();
@@ -256,7 +257,7 @@ export function AgentPlayground() {
     </div>
   );
 
-  const modelOptions = getModelsByType(agent!.agent_type).map((model) => ({
+  const modelOptions = getModelsByType(enumToAgentType(agent?.agent_type as number)).map((model) => ({
     value: model.id,
     label: model.name,
     data: model,
@@ -635,10 +636,10 @@ function ConfigPanel({
             {agent?.agent_type || "Loading..."}
           </span>
           <div className="text-xs text-gray-500 mt-1">
-            {agent?.agent_type === AgentType.TEXT && "Text-only conversations"}
-            {agent?.agent_type === AgentType.VOICE &&
+            {agent?.agent_type === agentTypeToEnum(AgentType.TEXT) && "Text-only conversations"}
+            {agent?.agent_type === agentTypeToEnum(AgentType.VOICE) &&
               "Voice and audio processing"}
-            {agent?.agent_type === AgentType.VISION &&
+            {agent?.agent_type === agentTypeToEnum(AgentType.VISION) &&
               "Text, images, and multimedia"}
           </div>
         </div>
