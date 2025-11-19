@@ -203,7 +203,7 @@ export default function Dashboard() {
                   <AgentCard
                     key={mockAgent.id}
                     agent={mockAgent}
-                    onDelete={() => { }}
+                    onDelete={() => {}}
                     onHire={() => {
                       handleHireTemplate(mockAgent.id);
                       setShowSidebar(false);
