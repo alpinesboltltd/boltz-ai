@@ -45,7 +45,7 @@ export function handleFirebaseErrorMessage(code: string): string {
 
 export async function socialSignIn(
   method: AuthRequestMethods
-): Promise<Profile> {
+): Promise<{ user: Profile; token: string }> {
   let user: User | undefined;
   switch (method) {
     case AuthRequestMethods.google:
@@ -84,8 +84,9 @@ export async function socialSignIn(
     throw new Error("Credentials not found");
   }
 
-  const payload = { id_token: user.getIdToken() };
-  const response = await fetch("api/v1/auth/verify", {
+  const idToken = await user.getIdToken();
+  const payload = { id_token: idToken };
+  const response = await fetch("/v1/auth/verify", {
     method: "POST",
     body: JSON.stringify(payload),
   });
@@ -93,9 +94,14 @@ export async function socialSignIn(
   if (!response.ok) {
     throw new Error("Signin failed");
   }
-  const profile = response.json();
-  console.log(profile);
-  return profile as unknown as Profile;
+
+  const { user: profileUser, token } = (await response.json()) as {
+    user: Profile;
+    token: string;
+  };
+  console.log(token);
+
+  return { user: profileUser, token };
 }
 
 /*

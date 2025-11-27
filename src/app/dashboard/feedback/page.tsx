@@ -9,6 +9,7 @@ import {
   FaceFrownIcon,
 } from "@heroicons/react/24/solid";
 import { ChatBubbleLeftRightIcon } from "@heroicons/react/24/outline";
+import { toast } from "@/store/toastStore";
 
 interface Feedback {
   id: string;
@@ -310,7 +311,7 @@ export default function FeedbackPage() {
                         className="inline-flex items-center px-3 py-1 border border-transparent text-xs font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700"
                         onClick={() => {
                           // In a real app, this would navigate to the conversation
-                          alert(`View conversation ${item.conversationId}`);
+                          toast.info("Navigation", `View conversation ${item.conversationId}`);
                         }}
                       >
                         View Conversation

@@ -1,8 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { ChatBubbleLeftRightIcon, UserIcon, ClockIcon } from "@heroicons/react/24/outline";
-import { useParams } from "next/navigation";
+import {
+  ChatBubbleLeftRightIcon,
+  UserIcon,
+  ClockIcon,
+} from "@heroicons/react/24/outline";
+import { useAgentData } from "@/store/agentDetailStore";
 import { agentsAPI } from "@/lib/api";
 
 interface ActivityItem {
@@ -17,27 +21,28 @@ interface ActivityItem {
 }
 
 export function Activity() {
-  const agentId = useParams().id as string;
+  const agent = useAgentData();
   const [activities, setActivities] = useState<ActivityItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<string>("all");
 
   useEffect(() => {
     const fetchActivity = async () => {
+      if (!agent?.id) return;
       try {
-        const { data } = await agentsAPI.getActivity(agentId);
+        const { data } = await agentsAPI.getActivity(agent.id);
         setActivities(data);
       } catch (error) {
-        console.error('Failed to fetch activity:', error);
+        console.error("Failed to fetch activity:", error);
       } finally {
         setLoading(false);
       }
     };
     fetchActivity();
-  }, [agentId]);
+  }, [agent?.id]);
 
-  const filteredActivities = activities.filter(activity => 
-    filter === "all" || activity.type === filter
+  const filteredActivities = activities.filter(
+    (activity) => filter === "all" || activity.type === filter
   );
 
   const getActivityIcon = (type: string) => {
@@ -80,8 +85,12 @@ export function Activity() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-xl font-semibold text-gray-900">Agent Activity</h2>
-          <p className="text-sm text-gray-600">Recent activity and events for this agent</p>
+          <h2 className="text-xl font-semibold text-gray-900">
+            Agent Activity
+          </h2>
+          <p className="text-sm text-gray-600">
+            Recent activity and events for this agent
+          </p>
         </div>
         <div>
           <select
@@ -105,25 +114,37 @@ export function Activity() {
         <div className="divide-y divide-gray-200">
           {filteredActivities.length === 0 ? (
             <div className="px-6 py-8 text-center">
-              <p className="text-gray-500">No activities found for the selected filter.</p>
+              <p className="text-gray-500">
+                No activities found for the selected filter.
+              </p>
             </div>
           ) : (
             filteredActivities.map((activity) => (
               <div key={activity.id} className="px-6 py-4">
                 <div className="flex items-start space-x-4">
-                  <div className={`flex-shrink-0 p-2 rounded-full ${getStatusColor(activity.status)}`}>
+                  <div
+                    className={`flex-shrink-0 p-2 rounded-full ${getStatusColor(activity.status)}`}
+                  >
                     {getActivityIcon(activity.type)}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between">
-                      <h4 className="text-sm font-medium text-gray-900">{activity.title}</h4>
-                      <span className="text-xs text-gray-500">{formatTimestamp(activity.timestamp)}</span>
+                      <h4 className="text-sm font-medium text-gray-900">
+                        {activity.title}
+                      </h4>
+                      <span className="text-xs text-gray-500">
+                        {formatTimestamp(activity.timestamp)}
+                      </span>
                     </div>
-                    <p className="text-sm text-gray-600 mt-1">{activity.description}</p>
+                    <p className="text-sm text-gray-600 mt-1">
+                      {activity.description}
+                    </p>
                     {(activity.user || activity.platform) && (
                       <div className="flex items-center space-x-4 mt-2 text-xs text-gray-500">
                         {activity.user && <span>User: {activity.user}</span>}
-                        {activity.platform && <span>Platform: {activity.platform}</span>}
+                        {activity.platform && (
+                          <span>Platform: {activity.platform}</span>
+                        )}
                       </div>
                     )}
                   </div>

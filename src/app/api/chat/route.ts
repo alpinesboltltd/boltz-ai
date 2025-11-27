@@ -147,7 +147,7 @@ Question: ${message}`;
     }
 
     const genAI = new GoogleGenerativeAI(geminiApiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
     // Filter and prepare chat history
     const chatHistory = history.filter(
@@ -181,8 +181,9 @@ Question: ${message}`;
     });
 
     const result = await chat.sendMessage(contextPrompt);
-    const responseText = result.response.text();
-
+    //const responseText = result.response.text();
+    const responseText = result.response.candidates?.[0]?.content?.parts?.[0]?.text || result.response.text() || "";
+    console.log(responseText)
     return NextResponse.json({ reply: responseText }, { status: 200 });
   } catch (error) {
     console.error("Error communicating with Gemini API:", error);

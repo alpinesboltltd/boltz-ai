@@ -5,7 +5,7 @@ import { Spinner } from "@/components/common/Spinner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Image from "next/image";
 import { useCurrentUser } from "@/store/authStore";
-import { Profile } from "@/types";
+import { Profile, UserRoles } from "@/types";
 import { Switch } from "@headlessui/react";
 import { toast } from "@/store/toastStore";
 
@@ -105,9 +105,15 @@ export default function SettingsPage() {
       // For development, simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      toast.success("Profile Updated", "Your profile has been updated successfully");
-    } catch  {
-      toast.error("Update Failed", "Failed to update profile. Please try again.");
+      toast.success(
+        "Profile Updated",
+        "Your profile has been updated successfully"
+      );
+    } catch {
+      toast.error(
+        "Update Failed",
+        "Failed to update profile. Please try again."
+      );
     } finally {
       setLoading(false);
     }
@@ -140,8 +146,11 @@ export default function SettingsPage() {
           isDefault: method.id === id,
         }))
       );
-      toast.success("Payment Method Updated", "Default payment method has been updated");
-    } catch  {
+      toast.success(
+        "Payment Method Updated",
+        "Default payment method has been updated"
+      );
+    } catch {
       toast.error("Update Failed", "Failed to set default payment method");
     } finally {
       setLoading(false);
@@ -159,8 +168,11 @@ export default function SettingsPage() {
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       setPaymentMethods((prev) => prev.filter((method) => method.id !== id));
-      toast.success("Payment Method Removed", "Payment method has been removed successfully");
-    } catch  {
+      toast.success(
+        "Payment Method Removed",
+        "Payment method has been removed successfully"
+      );
+    } catch {
       toast.error("Removal Failed", "Failed to remove payment method");
     } finally {
       setLoading(false);
@@ -189,8 +201,11 @@ export default function SettingsPage() {
             : userData.api_key.test_key,
         },
       }));
-      toast.success("API Key Regenerated", "Your API key has been regenerated successfully");
-    } catch  {
+      toast.success(
+        "API Key Regenerated",
+        "Your API key has been regenerated successfully"
+      );
+    } catch {
       toast.error("Regeneration Failed", "Failed to regenerate API key");
     } finally {
       setLoading(false);
@@ -233,7 +248,7 @@ export default function SettingsPage() {
                       <Image
                         width={40}
                         height={40}
-                        src={userData.avatar}
+                        src={userData.avatar || "hello world"} //FIXME: Default avater image for users
                         alt="Profile"
                         className="h-full w-full object-cover"
                       />
@@ -260,7 +275,7 @@ export default function SettingsPage() {
                         type="text"
                         name="name"
                         id="name"
-                        value={userData.name}
+                        value={userData.name || "Admin"}
                         onChange={(e) =>
                           setUserData({ ...userData, name: e.target.value })
                         }
@@ -279,7 +294,7 @@ export default function SettingsPage() {
                         type="email"
                         name="email"
                         id="email"
-                        value={userData!.email}
+                        value={userData.email!}
                         disabled
                         onChange={(e) =>
                           setUserData({ ...userData, email: e.target.value })
@@ -314,13 +329,17 @@ export default function SettingsPage() {
                       >
                         Role
                       </label>
+                      {/* FIXME:change to drop down option */}
                       <input
                         type="text"
                         name="role"
                         id="role"
                         value={userData.role}
                         onChange={(e) =>
-                          setUserData({ ...userData, role: e.target.value })
+                          setUserData({
+                            ...userData,
+                            role: e.target.value as UserRoles,
+                          })
                         }
                         className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
                       />
@@ -434,7 +453,12 @@ export default function SettingsPage() {
                   <div className="flex justify-end">
                     <button
                       type="button"
-                      onClick={() => toast.success("Preferences Saved", "Your notification preferences have been updated")}
+                      onClick={() =>
+                        toast.success(
+                          "Preferences Saved",
+                          "Your notification preferences have been updated"
+                        )
+                      }
                       className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
                     >
                       Save Preferences
@@ -663,9 +687,17 @@ export default function SettingsPage() {
                               ? userData.api_key.live_key
                               : userData.api_key.test_key
                           );
-                          toast.success("Copied!", "API key copied to clipboard");
+                          toast.success(
+                            "Copied!",
+                            "API key copied to clipboard"
+                          );
                         } catch (err) {
-                          toast.error("Copy Failed", "Failed to copy API key. Please copy manually.");
+                          toast.error(
+                            "Copy Failed",
+                            err instanceof Error
+                              ? err.message
+                              : "Failed to copy API key. Please copy manually."
+                          );
                         }
                       }}
                       className="inline-flex items-center px-3 py-2 border border-l-0 border-gray-300 bg-gray-50 text-gray-500 rounded-r-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"

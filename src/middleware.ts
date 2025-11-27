@@ -6,21 +6,12 @@ export function middleware(request: NextRequest) {
   // Get the path of the request
   const path = request.nextUrl.pathname;
 
-  // Define public paths that don't require authentication
-  const isPublicPath =
-    path === "/auth/login" ||
-    path === "/auth/register" ||
-    path === "/auth/forgot-password" ||
-    path === "/" ||
-    path === "/pricing" ||
-    path === "/enterprise" ||
-    path === "/contact" ||
-    path === "/privacy" ||
-    path === "/terms" ||
-    path.startsWith("/dashboard/") ||
-    path.startsWith("/chatagent/") ||
-    path.startsWith("/api/") ||
-    path.startsWith("/v1/");
+  // Define protected paths that require authentication
+  const isProtectedPath =
+    path.startsWith("/dashboard") || path.startsWith("/chatagent");
+
+  // Define auth paths
+  const isAuthPath = path.startsWith("/auth/");
 
   // Check for Bearer token in Authorization header first
   let token: string | undefined = undefined;
@@ -32,18 +23,23 @@ export function middleware(request: NextRequest) {
     token = request.cookies.get("auth_token")?.value;
   }
 
-  // If the path requires authentication and there's no token, redirect to login
-  if (!isPublicPath && !token) {
-    // Store the original URL to redirect back after login
-    const url = new URL("/auth/login", request.url);
-    url.searchParams.set("redirect", encodeURI(request.nextUrl.pathname));
-
+  // If accessing protected path without token, redirect to login
+  if (isProtectedPath && !token) {
+    const url = new URL("/login", request.url);
+    url.searchParams.set(
+      "redirect",
+      encodeURIComponent(request.nextUrl.pathname + request.nextUrl.search)
+    );
     return NextResponse.redirect(url);
   }
 
-  // If the user is logged in and trying to access auth pages, redirect to dashboard
-  if (token && (path === "/auth/login" || path === "/auth/register")) {
-    return NextResponse.redirect(new URL("/dashboard", request.url));
+  // If logged in and trying to access auth pages, redirect to dashboard or intended page
+  if (token && isAuthPath) {
+    const redirectTo = request.nextUrl.searchParams.get("redirect");
+    const targetUrl = redirectTo
+      ? decodeURIComponent(redirectTo)
+      : "/dashboard";
+    return NextResponse.redirect(new URL(targetUrl, request.url));
   }
 
   return NextResponse.next();
@@ -51,14 +47,5 @@ export function middleware(request: NextRequest) {
 
 // See "Matching Paths" below to learn more
 export const config = {
-  matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * - public folder
-     */
-    "/((?!_next/static|_next/image|favicon.ico|public).*)",
-  ],
+  matcher: ["/((?!_next/static|_next/image|favicon.ico|public|v1).*)"],
 };

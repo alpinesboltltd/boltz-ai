@@ -8,8 +8,9 @@ import { useGSAP } from "@gsap/react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import { Menu } from "@headlessui/react";
-import { useCurrentUser } from "@/store/authStore";
+import { useCurrentUser, useAuthStore } from "@/store/authStore";
 import { User } from "lucide-react";
+import { ErrorBoundary } from "@/components/common/ErrorBoundary";
 
 export default function DashboardLayout({
   children,
@@ -17,12 +18,73 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const user = useCurrentUser();
+  const logout = useAuthStore((state) => state.logout);
   const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const sidebarRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const container = useRef<HTMLDivElement>(null);
+
+  // Handle sidebar collapse animation using GSAP hooks
+  const toggleSidebar = () => {
+    setSidebarCollapsed(!sidebarCollapsed);
+  };
+
+  useGSAP(
+    () => {
+      if (!user) return;
+      // Only run animations on desktop (md breakpoint and above)
+      const isDesktop = window.matchMedia("(min-width: 768px)").matches;
+
+      if (isDesktop && sidebarRef.current && contentRef.current) {
+        const tl = gsap.timeline();
+
+        if (sidebarCollapsed) {
+          tl.to(sidebarRef.current, {
+            width: "4rem",
+            duration: 0.3,
+            ease: "power2.out",
+          }).to(
+            contentRef.current,
+            {
+              paddingLeft: "4rem",
+              duration: 0.3,
+              ease: "power2.out",
+            },
+            "<"
+          );
+        } else {
+          tl.to(sidebarRef.current, {
+            width: "16rem",
+            duration: 0.3,
+            ease: "power2.out",
+          }).to(
+            contentRef.current,
+            {
+              paddingLeft: "16rem",
+              duration: 0.3,
+              ease: "power2.out",
+            },
+            "<"
+          );
+        }
+      }
+    },
+    { dependencies: [sidebarCollapsed, user], scope: container }
+  );
+  
+  // Show loading or redirect if no user
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600 mx-auto"></div>
+          <p className="mt-2 text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   const navigation = [
     {
@@ -64,53 +126,6 @@ export default function DashboardLayout({
     }
     return pathname.startsWith(href) && href !== "/dashboard";
   };
-
-  // Handle sidebar collapse animation using GSAP hooks
-  const toggleSidebar = () => {
-    setSidebarCollapsed(!sidebarCollapsed);
-  };
-
-  useGSAP(
-    () => {
-      // Only run animations on desktop (md breakpoint and above)
-      const isDesktop = window.matchMedia("(min-width: 768px)").matches;
-
-      if (isDesktop && sidebarRef.current && contentRef.current) {
-        const tl = gsap.timeline();
-
-        if (sidebarCollapsed) {
-          tl.to(sidebarRef.current, {
-            width: "4rem",
-            duration: 0.3,
-            ease: "power2.out",
-          }).to(
-            contentRef.current,
-            {
-              paddingLeft: "4rem",
-              duration: 0.3,
-              ease: "power2.out",
-            },
-            "<"
-          );
-        } else {
-          tl.to(sidebarRef.current, {
-            width: "16rem",
-            duration: 0.3,
-            ease: "power2.out",
-          }).to(
-            contentRef.current,
-            {
-              paddingLeft: "16rem",
-              duration: 0.3,
-              ease: "power2.out",
-            },
-            "<"
-          );
-        }
-      }
-    },
-    { dependencies: [sidebarCollapsed], scope: container }
-  );
 
   return (
     <div ref={container} className="min-h-screen bg-gray-100">
@@ -183,6 +198,25 @@ export default function DashboardLayout({
                   {item.name}
                 </Link>
               ))}
+              <button
+                onClick={logout}
+                className="group flex items-center w-full px-2 py-2 text-base font-medium rounded-md text-gray-600 hover:bg-red-50 hover:text-red-600"
+              >
+                <svg
+                  className="mr-4 h-6 w-6 text-gray-400 group-hover:text-red-500"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                  />
+                </svg>
+                Logout
+              </button>
             </nav>
           </div>
         </div>
@@ -274,18 +308,49 @@ export default function DashboardLayout({
                 </Link>
               ))}
             </nav>
+            {/* Logout Button */}
+            <div className="px-2 pb-2">
+              <button
+                onClick={logout}
+                className={`group flex items-center w-full px-2 py-2 text-sm font-medium rounded-md transition-all duration-200 text-gray-600 hover:bg-red-50 hover:text-red-600 ${sidebarCollapsed ? "justify-center" : ""}`}
+                title={sidebarCollapsed ? "Logout" : ""}
+              >
+                <svg
+                  className={`h-6 w-6 transition-all duration-200 text-gray-400 group-hover:text-red-500 ${sidebarCollapsed ? "mr-0" : "mr-3"}`}
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                  />
+                </svg>
+                <span
+                  className={`transition-opacity duration-300 ${
+                    sidebarCollapsed
+                      ? "opacity-0 w-0 overflow-hidden"
+                      : "opacity-100"
+                  }`}
+                >
+                  Logout
+                </span>
+              </button>
+            </div>
           </div>
           {!sidebarCollapsed && (
             <div className="flex flex-shrink-0 border-t border-gray-200 p-4 transition-opacity duration-300">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
                   <div className="h-8 w-8 rounded-full bg-gray-300 flex justify-center items-center">
-                    {user && user.avatar ? (
+                    {user?.avatar ? (
                       <Image
                         src={user.avatar}
                         height={50}
                         width={50}
-                        alt={user.name}
+                        alt={user.name || user.displayName || "User"}
                         className="rounded-full h-full w-full"
                       />
                     ) : (
@@ -295,7 +360,7 @@ export default function DashboardLayout({
                 </div>
                 <div className="ml-3">
                   <p className="text-sm font-medium text-gray-700">
-                    {user!.name}
+                    {user?.name || user?.displayName || "User"}
                   </p>
                   <Link
                     href="/dashboard/settings"
@@ -375,7 +440,9 @@ export default function DashboardLayout({
             </div>
           </div>
 
-          <main className="flex-1">{children}</main>
+          <main className="flex-1">
+            <ErrorBoundary>{children}</ErrorBoundary>
+          </main>
         </div>
       </div>
     </div>

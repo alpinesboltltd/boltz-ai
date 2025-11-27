@@ -24,7 +24,23 @@ export async function POST(request: Request) {
           password
         );
 
-        return NextResponse.json({ success: true, user });
+        // Get Firebase ID token
+        const idToken = await user.getIdToken();
+        
+        // Verify with external server to get auth token
+        const verifyResponse = await fetch(`${process.env.API_BASE_URL}/api/v1/auth/verify`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id_token: idToken }),
+        });
+
+        if (!verifyResponse.ok) {
+          throw new Error("Failed to verify with server");
+        }
+
+        const { user: profileUser, token } = await verifyResponse.json();
+
+        return NextResponse.json({ success: true, user: profileUser, token });
       } catch (error) {
         if (error instanceof FirebaseError) {
           const message = handleFirebaseErrorMessage(error.code);
@@ -37,6 +53,6 @@ export async function POST(request: Request) {
     console.log(error);
     const message =
       error instanceof Error ? error.message : "Internal server error";
-    NextResponse.json({ message }, { status: 500 });
+    return NextResponse.json({ message }, { status: 500 });
   }
 }

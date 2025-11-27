@@ -65,9 +65,8 @@ export function ApiFunctionBuilder({
     <button
       type="button"
       onClick={onToggle}
-      className={`flex items-center gap-2 px-3 py-1 rounded-lg text-sm transition-colors ${
-        isJson ? "bg-blue-100 text-blue-700" : "bg-gray-100 text-gray-600"
-      }`}
+      className={`flex items-center gap-2 px-3 py-1 rounded-lg text-sm transition-colors ${isJson ? "bg-blue-100 text-blue-700" : "bg-gray-100 text-gray-600"
+        }`}
     >
       {isJson ? (
         <ToggleRight className="w-4 h-4" />
@@ -279,45 +278,45 @@ export function ApiFunctionBuilder({
               {(watchedMethod === "POST" ||
                 watchedMethod === "PUT" ||
                 watchedMethod === "PATCH") && (
-                <div className="mt-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <label className="text-sm font-medium text-gray-700">
-                      Request Body
-                    </label>
-                    <ToggleButton
-                      isJson={toggles.requestBody}
-                      onToggle={() =>
-                        setToggles((prev) => ({
-                          ...prev,
-                          requestBody: !prev.requestBody,
-                        }))
-                      }
-                    />
-                  </div>
-                  {toggles.requestBody ? (
-                    <textarea
-                      {...register("requestBody")}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                      rows={4}
-                      placeholder='{"name": "{{customer_name}}", "email": "{{customer_email}}", "status": "active"}'
-                    />
-                  ) : (
-                    <div className="grid grid-cols-2 gap-2">
-                      <input
-                        placeholder="Field name"
-                        className="px-3 py-2 border border-gray-300 rounded-lg"
-                      />
-                      <input
-                        placeholder="Field value"
-                        className="px-3 py-2 border border-gray-300 rounded-lg"
+                  <div className="mt-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <label className="text-sm font-medium text-gray-700">
+                        Request Body
+                      </label>
+                      <ToggleButton
+                        isJson={toggles.requestBody}
+                        onToggle={() =>
+                          setToggles((prev) => ({
+                            ...prev,
+                            requestBody: !prev.requestBody,
+                          }))
+                        }
                       />
                     </div>
-                  )}
-                  <p className="text-sm text-gray-500 mt-1">
-                    Use {{ variable_name }} for dynamic values
-                  </p>
-                </div>
-              )}
+                    {toggles.requestBody ? (
+                      <textarea
+                        {...register("requestBody")}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                        rows={4}
+                        placeholder='{"name": "{{customer_name}}", "email": "{{customer_email}}", "status": "active"}'
+                      />
+                    ) : (
+                      <div className="grid grid-cols-2 gap-2">
+                        <input
+                          placeholder="Field name"
+                          className="px-3 py-2 border border-gray-300 rounded-lg"
+                        />
+                        <input
+                          placeholder="Field value"
+                          className="px-3 py-2 border border-gray-300 rounded-lg"
+                        />
+                      </div>
+                    )}
+                    <p className="text-sm text-gray-500 mt-1">
+                      Use {"{{ variable_name }}"} for dynamic values
+                    </p>
+                  </div>
+                )}
             </div>
 
             {/* Authentication */}

@@ -103,10 +103,10 @@ export function PricingSection() {
               <a
                 href={
                   tier.mostPopular
-                    ? "/auth/register"
+                    ? "/register"
                     : tier.name === "Business"
                       ? "/enterprise"
-                      : "/auth/register"
+                      : "/register"
                 }
                 aria-describedby={tier.id}
                 className={`${

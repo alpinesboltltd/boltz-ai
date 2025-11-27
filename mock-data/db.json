@@ -22,19 +22,6 @@
       "status": "active",
       "created_at": "2025-09-02T17:30:55.999Z",
       "updated_at": "2025-09-02T17:32:09.518Z"
-    },
-    {
-      "id": "bx1dek6bf",
-      "user_id": "1",
-      "name": "Bolq",
-      "description": "Bolq helpes with administrative duties",
-      "agent_type": "text",
-      "ai_model": "o1-mini",
-      "ai_provider": "OpenAI",
-      "credits_per_1k": 10,
-      "status": "active",
-      "created_at": "2025-09-28T13:14:59.525Z",
-      "updated_at": "2025-09-28T13:16:00.778Z"
     }
   ],
   "agent_appearance": [
@@ -50,35 +37,12 @@
       "font_family": "Inter",
       "created_at": "2025-09-02T17:32:09.518Z",
       "updated_at": "2025-09-02T17:32:09.518Z"
-    },
-    {
-      "id": "tglcx0c80",
-      "agent_id": "bx1dek6bf",
-      "welcome_message": "Hi, Welcome to Walmart",
-      "primary_color": "#248f5d",
-      "position": "bottom-left",
-      "icon_size": "large",
-      "bubble_style": "square",
-      "chat_icon": "default",
-      "font_family": "Inter",
-      "created_at": "2025-09-28T13:16:00.778Z",
-      "updated_at": "2025-09-28T13:16:00.778Z"
     }
   ],
   "agent_behavior": [
     {
-      "id": "ldfjhs0t9",
-      "agent_id": "4k8afeknd",
-      "initial_messages": "[\"Hi! How can I help you today?\"]",
-      "fallback_message": "I'm sorry, I don't understand that question. Could you rephrase it?",
-      "enable_human_handoff": false,
-      "offline_message": "Our team is currently offline. Please leave a message and we'll get back to you.",
-      "created_at": "2025-09-02T17:32:09.518Z",
-      "updated_at": "2025-09-02T17:32:09.518Z"
-    },
-    {
       "id": "ckhm8kdvf",
-      "agent_id": "bx1dek6bf",
+      "agent_id": "4k8afeknd",
       "initial_messages": "[\"Hi, Welcome to Walmart\"]",
       "fallback_message": "I'm sorry, I don't understand that question. Could you rephrase it?",
       "enable_human_handoff": false,
@@ -102,15 +66,6 @@
       "updated_at": "2023-12-05T14:22:00Z"
     },
     {
-      "id": "5",
-      "agent_id": "2",
-      "platform": "shopify",
-      "api_key": "shopify_api_key_789",
-      "is_active": true,
-      "created_at": "2023-10-20T09:15:00Z",
-      "updated_at": "2023-12-01T11:45:00Z"
-    },
-    {
       "id": "6",
       "agent_id": "4k8afeknd",
       "platform": "website",
@@ -122,16 +77,6 @@
   ],
   "agent_stats": [
     {
-      "id": "3",
-      "agent_id": "3",
-      "total_messages": 156,
-      "unique_users": 42,
-      "average_rating": 4.2,
-      "response_rate": 0.87,
-      "conversions_count": 8,
-      "last_calculated_at": "2025-07-26T00:40:46.092Z"
-    },
-    {
       "id": "rzj4yuh17",
       "agent_id": "4k8afeknd",
       "total_messages": 2847,
@@ -140,16 +85,6 @@
       "response_rate": 0.92,
       "conversions_count": 73,
       "last_calculated_at": "2025-09-02T17:32:09.518Z"
-    },
-    {
-      "id": "xo820tgct",
-      "agent_id": "bx1dek6bf",
-      "total_messages": 0,
-      "unique_users": 0,
-      "average_rating": 0,
-      "response_rate": 0,
-      "conversions_count": 0,
-      "last_calculated_at": "2025-09-28T13:16:00.778Z"
     }
   ],
   "conversations": [
@@ -163,149 +98,16 @@
       "status": "closed",
       "escalated_to_human": false,
       "escalation_reason": null
-    },
-    {
-      "id": "convo_2",
-      "agent_id": "4k8afeknd",
-      "platform": "WhatsApp",
-      "client_id": "user_002",
-      "title": "Order Status Check",
-      "created_at": "2025-01-14T11:30:00Z",
-      "status": "closed",
-      "escalated_to_human": false,
-      "escalation_reason": null
-    },
-    {
-      "id": "convo_3",
-      "agent_id": "3",
-      "platform": "Website",
-      "client_id": "user_003",
-      "title": "Business Loan Application",
-      "created_at": "2025-01-13T10:01:00Z",
-      "status": "open",
-      "escalated_to_human": true,
-      "escalation_reason": "Complex financial inquiry"
-    },
-    {
-      "id": "convo_4",
-      "agent_id": "4k8afeknd",
-      "platform": "Website",
-      "client_id": "user_004",
-      "title": "Data Science Course Inquiry",
-      "created_at": "2025-01-13T14:20:00Z",
-      "status": "closed",
-      "escalated_to_human": false,
-      "escalation_reason": null
-    },
-    {
-      "id": "convo_5",
-      "agent_id": "4k8afeknd",
-      "platform": "Website",
-      "client_id": "user_005",
-      "title": "Shipping Information",
-      "created_at": "2025-01-12T16:45:00Z",
-      "status": "closed",
-      "escalated_to_human": false,
-      "escalation_reason": null
-    },
-    {
-      "id": "convo_6",
-      "agent_id": "4k8afeknd",
-      "platform": "Website",
-      "client_id": "user_006",
-      "title": "Return Request",
-      "created_at": "2025-01-11T13:20:00Z",
-      "status": "closed",
-      "escalated_to_human": true,
-      "escalation_reason": "Customer dissatisfaction"
-    },
-    {
-      "id": "convo_7",
-      "agent_id": "4k8afeknd",
-      "platform": "Website",
-      "client_id": "user_007",
-      "title": "Payment Issue",
-      "created_at": "2025-01-10T08:30:00Z",
-      "status": "closed",
-      "escalated_to_human": false,
-      "escalation_reason": null
-    },
-    {
-      "id": "convo_8",
-      "agent_id": "4k8afeknd",
-      "platform": "Website",
-      "client_id": "user_008",
-      "title": "General Support",
-      "created_at": "2025-01-09T15:10:00Z",
-      "status": "closed",
-      "escalated_to_human": false,
-      "escalation_reason": null
     }
   ],
   "messages": [
     {
       "id": "msg_012",
-      "convo_id": "convo_3",
+      "convo_id": "convo_1",
       "role": "user",
       "text": "I want to apply for a business loan for my restaurant",
       "timestamp": "2025-07-01T10:02:00Z",
       "confidence_score": 0.88
-    },
-    {
-      "id": "msg_013",
-      "convo_id": "convo_3",
-      "role": "assistant",
-      "text": "That's wonderful! I'd be happy to help you with your business loan application. For restaurant businesses, we offer competitive rates starting at 6.5% APR. You'll need your business license, tax returns for the last 2 years, financial statements, and a business plan. The typical loan amount ranges from $50,000 to $500,000. Would you like me to connect you with our business loan specialist to discuss your specific needs?",
-      "confidence_score": 0.91,
-      "timestamp": "2025-07-01T10:03:00Z"
-    },
-    {
-      "id": "msg_014",
-      "convo_id": "convo_3",
-      "role": "user",
-      "text": "Yes, that would be great. I'm looking for around $200,000",
-      "timestamp": "2025-07-01T10:04:00Z",
-      "confidence_score": 0.99
-    },
-    {
-      "id": "msg_015",
-      "convo_id": "convo_3",
-      "role": "assistant",
-      "text": "Perfect! $200,000 is well within our lending range for established restaurants. I'm scheduling you for a consultation with Maria Rodriguez, our senior business loan officer. She has availability tomorrow at 11:00 AM or Thursday at 3:00 PM. She'll review your documents and discuss terms, repayment options, and next steps. Which time works better for you?",
-      "confidence_score": 0.89,
-      "timestamp": "2025-07-01T10:05:00Z"
-    },
-    {
-      "id": "msg_017",
-      "convo_id": "convo_4",
-      "role": "user",
-      "text": "I'm interested in your data science certification program",
-      "timestamp": "2025-07-01T10:02:00Z",
-      "confidence_score": 0.88
-    },
-    {
-      "id": "msg_018",
-      "convo_id": "convo_4",
-      "role": "assistant",
-      "text": "Excellent choice! Our Data Science Certification is a comprehensive 6-month program covering Python, machine learning, statistics, and real-world projects. The program includes 120 hours of instruction, mentorship, and career support. The next cohort starts August 15th, and early bird pricing is $2,499 (regular price $2,999). We also offer payment plans. Would you like me to send you the detailed curriculum?",
-      "confidence_score": 0.93,
-      "timestamp": "2025-07-01T10:03:00Z"
-    },
-    {
-      "id": "msg_019",
-      "convo_id": "convo_4",
-      "role": "user",
-      "text": "Yes, please send the curriculum. Also, do you offer job placement assistance?",
-      "timestamp": "2025-07-01T10:04:00Z",
-      "confidence_score": 0.99
-    },
-    {
-      "id": "msg_020",
-      "convo_id": "convo_4",
-      "role": "assistant",
-      "text": "Absolutely! I'll email you the complete curriculum within the next 10 minutes. Yes, we provide comprehensive career support including resume review, interview preparation, and access to our partner network of 200+ hiring companies. Our job placement rate is 87% within 6 months of graduation. We also offer a job guarantee - if you don't find a position within 12 months, we'll refund 50% of your tuition. Would you like to schedule a call with our admissions counselor?",
-      "confidence_score": 0.96,
-      "timestamp": "2025-07-01T10:05:00Z"
     }
   ],
   "message_metadata": [
@@ -316,102 +118,6 @@
       "intent": "loan_inquiry",
       "msg_type": "text",
       "token_count": 14
-    },
-    {
-      "id": "meta_013",
-      "msg_id": "msg_013",
-      "sentiment": "positive",
-      "intent": "loan_info",
-      "msg_type": "text",
-      "token_count": 58
-    },
-    {
-      "id": "meta_014",
-      "msg_id": "msg_014",
-      "sentiment": "positive",
-      "intent": "loan_amount",
-      "msg_type": "text",
-      "token_count": 12
-    },
-    {
-      "id": "meta_015",
-      "msg_id": "msg_015",
-      "sentiment": "positive",
-      "intent": "scheduling",
-      "msg_type": "text",
-      "token_count": 45
-    },
-    {
-      "id": "meta_017",
-      "msg_id": "msg_017",
-      "sentiment": "neutral",
-      "intent": "course_inquiry",
-      "msg_type": "text",
-      "token_count": 9
-    },
-    {
-      "id": "meta_018",
-      "msg_id": "msg_018",
-      "sentiment": "positive",
-      "intent": "course_info",
-      "msg_type": "text",
-      "token_count": 55
-    },
-    {
-      "id": "meta_019",
-      "msg_id": "msg_019",
-      "sentiment": "positive",
-      "intent": "additional_info",
-      "msg_type": "text",
-      "token_count": 15
-    },
-    {
-      "id": "meta_020",
-      "msg_id": "msg_020",
-      "sentiment": "positive",
-      "intent": "comprehensive_info",
-      "msg_type": "text",
-      "token_count": 68
-    },
-    {
-      "id": "meta_021",
-      "msg_id": "msg_021",
-      "sentiment": "negative",
-      "intent": "complaint",
-      "msg_type": "text",
-      "token_count": 25
-    },
-    {
-      "id": "meta_022",
-      "msg_id": "msg_022",
-      "sentiment": "neutral",
-      "intent": "product_inquiry",
-      "msg_type": "text",
-      "token_count": 18
-    },
-    {
-      "id": "meta_023",
-      "msg_id": "msg_023",
-      "sentiment": "positive",
-      "intent": "product_info",
-      "msg_type": "text",
-      "token_count": 42
-    },
-    {
-      "id": "meta_024",
-      "msg_id": "msg_024",
-      "sentiment": "neutral",
-      "intent": "shipping_inquiry",
-      "msg_type": "text",
-      "token_count": 12
-    },
-    {
-      "id": "meta_025",
-      "msg_id": "msg_025",
-      "sentiment": "positive",
-      "intent": "shipping_info",
-      "msg_type": "text",
-      "token_count": 35
     }
   ],
   "analytics_questions": [
@@ -591,65 +297,6 @@
       "is_active": true,
       "created_at": "2023-11-01T10:00:00Z",
       "updated_at": "2023-12-01T15:20:00Z"
-    },
-    {
-      "id": "6",
-      "agent_id": "4k8afeknd",
-      "content_type": "faq",
-      "category": "Payment",
-      "title": "What payment methods do you accept?",
-      "content": "We accept all major credit cards (Visa, MasterCard, American Express), PayPal, Apple Pay, and Google Pay.",
-      "intent": "payment_methods",
-      "keywords": "payment,credit card,paypal,apple pay,google pay",
-      "confidence_score": 0.93,
-      "source_url": null,
-      "is_active": true,
-      "created_at": "2023-11-01T10:00:00Z",
-      "updated_at": "2023-12-01T15:20:00Z"
-    },
-    {
-      "id": "7",
-      "agent_id": "4k8afeknd",
-      "content_type": "faq",
-      "category": "Support",
-      "title": "How do I contact customer support?",
-      "content": "You can contact our customer support team via email at support@company.com, phone at 1-800-123-4567, or through this chat.",
-      "intent": "contact_support",
-      "keywords": "contact,support,email,phone,chat",
-      "confidence_score": 0.99,
-      "source_url": null,
-      "is_active": true,
-      "created_at": "2023-11-01T10:00:00Z",
-      "updated_at": "2023-12-01T15:20:00Z"
-    },
-    {
-      "id": "13",
-      "agent_id": "3",
-      "content_type": "faq",
-      "category": "Customer Support",
-      "title": "Product Return Policy",
-      "content": "Our return policy allows customers to return products within 30 days of purchase. Items must be in original condition with tags attached. Refunds are processed within 5-7 business days.",
-      "intent": "return_policy_inquiry",
-      "keywords": "return,refund,policy,30 days,original condition",
-      "confidence_score": 0.95,
-      "source_url": null,
-      "is_active": true,
-      "created_at": "2023-12-01T15:20:00Z",
-      "updated_at": "2023-12-01T15:20:00Z"
-    },
-    {
-      "id": "kpi9f7czp",
-      "agent_id": "bx1dek6bf",
-      "content_type": "faq",
-      "category": "Q&A",
-      "title": "What is your refund policy",
-      "content": "We do not offer refunds",
-      "intent": "qa_knowledge",
-      "keywords": "what,is,your,refund,policy",
-      "confidence_score": 1,
-      "is_active": true,
-      "created_at": "2025-09-28T13:15:23.177Z",
-      "updated_at": "2025-09-28T13:15:23.177Z"
     }
   ],
   "core_actions": [

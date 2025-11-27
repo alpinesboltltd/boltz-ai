@@ -18,6 +18,10 @@ export function TrainingSources({
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [textData, setTextData] = useState({ title: "", content: "" });
   const [urlData, setUrlData] = useState("");
+  const [urlOptions, setUrlOptions] = useState({
+    maxPages: 10,
+    excludePatterns: "" as string,
+  });
   const [qaData, setQaData] = useState({ question: "", answer: "" });
 
   const saveTrainingData = async (data: any) => {
@@ -90,11 +94,20 @@ export function TrainingSources({
   const handleUrlSubmit = async () => {
     if (!urlData) return;
 
+    const excludeList = urlOptions.excludePatterns
+      .split("\n")
+      .map((p) => p.trim())
+      .filter((p) => p.length > 0);
+
     await saveTrainingData({
       content_type: "website_content",
       category: "Website",
       title: `Website: ${urlData}`,
-      content: `Content from ${urlData}`,
+      content: JSON.stringify({
+        url: urlData,
+        maxPages: urlOptions.maxPages,
+        excludePatterns: excludeList,
+      }),
       intent: "website_knowledge",
       keywords: new URL(urlData).hostname,
       confidence_score: 0.8,
@@ -103,6 +116,7 @@ export function TrainingSources({
     });
 
     setUrlData("");
+    setUrlOptions({ maxPages: 10, excludePatterns: "" });
   };
 
   const handleQASubmit = async () => {
@@ -272,13 +286,80 @@ export function TrainingSources({
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                 placeholder="https://example.com"
               />
+              <p className="mt-1 text-xs text-gray-500">
+                Enter the base URL to crawl and extract content from
+              </p>
             </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Maximum Pages
+                </label>
+                <input
+                  type="number"
+                  min="1"
+                  max="100"
+                  value={urlOptions.maxPages}
+                  onChange={(e) =>
+                    setUrlOptions((prev) => ({
+                      ...prev,
+                      maxPages: parseInt(e.target.value) || 10,
+                    }))
+                  }
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                />
+                <p className="mt-1 text-xs text-gray-500">
+                  Limit the number of pages to crawl (1-100)
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Exclude URL Patterns
+              </label>
+              <textarea
+                value={urlOptions.excludePatterns}
+                onChange={(e) =>
+                  setUrlOptions((prev) => ({
+                    ...prev,
+                    excludePatterns: e.target.value,
+                  }))
+                }
+                rows={3}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 resize-none"
+                placeholder="/admin&#10;/login&#10;/cart&#10;*.pdf"
+              />
+              <p className="mt-1 text-xs text-gray-500">
+                Enter URL patterns to exclude (one per line). Supports wildcards (*)
+              </p>
+            </div>
+
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <h4 className="text-sm font-medium text-blue-900 mb-2">
+                Crawl Settings Summary
+              </h4>
+              <ul className="text-xs text-blue-700 space-y-1">
+                <li>• Will crawl up to {urlOptions.maxPages} pages</li>
+                {urlOptions.excludePatterns && (
+                  <li>
+                    • Excluding:{" "}
+                    {urlOptions.excludePatterns
+                      .split("\n")
+                      .filter((p) => p.trim())
+                      .join(", ")}
+                  </li>
+                )}
+              </ul>
+            </div>
+
             <button
               onClick={handleUrlSubmit}
               disabled={!urlData}
-              className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
-              Add Website
+              Start Crawling Website
             </button>
           </div>
         )}

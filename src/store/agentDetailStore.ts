@@ -1,64 +1,129 @@
 import { create } from "zustand";
-import { AgentAppearance, Agent } from "@/types/agent";
+import {
+  Agent,
+  AgentAppearance,
+  AgentBehavior,
+  AgentIntegration,
+  AgentStats,
+  TrainingData,
+  SystemPromptTemplate
+} from "@/types/agent";
+import { agentsAPI } from "@/lib/api";
+import { accessToken } from "./authStore";
+
+interface AgentDetailData {
+  agent: Agent;
+  agent_appearance: AgentAppearance;
+  agent_behavior: AgentBehavior;
+  agent_integration: AgentIntegration;
+  agent_stats: AgentStats;
+  training_data: TrainingData;
+  system_prompt_template: SystemPromptTemplate;
+}
 
 interface AgentDetailState {
   currentAgentId: string | null;
-  agent: Agent | null;
-  appearance: AgentAppearance | null;
+  data: AgentDetailData | null;
   loading: boolean;
+  error: string | null;
 
-  setCurrentAgent: (agentId: string) => void;
-  fetchAppearance: (agentId: string) => Promise<void>;
+  fetchAgentDetails: (agentId: string) => Promise<void>;
   updateAppearance: (appearance: AgentAppearance) => void;
+  updateBehavior: (behavior: AgentBehavior) => void;
   clearAgent: () => void;
 }
 
+const token = accessToken()
+
+
 export const useAgentDetailStore = create<AgentDetailState>((set, get) => ({
   currentAgentId: null,
-  agent: null,
-  appearance: null,
+  data: null,
   loading: false,
+  error: null,
 
-  setCurrentAgent: (agentId: string) => {
-    set({ currentAgentId: agentId });
-  },
-
-  fetchAppearance: async (agentId: string) => {
-    const { currentAgentId, appearance } = get();
+  fetchAgentDetails: async (agentId: string) => {
+    const { currentAgentId, data } = get();
 
     // Return cached data if same agent
-    if (currentAgentId === agentId && appearance) {
+    if (currentAgentId === agentId && data) {
       return;
     }
 
-    set({ loading: true });
+    set({ loading: true, error: null });
     try {
-      const response = await fetch(`/api/chatagents/${agentId}/appearance`);
-      const result = await response.json();
-
-      if (result.success) {
-        set({
-          appearance: result.data,
-          currentAgentId: agentId,
-          loading: false,
-        });
-      }
+      const response = await agentsAPI.getById(agentId, token);
+      set({
+        data: response,
+        currentAgentId: response.agent.id,
+        loading: false,
+        error: null,
+      });
     } catch (error) {
-      console.error("Failed to fetch appearance:", error);
-      set({ loading: false });
+      console.error("Failed to fetch agent details:", error);
+      set({
+        loading: false,
+        error: error instanceof Error ? error.message : "Failed to fetch agent details"
+      });
     }
   },
 
   updateAppearance: (appearance: AgentAppearance) => {
-    set({ appearance });
+    const { data } = get();
+    if (data) {
+      set({
+        data: {
+          ...data,
+          agent_appearance: appearance
+        }
+      });
+    }
+  },
+
+  updateBehavior: (behavior: AgentBehavior) => {
+    const { data } = get();
+    if (data) {
+      set({
+        data: {
+          ...data,
+          agent_behavior: behavior
+        }
+      });
+    }
   },
 
   clearAgent: () => {
     set({
       currentAgentId: null,
-      agent: null,
-      appearance: null,
+      data: null,
       loading: false,
+      error: null,
     });
   },
 }));
+
+// Convenience selectors
+export const useAgentData = () => {
+  const data = useAgentDetailStore(state => state.data);
+  return data?.agent;
+};
+
+export const useAgentAppearance = () => {
+  const data = useAgentDetailStore(state => state.data);
+  return data?.agent_appearance;
+};
+
+export const useAgentBehavior = () => {
+  const data = useAgentDetailStore(state => state.data);
+  return data?.agent_behavior;
+};
+
+export const useAgentStats = () => {
+  const data = useAgentDetailStore(state => state.data);
+  return data?.agent_stats;
+};
+
+export const useTrainingData = () => {
+  const data = useAgentDetailStore(state => state.data);
+  return data?.training_data;
+};

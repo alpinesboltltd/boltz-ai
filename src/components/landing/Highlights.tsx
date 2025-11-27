@@ -24,9 +24,11 @@ export function Highlights() {
       <div className="flex flex-wrap justify-start items-stretch gap-4 mt-6 px-4">
         {highlights.map((item) => (
           <Card key={item.title} className="shadow-none border">
-            <CardHeader src={item.src} />
-            <CardTitle text={item.title} />
-            <CardDescription text={item.description} />
+            <CardHeader>
+              <img src={item.src} alt={item.title} className="w-12 h-12 mb-4" />
+              <CardTitle>{item.title}</CardTitle>
+              <CardDescription>{item.description}</CardDescription>
+            </CardHeader>
           </Card>
         ))}
       </div>

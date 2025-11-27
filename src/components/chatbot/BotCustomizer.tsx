@@ -3,9 +3,7 @@
 
 import { useState, useEffect } from "react";
 import { BotPreview } from "./BotPreview";
-import { useParams } from "next/navigation";
-import { useAgentStore } from "@/store/agentStore";
-import { useAgentDetailStore } from "@/store/agentDetailStore";
+import { useAgentData, useAgentAppearance } from "@/store/agentDetailStore";
 import {
   AgentAppearance,
   AgentBubbleStyle,
@@ -18,9 +16,8 @@ interface BotCustomizerProps {
 }
 
 export function BotCustomizer({ onSave }: BotCustomizerProps) {
-  const agentId = useParams().id as string;
-  const { getAgent } = useAgentStore();
-  const { appearance, fetchAppearance } = useAgentDetailStore();
+  const agent = useAgentData();
+  const appearance = useAgentAppearance();
   const [name, setName] = useState("Agent");
   const [config, setConfig] = useState<Partial<AgentAppearance>>({
     position: "bottom-right" as AgentPosition,
@@ -32,12 +29,10 @@ export function BotCustomizer({ onSave }: BotCustomizerProps) {
   });
 
   useEffect(() => {
-    const { agent } = getAgent(agentId);
     if (agent) {
       setName(agent.name);
     }
-    fetchAppearance(agentId);
-  }, [agentId, getAgent, fetchAppearance]);
+  }, [agent]);
 
   useEffect(() => {
     if (appearance) {

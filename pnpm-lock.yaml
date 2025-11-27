@@ -50,11 +50,8 @@ importers:
       date-fns:
         specifier: ^2.30.0
         version: 2.30.0
-      dompurify:
-        specifier: ^3.2.6
-        version: 3.2.6
       firebase:
-        specifier: ^12.0.0
+        specifier: ^12.1.0
         version: 12.1.0
       framer-motion:
         specifier: ^10.16.4

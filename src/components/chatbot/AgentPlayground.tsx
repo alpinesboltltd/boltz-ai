@@ -10,7 +10,6 @@ import {
   Cog6ToothIcon,
 } from "@heroicons/react/24/outline";
 import {
-  Agent,
   MessageRoles,
   SystemPromptTemplate,
   PlaygroundConfig,
@@ -18,31 +17,45 @@ import {
 } from "@/types/agent";
 import { Chat, agentsAPI } from "@/lib/api";
 import { playgroundAPI } from "@/lib/playground-api";
-import { useParams } from "next/navigation";
-import { useAgentStore } from "@/store/agentStore";
-import { useAgentDetailStore } from "@/store/agentDetailStore";
+import {
+  useAgentData,
+  useAgentBehavior,
+  useAgentAppearance,
+} from "@/store/agentDetailStore";
+import { useMemo } from "react";
 import { SYSTEM_PROMPT_TEMPLATES } from "@/data/systemPrompts";
-import { AI_MODELS, AIModel } from "@/mock-data/ai-models";
 import Image from "next/image";
 import Select from "react-select";
 import { Message } from "@/types";
+import { cn } from "@/lib/utils";
+import { useAIModelsStore } from "@/store/aiModelsStore";
+import { AIModel } from "@/mock-data/ai-models";
+import { agentTypeToEnum, enumToAgentType } from "@/lib/agentTypeSerializer";
 
 export function AgentPlayground() {
-  const agentId = useParams().id as string;
-  const { getAgent } = useAgentStore();
-  const { fetchAppearance } = useAgentDetailStore();
-  const [agent, setAgent] = useState<Agent>();
+  const agent = useAgentData();
+  const behavior = useAgentBehavior();
+  const appearance = useAgentAppearance();
+  const agentId = agent?.id;
+  const { models, getModelsByType } = useAIModelsStore();
+
+  const primaryColor = useMemo(
+    () => appearance?.primary_color || "#0284c7",
+    [appearance?.primary_color]
+  );
   const [messages, setMessages] = useState<any[]>([]);
   const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [showConfig, setShowConfig] = useState(true);
   const mobileTabContentRef = useRef<HTMLDivElement>(null);
   const [config, setConfig] = useState<PlaygroundConfig>({
-    model: "GPT-3.5 Turbo",
-    temperature: 0.7,
-    maxTokens: 1000,
-    systemInstruction: SYSTEM_PROMPT_TEMPLATES[0].template,
-    selectedTemplate: "ai_agent",
+    ai_model_id: agent?.ai_model_id || "adaf",
+    ai_model_name: agent?.name || "gpt-40",
+    maxTokens: behavior?.max_tokens || 500,
+    temperature: behavior?.temperature || 0.5,
+    systemInstruction:
+      behavior?.system_instruction || "You are a helpful assistant",
+    selectedTemplate: SYSTEM_PROMPT_TEMPLATES[0].template,
   });
   const [customPrompts, setCustomPrompts] = useState<SystemPromptTemplate[]>(
     []
@@ -50,30 +63,37 @@ export function AgentPlayground() {
   const [testQueries, setTestQueries] = useState<string[]>([]);
 
   useEffect(() => {
-    const { agent: agnt } = getAgent(agentId);
-    if (agnt) {
-      setAgent(agnt);
-      setConfig((prev) => ({ ...prev, model: agnt.ai_model }));
+    if (agent) {
+      setConfig((prev) => ({
+        ...prev,
+        ai_model_id: agent.ai_model_id,
+        ai_model_name: agent.name,
+      }));
     }
-    fetchAppearance(agentId);
-    loadBehaviorConfig();
-  }, [agentId, getAgent, fetchAppearance]);
+    if (agentId) {
+      loadBehaviorConfig();
+    }
+  }, [agent, agentId]);
+
+  useEffect(() => {
+    if (behavior) {
+      setConfig({
+        ai_model_id: agent?.ai_model_id || "adaf",
+        ai_model_name:
+          models.find((model) => model.id === agent?.ai_model_id)?.name ||
+          "GPT-3.5 Turbo",
+        temperature: behavior.temperature || 0.7,
+        maxTokens: behavior.max_tokens || 1000,
+        systemInstruction:
+          behavior.system_instruction || SYSTEM_PROMPT_TEMPLATES[0].template,
+        selectedTemplate: behavior.prompt_template || "ai_agent",
+      });
+    }
+  }, [behavior, agent?.ai_model_id]);
 
   const loadBehaviorConfig = async () => {
+    if (!agentId) return;
     try {
-      const behaviorConfig = await playgroundAPI.loadBehaviorConfig(agentId);
-      if (behaviorConfig) {
-        setConfig({
-          model: agent?.ai_model || "GPT-3.5 Turbo",
-          temperature: behaviorConfig.temperature || 0.7,
-          maxTokens: behaviorConfig.max_tokens || 1000,
-          systemInstruction:
-            behaviorConfig.system_instruction ||
-            SYSTEM_PROMPT_TEMPLATES[0].template,
-          selectedTemplate: behaviorConfig.prompt_template || "ai_agent",
-        });
-      }
-
       // Load test queries
       const queries = await playgroundAPI.loadTestQueries(agentId);
       setTestQueries(queries);
@@ -86,10 +106,12 @@ export function AgentPlayground() {
     setMessages([
       {
         role: MessageRoles.ASSISTANT,
-        parts: `Hello! I'm ${agent?.name}. How can I help you today?`,
+        parts:
+          appearance?.welcome_message ||
+          "Hi, welcome; How can I help you today",
       },
     ]);
-  }, [agent?.name, config.systemInstruction]);
+  }, [agent?.name, config.systemInstruction, appearance]);
 
   const handleSendMessage = async (
     e?: React.FormEvent,
@@ -106,6 +128,7 @@ export function AgentPlayground() {
     setMessages((prev) => [...prev, userMessage]);
 
     try {
+      if (!agentId) return;
       const { reply } = await Chat.sendMessage(query, messages, agentId);
 
       const assistantMessage = {
@@ -113,6 +136,7 @@ export function AgentPlayground() {
         parts: reply,
       };
       setMessages((prev) => [...prev, assistantMessage]);
+      console.log(reply);
     } catch (error) {
       console.error("Failed to send message:", error);
     } finally {
@@ -132,14 +156,18 @@ export function AgentPlayground() {
   };
 
   const handleConfigSave = async () => {
+    if (!agentId) return;
     try {
       // Update agent model if changed
-      if (agent && config.model !== agent.ai_model) {
-        const modelData = AI_MODELS.find((m) => m.model === config.model);
+      if (agent && config.ai_model_id !== agent.ai_model_id) {
+        const modelData = models.find((m) => m.id === config.ai_model_id);
+        if (!modelData) {
+          console.error("Model not found");
+          return;
+        }
         await agentsAPI.update(agentId, {
-          ai_model: config.model,
-          ai_provider: modelData?.provider || agent.ai_provider,
-          credits_per_1k: modelData?.credits_per_1k || agent.credits_per_1k,
+          id: agentId,
+          ai_model_id: modelData?.id,
         });
       }
 
@@ -174,6 +202,7 @@ export function AgentPlayground() {
   };
 
   const saveTestQueries = async (queries: string[]) => {
+    if (!agentId) return;
     await playgroundAPI.saveTestQueries(agentId, queries);
   };
 
@@ -189,23 +218,6 @@ export function AgentPlayground() {
   const allPrompts = [...SYSTEM_PROMPT_TEMPLATES, ...customPrompts];
 
   // Filter models based on agent type
-  const getFilteredModels = () => {
-    if (!agent) return AI_MODELS;
-    switch (agent.agent_type) {
-      case AgentType.TEXT:
-        return AI_MODELS.filter((model) => model.capabilities.includes("text"));
-      case AgentType.VOICE:
-        return AI_MODELS.filter((model) =>
-          model.capabilities.includes("voice")
-        );
-      case AgentType.MULTIMODAL:
-        return AI_MODELS.filter((model) =>
-          model.capabilities.includes("multimodal")
-        );
-      default:
-        return AI_MODELS;
-    }
-  };
 
   // Custom option component for react-select
   const ModelOption = ({ data }: { data: AIModel }) => (
@@ -218,7 +230,7 @@ export function AgentPlayground() {
         className="mr-3"
       />
       <div>
-        <div className="font-medium">{data.model}</div>
+        <div className="font-medium">{data.name}</div>
         <div className="text-sm text-gray-500">
           {data.provider} - {data.credits_per_1k} credits/1k
         </div>
@@ -237,7 +249,7 @@ export function AgentPlayground() {
         className="mr-3 flex-shrink-0"
       />
       <div className="min-w-0">
-        <div className="font-medium text-sm truncate">{data.model}</div>
+        <div className="font-medium text-sm truncate">{data.name}</div>
         <div className="text-xs text-gray-500 truncate">
           {data.provider} • {data.credits_per_1k} credits/1k
         </div>
@@ -245,14 +257,14 @@ export function AgentPlayground() {
     </div>
   );
 
-  const modelOptions = getFilteredModels().map((model) => ({
-    value: model.model,
-    label: model.model,
+  const modelOptions = getModelsByType(enumToAgentType(agent?.agent_type as number)).map((model) => ({
+    value: model.id,
+    label: model.name,
     data: model,
   }));
 
   const selectedModel = modelOptions.find(
-    (option) => option.value === config.model
+    (option) => option.value === config.ai_model_id
   );
 
   // Animate mobile tab transitions
@@ -273,8 +285,8 @@ export function AgentPlayground() {
   const selectStyles = {
     control: (provided: any, state: any) => ({
       ...provided,
-      borderColor: state.isFocused ? "#3B82F6" : "#D1D5DB",
-      boxShadow: state.isFocused ? "0 0 0 2px rgba(59, 130, 246, 0.1)" : "none",
+      borderColor: state.isFocused ? primaryColor : "#D1D5DB",
+      boxShadow: state.isFocused ? `0 0 0 2px ${primaryColor}20` : "none",
       "&:hover": {
         borderColor: "#9CA3AF",
       },
@@ -307,7 +319,7 @@ export function AgentPlayground() {
     option: (provided: any, state: any) => ({
       ...provided,
       backgroundColor: state.isSelected
-        ? "#3B82F6"
+        ? primaryColor
         : state.isFocused
           ? "#F3F4F6"
           : "white",
@@ -330,12 +342,19 @@ export function AgentPlayground() {
       <div className="block lg:hidden">
         <div className="space-y-4">
           {/* Chat Interface - Mobile */}
-          <div className="bg-white rounded-lg shadow overflow-hidden flex flex-col h-[60vh]">
-            <div className="text-white px-4 py-3 flex justify-between items-center bg-primary-600">
+          <div
+            className={cn(
+              "bg-white rounded-lg shadow overflow-hidden flex flex-col h-[60vh]"
+            )}
+          >
+            <div
+              className="text-white px-4 py-3 flex justify-between items-center"
+              style={{ backgroundColor: primaryColor }}
+            >
               <div>
                 <h3 className="font-medium">Testing: {agent?.name}</h3>
                 <p className="text-xs text-primary-100">
-                  {config.model} | Temp: {config.temperature}
+                  {config.ai_model_name} | Temp: {config.temperature}
                 </p>
               </div>
               <button
@@ -357,11 +376,17 @@ export function AgentPlayground() {
                     className={`mb-4 flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
                   >
                     <div
-                      className={`max-w-[85%] px-3 py-2 rounded-lg text-sm ${
+                      className={cn(
+                        "max-w-[85%] px-3 py-2 rounded-lg text-sm",
                         message.role === "user"
-                          ? "bg-primary-600 text-white"
+                          ? "text-white"
                           : "bg-gray-100 text-gray-800"
-                      }`}
+                      )}
+                      style={
+                        message.role === "user"
+                          ? { backgroundColor: primaryColor }
+                          : {}
+                      }
                     >
                       <p className="whitespace-pre-wrap">{message.parts}</p>
                     </div>
@@ -395,12 +420,21 @@ export function AgentPlayground() {
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
                   placeholder="Type your test message..."
-                  className="flex-1 text-sm rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
+                  className="flex-1 text-sm rounded-md border-gray-300 shadow-sm focus:outline-none focus:ring-2"
+                  style={
+                    {
+                      borderColor: "#D1D5DB",
+                      "--tw-ring-color": primaryColor,
+                    } as any
+                  }
+                  onFocus={(e) => (e.target.style.borderColor = primaryColor)}
+                  onBlur={(e) => (e.target.style.borderColor = "#D1D5DB")}
                 />
                 <button
                   type="submit"
                   disabled={isTyping}
-                  className="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50"
+                  className="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50"
+                  style={{ backgroundColor: primaryColor }}
                 >
                   <PaperAirplaneIcon className="h-4 w-4" />
                 </button>
@@ -450,6 +484,7 @@ export function AgentPlayground() {
                   selectStyles={selectStyles}
                   ModelOption={ModelOption}
                   ModelSingleValue={ModelSingleValue}
+                  primaryColor={primaryColor}
                 />
               ) : (
                 <MobileTestQueries
@@ -486,6 +521,7 @@ export function AgentPlayground() {
               selectStyles={selectStyles}
               ModelOption={ModelOption}
               ModelSingleValue={ModelSingleValue}
+              primaryColor={primaryColor}
             />
           </div>
 
@@ -500,6 +536,7 @@ export function AgentPlayground() {
               setInputValue={setInputValue}
               handleSendMessage={handleSendMessage}
               handleReset={handleReset}
+              primaryColor={primaryColor}
             />
           </div>
 
@@ -537,6 +574,7 @@ export function AgentPlayground() {
               selectStyles={selectStyles}
               ModelOption={ModelOption}
               ModelSingleValue={ModelSingleValue}
+              primaryColor={primaryColor}
             />
           </div>
 
@@ -551,6 +589,7 @@ export function AgentPlayground() {
               setInputValue={setInputValue}
               handleSendMessage={handleSendMessage}
               handleReset={handleReset}
+              primaryColor={primaryColor}
             />
           </div>
 
@@ -583,6 +622,7 @@ function ConfigPanel({
   selectStyles,
   ModelOption,
   ModelSingleValue,
+  primaryColor,
 }: any) {
   return (
     <div className="space-y-4">
@@ -596,10 +636,10 @@ function ConfigPanel({
             {agent?.agent_type || "Loading..."}
           </span>
           <div className="text-xs text-gray-500 mt-1">
-            {agent?.agent_type === AgentType.TEXT && "Text-only conversations"}
-            {agent?.agent_type === AgentType.VOICE &&
+            {agent?.agent_type === agentTypeToEnum(AgentType.TEXT) && "Text-only conversations"}
+            {agent?.agent_type === agentTypeToEnum(AgentType.VOICE) &&
               "Voice and audio processing"}
-            {agent?.agent_type === AgentType.MULTIMODAL &&
+            {agent?.agent_type === agentTypeToEnum(AgentType.VISION) &&
               "Text, images, and multimedia"}
           </div>
         </div>
@@ -725,7 +765,8 @@ function ConfigPanel({
 
       <button
         onClick={handleConfigSave}
-        className="w-full px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm"
+        className="w-full px-4 py-2 text-white rounded-md focus:outline-none focus:ring-2 text-sm transition-opacity hover:opacity-90"
+        style={{ backgroundColor: primaryColor }}
       >
         Save Configuration
       </button>
@@ -748,10 +789,14 @@ function ChatInterface({
   setInputValue,
   handleSendMessage,
   handleReset,
+  primaryColor,
 }: any) {
   return (
     <>
-      <div className="text-white px-4 py-3 flex justify-between items-center bg-primary-600">
+      <div
+        className="text-white px-4 py-3 flex justify-between items-center"
+        style={{ backgroundColor: primaryColor }}
+      >
         <div>
           <h3 className="font-medium">Testing: {agent?.name}</h3>
           <p className="text-xs text-primary-100">
@@ -780,9 +825,14 @@ function ChatInterface({
               <div
                 className={`max-w-[80%] px-4 py-2 rounded-lg ${
                   message.role === "user"
-                    ? "bg-primary-600 text-white"
+                    ? "text-white"
                     : "bg-gray-100 text-gray-800"
                 }`}
+                style={
+                  message.role === "user"
+                    ? { backgroundColor: primaryColor }
+                    : {}
+                }
               >
                 <p className="text-sm whitespace-pre-wrap">{message.parts}</p>
               </div>
@@ -816,12 +866,18 @@ function ChatInterface({
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             placeholder="Type your test message..."
-            className="flex-1 rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
+            className="flex-1 rounded-md border-gray-300 shadow-sm focus:outline-none focus:ring-2"
+            style={
+              { borderColor: "#D1D5DB", "--tw-ring-color": primaryColor } as any
+            }
+            onFocus={(e) => (e.target.style.borderColor = primaryColor)}
+            onBlur={(e) => (e.target.style.borderColor = "#D1D5DB")}
           />
           <button
             type="submit"
             disabled={isTyping}
-            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50"
+            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50"
+            style={{ backgroundColor: primaryColor }}
           >
             <PaperAirplaneIcon className="h-5 w-5" />
           </button>

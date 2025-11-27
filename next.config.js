@@ -5,7 +5,10 @@ const nextConfig = {
     ignoreDuringBuilds: false,
   },
   images: {
-    domains: ["i.pravatar.cc"],
+    remotePatterns: [
+      { hostname: "i.pravatar.cc" },
+      { hostname: "images.unsplash.com" },
+    ],
   },
   rewrites: async () => {
     return [

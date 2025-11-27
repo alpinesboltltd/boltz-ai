@@ -43,7 +43,7 @@ export default function SecuritySettings({
   const [newTopic, setNewTopic] = useState("");
   const [error, setError] = useState("");
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
 
     setSettings((prev) => ({
@@ -68,7 +68,7 @@ export default function SecuritySettings({
     setError("");
   };
 
-  const handleRemoveIp = (ip) => {
+  const handleRemoveIp = (ip: string) => {
     setSettings((prev) => ({
       ...prev,
       ipWhitelist: prev.ipWhitelist.filter((item) => item !== ip),
@@ -87,14 +87,14 @@ export default function SecuritySettings({
     setNewTopic("");
   };
 
-  const handleRemoveTopic = (topic) => {
+  const handleRemoveTopic = (topic: string) => {
     setSettings((prev) => ({
       ...prev,
       sensitiveTopics: prev.sensitiveTopics.filter((item) => item !== topic),
     }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 

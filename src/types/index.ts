@@ -1,15 +1,15 @@
 import { User } from "firebase/auth";
 
 // AI Model Types
-export interface AIModel {
-  id: string;
-  name: string;
-  provider: string;
-  description: string;
-  capabilities: string[];
-  pricing: string;
-  isPopular: boolean;
-}
+// export interface AIModel {
+//   id: string;
+//   name: string;
+//   provider: string;
+//   description: string;
+//   capabilities: string[];
+//   pricing: string;
+//   isPopular: boolean;
+// }
 
 // API Response types
 export interface ApiResponse<T> {
@@ -27,6 +27,9 @@ export interface Profile extends User {
   role: UserRoles;
   company?: string;
   avatar?: string;
+  phone?: string;
+  whatsapp?: string;
+  onlineStatus?: boolean;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -125,6 +128,8 @@ export enum SubscriptionPlans {
 export enum UserRoles {
   superAdmin = "superadmin",
   admin = "admin",
+  editor = "editor",
+  viewer = "viewer",
   user = "user",
   staff = "staff",
 }
@@ -144,3 +149,4 @@ export enum FirebaseErrorMessage {
 // Re-export new types
 export * from "./sources";
 export * from "./actions";
+export * from "./aiModels";
