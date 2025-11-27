@@ -3,15 +3,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Save, X } from "lucide-react";
 
-interface SequentialWorkflowFormData {
-  name: string;
-  description: string;
-  trigger: {
-    type: string;
-    value: string;
-  };
-  steps: any[];
-}
+import { SequentialWorkflowFormData } from "@/schemas/actionSchemas";
 
 interface SequentialWorkflowBuilderProps {
   onSave: (workflow: SequentialWorkflowFormData) => void;
@@ -70,10 +62,10 @@ export function SequentialWorkflowBuilder({
     const workflowData = {
       ...formData,
       steps: nodes.map((node) => ({
+        ...node.data,
         id: node.id,
         name: node.name,
         type: node.type,
-        ...node.data,
       })),
     };
     onSave(workflowData);
@@ -174,29 +166,20 @@ export function SequentialWorkflowBuilder({
             <div className="w-64 bg-gray-50 border-r p-4">
               <h3 className="font-medium text-gray-900 mb-4">Workflow Nodes</h3>
               <div className="space-y-2">
-                <button
-                  onClick={() => {
-                    const newNode = {
-                      id: `trigger_${Date.now()}`,
-                      type: "trigger",
-                      name: "Trigger",
-                      position: { x: 50, y: 50 },
-                      data: { triggerType: "keyword", triggerValue: "" },
-                    };
-                    setNodes([...nodes, newNode]);
-                  }}
-                  className="w-full p-3 bg-green-100 border border-green-300 text-green-700 rounded-lg hover:bg-green-200 flex items-center gap-2"
-                >
-                  ⚡ Trigger
-                </button>
+
                 <button
                   onClick={() => {
                     const newNode = {
                       id: `message_${Date.now()}`,
-                      type: "message",
+                      type: "message" as const,
                       name: "Send Message",
                       position: { x: 50 + nodes.length * 200, y: 50 },
-                      data: { messageText: "" },
+                      data: {
+                        id: `message_${Date.now()}`,
+                        type: "message" as const,
+                        name: "Send Message",
+                        messageText: "",
+                      },
                     };
                     setNodes([...nodes, newNode]);
                   }}
@@ -208,10 +191,16 @@ export function SequentialWorkflowBuilder({
                   onClick={() => {
                     const newNode = {
                       id: `api_${Date.now()}`,
-                      type: "api_call",
+                      type: "api_call" as const,
                       name: "API Call",
                       position: { x: 50 + nodes.length * 200, y: 50 },
-                      data: { method: "GET", url: "" },
+                      data: {
+                        id: `api_${Date.now()}`,
+                        type: "api_call" as const,
+                        name: "API Call",
+                        method: "GET" as const,
+                        url: "",
+                      },
                     };
                     setNodes([...nodes, newNode]);
                   }}
@@ -223,10 +212,17 @@ export function SequentialWorkflowBuilder({
                   onClick={() => {
                     const newNode = {
                       id: `condition_${Date.now()}`,
-                      type: "condition",
+                      type: "condition" as const,
                       name: "Condition",
                       position: { x: 50 + nodes.length * 200, y: 50 },
-                      data: { field: "", operator: "equals", value: "" },
+                      data: {
+                        id: `condition_${Date.now()}`,
+                        type: "condition" as const,
+                        name: "Condition",
+                        conditionField: "",
+                        conditionOperator: "equals" as const,
+                        conditionValue: "",
+                      },
                     };
                     setNodes([...nodes, newNode]);
                   }}
@@ -238,10 +234,15 @@ export function SequentialWorkflowBuilder({
                   onClick={() => {
                     const newNode = {
                       id: `delay_${Date.now()}`,
-                      type: "delay",
+                      type: "delay" as const,
                       name: "Delay",
                       position: { x: 50 + nodes.length * 200, y: 50 },
-                      data: { seconds: 30 },
+                      data: {
+                        id: `delay_${Date.now()}`,
+                        type: "delay" as const,
+                        name: "Delay",
+                        delaySeconds: 30,
+                      },
                     };
                     setNodes([...nodes, newNode]);
                   }}
@@ -274,9 +275,8 @@ export function SequentialWorkflowBuilder({
                 return (
                   <div
                     key={node.id}
-                    className={`absolute w-40 h-20 rounded-lg border-2 cursor-pointer select-none p-3 ${
-                      nodeColors[node.type as keyof typeof nodeColors]
-                    } ${isSelected ? "ring-2 ring-blue-500" : ""}`}
+                    className={`absolute w-40 h-20 rounded-lg border-2 cursor-pointer select-none p-3 ${nodeColors[node.type as keyof typeof nodeColors]
+                      } ${isSelected ? "ring-2 ring-blue-500" : ""}`}
                     style={{
                       left: node.position.x,
                       top: node.position.y,

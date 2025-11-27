@@ -9,6 +9,7 @@ import ReactFlow, {
   Controls,
   Background,
   MiniMap,
+  BackgroundVariant,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import { X, Save, Plus } from 'lucide-react';
@@ -52,7 +53,7 @@ export function WorkflowBuilderV2({ onSave, onCancel }: WorkflowBuilderV2Props) 
       type: 'default',
       position: { x: Math.random() * 400 + 100, y: Math.random() * 400 + 100 },
       data: { label: `${nodeTypes[selectedNodeType as keyof typeof nodeTypes]?.label || 'Node'}` },
-      style: { 
+      style: {
         backgroundColor: nodeTypes[selectedNodeType as keyof typeof nodeTypes]?.color || '#6b7280',
         color: 'white',
         border: '1px solid #374151',
@@ -91,7 +92,7 @@ export function WorkflowBuilderV2({ onSave, onCancel }: WorkflowBuilderV2Props) 
           {/* Sidebar */}
           <div className="w-64 border-r bg-gray-50 p-4">
             <h3 className="font-medium text-gray-900 mb-4">Add Nodes</h3>
-            
+
             <div className="mb-4">
               <select
                 value={selectedNodeType}
@@ -117,8 +118,8 @@ export function WorkflowBuilderV2({ onSave, onCancel }: WorkflowBuilderV2Props) 
               <div className="space-y-2">
                 {Object.entries(nodeTypes).map(([key, { label, color }]) => (
                   <div key={key} className="flex items-center gap-2">
-                    <div 
-                      className="w-4 h-4 rounded" 
+                    <div
+                      className="w-4 h-4 rounded"
                       style={{ backgroundColor: color }}
                     />
                     <span className="text-sm text-gray-600">{label}</span>
@@ -141,7 +142,7 @@ export function WorkflowBuilderV2({ onSave, onCancel }: WorkflowBuilderV2Props) 
             >
               <Controls />
               <MiniMap />
-              <Background variant="dots" gap={12} size={1} />
+              <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
             </ReactFlow>
           </div>
         </div>

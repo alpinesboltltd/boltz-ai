@@ -13,7 +13,7 @@ interface AgentCardProps {
     imageUrl?: string;
     icon?: LucideIcon;
     isTemplate?: boolean;
-    agent_type?: string;
+    agent_type?: string | number;
     ai_model?: string;
     credits_per_1k?: number;
     average_rating?: number;

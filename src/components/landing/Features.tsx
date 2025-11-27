@@ -23,32 +23,52 @@ export function Features() {
 
         <div className="grid md:grid-cols-2 gap-8 mb-12">
           <Card>
-            <CardHeader src="/img/logo.webp" />
-            <CardTitle text="Sync with Real-time Data" />
-            <CardDescription text="Connect your agent to order management, CRMs, and databases for instant access to customer information and order details." />
+            <CardHeader>
+              <img src="/img/logo.webp" alt="Feature Icon" className="w-12 h-12 mb-4" />
+              <CardTitle>Sync with Real-time Data</CardTitle>
+              <CardDescription>
+                Connect your agent to order management, CRMs, and databases for instant access to customer information and order details.
+              </CardDescription>
+            </CardHeader>
           </Card>
           <Card>
-            <CardHeader src="/img/logo.webp" />
-            <CardTitle text="Take Actions on Your Systems" />
-            <CardDescription text="Enable your agent to update subscriptions, process refunds, schedule appointments, and perform actions across your business systems." />
+            <CardHeader>
+              <img src="/img/logo.webp" alt="Feature Icon" className="w-12 h-12 mb-4" />
+              <CardTitle>Take Actions on Your Systems</CardTitle>
+              <CardDescription>
+                Enable your agent to update subscriptions, process refunds, schedule appointments, and perform actions across your business systems.
+              </CardDescription>
+            </CardHeader>
           </Card>
         </div>
 
         <div className="grid lg:grid-cols-3 gap-8 mb-16">
           <Card>
-            <CardHeader src="/img/logo.webp" />
-            <CardTitle text="Compare AI Models" />
-            <CardDescription text="Test different AI models side-by-side to find the perfect fit for your specific use case and performance requirements." />
+            <CardHeader>
+              <img src="/img/logo.webp" alt="Feature Icon" className="w-12 h-12 mb-4" />
+              <CardTitle>Compare AI Models</CardTitle>
+              <CardDescription>
+                Test different AI models side-by-side to find the perfect fit for your specific use case and performance requirements.
+              </CardDescription>
+            </CardHeader>
           </Card>
           <Card>
-            <CardHeader src="/img/logo.webp" />
-            <CardTitle text="Smart Escalation" />
-            <CardDescription text="Set natural language rules for when to escalate complex queries to human agents automatically." />
+            <CardHeader>
+              <img src="/img/logo.webp" alt="Feature Icon" className="w-12 h-12 mb-4" />
+              <CardTitle>Smart Escalation</CardTitle>
+              <CardDescription>
+                Set natural language rules for when to escalate complex queries to human agents automatically.
+              </CardDescription>
+            </CardHeader>
           </Card>
           <Card>
-            <CardHeader src="/img/logo.webp" />
-            <CardTitle text="Advanced Analytics" />
-            <CardDescription text="Track performance metrics, conversation quality, and customer satisfaction with detailed reporting dashboards." />
+            <CardHeader>
+              <img src="/img/logo.webp" alt="Feature Icon" className="w-12 h-12 mb-4" />
+              <CardTitle>Advanced Analytics</CardTitle>
+              <CardDescription>
+                Track performance metrics, conversation quality, and customer satisfaction with detailed reporting dashboards.
+              </CardDescription>
+            </CardHeader>
           </Card>
         </div>
 
@@ -56,14 +76,12 @@ export function Features() {
         <Card className="p-8">
           <div className="flex flex-col lg:flex-row items-start gap-8">
             <div className="lg:w-1/3">
-              <CardTitle
-                text="Works with Your Favorite Tools"
-                className="text-2xl mb-4"
-              />
-              <CardDescription
-                text="Seamlessly integrate with payment processors, communication platforms, and business tools to create a unified customer experience."
-                className="text-lg"
-              />
+              <CardTitle className="text-2xl mb-4">
+                Works with Your Favorite Tools
+              </CardTitle>
+              <CardDescription className="text-lg">
+                Seamlessly integrate with payment processors, communication platforms, and business tools to create a unified customer experience.
+              </CardDescription>
             </div>
             <div className="lg:w-2/3 grid grid-cols-2 md:grid-cols-3 gap-4">
               <CompWork text="Stripe" src="/images/stripe.png" />
@@ -85,8 +103,10 @@ export function Features() {
               <SparklesIcon className="w-6 h-6 text-primary-600" />
             </div>
             <div>
-              <CardTitle text="White Label Solution" />
-              <CardDescription text="Remove all Boltz branding and customize the interface to match your brand perfectly." />
+              <CardTitle>White Label Solution</CardTitle>
+              <CardDescription>
+                Remove all Boltz branding and customize the interface to match your brand perfectly.
+              </CardDescription>
             </div>
           </div>
           <div className="flex items-start gap-4">
@@ -94,8 +114,10 @@ export function Features() {
               <SparklesIcon className="w-6 h-6 text-primary-600" />
             </div>
             <div>
-              <CardTitle text="Continuously Learning" />
-              <CardDescription text="Your agent improves over time by learning from interactions and syncing with your business systems." />
+              <CardTitle>Continuously Learning</CardTitle>
+              <CardDescription>
+                Your agent improves over time by learning from interactions and syncing with your business systems.
+              </CardDescription>
             </div>
           </div>
         </div>

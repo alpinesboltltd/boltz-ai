@@ -142,13 +142,13 @@ export default function UsersPage() {
         prev.map((user) =>
           user.id === userToEdit.id
             ? {
-                ...user,
-                name: data.name,
-                email: data.email,
-                phone: data.phone,
-                whatsapp: data.whatsapp,
-                role: data.role,
-              }
+              ...user,
+              name: data.name,
+              email: data.email,
+              phone: data.phone,
+              whatsapp: data.whatsapp,
+              role: data.role,
+            }
             : user
         )
       );
@@ -384,11 +384,10 @@ export default function UsersPage() {
                                 />
                                 {/* Status Dot */}
                                 <span
-                                  className={`absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-white ${
-                                    user.onlineStatus
+                                  className={`absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-white ${user.onlineStatus
                                       ? "bg-green-500"
                                       : "bg-yellow-500"
-                                  }`}
+                                    }`}
                                 ></span>
                               </>
                             ) : (
@@ -398,11 +397,10 @@ export default function UsersPage() {
                                 </div>
                                 {/* Status Dot */}
                                 <span
-                                  className={`absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-white ${
-                                    user.onlineStatus
+                                  className={`absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-white ${user.onlineStatus
                                       ? "bg-green-500"
                                       : "bg-yellow-500"
-                                  }`}
+                                    }`}
                                 ></span>
                               </>
                             )}
@@ -417,22 +415,20 @@ export default function UsersPage() {
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                         <span
-                          className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${
-                            user.role === UserRoles.admin
+                          className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${user.role === UserRoles.admin
                               ? "bg-blue-100 text-blue-800"
                               : "bg-green-100 text-green-800"
-                          }`}
+                            }`}
                         >
                           {user.role === UserRoles.admin ? "Admin" : "Staff"}
                         </span>
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                         <span
-                          className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${
-                            user.status === "active"
+                          className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${user.status === "active"
                               ? "bg-green-100 text-green-800"
                               : "bg-red-100 text-red-800"
-                          }`}
+                            }`}
                         >
                           {user.status === "active" ? "Active" : "Inactive"}
                         </span>
@@ -592,6 +588,13 @@ export default function UsersPage() {
                       "Retrain agents",
                       "Reply to messages",
                       "Manage content",
+                    ],
+                    [UserRoles.editor]: [
+                      "Edit content",
+                      "Reply to messages",
+                    ],
+                    [UserRoles.viewer]: [
+                      "View only access",
                     ],
                     [UserRoles.user]: ["Basic user access"],
                   };

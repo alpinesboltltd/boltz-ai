@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
-import { agentsAPI } from "@/lib/api";
+import { agentsAPI, CreateCustomActionPayload } from "@/lib/api";
 import {
   AgentActions,
   CoreAction,
@@ -103,11 +103,10 @@ export function ActionsV2() {
               <p className="text-sm text-gray-500 mt-1">{action.description}</p>
               <div className="flex items-center gap-2 mt-2">
                 <span
-                  className={`px-2 py-1 text-xs rounded-full ${
-                    action.status === "active"
-                      ? "bg-green-100 text-green-700"
-                      : "bg-gray-100 text-gray-700"
-                  }`}
+                  className={`px-2 py-1 text-xs rounded-full ${action.status === "active"
+                    ? "bg-green-100 text-green-700"
+                    : "bg-gray-100 text-gray-700"
+                    }`}
                 >
                   {action.status}
                 </span>
@@ -184,8 +183,18 @@ export function ActionsV2() {
 
   const handleSaveApiFunction = async (apiFunction: ApiFunctionFormData) => {
     try {
-      // TODO: refactor correctly
-      await agentsAPI.createApiFunction({ agentId, ...apiFunction });
+      const payload = {
+        ...apiFunction,
+        agentId,
+        errorHandling: apiFunction.errorHandling
+          ? {
+            ...apiFunction.errorHandling,
+            retries: apiFunction.errorHandling.retries ?? 0,
+            timeout: apiFunction.errorHandling.timeout ?? 5000,
+          }
+          : undefined,
+      };
+      await agentsAPI.createApiFunction(payload);
       setShowApiFunctionBuilder(false);
       // Refresh actions data
       const { data } = await agentsAPI.getActions(agentId);
@@ -201,7 +210,19 @@ export function ActionsV2() {
 
   const handleSaveWorkflow = async (workflow: SequentialWorkflowFormData) => {
     try {
-      await agentsAPI.createSequentialWorkflow(agentId, workflow);
+      const payload = {
+        name: workflow.name,
+        description: workflow.description,
+        steps: workflow.steps.map((step) => {
+          const { id, type, ...config } = step;
+          return {
+            id,
+            type,
+            config: config as Record<string, unknown>,
+          };
+        }),
+      };
+      await agentsAPI.createSequentialWorkflow(agentId, payload);
       setShowWorkflowBuilder(false);
       // Refresh actions data
       const { data } = await agentsAPI.getActions(agentId);
@@ -217,7 +238,7 @@ export function ActionsV2() {
 
   const handleSaveAction = async (action: Partial<CustomAction>) => {
     try {
-      await agentsAPI.createCustomAction(agentId, action);
+      await agentsAPI.createCustomAction(agentId, action as CreateCustomActionPayload);
       setShowActionForm(false);
       // Refresh actions data
       const { data } = await agentsAPI.getActions(agentId);
@@ -242,33 +263,30 @@ export function ActionsV2() {
         <nav className="-mb-px flex space-x-8" aria-label="Tabs">
           <button
             onClick={() => setActiveTab("core")}
-            className={`${
-              activeTab === "core"
-                ? "border-primary-500 text-primary-600"
-                : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-            } whitespace-nowrap py-4 px-1 border-b-2 font-medium flex items-center gap-x-2 text-sm`}
+            className={`${activeTab === "core"
+              ? "border-primary-500 text-primary-600"
+              : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+              } whitespace-nowrap py-4 px-1 border-b-2 font-medium flex items-center gap-x-2 text-sm`}
           >
             <Zap className="w-4 h-4" />
             Core Actions
           </button>
           <button
             onClick={() => setActiveTab("system")}
-            className={`${
-              activeTab === "system"
-                ? "border-primary-500 text-primary-600"
-                : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-            } whitespace-nowrap py-4 px-1 border-b-2 flex gap-x-2 items-center font-medium text-sm`}
+            className={`${activeTab === "system"
+              ? "border-primary-500 text-primary-600"
+              : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+              } whitespace-nowrap py-4 px-1 border-b-2 flex gap-x-2 items-center font-medium text-sm`}
           >
             <Settings className="w-4 h-4" />
             System Actions
           </button>
           <button
             onClick={() => setActiveTab("custom")}
-            className={`${
-              activeTab === "custom"
-                ? "border-primary-500 text-primary-600"
-                : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-            } whitespace-nowrap py-4 px-1 border-b-2 flex items-center gap-x-2 font-medium text-sm`}
+            className={`${activeTab === "custom"
+              ? "border-primary-500 text-primary-600"
+              : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+              } whitespace-nowrap py-4 px-1 border-b-2 flex items-center gap-x-2 font-medium text-sm`}
           >
             <Workflow className="w-4 h-4" />
             Custom Actions
@@ -338,11 +356,10 @@ export function ActionsV2() {
                       </p>
                       <div className="flex items-center gap-2 mt-2">
                         <span
-                          className={`px-2 py-1 text-xs rounded-full ${
-                            action.status === "active"
-                              ? "bg-green-100 text-green-700"
-                              : "bg-gray-100 text-gray-700"
-                          }`}
+                          className={`px-2 py-1 text-xs rounded-full ${action.status === "active"
+                            ? "bg-green-100 text-green-700"
+                            : "bg-gray-100 text-gray-700"
+                            }`}
                         >
                           {action.status}
                         </span>
