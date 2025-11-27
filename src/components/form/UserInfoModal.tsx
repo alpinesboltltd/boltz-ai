@@ -36,6 +36,17 @@ export default function UserInfoModal({ user, onClose }: UserInfoModalProps) {
       "Delete agents",
       "Reply to messages",
     ],
+    [UserRoles.editor]: [
+      "Edit agents",
+      "Retrain agents",
+      "Reply to messages",
+      "Manage content",
+    ],
+    [UserRoles.viewer]: [
+      "View agents",
+      "View messages",
+      "View analytics",
+    ],
     [UserRoles.staff]: [
       "Retrain agents",
       "Reply to messages",
