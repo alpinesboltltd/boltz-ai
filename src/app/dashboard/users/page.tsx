@@ -2,15 +2,14 @@
 
 import { useState, useEffect } from "react";
 import { Spinner } from "@/components/common/Spinner";
-import { UserPlusIcon } from "@heroicons/react/24/outline";
+import { EnvelopeIcon, InformationCircleIcon, PencilIcon, PhoneIcon, TrashIcon, UserIcon, UserPlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useUserPermissions } from "@/hooks/useUserPermissions";
 import { UserRoles } from "@/types";
-import UserAddModal from "@/components/form/UserAddModal";
-import UserEditModal from "@/components/form/UserEditModal";
 import UserDeleteModal from "@/components/form/UserDeleteModal";
-import UserInfoModal from "@/components/form/UserInfoModal";
 import UserFilters from "@/components/form/UserFilters";
 import UsersTable from "@/components/form/UsersTable";
+import UserForm from "@/components/form/userForm";
+import Image from "next/image";
 
 interface User {
   id: string;
