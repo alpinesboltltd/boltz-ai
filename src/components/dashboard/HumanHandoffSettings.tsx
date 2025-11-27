@@ -72,8 +72,9 @@ export default function HumanHandoffSettings({
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const target = e.target as HTMLInputElement;
+    const { name, value, type, checked } = target;
 
     setSettings((prev) => ({
       ...prev,
@@ -81,27 +82,40 @@ export default function HumanHandoffSettings({
     }));
   };
 
-  const handleBusinessHoursChange = (e) => {
-    const { name, value, type, checked } = e.target;
+  const handleBusinessHoursChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const target = e.target as HTMLInputElement;
+    const { name, value, type, checked } = target;
 
-    setSettings((prev) => ({
-      ...prev,
-      businessHours: {
-        ...prev.businessHours,
-        [name]: type === "checkbox" ? checked : value,
-      },
-    }));
+    setSettings((prev) => {
+      const currentBusinessHours = prev.businessHours || {
+        enabled: false,
+        timezone: "UTC",
+        schedule: [],
+      };
+      return {
+        ...prev,
+        businessHours: {
+          ...currentBusinessHours,
+          [name]: type === "checkbox" ? checked : value,
+        },
+      };
+    });
   };
 
-  const handleScheduleChange = (index, field, value) => {
+  const handleScheduleChange = (index: number, field: string, value: string) => {
     setSettings((prev) => {
-      const newSchedule = [...prev.businessHours.schedule];
+      const currentBusinessHours = prev.businessHours || {
+        enabled: false,
+        timezone: "UTC",
+        schedule: [],
+      };
+      const newSchedule = [...(currentBusinessHours.schedule || [])];
       newSchedule[index] = { ...newSchedule[index], [field]: value };
 
       return {
         ...prev,
         businessHours: {
-          ...prev.businessHours,
+          ...currentBusinessHours,
           schedule: newSchedule,
         },
       };
@@ -110,34 +124,49 @@ export default function HumanHandoffSettings({
 
   const handleAddDay = () => {
     // Find first day not in schedule
-    const usedDays = settings.businessHours.schedule.map((item) => item.day);
+    const schedule = settings.businessHours?.schedule || [];
+    const usedDays = schedule.map((item) => item.day);
     const availableDay = daysOfWeek.find((day) => !usedDays.includes(day));
 
     if (availableDay) {
-      setSettings((prev) => ({
-        ...prev,
-        businessHours: {
-          ...prev.businessHours,
-          schedule: [
-            ...prev.businessHours.schedule,
-            { day: availableDay, start: "09:00", end: "17:00" },
-          ],
-        },
-      }));
+      setSettings((prev) => {
+        const currentBusinessHours = prev.businessHours || {
+          enabled: false,
+          timezone: "UTC",
+          schedule: [],
+        };
+        return {
+          ...prev,
+          businessHours: {
+            ...currentBusinessHours,
+            schedule: [
+              ...(currentBusinessHours.schedule || []),
+              { day: availableDay, start: "09:00", end: "17:00" },
+            ],
+          },
+        };
+      });
     }
   };
 
-  const handleRemoveDay = (index) => {
-    setSettings((prev) => ({
-      ...prev,
-      businessHours: {
-        ...prev.businessHours,
-        schedule: prev.businessHours.schedule.filter((_, i) => i !== index),
-      },
-    }));
+  const handleRemoveDay = (index: number) => {
+    setSettings((prev) => {
+      const currentBusinessHours = prev.businessHours || {
+        enabled: false,
+        timezone: "UTC",
+        schedule: [],
+      };
+      return {
+        ...prev,
+        businessHours: {
+          ...currentBusinessHours,
+          schedule: (currentBusinessHours.schedule || []).filter((_, i) => i !== index),
+        },
+      };
+    });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
@@ -266,7 +295,7 @@ export default function HumanHandoffSettings({
                       id="businessHoursEnabled"
                       name="enabled"
                       type="checkbox"
-                      checked={settings.businessHours.enabled}
+                      checked={settings.businessHours?.enabled ?? false}
                       onChange={handleBusinessHoursChange}
                       className="focus:ring-primary-500 h-4 w-4 text-primary-600 border-gray-300 rounded"
                     />
@@ -285,7 +314,7 @@ export default function HumanHandoffSettings({
                   </div>
                 </div>
 
-                {settings.businessHours.enabled && (
+                {settings.businessHours?.enabled && (
                   <div className="mt-4 space-y-4">
                     <div>
                       <label
@@ -297,7 +326,7 @@ export default function HumanHandoffSettings({
                       <select
                         id="timezone"
                         name="timezone"
-                        value={settings.businessHours.timezone}
+                        value={settings.businessHours?.timezone || "UTC"}
                         onChange={handleBusinessHoursChange}
                         className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm rounded-md"
                       >
@@ -314,7 +343,7 @@ export default function HumanHandoffSettings({
                         Schedule
                       </label>
 
-                      {settings.businessHours.schedule.map((item, index) => (
+                      {settings.businessHours?.schedule?.map((item, index) => (
                         <div
                           key={index}
                           className="flex items-center space-x-2 mb-2"
@@ -378,7 +407,7 @@ export default function HumanHandoffSettings({
                         </div>
                       ))}
 
-                      {settings.businessHours.schedule.length < 7 && (
+                      {(settings.businessHours?.schedule?.length || 0) < 7 && (
                         <button
                           type="button"
                           onClick={handleAddDay}

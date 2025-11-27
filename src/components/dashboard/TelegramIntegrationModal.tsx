@@ -23,7 +23,7 @@ export default function TelegramIntegrationModal({
 
   if (!isOpen) return null;
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError("");

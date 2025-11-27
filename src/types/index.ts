@@ -128,6 +128,8 @@ export enum SubscriptionPlans {
 export enum UserRoles {
   superAdmin = "superadmin",
   admin = "admin",
+  editor = "editor",
+  viewer = "viewer",
   user = "user",
   staff = "staff",
 }
