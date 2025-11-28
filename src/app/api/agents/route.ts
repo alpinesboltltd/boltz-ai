@@ -26,14 +26,14 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const data = createAgentSchema.parse(body);
-    
+
     const agentId = nextId.toString();
     const now = new Date().toISOString();
 
     // Create agent record
     const agent = {
       id: agentId,
-      user_id: "1", // Get from auth in production
+      userId: "1", // Get from auth in production
       name: data.name,
       description: data.description,
       agent_type: data.agent_type,
@@ -101,7 +101,7 @@ export async function POST(request: NextRequest) {
 
   } catch (error) {
     console.error("Error creating agent:", error);
-    
+
     if (error instanceof z.ZodError) {
       return NextResponse.json({
         success: false,

@@ -214,7 +214,7 @@ export default function CreateAgentPage() {
         // Create new agent
         const agentPayload = {
           ...data,
-          user_id: user.id,
+          userId: user.id,
           agent_type: agentTypeToEnum(data.agent_type),
         };
 
@@ -369,20 +369,18 @@ export default function CreateAgentPage() {
               ].map((stepItem) => (
                 <li key={stepItem.id} className="md:flex-1">
                   <div
-                    className={`group flex flex-col border-l-4 py-2 pl-4 ${
-                      step > stepItem.id
+                    className={`group flex flex-col border-l-4 py-2 pl-4 ${step > stepItem.id
                         ? "border-primary-600"
                         : step === stepItem.id
                           ? "border-primary-600"
                           : "border-gray-200"
-                    } md:border-l-0 md:border-t-4 md:pl-0 md:pt-4 md:pb-0`}
+                      } md:border-l-0 md:border-t-4 md:pl-0 md:pt-4 md:pb-0`}
                   >
                     <span
-                      className={`text-xs font-semibold uppercase tracking-wide ${
-                        step >= stepItem.id
+                      className={`text-xs font-semibold uppercase tracking-wide ${step >= stepItem.id
                           ? "text-primary-600"
                           : "text-gray-500"
-                      }`}
+                        }`}
                     >
                       Step {stepItem.id}
                     </span>
@@ -435,11 +433,10 @@ export default function CreateAgentPage() {
                         <div
                           key={template.id}
                           onClick={() => setSelectedTemplate(template.id)}
-                          className={`relative rounded-lg border p-4 cursor-pointer ${
-                            selectedTemplate === template.id
+                          className={`relative rounded-lg border p-4 cursor-pointer ${selectedTemplate === template.id
                               ? "border-primary-500 ring-2 ring-primary-500"
                               : "border-gray-300 hover:border-gray-400"
-                          }`}
+                            }`}
                         >
                           <div className="flex items-center space-x-3">
                             <div className="text-2xl">{template.icon}</div>
@@ -489,11 +486,10 @@ export default function CreateAgentPage() {
                       ].map((type) => (
                         <label
                           key={type.value}
-                          className={`relative flex flex-col items-center p-6 border-2 rounded-xl cursor-pointer transition-all hover:shadow-md ${
-                            selectedAgentType === type.value
+                          className={`relative flex flex-col items-center p-6 border-2 rounded-xl cursor-pointer transition-all hover:shadow-md ${selectedAgentType === type.value
                               ? "border-primary-500 bg-primary-50 shadow-md"
                               : "border-gray-200 hover:border-gray-300"
-                          }`}
+                            }`}
                         >
                           <input
                             {...agentForm.register("agent_type")}
@@ -532,11 +528,10 @@ export default function CreateAgentPage() {
                         {availableModels.map((model) => (
                           <label
                             key={model.id}
-                            className={`relative rounded-lg border p-4 cursor-pointer flex items-center ${
-                              selectedModel === model.id
+                            className={`relative rounded-lg border p-4 cursor-pointer flex items-center ${selectedModel === model.id
                                 ? "border-primary-500 ring-2 ring-primary-500"
                                 : "border-gray-300 hover:border-gray-400"
-                            }`}
+                              }`}
                           >
                             <input
                               {...agentForm.register("ai_model_id")}

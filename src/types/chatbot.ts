@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export interface Chatbot {
   id: string;
-  user_id: string;
+  userId: string;
   name: string;
   description: string;
   ai_model: string;
@@ -61,11 +61,11 @@ export interface TrainingData {
   id: number;
   chatagent_id: string;
   content_type:
-    | "faq"
-    | "knowledge_base"
-    | "procedure"
-    | "external_link"
-    | "website_content";
+  | "faq"
+  | "knowledge_base"
+  | "procedure"
+  | "external_link"
+  | "website_content";
   category: string;
   title: string;
   content: string;

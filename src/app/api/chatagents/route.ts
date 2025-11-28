@@ -17,7 +17,7 @@ export async function POST(request: Request) {
       method: "GET",
     });
     const agents = (await response.json()) as Agent[];
-    const data = agents.filter((agent) => agent.user_id === userId);
+    const data = agents.filter((agent) => agent.userId === userId);
     return NextResponse.json(
       { success: true, message: "Request successful", data },
       { status: 200 }

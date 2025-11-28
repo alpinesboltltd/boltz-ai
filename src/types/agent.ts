@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export interface Agent {
   id: string;
-  user_id: string;
+  userId: string;
   name: string;
   description: string;
   agent_type: AgentType | number;
@@ -75,11 +75,11 @@ export interface TrainingData {
   id: number;
   agent_id: string;
   content_type:
-    | "faq"
-    | "knowledge_base"
-    | "procedure"
-    | "external_link"
-    | "website_content";
+  | "faq"
+  | "knowledge_base"
+  | "procedure"
+  | "external_link"
+  | "website_content";
   category: string;
   title: string;
   content: string;
@@ -225,9 +225,9 @@ const statusEnum = [
 ] as const;
 
 export const AgentTypeEnum = {
-  TEXT: 0,
-  VOICE: 1,
-  MULTIMODAL: 2,
+  MULTIMODAL: 0,
+  TEXT: 1,
+  VOICE: 2,
 } as const;
 
 export const CreateAgentRequestSchema = z.object({
@@ -239,7 +239,7 @@ export const CreateAgentRequestSchema = z.object({
 });
 
 export const CreateAgentAPIRequestSchema = CreateAgentRequestSchema.extend({
-  user_id: z.string(),
+  userId: z.string(),
   agent_type: z.union([z.nativeEnum(AgentType), z.number()]),
 });
 

@@ -2,9 +2,9 @@ import { AgentType } from "@/types/agent";
 
 // DB enum values: 0 = text, 1 = voice, 2 = multimodal (vision)
 export const AgentTypeEnum = {
-  TEXT: 0,
-  VOICE: 1,
-  MULTIMODAL: 2,
+  MULTIMODAL: 0,
+  TEXT: 1,
+  VOICE: 2,
 } as const;
 
 export const agentTypeToEnum = (type: AgentType): number => {
