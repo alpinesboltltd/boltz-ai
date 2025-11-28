@@ -8,6 +8,7 @@ import { useCurrentUser } from "@/store/authStore";
 import { Profile, UserRoles } from "@/types";
 import { Switch } from "@headlessui/react";
 import { toast } from "@/store/toastStore";
+import { authAPI } from "@/lib/api";
 
 export default function SettingsPage() {
   const user = useCurrentUser();
@@ -58,7 +59,7 @@ export default function SettingsPage() {
   ]);
 
   // Mock subscription data
-  const [subscription, setSubscription] = useState({
+  const [subscription, _setSubscription] = useState({
     plan: "Pro",
     price: "$29/month",
     status: "active",
@@ -76,51 +77,30 @@ export default function SettingsPage() {
 
   const handleProfileSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-    // FIXME: run implementation for subscription
-    setSubscription({
-      plan: "Pro",
-      price: "$29/month",
-      status: "active",
-      nextBillingDate: "2023-12-01",
-      features: [
-        "10,000 messages per month",
-        "Advanced chatagent customization",
-        "Website & WhatsApp integration",
-        "All AI models (Gemini, GPT-4, Claude)",
-        "Knowledge base integration",
-        "Analytics dashboard",
-        "Priority support",
-      ],
-    });
-
-    try {
-      // In production, this would call the real API
-      // await fetch('/api/user/profile', {
-      //   method: 'PUT',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(userData)
-      // });
-
-      // For development, simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      toast.success(
-        "Profile Updated",
-        "Your profile has been updated successfully"
-      );
-    } catch {
-      toast.error(
-        "Update Failed",
-        "Failed to update profile. Please try again."
-      );
-    } finally {
-      setLoading(false);
-    }
+    // Profile update is not yet supported by the backend
+    toast.info("Coming Soon", "Profile update is currently disabled.");
   };
 
-  const handleNotificationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleNotificationChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = e.target;
+
+    // Only email notifications (OTP) are supported via API for now
+    if (name === "email") {
+      try {
+        if (checked) {
+          await authAPI.enableOTP(user?.email || "");
+          toast.success("Success", "OTP enabled successfully");
+        } else {
+          await authAPI.disableOTP(user?.email || "");
+          toast.success("Success", "OTP disabled successfully");
+        }
+      } catch (error) {
+        console.error("Failed to update OTP settings:", error);
+        toast.error("Error", "Failed to update OTP settings");
+        return; // Don't update state if API call failed
+      }
+    }
+
     setUserData((prev) => ({
       ...prev,
       notifications: {

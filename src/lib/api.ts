@@ -127,6 +127,72 @@ export const authAPI = {
   getCurrentUser: async () => {
     return await apiRequest("/auth/me");
   },
+
+  enableOTP: async (email: string) => {
+    return await apiRequest("/auth/otp/enable", {
+      method: "POST",
+      body: JSON.stringify({ email }),
+    });
+  },
+
+  disableOTP: async (email: string) => {
+    return await apiRequest("/auth/otp/disable", {
+      method: "POST",
+      body: JSON.stringify({ email }),
+    });
+  },
+};
+
+// System API
+export const systemAPI = {
+  // System Instructions
+  createInstruction: async (
+    title: string,
+    content: string,
+    templateId?: string
+  ) => {
+    return await apiRequest("/system/instructions", {
+      method: "POST",
+      body: JSON.stringify({ title, content, template_id: templateId }),
+    });
+  },
+
+  getInstruction: async (id: string) => {
+    return await apiRequest(`/system/instructions/${id}`);
+  },
+
+  updateInstruction: async (id: string, title?: string, content?: string) => {
+    return await apiRequest(`/system/instructions/${id}`, {
+      method: "PUT",
+      body: JSON.stringify({ title, content }),
+    });
+  },
+
+  deleteInstruction: async (id: string) => {
+    return await apiRequest(`/system/instructions/${id}`, {
+      method: "DELETE",
+    });
+  },
+
+  listInstructions: async () => {
+    return await apiRequest("/system/instructions");
+  },
+
+  // Prompt Templates
+  createTemplate: async (title: string, content: string) => {
+    return await apiRequest("/system/templates", {
+      method: "POST",
+      body: JSON.stringify({ title, content }),
+    });
+  },
+
+  getTemplate: async (id: string) => {
+    return await apiRequest(`/system/templates/${id}`);
+  },
+
+  listTemplates: async () => {
+    return await apiRequest("/system/templates");
+  },
 };
 
 // Agents API

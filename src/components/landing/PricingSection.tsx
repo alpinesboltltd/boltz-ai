@@ -1,58 +1,7 @@
 import { CheckIcon } from "@heroicons/react/20/solid";
+import { pricingTiers as tiers } from "@/lib/static/landing";
 
-// FIXME: fetch from the database
-const tiers = [
-  {
-    name: "Free",
-    id: "tier-free",
-    price: "$0",
-    description: "Perfect for small projects and personal websites.",
-    features: [
-      "1,000 messages per month",
-      "Basic chatagent customization",
-      "Website integration",
-      "Google Gemini AI model",
-      "Email support",
-    ],
-    cta: "Start for free",
-    mostPopular: false,
-  },
-  {
-    name: "Pro",
-    id: "tier-pro",
-    price: "$29",
-    description: "Ideal for growing businesses and e-commerce sites.",
-    features: [
-      "10,000 messages per month",
-      "Advanced chatagent customization",
-      "Website & WhatsApp integration",
-      "All AI models (Gemini, GPT-4, Claude)",
-      "Knowledge base integration",
-      "Analytics dashboard",
-      "Priority support",
-    ],
-    cta: "Get started",
-    mostPopular: true,
-  },
-  {
-    name: "Business",
-    id: "tier-business",
-    price: "$99",
-    description: "For businesses with advanced needs and multiple channels.",
-    features: [
-      "50,000 messages per month",
-      "Full chatagent customization",
-      "All platform integrations",
-      "All AI models with fine-tuning",
-      "Advanced analytics",
-      "Team collaboration",
-      "API access",
-      "Dedicated support",
-    ],
-    cta: "Contact sales",
-    mostPopular: false,
-  },
-];
+
 
 export function PricingSection() {
   return (
@@ -70,11 +19,10 @@ export function PricingSection() {
           {tiers.map((tier) => (
             <div
               key={tier.id}
-              className={`relative bg-white rounded-2xl p-8 shadow-lg ${
-                tier.mostPopular
+              className={`relative bg-white rounded-2xl p-8 shadow-lg ${tier.mostPopular
                   ? "ring-2 ring-primary-600 shadow-2xl scale-105"
                   : "ring-1 ring-gray-200"
-              }`}
+                }`}
             >
               {tier.mostPopular ? (
                 <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-primary-600 text-white px-4 py-2 rounded-full text-sm font-semibold">
@@ -109,11 +57,10 @@ export function PricingSection() {
                       : "/register"
                 }
                 aria-describedby={tier.id}
-                className={`${
-                  tier.mostPopular
+                className={`${tier.mostPopular
                     ? "bg-primary-600 text-white hover:bg-primary-700"
                     : "bg-primary-50 text-primary-700 hover:bg-primary-100"
-                } mt-6 block rounded-md px-3 py-2 text-center text-sm font-semibold leading-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600`}
+                  } mt-6 block rounded-md px-3 py-2 text-center text-sm font-semibold leading-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600`}
               >
                 {tier.cta}
               </a>

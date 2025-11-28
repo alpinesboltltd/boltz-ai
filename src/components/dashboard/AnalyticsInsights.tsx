@@ -39,7 +39,6 @@ interface AnalyticsInsightsProps {
 
 export default function AnalyticsInsights({
   analytics,
-  timeRange,
 }: AnalyticsInsightsProps) {
   const [selectedInsight, setSelectedInsight] = useState<string | null>(null);
 
@@ -174,7 +173,7 @@ export default function AnalyticsInsights({
     }
 
     return insights;
-  }, [analytics, timeRange]);
+  }, [analytics]);
 
   const getInsightIcon = (type: string) => {
     switch (type) {

@@ -1,28 +1,6 @@
+import { testimonials } from "@/lib/static/landing";
+
 export function TestimonialsSection() {
-  //  FIXME: Fetch from the database
-  const testimonials = [
-    {
-      content:
-        "Boltz Ai transformed our customer support. We reduced response times by 80% and increased satisfaction by 35%.",
-      author: "Sarah Johnson",
-      role: "Customer Success Manager",
-      company: "TechCorp Inc.",
-    },
-    {
-      content:
-        "Setting up our AI agent took minutes. The platform is intuitive and the responses are incredibly accurate.",
-      author: "Michael Chen",
-      role: "E-commerce Director",
-      company: "Retail Solutions",
-    },
-    {
-      content:
-        "Our voice agent handles 70% of calls without human intervention. The ROI has been phenomenal.",
-      author: "Jessica Patel",
-      role: "Head of Support",
-      company: "SaaS Platform",
-    },
-  ];
 
   return (
     <section className="bg-gray-50 py-24">

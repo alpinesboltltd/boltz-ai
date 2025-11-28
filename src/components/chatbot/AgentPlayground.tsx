@@ -29,7 +29,7 @@ import Select from "react-select";
 import { Message } from "@/types";
 import { cn } from "@/lib/utils";
 import { useAIModelsStore } from "@/store/aiModelsStore";
-import { AIModel } from "@/mock-data/ai-models";
+import { AIModel } from "@/lib/static/ai-models";
 import { agentTypeToEnum, enumToAgentType } from "@/lib/agentTypeSerializer";
 
 export function AgentPlayground() {
@@ -448,21 +448,19 @@ export function AgentPlayground() {
               <nav className="-mb-px flex">
                 <button
                   onClick={() => setShowConfig(true)}
-                  className={`py-2 px-4 text-sm font-medium border-b-2 ${
-                    showConfig
+                  className={`py-2 px-4 text-sm font-medium border-b-2 ${showConfig
                       ? "border-primary-500 text-primary-600"
                       : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                  }`}
+                    }`}
                 >
                   Configuration
                 </button>
                 <button
                   onClick={() => setShowConfig(false)}
-                  className={`py-2 px-4 text-sm font-medium border-b-2 ${
-                    !showConfig
+                  className={`py-2 px-4 text-sm font-medium border-b-2 ${!showConfig
                       ? "border-primary-500 text-primary-600"
                       : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                  }`}
+                    }`}
                 >
                   Test Queries
                 </button>
@@ -823,11 +821,10 @@ function ChatInterface({
               className={`mb-4 flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
             >
               <div
-                className={`max-w-[80%] px-4 py-2 rounded-lg ${
-                  message.role === "user"
+                className={`max-w-[80%] px-4 py-2 rounded-lg ${message.role === "user"
                     ? "text-white"
                     : "bg-gray-100 text-gray-800"
-                }`}
+                  }`}
                 style={
                   message.role === "user"
                     ? { backgroundColor: primaryColor }

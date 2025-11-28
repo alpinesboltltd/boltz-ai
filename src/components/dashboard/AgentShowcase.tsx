@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import { gsap } from "gsap";
 import { MOCK_AGENTS } from "@/constants";
 
@@ -41,15 +42,17 @@ export const AgentShowcase = ({ onHire }: { onHire: (id: string) => void }) => {
       <h2 className="text-3xl font-bold text-gray-900 mb-8 animate-item">
         Discover Our AI Agents
       </h2>
-      
+
       <div ref={cardRef} className="relative w-full max-w-2xl">
         <div className="bg-gradient-to-br from-primary-50 to-purple-50 rounded-3xl shadow-2xl p-8 border border-primary-200">
           {/* Agent Image */}
           <div className="flex justify-center mb-6 animate-item">
             <div className="relative">
-              <img
+              <Image
                 src={agent.imageUrl}
                 alt={agent.name}
+                width={128}
+                height={128}
                 className="w-32 h-32 rounded-full object-cover border-4 border-white shadow-lg"
               />
               <div className="absolute -bottom-2 -right-2 bg-yellow-400 rounded-full p-2 shadow-lg">
@@ -117,9 +120,8 @@ export const AgentShowcase = ({ onHire }: { onHire: (id: string) => void }) => {
             <button
               key={idx}
               onClick={() => setCurrentIndex(idx)}
-              className={`h-2 rounded-full transition-all duration-300 ${
-                idx === currentIndex ? "w-8 bg-primary-600" : "w-2 bg-gray-300"
-              }`}
+              className={`h-2 rounded-full transition-all duration-300 ${idx === currentIndex ? "w-8 bg-primary-600" : "w-2 bg-gray-300"
+                }`}
             />
           ))}
         </div>

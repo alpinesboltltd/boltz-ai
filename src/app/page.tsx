@@ -1,6 +1,5 @@
 import { HeroSection } from "@/components/landing/HeroSection";
 import { FeaturesSection } from "@/components/landing/FeaturesSection";
-import { Explore } from "@/components/landing/Explore";
 import { Features } from "@/components/landing/Features";
 import { PricingSection } from "@/components/landing/PricingSection";
 import { TestimonialsSection } from "@/components/landing/TestimonialsSection";
@@ -14,7 +13,6 @@ export default function Home() {
       <Header />
       <HeroSection />
       <FeaturesSection />
-      <Explore />
       <Features />
       <PricingSection />
       <TestimonialsSection />

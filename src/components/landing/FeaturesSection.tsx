@@ -7,66 +7,19 @@ import {
   ShieldCheckIcon,
 } from "@heroicons/react/24/outline";
 import Topic from "../ui/Topic";
+import { agentTypesData, coreFeaturesData } from "@/lib/static/landing";
 
-const agentTypes = [
-  {
-    name: "Multimodal AI Agents",
-    description:
-      "Handle text, images, documents, and voice in one intelligent agent. Perfect for complex customer support scenarios.",
-    icon: PhotoIcon,
-    features: [
-      "Image recognition",
-      "Document processing",
-      "Voice integration",
-      "Multi-format responses",
-    ],
-  },
-  {
-    name: "Text AI Agents",
-    description:
-      "Lightning-fast text-based agents for chat, email, and messaging platforms. Optimized for quick, accurate responses.",
-    icon: ChatBubbleLeftRightIcon,
-    features: [
-      "Instant responses",
-      "Context awareness",
-      "Multi-language",
-      "Smart routing",
-    ],
-  },
-  {
-    name: "Voice AI Agents",
-    description:
-      "Natural voice conversations with advanced speech recognition and synthesis. Handle phone calls like a human.",
-    icon: MicrophoneIcon,
-    features: [
-      "Natural speech",
-      "Real-time processing",
-      "Emotion detection",
-      "Call handling",
-    ],
-  },
-];
+const agentTypes = agentTypesData.map((agent, index) => ({
+  ...agent,
+  icon: index === 0 ? PhotoIcon : index === 1 ? ChatBubbleLeftRightIcon : MicrophoneIcon,
+}));
 
-const coreFeatures = [
-  {
-    name: "Advanced AI Models",
-    description:
-      "Powered by GPT-5, Claude, Gemini, and other leading AI models for superior performance.",
-    icon: CpuChipIcon,
-  },
-  {
-    name: "Real-time Analytics",
-    description:
-      "Track performance, user satisfaction, and conversion metrics with detailed dashboards.",
-    icon: ChartBarIcon,
-  },
-  {
-    name: "Enterprise Security",
-    description:
-      "Bank-level security with encryption, compliance, and data protection built-in.",
-    icon: ShieldCheckIcon,
-  },
-];
+const coreFeatures = coreFeaturesData.map((feature, index) => ({
+  ...feature,
+  icon: index === 0 ? CpuChipIcon : index === 1 ? ChartBarIcon : ShieldCheckIcon,
+}));
+
+
 
 export function FeaturesSection() {
   return (

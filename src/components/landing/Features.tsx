@@ -1,4 +1,5 @@
 import { SparklesIcon } from "@heroicons/react/24/outline";
+import Image from "next/image";
 import {
   Card,
   CardHeader,
@@ -24,7 +25,7 @@ export function Features() {
         <div className="grid md:grid-cols-2 gap-8 mb-12">
           <Card>
             <CardHeader>
-              <img src="/img/logo.webp" alt="Feature Icon" className="w-12 h-12 mb-4" />
+              <Image src="/img/logo.webp" alt="Feature Icon" width={48} height={48} className="w-12 h-12 mb-4" />
               <CardTitle>Sync with Real-time Data</CardTitle>
               <CardDescription>
                 Connect your agent to order management, CRMs, and databases for instant access to customer information and order details.
@@ -33,7 +34,7 @@ export function Features() {
           </Card>
           <Card>
             <CardHeader>
-              <img src="/img/logo.webp" alt="Feature Icon" className="w-12 h-12 mb-4" />
+              <Image src="/img/logo.webp" alt="Feature Icon" width={48} height={48} className="w-12 h-12 mb-4" />
               <CardTitle>Take Actions on Your Systems</CardTitle>
               <CardDescription>
                 Enable your agent to update subscriptions, process refunds, schedule appointments, and perform actions across your business systems.
@@ -45,7 +46,7 @@ export function Features() {
         <div className="grid lg:grid-cols-3 gap-8 mb-16">
           <Card>
             <CardHeader>
-              <img src="/img/logo.webp" alt="Feature Icon" className="w-12 h-12 mb-4" />
+              <Image src="/img/logo.webp" alt="Feature Icon" width={48} height={48} className="w-12 h-12 mb-4" />
               <CardTitle>Compare AI Models</CardTitle>
               <CardDescription>
                 Test different AI models side-by-side to find the perfect fit for your specific use case and performance requirements.
@@ -54,7 +55,7 @@ export function Features() {
           </Card>
           <Card>
             <CardHeader>
-              <img src="/img/logo.webp" alt="Feature Icon" className="w-12 h-12 mb-4" />
+              <Image src="/img/logo.webp" alt="Feature Icon" width={48} height={48} className="w-12 h-12 mb-4" />
               <CardTitle>Smart Escalation</CardTitle>
               <CardDescription>
                 Set natural language rules for when to escalate complex queries to human agents automatically.
@@ -63,7 +64,7 @@ export function Features() {
           </Card>
           <Card>
             <CardHeader>
-              <img src="/img/logo.webp" alt="Feature Icon" className="w-12 h-12 mb-4" />
+              <Image src="/img/logo.webp" alt="Feature Icon" width={48} height={48} className="w-12 h-12 mb-4" />
               <CardTitle>Advanced Analytics</CardTitle>
               <CardDescription>
                 Track performance metrics, conversation quality, and customer satisfaction with detailed reporting dashboards.
