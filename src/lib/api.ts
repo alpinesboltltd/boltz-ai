@@ -4,6 +4,7 @@ import {
   Agent,
   AgentAppearance,
   AgentBehavior,
+  AgentChannel,
   AgentIntegration,
   AgentStats,
   CreateAgentAPIRequest,
@@ -62,6 +63,13 @@ export interface CreateWorkflowPayload {
 }
 
 export type UpdatePlaygroundConfigPayload = Partial<PlaygroundConfig>;
+
+export interface ScraperPayload {
+  url: string;
+  trace?: boolean;
+  exclude?: string[];
+  max_pages?: number;
+}
 
 // API helper function
 export const apiRequest = async (
@@ -261,6 +269,16 @@ export const agentsAPI = {
     });
   },
 
+  // Agent Appearance
+  createAppearance: async (
+    data: Partial<AgentAppearance>
+  ): Promise<{ appearance: AgentAppearance }> => {
+    return await apiRequest(`/agent/create/appearance`, {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  },
+
   getAppearance: async (id: string) => {
     return await apiRequest(`/agent/${id}/appearance`, { method: "GET" });
   },
@@ -268,10 +286,117 @@ export const agentsAPI = {
   updateAppearance: async (
     id: string,
     data: UpdateAppearancePayload
-  ): Promise<{ data: AgentAppearance }> => {
+  ): Promise<{ appearance: AgentAppearance }> => {
     return await apiRequest(`/agent/${id}/appearance`, {
       method: "PATCH",
       body: JSON.stringify(data),
+    });
+  },
+
+  deleteAppearance: async (id: string) => {
+    return await apiRequest(`/agent/${id}/appearance`, {
+      method: "DELETE",
+    });
+  },
+
+  // Agent Behavior
+  createBehavior: async (
+    data: Partial<AgentBehavior>
+  ): Promise<{ behavior: AgentBehavior }> => {
+    return await apiRequest(`/agent/create/behavior`, {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  },
+
+  getBehavior: async (id: string) => {
+    return await apiRequest(`/agent/${id}/behavior`);
+  },
+
+  updateBehavior: async (
+    id: string,
+    data: Partial<AgentBehavior>
+  ): Promise<{ behavior: AgentBehavior }> => {
+    return await apiRequest(`/agent/${id}/behavior`, {
+      method: "PATCH",
+      body: JSON.stringify(data),
+    });
+  },
+
+  deleteBehavior: async (id: string) => {
+    return await apiRequest(`/agent/${id}/behavior`, {
+      method: "DELETE",
+    });
+  },
+
+  // Agent Channel
+  createChannel: async (
+    data: Partial<AgentChannel>
+  ): Promise<{ channel: AgentChannel }> => {
+    return await apiRequest(`/agent/create/channel`, {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  },
+
+  getChannel: async (id: string) => {
+    return await apiRequest(`/agent/${id}/channel`);
+  },
+
+  updateChannel: async (
+    id: string,
+    data: Partial<AgentChannel>
+  ): Promise<{ channel: AgentChannel }> => {
+    return await apiRequest(`/agent/${id}/channel`, {
+      method: "PATCH",
+      body: JSON.stringify(data),
+    });
+  },
+
+  deleteChannel: async (id: string) => {
+    return await apiRequest(`/agent/${id}/channel`, {
+      method: "DELETE",
+    });
+  },
+
+  // Agent Integration
+  createIntegration: async (
+    data: Partial<AgentIntegration>
+  ): Promise<{ integration: AgentIntegration }> => {
+    return await apiRequest(`/agent/create/integration`, {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  },
+
+  getIntegration: async (id: string) => {
+    return await apiRequest(`/agent/${id}/integration`);
+  },
+
+  updateIntegration: async (
+    id: string,
+    data: Partial<AgentIntegration>
+  ): Promise<{ integration: AgentIntegration }> => {
+    return await apiRequest(`/agent/${id}/integration`, {
+      method: "PATCH",
+      body: JSON.stringify(data),
+    });
+  },
+
+  deleteIntegration: async (id: string) => {
+    return await apiRequest(`/agent/${id}/integration`, {
+      method: "DELETE",
+    });
+  },
+
+  // Agent Stats
+  getStats: async (id: string) => {
+    return await apiRequest(`/agent/${id}/stats`);
+  },
+
+  deleteStats: async (id: string) => {
+    return await apiRequest(`/agent/${id}/stats`, {
+      method: "DELETE",
     });
   },
 
@@ -570,40 +695,57 @@ export const aiModelsAPI = {
   },
 };
 // Training API
+// Training API
 export const trainingAPI = {
-  uploadFile: async (
-    file: File,
+  trainWithText: async (
     agentId: string,
-    token: string
-  ): Promise<{ message: string; file_id: string }> => {
-    // Validate file
-    const maxSize = 10 * 1024 * 1024; // 10MB
-    const allowedTypes = [
-      "application/pdf",
-      "text/plain",
-      "application/msword",
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-    ];
+    title: string,
+    content: string,
+    token?: string
+  ) => {
+    return await apiRequest(
+      `/agent/${agentId}/train/text`,
+      {
+        method: "POST",
+        body: JSON.stringify({ title, content }),
+      },
+      token
+    );
+  },
 
-    if (file.size > maxSize) {
-      throw new Error("File size exceeds 10MB limit");
-    }
+  trainWithURL: async (
+    agentId: string,
+    url: string,
+    maxPages: number = 10,
+    excludePatterns: string[] = [],
+    token?: string
+  ) => {
+    return await apiRequest(
+      `/agent/${agentId}/train/url`,
+      {
+        method: "POST",
+        body: JSON.stringify({ url, max_pages: maxPages, exclude_patterns: excludePatterns }),
+      },
+      token
+    );
+  },
 
-    if (!allowedTypes.includes(file.type)) {
-      throw new Error(
-        "Invalid file type. Only PDF, TXT, DOC, and DOCX files are allowed"
-      );
-    }
-
+  trainWithFile: async (
+    agentId: string,
+    file: File,
+    token?: string
+  ) => {
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("agent_id", agentId);
-    formData.append("data_type", "document");
 
-    const response = await fetch("/training/upload", {
+    // Note: apiRequest handles JSON, but for FormData we need to let browser set Content-Type
+    // So we use fetch directly or modify apiRequest. 
+    // Let's use fetch directly for file upload to avoid Content-Type issues.
+    const authToken = token || localStorage.getItem("auth_token");
+    const response = await fetch(`/api/v1/agent/${agentId}/train/file`, {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${token}`,
+        ...(authToken && { Authorization: `Bearer ${authToken}` }),
       },
       body: formData,
     });
@@ -616,64 +758,51 @@ export const trainingAPI = {
     return response.json();
   },
 
-  processTraining: async (
-    agentId: string,
-    dataSource: string,
-    processingType: string,
-    token: string
-  ): Promise<{ message: string; job_id: string }> => {
+  getDocuments: async (agentId: string, token?: string) => {
+    return await apiRequest(`/agent/${agentId}/training/documents`, {}, token);
+  },
+
+  getStats: async (agentId: string, token?: string) => {
+    return await apiRequest(`/agent/${agentId}/training/stats`, {}, token);
+  },
+
+  query: async (agentId: string, query: string, token?: string) => {
     return await apiRequest(
-      "/training/process",
+      `/agent/${agentId}/training/query`,
       {
         method: "POST",
-        body: JSON.stringify({
-          agent_id: agentId,
-          data_source: dataSource,
-          processing_type: processingType,
-        }),
+        body: JSON.stringify({ query }),
       },
       token
     );
   },
 
-  getStatus: async (
-    agentId: string,
-    token: string
-  ): Promise<{
-    status: string;
-    progress: number;
-    total_documents: number;
-    processed_documents: number;
-  }> => {
-    return await apiRequest(`/training/status/${agentId}`, {}, token);
-  },
-
-  searchKnowledge: async (
-    agentId: string,
-    query: string,
-    limit: number,
-    token: string
-  ): Promise<{ results: Array<{ content: string; score: number }> }> => {
-    if (!query || query.trim().length === 0) {
-      throw new Error("Query cannot be empty");
-    }
-
-    if (limit < 1 || limit > 20) {
-      throw new Error("Limit must be between 1 and 20");
-    }
-
+  deleteTrainingData: async (agentId: string, documentId: string, token?: string) => {
     return await apiRequest(
-      "/training/search",
+      `/agent/${agentId}/training?documentId=${documentId}`,
       {
-        method: "POST",
-        body: JSON.stringify({
-          agent_id: agentId,
-          query,
-          limit,
-        }),
+        method: "DELETE"
       },
       token
     );
+  }
+};
+
+
+export const workspacesAPI = {
+  create: async (name: string, description?: string) => {
+    return await apiRequest("/workspaces", {
+      method: "POST",
+      body: JSON.stringify({ name, description }),
+    });
+  },
+
+  getAll: async () => {
+    return await apiRequest("/workspaces");
+  },
+
+  getById: async (id: string) => {
+    return await apiRequest(`/workspaces/${id}`);
   },
 };
 
@@ -686,6 +815,16 @@ export const Chat = {
     return await apiRequest("/chat", {
       method: "POST",
       body: JSON.stringify({ message, history, agentId }),
+    });
+  },
+};
+
+// Scraper API
+export const scraperAPI = {
+  scrape: async (payload: ScraperPayload) => {
+    return await apiRequest("/scrape", {
+      method: "POST",
+      body: JSON.stringify(payload),
     });
   },
 };

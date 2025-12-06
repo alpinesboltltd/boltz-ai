@@ -11,6 +11,7 @@ export interface Agent {
   created_at: string;
   updated_at: string;
   template?: string;
+  workspace_id?: string;
 }
 
 export interface AgentAppearance {
@@ -36,6 +37,8 @@ export interface AgentBehavior {
   offline_message: string;
   system_instruction: string;
   prompt_template: string;
+  system_instruction_id?: string;
+  prompt_template_id?: string;
   temperature: number;
   max_tokens: number;
   created_at: string;
@@ -56,6 +59,14 @@ export interface AgentIntegration {
   platform: Platform;
   api_key: string | null;
   is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface AgentChannel {
+  id: number;
+  agent_id: string;
+  channel_id: string[];
   created_at: string;
   updated_at: string;
 }
@@ -236,6 +247,8 @@ export const CreateAgentRequestSchema = z.object({
   agent_type: z.nativeEnum(AgentType),
   ai_model_id: z.string().min(1, "AI model is required"),
   status: z.enum(statusEnum),
+  workspace_id: z.string().optional(),
+  template_id: z.string().optional(),
 });
 
 export const CreateAgentAPIRequestSchema = CreateAgentRequestSchema.extend({

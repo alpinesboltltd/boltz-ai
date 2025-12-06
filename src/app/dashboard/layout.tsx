@@ -12,6 +12,7 @@ import { useCurrentUser, useAuthStore } from "@/store/authStore";
 import { User } from "lucide-react";
 import { ErrorBoundary } from "@/components/common/ErrorBoundary";
 import { UserRoles } from "@/types";
+import { WorkspaceSwitcher } from "@/components/workspace/WorkspaceSwitcher";
 
 export default function DashboardLayout({
   children,
@@ -179,14 +180,14 @@ export default function DashboardLayout({
                   key={item.name}
                   href={item.href}
                   className={`group flex items-center px-2 py-2 text-base font-medium rounded-md ${isActive(item.href)
-                      ? "bg-primary-100 text-primary-900"
-                      : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                    ? "bg-primary-100 text-primary-900"
+                    : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                     }`}
                 >
                   <svg
                     className={`mr-4 h-6 w-6 ${isActive(item.href)
-                        ? "text-primary-600"
-                        : "text-gray-400 group-hover:text-gray-500"
+                      ? "text-primary-600"
+                      : "text-gray-400 group-hover:text-gray-500"
                       }`}
                     fill="none"
                     viewBox="0 0 24 24"
@@ -271,21 +272,24 @@ export default function DashboardLayout({
                 )}
               </Link>
             </div>
+            <div className="px-2 mt-4">
+              <WorkspaceSwitcher />
+            </div>
             <nav className="mt-5 flex-1 space-y-1 bg-white px-2">
               {navigation.map((item) => (
                 <Link
                   key={item.name}
                   href={item.href}
                   className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-all duration-200 ${isActive(item.href)
-                      ? "bg-primary-100 text-primary-900"
-                      : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                    ? "bg-primary-100 text-primary-900"
+                    : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                     } ${sidebarCollapsed ? "justify-center" : ""}`}
                   title={sidebarCollapsed ? item.name : ""}
                 >
                   <svg
                     className={`h-6 w-6 transition-all duration-200 ${isActive(item.href)
-                        ? "text-primary-600"
-                        : "text-gray-400 group-hover:text-gray-500"
+                      ? "text-primary-600"
+                      : "text-gray-400 group-hover:text-gray-500"
                       } ${sidebarCollapsed ? "mr-0" : "mr-3"}`}
                     fill="none"
                     viewBox="0 0 24 24"
@@ -300,8 +304,8 @@ export default function DashboardLayout({
                   </svg>
                   <span
                     className={`transition-opacity duration-300 ${sidebarCollapsed
-                        ? "opacity-0 w-0 overflow-hidden"
-                        : "opacity-100"
+                      ? "opacity-0 w-0 overflow-hidden"
+                      : "opacity-100"
                       }`}
                   >
                     {item.name}
@@ -331,8 +335,8 @@ export default function DashboardLayout({
                 </svg>
                 <span
                   className={`transition-opacity duration-300 ${sidebarCollapsed
-                      ? "opacity-0 w-0 overflow-hidden"
-                      : "opacity-100"
+                    ? "opacity-0 w-0 overflow-hidden"
+                    : "opacity-100"
                     }`}
                 >
                   Logout

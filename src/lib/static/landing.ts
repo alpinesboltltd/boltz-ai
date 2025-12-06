@@ -317,3 +317,42 @@ export const pricingPlans = [
         highlighted: false,
     },
 ];
+
+export const FeaturesTableItem: FeaturesTableItem[] = [
+    {
+        name: "AI Conversations",
+        description: "Natural language processing with context awareness",
+        platforms: "All",
+        tiers: { free: true, pro: true, business: true },
+    },
+    {
+        name: "Website Widget",
+        description: "Embeddable chat widget for your website",
+        platforms: "Web",
+        tiers: { free: true, pro: true, business: true },
+    },
+    {
+        name: "WhatsApp Integration",
+        description: "Connect your agent to WhatsApp Business",
+        platforms: "WhatsApp",
+        tiers: { free: false, pro: true, business: true },
+    },
+    {
+        name: "Knowledge Base",
+        description: "Train on your own documents and data",
+        platforms: "All",
+        tiers: { free: false, pro: true, business: true },
+    },
+    {
+        name: "API Access",
+        description: "Programmatic access to your agents",
+        platforms: "API",
+        tiers: { free: false, pro: false, business: true },
+    },
+    {
+        name: "Team Collaboration",
+        description: "Invite team members to manage agents",
+        platforms: "Web",
+        tiers: { free: false, pro: false, business: true },
+    },
+];

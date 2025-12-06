@@ -18,8 +18,10 @@ import {
 } from "@/types/agent";
 import { TrainingSources } from "@/components/dashboard/TrainingSources";
 import { BotPreview } from "@/components/chatbot/BotPreview";
-import { agentApi } from "@/lib/agent-api";
+import { agentsAPI, systemAPI } from "@/lib/api";
+import { agentTypeToEnum } from "@/lib/agentTypeSerializer";
 import { accessToken, useCurrentUser } from "@/store/authStore";
+import { useWorkspaceStore } from "@/store/workspaceStore";
 import { useAIModelsStore } from "@/store/aiModelsStore";
 import { Spinner } from "@/components/common/Spinner";
 import { Input } from "@/components/common/Input";
@@ -27,8 +29,6 @@ import { Textarea } from "@/components/common/Textarea";
 import { Select } from "@/components/common/Select";
 import { CheckCircleIcon } from "@heroicons/react/24/outline";
 import { toast } from "@/store/toastStore";
-import { agentsAPI } from "@/lib/api";
-import { agentTypeToEnum } from "@/lib/agentTypeSerializer";
 
 interface AgentAppearanceForm {
   welcome_message: string;
@@ -40,59 +40,45 @@ interface AgentAppearanceForm {
   font_family: string;
 }
 
-const templates = [
+const staticTemplates = [
   {
     id: "customer-support",
     name: "Customer Support",
     description: "Handle customer inquiries and support requests",
     icon: "🛎️",
   },
-  {
-    id: "sales",
-    name: "Sales Assistant",
-    description: "Help customers find and purchase products",
-    icon: "💼",
-  },
-  {
-    id: "faq",
-    name: "FAQ Agent",
-    description: "Answer frequently asked questions",
-    icon: "❓",
-  },
-  {
-    id: "lead-gen",
-    name: "Lead Generation",
-    description: "Capture leads and qualify prospects",
-    icon: "🎯",
-  },
-  {
-    id: "product-recommender",
-    name: "Product Recommender",
-    description: "Recommend products based on customer preferences",
-    icon: "🛍️",
-  },
-  {
-    id: "appointment",
-    name: "Appointment Scheduler",
-    description: "Help users book appointments and meetings",
-    icon: "📅",
-  },
-  {
-    id: "blank",
-    name: "Blank",
-    description: "Start from scratch with a blank template",
-    icon: "📝",
-  },
+  // ... (keep static templates as fallback or remove if fully dynamic)
 ];
 
 export default function CreateAgentPage() {
   const user = useCurrentUser();
-  const router = useRouter();
+  const { currentWorkspace } = useWorkspaceStore();
   const [step, setStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [agentId, setAgentId] = useState<string | null>(null);
   const [agentData, setAgentData] = useState<Agent | null>(null);
   const [selectedTemplate, setSelectedTemplate] = useState("");
+  const [templates, setTemplates] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchTemplates = async () => {
+      try {
+        const res = await systemAPI.listTemplates();
+        // Map API templates to UI format
+        const apiTemplates = res.data.map((t: any) => ({
+          id: t.id,
+          name: t.title,
+          description: t.content.substring(0, 50) + "...",
+          icon: "🤖", // Default icon
+        }));
+        setTemplates(apiTemplates);
+      } catch (error) {
+        console.error("Failed to fetch templates", error);
+        // Fallback to static if needed, or empty
+      }
+    };
+    fetchTemplates();
+  }, []);
   // const [isQuickCreateOpen, setIsQuickCreateOpen] = useState(false);
 
   // Refs for animation
@@ -216,6 +202,8 @@ export default function CreateAgentPage() {
           ...data,
           userId: user.id,
           agent_type: agentTypeToEnum(data.agent_type),
+          workspace_id: currentWorkspace?.id,
+          template_id: selectedTemplate,
         };
 
         const { data: agent } = await agentsAPI.create(
@@ -263,13 +251,13 @@ export default function CreateAgentPage() {
       const timestamp = new Date().toISOString();
 
       await Promise.all([
-        agentApi.createAppearance({
+        agentsAPI.createAppearance({
           agent_id: agentId,
           ...data,
           created_at: timestamp,
           updated_at: timestamp,
         }),
-        agentApi.createBehavior({
+        agentsAPI.createBehavior({
           agent_id: agentId,
           initial_messages: JSON.stringify([data.welcome_message]),
           fallback_message:
@@ -279,19 +267,11 @@ export default function CreateAgentPage() {
             "Our team is currently offline. Please leave a message and we'll get back to you.",
           system_instruction: "You are a helpful AI assistant.",
           prompt_template: "{{conversation}}",
+          prompt_template_id: selectedTemplate || undefined,
           temperature: 0.7,
           max_tokens: 500,
           created_at: timestamp,
           updated_at: timestamp,
-        }),
-        agentApi.createStats({
-          agent_id: agentId,
-          total_messages: 0,
-          unique_users: 0,
-          average_rating: 0,
-          response_rate: 0,
-          conversions_count: 0,
-          last_calculated_at: timestamp,
         }),
       ]);
 
@@ -370,16 +350,16 @@ export default function CreateAgentPage() {
                 <li key={stepItem.id} className="md:flex-1">
                   <div
                     className={`group flex flex-col border-l-4 py-2 pl-4 ${step > stepItem.id
+                      ? "border-primary-600"
+                      : step === stepItem.id
                         ? "border-primary-600"
-                        : step === stepItem.id
-                          ? "border-primary-600"
-                          : "border-gray-200"
+                        : "border-gray-200"
                       } md:border-l-0 md:border-t-4 md:pl-0 md:pt-4 md:pb-0`}
                   >
                     <span
                       className={`text-xs font-semibold uppercase tracking-wide ${step >= stepItem.id
-                          ? "text-primary-600"
-                          : "text-gray-500"
+                        ? "text-primary-600"
+                        : "text-gray-500"
                         }`}
                     >
                       Step {stepItem.id}
@@ -434,8 +414,8 @@ export default function CreateAgentPage() {
                           key={template.id}
                           onClick={() => setSelectedTemplate(template.id)}
                           className={`relative rounded-lg border p-4 cursor-pointer ${selectedTemplate === template.id
-                              ? "border-primary-500 ring-2 ring-primary-500"
-                              : "border-gray-300 hover:border-gray-400"
+                            ? "border-primary-500 ring-2 ring-primary-500"
+                            : "border-gray-300 hover:border-gray-400"
                             }`}
                         >
                           <div className="flex items-center space-x-3">
@@ -487,8 +467,8 @@ export default function CreateAgentPage() {
                         <label
                           key={type.value}
                           className={`relative flex flex-col items-center p-6 border-2 rounded-xl cursor-pointer transition-all hover:shadow-md ${selectedAgentType === type.value
-                              ? "border-primary-500 bg-primary-50 shadow-md"
-                              : "border-gray-200 hover:border-gray-300"
+                            ? "border-primary-500 bg-primary-50 shadow-md"
+                            : "border-gray-200 hover:border-gray-300"
                             }`}
                         >
                           <input
@@ -529,8 +509,8 @@ export default function CreateAgentPage() {
                           <label
                             key={model.id}
                             className={`relative rounded-lg border p-4 cursor-pointer flex items-center ${selectedModel === model.id
-                                ? "border-primary-500 ring-2 ring-primary-500"
-                                : "border-gray-300 hover:border-gray-400"
+                              ? "border-primary-500 ring-2 ring-primary-500"
+                              : "border-gray-300 hover:border-gray-400"
                               }`}
                           >
                             <input

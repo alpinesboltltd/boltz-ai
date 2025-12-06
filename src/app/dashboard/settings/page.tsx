@@ -59,7 +59,7 @@ export default function SettingsPage() {
   ]);
 
   // Mock subscription data
-  const [subscription, _setSubscription] = useState({
+  const [subscription] = useState({
     plan: "Pro",
     price: "$29/month",
     status: "active",
