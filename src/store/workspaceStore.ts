@@ -35,8 +35,8 @@ export const useWorkspaceStore = create<WorkspaceState>()(
                     if (!get().currentWorkspace && workspaces.length > 0) {
                         set({ currentWorkspace: workspaces[0] });
                     }
-                } catch (error: any) {
-                    set({ error: error.message, isLoading: false });
+                } catch (error: unknown) {
+                    set({ error: (error as Error).message, isLoading: false });
                 }
             },
 
@@ -51,8 +51,8 @@ export const useWorkspaceStore = create<WorkspaceState>()(
                         isLoading: false,
                     }));
                     return newWorkspace;
-                } catch (error: any) {
-                    set({ error: error.message, isLoading: false });
+                } catch (error: unknown) {
+                    set({ error: (error as Error).message, isLoading: false });
                     return null;
                 }
             },

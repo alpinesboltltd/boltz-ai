@@ -40,32 +40,38 @@ interface AgentAppearanceForm {
   font_family: string;
 }
 
-const staticTemplates = [
-  {
-    id: "customer-support",
-    name: "Customer Support",
-    description: "Handle customer inquiries and support requests",
-    icon: "🛎️",
-  },
-  // ... (keep static templates as fallback or remove if fully dynamic)
-];
+interface APITemplate {
+  id: string;
+  title: string;
+  content: string;
+}
+
+interface UITemplate {
+  id: string;
+  name: string;
+  description: string;
+  icon: string;
+}
+
+
 
 export default function CreateAgentPage() {
   const user = useCurrentUser();
+  const router = useRouter();
   const { currentWorkspace } = useWorkspaceStore();
   const [step, setStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [agentId, setAgentId] = useState<string | null>(null);
   const [agentData, setAgentData] = useState<Agent | null>(null);
   const [selectedTemplate, setSelectedTemplate] = useState("");
-  const [templates, setTemplates] = useState<any[]>([]);
+  const [templates, setTemplates] = useState<UITemplate[]>([]);
 
   useEffect(() => {
     const fetchTemplates = async () => {
       try {
         const res = await systemAPI.listTemplates();
         // Map API templates to UI format
-        const apiTemplates = res.data.map((t: any) => ({
+        const apiTemplates = res.data.map((t: APITemplate) => ({
           id: t.id,
           name: t.title,
           description: t.content.substring(0, 50) + "...",

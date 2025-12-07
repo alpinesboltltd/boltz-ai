@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useWorkspaceStore } from "@/store/workspaceStore";
-import { ChevronDown, Plus, Check, X } from "lucide-react";
+import { ChevronDown, Plus, Check } from "lucide-react";
 
 export function WorkspaceSwitcher() {
     const {

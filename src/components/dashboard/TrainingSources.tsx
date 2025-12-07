@@ -15,7 +15,6 @@ export function TrainingSources({
   onDataAdded,
 }: TrainingSourcesProps) {
   const [activeTab, setActiveTab] = useState("files");
-  const [isUploading, setIsUploading] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [textData, setTextData] = useState({ title: "", content: "" });
   const [urlData, setUrlData] = useState("");
@@ -28,7 +27,6 @@ export function TrainingSources({
 
 
   const handleFileUpload = async (files: FileList) => {
-    setIsUploading(true);
     try {
       for (const file of Array.from(files)) {
         await trainingAPI.trainWithFile(agentId!, file);
@@ -36,8 +34,6 @@ export function TrainingSources({
       }
     } catch (error) {
       console.error("Error uploading file:", error);
-    } finally {
-      setIsUploading(false);
     }
   };
 
