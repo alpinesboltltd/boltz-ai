@@ -181,6 +181,9 @@ export function Actions() {
     try {
       const payload = {
         ...apiFunction,
+        headers: apiFunction.headers as Record<string, string> | undefined,
+        queryParams: apiFunction.queryParams as Record<string, string> | undefined,
+        responseMapping: apiFunction.responseMapping as Record<string, string> | undefined,
         agentId,
         errorHandling: apiFunction.errorHandling
           ? {

@@ -6,8 +6,8 @@ export const apiFunctionSchema = z.object({
   description: z.string().min(1, "Description is required").max(500, "Description too long"),
   method: z.enum(["GET", "POST", "PUT", "DELETE", "PATCH"]),
   url: z.string().url("Invalid URL format"),
-  headers: z.record(z.string()).optional(),
-  queryParams: z.record(z.string()).optional(),
+  headers: z.record(z.string(), z.string()).optional(),
+  queryParams: z.record(z.string(), z.string()).optional(),
   requestBody: z.string().optional(),
 
   // Authentication
@@ -19,7 +19,7 @@ export const apiFunctionSchema = z.object({
   apiKeyHeader: z.string().optional(),
 
   // Response handling
-  responseMapping: z.record(z.string()).optional(),
+  responseMapping: z.record(z.string(), z.string()).optional(),
   errorHandling: z.object({
     retries: z.number().min(0).max(5).optional(),
     timeout: z.number().min(1000).max(30000).optional(),
@@ -36,7 +36,7 @@ export const sequentialWorkflowSchema = z.object({
   trigger: z.object({
     type: z.enum(["keyword", "intent", "sentiment", "condition", "manual", "schedule"]),
     value: z.string().min(1, "Trigger value is required"),
-    conditions: z.record(z.any()).optional(),
+    conditions: z.record(z.string(), z.string()).optional(),
   }),
 
   // Sequential steps
@@ -49,7 +49,7 @@ export const sequentialWorkflowSchema = z.object({
     apiFunction: z.string().optional(), // Reference to created API function
     method: z.enum(["GET", "POST", "PUT", "DELETE", "PATCH"]).optional(),
     url: z.string().optional(),
-    headers: z.record(z.string()).optional(),
+    headers: z.record(z.string(), z.string()).optional(),
     requestBody: z.string().optional(),
 
     // Authentication (if not using API function)
@@ -74,12 +74,12 @@ export const sequentialWorkflowSchema = z.object({
     // CRM Integration
     crmProvider: z.enum(["salesforce", "hubspot", "pipedrive", "custom"]).optional(),
     crmAction: z.enum(["create_contact", "update_contact", "create_deal", "update_deal", "add_note"]).optional(),
-    crmData: z.record(z.any()).optional(),
+    crmData: z.record(z.string(), z.string()).optional(),
 
     // Calendar Integration
     calendarProvider: z.enum(["google", "outlook", "calendly", "custom"]).optional(),
     calendarAction: z.enum(["book_meeting", "cancel_meeting", "reschedule_meeting", "check_availability"]).optional(),
-    calendarData: z.record(z.any()).optional(),
+    calendarData: z.record(z.string(), z.string()).optional(),
 
     // Delay Configuration
     delaySeconds: z.number().min(1).max(3600).optional(),
@@ -94,8 +94,8 @@ export const sequentialWorkflowSchema = z.object({
 export const apiRequestSchema = z.object({
   method: z.enum(["GET", "POST", "PUT", "DELETE", "PATCH"]),
   url: z.string().url("Invalid URL format"),
-  headers: z.record(z.string()).optional(),
-  body: z.record(z.any()).optional(),
+  headers: z.record(z.string(), z.string()).optional(),
+  body: z.record(z.string(), z.string()).optional(),
   auth: z.object({
     type: z.enum(["bearer", "basic", "api_key"]),
     token: z.string().optional(),
@@ -109,7 +109,7 @@ export const apiRequestSchema = z.object({
 export const webhookConfigSchema = z.object({
   url: z.string().url("Invalid webhook URL"),
   method: z.enum(["POST", "PUT"]),
-  headers: z.record(z.string()).optional(),
+  headers: z.record(z.string(), z.string()).optional(),
   retries: z.number().min(0).max(5).optional(),
   timeout: z.number().min(1000).max(30000).optional(),
 });
@@ -117,13 +117,13 @@ export const webhookConfigSchema = z.object({
 export const actionTriggerSchema = z.object({
   type: z.enum(["keyword", "intent", "sentiment", "condition", "manual"]),
   value: z.string().min(1, "Trigger value is required"),
-  conditions: z.record(z.any()).optional(),
+  conditions: z.record(z.string(), z.string()).optional(),
 });
 
 export const actionStepSchema = z.object({
   id: z.string(),
   type: z.enum(["message", "api_call", "webhook", "condition", "delay", "escalate", "log"]),
-  config: z.record(z.any()),
+  config: z.record(z.string(), z.string()),
   apiRequest: apiRequestSchema.optional(),
   webhookConfig: webhookConfigSchema.optional(),
   nextStep: z.string().optional(),
@@ -138,8 +138,8 @@ export const workflowStepSchema = z.object({
   // API Configuration
   method: z.enum(["GET", "POST", "PUT", "DELETE", "PATCH"]).optional(),
   url: z.string().optional(),
-  headers: z.record(z.string()).optional(),
-  queryParams: z.record(z.string()).optional(),
+  headers: z.record(z.string(), z.string()).optional(),
+  queryParams: z.record(z.string(), z.string()).optional(),
   body: z.string().optional(),
 
   // Authentication
@@ -153,7 +153,7 @@ export const workflowStepSchema = z.object({
   // Webhook Configuration
   webhookUrl: z.string().optional(),
   webhookMethod: z.enum(["POST", "PUT"]).optional(),
-  webhookHeaders: z.record(z.string()).optional(),
+  webhookHeaders: z.record(z.string(), z.string()).optional(),
 
   // Condition Configuration
   conditionField: z.string().optional(),
