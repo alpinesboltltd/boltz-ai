@@ -17,10 +17,7 @@ const SignupSchema = z
       .min(1, { message: "Confirm password is required" }),
     method: z.string(),
     terms: z
-      .boolean({
-        required_error: "You must agree to the terms and conditions",
-        invalid_type_error: "you must agree to the terms and conditions",
-      })
+      .boolean()
       .refine((value) => value === true, {
         message: "You must agree to the terms and conditions",
       }),
