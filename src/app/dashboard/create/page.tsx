@@ -26,7 +26,6 @@ import { Spinner } from "@/components/common/Spinner";
 import { Input } from "@/components/common/Input";
 import { Textarea } from "@/components/common/Textarea";
 import { Select } from "@/components/common/Select";
-import { toast } from "@/hooks/useToast";
 import {
   CheckCircle2,
   Bot,
@@ -41,6 +40,7 @@ import {
   Zap
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { toast } from "@/store/toastStore";
 
 interface AgentAppearanceForm {
   welcome_message: string;
@@ -376,8 +376,8 @@ export default function CreateAgentPage() {
                     <div className="border-t border-gray-100 pt-8">
                       <label className="block text-sm font-medium text-gray-700 mb-4">Select AI Model</label>
                       {modelsLoading ? (
-                        <div className="flex items-center justify-center py-8 text-gray-500">
-                          <Spinner size="sm" className="mr-2" /> Loading models...
+                        <div className="flex items-center justify-center py-8 text-gray-500 gap-2">
+                          <Spinner size="sm" /> Loading models...
                         </div>
                       ) : (
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
