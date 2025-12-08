@@ -396,7 +396,7 @@ export default function UsersPage() {
               </div>
               <div className="p-6">
                 <UserForm
-                  user={editForm ? userToEdit : undefined}
+                  user={editForm ? (userToEdit ?? undefined) : undefined}
                   currentUserRole={currentUserRole}
                   onSubmit={editForm ? handleUpdateUser : handleCreateUser}
                   onCancel={() => {
