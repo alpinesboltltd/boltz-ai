@@ -123,7 +123,7 @@ export function Activity() {
               <div key={activity.id} className="px-6 py-4">
                 <div className="flex items-start space-x-4">
                   <div
-                    className={`flex-shrink-0 p-2 rounded-full ${getStatusColor(activity.status)}`}
+                    className={`shrink-0 p-2 rounded-full ${getStatusColor(activity.status)}`}
                   >
                     {getActivityIcon(activity.type)}
                   </div>

@@ -7,6 +7,21 @@ import { Spinner } from "@/components/common/Spinner";
 import { toast } from "@/store/toastStore";
 import { useCurrentUser } from "@/store/authStore";
 import { UserRoles } from "@/types";
+import {
+    Cpu,
+    Plus,
+    Edit2,
+    Trash2,
+    Zap,
+    Eye,
+    Mic,
+    MessageSquare,
+    BrainCircuit,
+    X,
+    Check
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function ModelsPage() {
     const user = useCurrentUser();
@@ -108,191 +123,257 @@ export default function ModelsPage() {
 
     if (loading) {
         return (
-            <div className="flex justify-center items-center h-full">
+            <div className="flex flex-col items-center justify-center min-h-[60vh]">
                 <Spinner size="lg" />
+                <p className="mt-4 text-gray-500 font-medium animate-pulse">Loading AI models...</p>
             </div>
         );
     }
 
     return (
-        <div className="px-4 sm:px-6 lg:px-8 py-8">
-            <div className="sm:flex sm:items-center">
-                <div className="sm:flex-auto">
-                    <h1 className="text-2xl font-semibold text-gray-900">AI Models</h1>
-                    <p className="mt-2 text-sm text-gray-700">
-                        Manage available AI models for agents.
+        <div className="px-4 sm:px-6 lg:px-8 py-8 animate-fade-in max-w-7xl mx-auto">
+            <div className="sm:flex sm:items-center sm:justify-between mb-8">
+                <div>
+                    <h1 className="text-3xl font-bold text-gray-900 tracking-tight flex items-center gap-3">
+                        <Cpu className="w-8 h-8 text-primary-600" />
+                        AI Models
+                    </h1>
+                    <p className="mt-2 text-gray-500">
+                        Configure and manage the AI models available to your agents.
                     </p>
                 </div>
                 {isAdmin && (
-                    <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-                        <button
-                            type="button"
-                            onClick={() => {
-                                setEditingModel(null);
-                                setFormData({
-                                    name: "",
-                                    provider: "",
-                                    credits_per_1k: 0,
-                                    supports_text: true,
-                                    supports_vision: false,
-                                    supports_voice: false,
-                                    is_reasoning: false,
-                                });
-                                setIsModalOpen(true);
-                            }}
-                            className="inline-flex items-center justify-center rounded-md border border-transparent bg-primary-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 sm:w-auto"
-                        >
-                            Add Model
-                        </button>
-                    </div>
+                    <button
+                        type="button"
+                        onClick={() => {
+                            setEditingModel(null);
+                            setFormData({
+                                name: "",
+                                provider: "",
+                                credits_per_1k: 0,
+                                supports_text: true,
+                                supports_vision: false,
+                                supports_voice: false,
+                                is_reasoning: false,
+                            });
+                            setIsModalOpen(true);
+                        }}
+                        className="btn btn-primary flex items-center gap-2 shadow-lg shadow-primary-500/20"
+                    >
+                        <Plus className="w-5 h-5" />
+                        Add Model
+                    </button>
                 )}
             </div>
 
-            <div className="mt-8 flex flex-col">
-                <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                    <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
-                        <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
-                            <table className="min-w-full divide-y divide-gray-300">
-                                <thead className="bg-gray-50">
-                                    <tr>
-                                        <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Name</th>
-                                        <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Provider</th>
-                                        <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Credits/1k</th>
-                                        <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Capabilities</th>
-                                        {isAdmin && <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-6"><span className="sr-only">Actions</span></th>}
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-gray-200 bg-white">
-                                    {models.map((model) => (
-                                        <tr key={model.id}>
-                                            <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{model.name}</td>
-                                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{model.provider}</td>
-                                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{model.credits_per_1k}</td>
-                                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                                <div className="flex gap-2">
-                                                    {model.supports_text && <span className="inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800">Text</span>}
-                                                    {model.supports_vision && <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">Vision</span>}
-                                                    {model.supports_voice && <span className="inline-flex items-center rounded-full bg-purple-100 px-2.5 py-0.5 text-xs font-medium text-purple-800">Voice</span>}
-                                                    {model.is_reasoning && <span className="inline-flex items-center rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800">Reasoning</span>}
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+                <div className="overflow-x-auto">
+                    <table className="min-w-full divide-y divide-gray-200">
+                        <thead className="bg-gray-50/50">
+                            <tr>
+                                <th scope="col" className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Model Name</th>
+                                <th scope="col" className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Provider</th>
+                                <th scope="col" className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Cost (Credits/1k)</th>
+                                <th scope="col" className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Capabilities</th>
+                                {isAdmin && <th scope="col" className="relative px-6 py-4"><span className="sr-only">Actions</span></th>}
+                            </tr>
+                        </thead>
+                        <tbody className="bg-white divide-y divide-gray-200">
+                            {models.map((model) => (
+                                <tr key={model.id} className="hover:bg-gray-50/50 transition-colors">
+                                    <td className="px-6 py-4 whitespace-nowrap">
+                                        <div className="flex items-center">
+                                            <div className="shrink-0 h-10 w-10 rounded-lg bg-primary-100 flex items-center justify-center text-primary-600">
+                                                <BrainCircuit className="w-5 h-5" />
+                                            </div>
+                                            <div className="ml-4">
+                                                <div className="text-sm font-medium text-gray-900">{model.name}</div>
+                                                {model.is_reasoning && (
+                                                    <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-purple-100 text-purple-800 mt-1">
+                                                        Reasoning Model
+                                                    </span>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap">
+                                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                                            {model.provider}
+                                        </span>
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        {model.credits_per_1k}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap">
+                                        <div className="flex gap-2">
+                                            {model.supports_text && (
+                                                <div className="p-1.5 bg-blue-50 text-blue-600 rounded-md" title="Text">
+                                                    <MessageSquare className="w-4 h-4" />
                                                 </div>
-                                            </td>
-                                            {isAdmin && (
-                                                <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                                                    <button onClick={() => handleEdit(model)} className="text-primary-600 hover:text-primary-900 mr-4">Edit</button>
-                                                    <button onClick={() => handleDelete(model.id)} className="text-red-600 hover:text-red-900">Delete</button>
-                                                </td>
                                             )}
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                                            {model.supports_vision && (
+                                                <div className="p-1.5 bg-green-50 text-green-600 rounded-md" title="Vision">
+                                                    <Eye className="w-4 h-4" />
+                                                </div>
+                                            )}
+                                            {model.supports_voice && (
+                                                <div className="p-1.5 bg-orange-50 text-orange-600 rounded-md" title="Voice">
+                                                    <Mic className="w-4 h-4" />
+                                                </div>
+                                            )}
+                                        </div>
+                                    </td>
+                                    {isAdmin && (
+                                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                            <div className="flex justify-end gap-2">
+                                                <button
+                                                    onClick={() => handleEdit(model)}
+                                                    className="p-2 text-gray-400 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"
+                                                >
+                                                    <Edit2 className="w-4 h-4" />
+                                                </button>
+                                                <button
+                                                    onClick={() => handleDelete(model.id)}
+                                                    className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                                >
+                                                    <Trash2 className="w-4 h-4" />
+                                                </button>
+                                            </div>
+                                        </td>
+                                    )}
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
-            {isModalOpen && (
-                <div className="fixed inset-0 z-10 overflow-y-auto">
-                    <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-                        <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" onClick={() => setIsModalOpen(false)} />
-                        <div className="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
-                            <form onSubmit={handleSubmit}>
-                                <div className="space-y-4">
-                                    <h3 className="text-lg font-medium leading-6 text-gray-900">{editingModel ? "Edit Model" : "Add Model"}</h3>
+            <AnimatePresence>
+                {isModalOpen && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => setIsModalOpen(false)}
+                            className="fixed inset-0 bg-gray-900/50 backdrop-blur-sm"
+                        />
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                            className="relative bg-white rounded-2xl shadow-xl w-full max-w-lg overflow-hidden"
+                        >
+                            <div className="flex items-center justify-between p-6 border-b border-gray-100">
+                                <h3 className="text-xl font-semibold text-gray-900">
+                                    {editingModel ? "Edit Model" : "Add New Model"}
+                                </h3>
+                                <button
+                                    onClick={() => setIsModalOpen(false)}
+                                    className="p-2 text-gray-400 hover:text-gray-500 hover:bg-gray-100 rounded-lg transition-colors"
+                                >
+                                    <X className="w-5 h-5" />
+                                </button>
+                            </div>
 
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700">Name</label>
+                            <form onSubmit={handleSubmit} className="p-6 space-y-6">
+                                <div className="grid grid-cols-2 gap-6">
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-medium text-gray-700">Model Name</label>
                                         <input
                                             type="text"
                                             required
                                             value={formData.name}
                                             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
+                                            className="input w-full"
+                                            placeholder="e.g. GPT-4"
                                         />
                                     </div>
-
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700">Provider</label>
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-medium text-gray-700">Provider</label>
                                         <input
                                             type="text"
                                             required
                                             value={formData.provider}
                                             onChange={(e) => setFormData({ ...formData, provider: e.target.value })}
-                                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
+                                            className="input w-full"
+                                            placeholder="e.g. OpenAI"
                                         />
-                                    </div>
-
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700">Credits per 1k</label>
-                                        <input
-                                            type="number"
-                                            required
-                                            value={formData.credits_per_1k}
-                                            onChange={(e) => setFormData({ ...formData, credits_per_1k: parseInt(e.target.value) })}
-                                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
-                                        />
-                                    </div>
-
-                                    <div className="space-y-2">
-                                        <div className="flex items-center">
-                                            <input
-                                                type="checkbox"
-                                                checked={formData.supports_text}
-                                                onChange={(e) => setFormData({ ...formData, supports_text: e.target.checked })}
-                                                className="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
-                                            />
-                                            <label className="ml-2 block text-sm text-gray-900">Supports Text</label>
-                                        </div>
-                                        <div className="flex items-center">
-                                            <input
-                                                type="checkbox"
-                                                checked={formData.supports_vision}
-                                                onChange={(e) => setFormData({ ...formData, supports_vision: e.target.checked })}
-                                                className="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
-                                            />
-                                            <label className="ml-2 block text-sm text-gray-900">Supports Vision</label>
-                                        </div>
-                                        <div className="flex items-center">
-                                            <input
-                                                type="checkbox"
-                                                checked={formData.supports_voice}
-                                                onChange={(e) => setFormData({ ...formData, supports_voice: e.target.checked })}
-                                                className="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
-                                            />
-                                            <label className="ml-2 block text-sm text-gray-900">Supports Voice</label>
-                                        </div>
-                                        <div className="flex items-center">
-                                            <input
-                                                type="checkbox"
-                                                checked={formData.is_reasoning}
-                                                onChange={(e) => setFormData({ ...formData, is_reasoning: e.target.checked })}
-                                                className="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
-                                            />
-                                            <label className="ml-2 block text-sm text-gray-900">Is Reasoning Model</label>
-                                        </div>
                                     </div>
                                 </div>
 
-                                <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
-                                    <button
-                                        type="submit"
-                                        className="inline-flex w-full justify-center rounded-md border border-transparent bg-primary-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 sm:col-start-2 sm:text-sm"
-                                    >
-                                        {editingModel ? "Update" : "Create"}
-                                    </button>
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-gray-700">Cost (Credits per 1k tokens)</label>
+                                    <input
+                                        type="number"
+                                        required
+                                        value={formData.credits_per_1k}
+                                        onChange={(e) => setFormData({ ...formData, credits_per_1k: parseInt(e.target.value) })}
+                                        className="input w-full"
+                                    />
+                                </div>
+
+                                <div className="space-y-4">
+                                    <label className="text-sm font-medium text-gray-700 block">Capabilities</label>
+                                    <div className="grid grid-cols-2 gap-4">
+                                        {[
+                                            { key: 'supports_text', label: 'Text Generation', icon: MessageSquare },
+                                            { key: 'supports_vision', label: 'Computer Vision', icon: Eye },
+                                            { key: 'supports_voice', label: 'Voice/Audio', icon: Mic },
+                                            { key: 'is_reasoning', label: 'Reasoning Model', icon: BrainCircuit },
+                                        ].map((cap) => (
+                                            <label
+                                                key={cap.key}
+                                                className={cn(
+                                                    "flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all",
+                                                    formData[cap.key as keyof typeof formData]
+                                                        ? "border-primary-500 bg-primary-50 text-primary-700"
+                                                        : "border-gray-200 hover:border-gray-300"
+                                                )}
+                                            >
+                                                <input
+                                                    type="checkbox"
+                                                    className="hidden"
+                                                    checked={!!formData[cap.key as keyof typeof formData]}
+                                                    onChange={(e) => setFormData({ ...formData, [cap.key]: e.target.checked })}
+                                                />
+                                                <div className={cn(
+                                                    "w-5 h-5 rounded-full border flex items-center justify-center transition-colors",
+                                                    formData[cap.key as keyof typeof formData]
+                                                        ? "bg-primary-500 border-primary-500 text-white"
+                                                        : "border-gray-300"
+                                                )}>
+                                                    {formData[cap.key as keyof typeof formData] && <Check className="w-3 h-3" />}
+                                                </div>
+                                                <div className="flex items-center gap-2">
+                                                    <cap.icon className="w-4 h-4" />
+                                                    <span className="text-sm font-medium">{cap.label}</span>
+                                                </div>
+                                            </label>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div className="flex gap-3 pt-2">
                                     <button
                                         type="button"
                                         onClick={() => setIsModalOpen(false)}
-                                        className="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 sm:col-start-1 sm:mt-0 sm:text-sm"
+                                        className="btn btn-secondary flex-1"
                                     >
                                         Cancel
                                     </button>
+                                    <button
+                                        type="submit"
+                                        className="btn btn-primary flex-1"
+                                    >
+                                        {editingModel ? "Update Model" : "Create Model"}
+                                    </button>
                                 </div>
                             </form>
-                        </div>
+                        </motion.div>
                     </div>
-                </div>
-            )}
+                )}
+            </AnimatePresence>
         </div>
     );
 }

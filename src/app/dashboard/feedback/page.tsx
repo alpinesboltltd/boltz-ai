@@ -1,15 +1,21 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useState, useEffect } from "react";
 import { Spinner } from "@/components/common/Spinner";
 import {
-  StarIcon,
-  FaceSmileIcon,
-  FaceFrownIcon,
-} from "@heroicons/react/24/solid";
-import { ChatBubbleLeftRightIcon } from "@heroicons/react/24/outline";
+  Star,
+  MessageSquare,
+  ThumbsUp,
+  ThumbsDown,
+  Filter,
+  Search,
+  User,
+  Calendar,
+  MessageCircle,
+  ArrowUpRight
+} from "lucide-react";
 import { toast } from "@/store/toastStore";
+import { cn } from "@/lib/utils";
 
 interface Feedback {
   id: string;
@@ -34,11 +40,7 @@ export default function FeedbackPage() {
   useEffect(() => {
     async function loadFeedback() {
       try {
-        // In production, this would call the real API
-        // const response = await fetch('/api/feedback');
-        // const data = await response.json();
-
-        // For development, use mock data
+        // Mock data for development
         await new Promise((resolve) => setTimeout(resolve, 1000));
 
         const mockChatbots = [
@@ -95,248 +97,201 @@ export default function FeedbackPage() {
   const averageRating =
     feedback.length > 0
       ? (
-          feedback.reduce((sum, item) => sum + item.rating, 0) / feedback.length
-        ).toFixed(1)
+        feedback.reduce((sum, item) => sum + item.rating, 0) / feedback.length
+      ).toFixed(1)
       : "0.0";
 
   const positivePercentage =
     feedback.length > 0
       ? Math.round(
-          (feedback.filter((item) => item.rating >= 4).length /
-            feedback.length) *
-            100
-        )
+        (feedback.filter((item) => item.rating >= 4).length /
+          feedback.length) *
+        100
+      )
       : 0;
 
   const negativePercentage =
     feedback.length > 0
       ? Math.round(
-          (feedback.filter((item) => item.rating <= 2).length /
-            feedback.length) *
-            100
-        )
+        (feedback.filter((item) => item.rating <= 2).length /
+          feedback.length) *
+        100
+      )
       : 0;
 
   const renderStars = (rating: number) => {
     return Array.from({ length: 5 }, (_, i) => (
-      <StarIcon
+      <Star
         key={i}
-        className={`h-5 w-5 ${i < rating ? "text-yellow-400" : "text-gray-300"}`}
-        aria-hidden="true"
+        className={cn(
+          "h-4 w-4",
+          i < rating ? "text-yellow-400 fill-yellow-400" : "text-gray-200"
+        )}
       />
     ));
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="flex flex-col items-center justify-center min-h-[60vh]">
         <Spinner size="lg" />
+        <p className="mt-4 text-gray-500 font-medium animate-pulse">Loading feedback...</p>
       </div>
     );
   }
 
   return (
-    <div className="px-4 sm:px-6 lg:px-8 py-8">
-      <div className="sm:flex sm:items-center">
-        <div className="sm:flex-auto">
-          <h1 className="text-2xl font-semibold text-gray-900">
-            User Feedback
-          </h1>
-          <p className="mt-2 text-sm text-gray-700">
-            Review feedback from users who have interacted with your chatagents.
-          </p>
-        </div>
+    <div className="px-4 sm:px-6 lg:px-8 py-8 animate-fade-in max-w-7xl mx-auto">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-gray-900 tracking-tight flex items-center gap-3">
+          <MessageSquare className="w-8 h-8 text-primary-600" />
+          User Feedback
+        </h1>
+        <p className="mt-2 text-gray-500">
+          Review and analyze user sentiment across your agents.
+        </p>
       </div>
 
       {/* Stats Cards */}
-      <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-3">
-        <div className="bg-white overflow-hidden shadow rounded-lg">
-          <div className="px-4 py-5 sm:p-6">
-            <div className="flex items-center">
-              <div className="flex-shrink-0 bg-primary-100 rounded-md p-3">
-                <StarIcon
-                  className="h-6 w-6 text-primary-600"
-                  aria-hidden="true"
-                />
-              </div>
-              <div className="ml-5 w-0 flex-1">
-                <dl>
-                  <dt className="text-sm font-medium text-gray-500 truncate">
-                    Average Rating
-                  </dt>
-                  <dd>
-                    <div className="text-lg font-medium text-gray-900">
-                      {averageRating}/5.0
-                    </div>
-                  </dd>
-                </dl>
-              </div>
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-3 mb-8">
+        <div className="bg-white overflow-hidden shadow-sm rounded-xl border border-gray-100 p-5">
+          <div className="flex items-center">
+            <div className="shrink-0 bg-yellow-50 rounded-lg p-3">
+              <Star className="h-6 w-6 text-yellow-600" />
+            </div>
+            <div className="ml-5 w-0 flex-1">
+              <dl>
+                <dt className="text-sm font-medium text-gray-500 truncate">Average Rating</dt>
+                <dd className="text-2xl font-bold text-gray-900 mt-1">{averageRating}/5.0</dd>
+              </dl>
             </div>
           </div>
         </div>
 
-        <div className="bg-white overflow-hidden shadow rounded-lg">
-          <div className="px-4 py-5 sm:p-6">
-            <div className="flex items-center">
-              <div className="flex-shrink-0 bg-green-100 rounded-md p-3">
-                <FaceSmileIcon
-                  className="h-6 w-6 text-green-600"
-                  aria-hidden="true"
-                />
-              </div>
-              <div className="ml-5 w-0 flex-1">
-                <dl>
-                  <dt className="text-sm font-medium text-gray-500 truncate">
-                    Positive Feedback
-                  </dt>
-                  <dd>
-                    <div className="text-lg font-medium text-gray-900">
-                      {positivePercentage}%
-                    </div>
-                  </dd>
-                </dl>
-              </div>
+        <div className="bg-white overflow-hidden shadow-sm rounded-xl border border-gray-100 p-5">
+          <div className="flex items-center">
+            <div className="shrink-0 bg-green-50 rounded-lg p-3">
+              <ThumbsUp className="h-6 w-6 text-green-600" />
+            </div>
+            <div className="ml-5 w-0 flex-1">
+              <dl>
+                <dt className="text-sm font-medium text-gray-500 truncate">Positive Feedback</dt>
+                <dd className="text-2xl font-bold text-gray-900 mt-1">{positivePercentage}%</dd>
+              </dl>
             </div>
           </div>
         </div>
 
-        <div className="bg-white overflow-hidden shadow rounded-lg">
-          <div className="px-4 py-5 sm:p-6">
-            <div className="flex items-center">
-              <div className="flex-shrink-0 bg-red-100 rounded-md p-3">
-                <FaceFrownIcon
-                  className="h-6 w-6 text-red-600"
-                  aria-hidden="true"
-                />
-              </div>
-              <div className="ml-5 w-0 flex-1">
-                <dl>
-                  <dt className="text-sm font-medium text-gray-500 truncate">
-                    Negative Feedback
-                  </dt>
-                  <dd>
-                    <div className="text-lg font-medium text-gray-900">
-                      {negativePercentage}%
-                    </div>
-                  </dd>
-                </dl>
-              </div>
+        <div className="bg-white overflow-hidden shadow-sm rounded-xl border border-gray-100 p-5">
+          <div className="flex items-center">
+            <div className="shrink-0 bg-red-50 rounded-lg p-3">
+              <ThumbsDown className="h-6 w-6 text-red-600" />
+            </div>
+            <div className="ml-5 w-0 flex-1">
+              <dl>
+                <dt className="text-sm font-medium text-gray-500 truncate">Negative Feedback</dt>
+                <dd className="text-2xl font-bold text-gray-900 mt-1">{negativePercentage}%</dd>
+              </dl>
             </div>
           </div>
         </div>
       </div>
 
       {/* Filters */}
-      <div className="mt-8 flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
-        <div className="flex items-center space-x-4">
-          <div>
-            <label
-              htmlFor="chatagent-filter"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Chatbot
-            </label>
-            <select
-              id="chatagent-filter"
-              name="chatagent-filter"
-              className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm rounded-md"
-              value={selectedChatbot}
-              onChange={(e) => setSelectedChatbot(e.target.value)}
-            >
-              <option value="all">All Chatbots</option>
-              {chatagents.map((bot) => (
-                <option key={bot.id} value={bot.id}>
-                  {bot.name}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <label
-              htmlFor="rating-filter"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Rating
-            </label>
-            <select
-              id="rating-filter"
-              name="rating-filter"
-              className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm rounded-md"
-              value={filter}
-              onChange={(e) => setFilter(e.target.value as any)}
-            >
-              <option value="all">All Ratings</option>
-              <option value="positive">Positive (4-5)</option>
-              <option value="negative">Negative (1-2)</option>
-            </select>
-          </div>
+      <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm mb-8 flex flex-col sm:flex-row gap-4 items-center justify-between">
+        <div className="flex items-center gap-2 text-sm text-gray-500">
+          <Filter className="w-4 h-4" />
+          <span className="font-medium">Filters:</span>
         </div>
 
-        <div className="text-sm text-gray-500">
-          Showing {filteredFeedback.length} of {feedback.length} feedback items
+        <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+          <select
+            className="input py-2 text-sm bg-gray-50 border-gray-200"
+            value={selectedChatbot}
+            onChange={(e) => setSelectedChatbot(e.target.value)}
+          >
+            <option value="all">All Agents</option>
+            {chatagents.map((bot) => (
+              <option key={bot.id} value={bot.id}>
+                {bot.name}
+              </option>
+            ))}
+          </select>
+
+          <select
+            className="input py-2 text-sm bg-gray-50 border-gray-200"
+            value={filter}
+            onChange={(e) => setFilter(e.target.value as any)}
+          >
+            <option value="all">All Ratings</option>
+            <option value="positive">Positive (4-5)</option>
+            <option value="negative">Negative (1-2)</option>
+          </select>
         </div>
       </div>
 
       {/* Feedback List */}
-      <div className="mt-6 bg-white shadow overflow-hidden sm:rounded-md">
-        <ul role="list" className="divide-y divide-gray-200">
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+        <div className="p-6 border-b border-gray-100 flex justify-between items-center">
+          <h2 className="text-lg font-semibold text-gray-900">Recent Feedback</h2>
+          <span className="text-sm text-gray-500">
+            Showing {filteredFeedback.length} of {feedback.length} items
+          </span>
+        </div>
+
+        <div className="divide-y divide-gray-100">
           {filteredFeedback.length > 0 ? (
             filteredFeedback.map((item) => (
-              <li key={item.id}>
-                <div className="px-4 py-4 sm:px-6">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center">
-                      <div className="flex-shrink-0">
-                        <ChatBubbleLeftRightIcon
-                          className="h-6 w-6 text-gray-400"
-                          aria-hidden="true"
-                        />
-                      </div>
-                      <div className="ml-4">
-                        <p className="text-sm font-medium text-primary-600">
-                          {item.chatagentName}
-                        </p>
-                        <div className="flex items-center mt-1">
-                          {renderStars(item.rating)}
-                          <span className="ml-2 text-sm text-gray-500">
-                            {new Date(item.createdAt).toLocaleDateString()}
-                          </span>
-                        </div>
-                      </div>
+              <div key={item.id} className="p-6 hover:bg-gray-50 transition-colors">
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center text-primary-600">
+                      <MessageCircle className="w-5 h-5" />
                     </div>
-                    <div className="ml-2 flex-shrink-0 flex">
-                      <button
-                        type="button"
-                        className="inline-flex items-center px-3 py-1 border border-transparent text-xs font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700"
-                        onClick={() => {
-                          // In a real app, this would navigate to the conversation
-                          toast.info("Navigation", `View conversation ${item.conversationId}`);
-                        }}
-                      >
-                        View Conversation
-                      </button>
+                    <div>
+                      <h3 className="text-sm font-medium text-gray-900">{item.chatagentName}</h3>
+                      <div className="flex items-center gap-2 mt-0.5">
+                        <div className="flex">{renderStars(item.rating)}</div>
+                        <span className="text-xs text-gray-400">•</span>
+                        <span className="text-xs text-gray-500 flex items-center gap-1">
+                          <Calendar className="w-3 h-3" />
+                          {new Date(item.createdAt).toLocaleDateString()}
+                        </span>
+                      </div>
                     </div>
                   </div>
-                  <div className="mt-2 sm:flex sm:justify-between">
-                    <div className="sm:flex">
-                      <p className="text-sm text-gray-500">{item.comment}</p>
-                    </div>
-                    {item.userIdentifier && (
-                      <div className="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
-                        <p>User: {item.userIdentifier}</p>
-                      </div>
-                    )}
-                  </div>
+
+                  <button
+                    onClick={() => toast.info("Navigation", `View conversation ${item.conversationId}`)}
+                    className="btn btn-ghost btn-sm text-primary-600 hover:text-primary-700 hover:bg-primary-50"
+                  >
+                    View Context <ArrowUpRight className="w-4 h-4 ml-1" />
+                  </button>
                 </div>
-              </li>
+
+                <div className="pl-4 ml-13 border-l-2 border-gray-100">
+                  <p className="text-gray-600 text-sm leading-relaxed">
+                    "{item.comment}"
+                  </p>
+                  {item.userIdentifier && (
+                    <div className="mt-3 flex items-center gap-2 text-xs text-gray-400">
+                      <User className="w-3 h-3" />
+                      <span>{item.userIdentifier}</span>
+                    </div>
+                  )}
+                </div>
+              </div>
             ))
           ) : (
-            <li className="px-4 py-6 sm:px-6 text-center text-gray-500">
-              No feedback found matching your filters.
-            </li>
+            <div className="p-12 text-center">
+              <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Search className="w-8 h-8 text-gray-400" />
+              </div>
+              <h3 className="text-lg font-medium text-gray-900">No feedback found</h3>
+              <p className="text-gray-500 mt-1">Try adjusting your filters to see more results.</p>
+            </div>
           )}
-        </ul>
+        </div>
       </div>
     </div>
   );

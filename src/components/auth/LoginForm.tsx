@@ -109,7 +109,7 @@ export function LoginForm() {
             {sessionExpired && (
                 <div className="mb-4 rounded-md bg-yellow-50 p-4">
                     <div className="flex">
-                        <div className="flex-shrink-0">
+                        <div className="shrink-0">
                             <svg
                                 className="h-5 w-5 text-yellow-400"
                                 xmlns="http://www.w3.org/2000/svg"

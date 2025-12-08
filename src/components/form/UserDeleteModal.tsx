@@ -35,7 +35,7 @@ export default function UserDeleteModal({
         </div>
         <div className="p-6">
           <div className="flex items-center mb-4">
-            <div className="flex-shrink-0 w-10 h-10 mx-auto flex items-center justify-center rounded-full bg-red-100">
+            <div className="shrink-0 w-10 h-10 mx-auto flex items-center justify-center rounded-full bg-red-100">
               <TrashIcon className="h-6 w-6 text-red-600" />
             </div>
             <div className="ml-4">

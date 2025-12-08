@@ -2,7 +2,21 @@
 
 import { useState, useEffect } from "react";
 import { Spinner } from "@/components/common/Spinner";
-import { EnvelopeIcon, InformationCircleIcon, PencilIcon, PhoneIcon, TrashIcon, UserIcon, UserPlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import {
+  User,
+  Mail,
+  Phone,
+  MoreVertical,
+  Trash2,
+  Edit2,
+  UserPlus,
+  Search,
+  Filter,
+  Shield,
+  CheckCircle2,
+  XCircle,
+  X
+} from "lucide-react";
 import { useUserPermissions } from "@/hooks/useUserPermissions";
 import { UserRoles } from "@/types";
 import UserDeleteModal from "@/components/form/UserDeleteModal";
@@ -10,6 +24,8 @@ import UserFilters from "@/components/form/UserFilters";
 import UsersTable from "@/components/form/UsersTable";
 import UserForm from "@/components/form/userForm";
 import Image from "next/image";
+import { cn } from "@/lib/utils";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface User {
   id: string;
@@ -40,17 +56,12 @@ export default function UsersPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Mock current user - in production, get from auth context
-  const currentUserRole = UserRoles.superAdmin; // Change to test different roles
+  const currentUserRole = UserRoles.superAdmin;
   const permissions = useUserPermissions({ currentUserRole });
 
   useEffect(() => {
     async function loadUsers() {
       try {
-        // In production, this would call the real API
-        // const response = await fetch('/api/users');
-        // const data = await response.json();
-
-        // For development, use mock data
         await new Promise((resolve) => setTimeout(resolve, 1000));
 
         const roles = [UserRoles.staff, UserRoles.admin];
@@ -92,7 +103,6 @@ export default function UsersPage() {
   }) => {
     setIsSubmitting(true);
     try {
-      // In production, call API
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       const newUser: User = {
@@ -129,7 +139,6 @@ export default function UsersPage() {
 
     setIsSubmitting(true);
     try {
-      // In production, call API
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       setUsers((prev) =>
@@ -161,9 +170,7 @@ export default function UsersPage() {
 
     setIsDeleting(true);
     try {
-      // In production, call API
       await new Promise((resolve) => setTimeout(resolve, 1000));
-
       setUsers(users.filter((user) => user.id !== userToDelete));
       setShowDeleteModal(false);
     } catch (error) {
@@ -190,20 +197,23 @@ export default function UsersPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="flex flex-col items-center justify-center min-h-[60vh]">
         <Spinner size="lg" />
+        <p className="mt-4 text-gray-500 font-medium animate-pulse">Loading users...</p>
       </div>
     );
   }
 
   return (
-    <div className="px-4 sm:px-6 lg:px-8 py-8">
-      <div className="sm:flex sm:items-center">
-        <div className="sm:flex-auto">
-          <h1 className="text-2xl font-semibold text-gray-900">Users</h1>
-          <p className="mt-2 text-sm text-gray-700">
-            A list of all users in your account including their name, email,
-            role and status.
+    <div className="px-4 sm:px-6 lg:px-8 py-8 animate-fade-in max-w-7xl mx-auto">
+      <div className="sm:flex sm:items-center sm:justify-between mb-8">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900 tracking-tight flex items-center gap-3">
+            <User className="w-8 h-8 text-primary-600" />
+            Users
+          </h1>
+          <p className="mt-2 text-gray-500">
+            Manage team members, roles, and access permissions.
           </p>
         </div>
 
@@ -211,434 +221,261 @@ export default function UsersPage() {
           <button
             type="button"
             onClick={() => setShowForm(true)}
-            className="inline-flex items-center justify-center rounded-md border border-transparent bg-primary-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 sm:w-auto"
+            className="btn btn-primary flex items-center gap-2 shadow-lg shadow-primary-500/20"
           >
-            <UserPlusIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+            <UserPlus className="w-5 h-5" />
             Add User
           </button>
         )}
       </div>
 
-      <UserFilters
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
-        roleFilter={roleFilter}
-        setRoleFilter={setRoleFilter}
-        statusFilter={statusFilter}
-        setStatusFilter={setStatusFilter}
-        totalUsers={users.length}
-        filteredCount={filteredUsers.length}
-      />
-
-      <UsersTable
-        users={filteredUsers}
-        permissions={permissions}
-        onEditUser={(user) => {
-          setUserToEdit(user);
-          setEditForm(true);
-        }}
-        onDeleteUser={(userId) => {
-          setUserToDelete(userId);
-          setShowDeleteModal(true);
-        }}
-        onShowUserInfo={setSelectedUserInfo}
-      />
-
-      {/* Modals - Outside table structure */}
-      {showForm && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50"
-          onClick={() => setShowForm(false)}
-        >
-          <div
-            className="bg-white rounded-lg shadow-xl max-w-lg w-full mx-4 relative"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-center justify-between p-6 border-b border-gray-200">
-              <h2 className="text-lg font-semibold text-gray-900">
-                Add New User
-              </h2>
-              <button
-                onClick={() => setShowForm(false)}
-                className="p-1 rounded-full hover:bg-gray-100 transition-colors duration-200"
-              >
-                <XMarkIcon className="h-6 w-6 text-gray-500 hover:text-gray-700" />
-              </button>
-            </div>
-            <div className="p-6">
-              <UserForm
-                currentUserRole={currentUserRole}
-                onSubmit={handleCreateUser}
-                onCancel={() => setShowForm(false)}
-                isLoading={isSubmitting}
-              />
-            </div>
-          </div>
-        </div>
-      )}
       {/* Filters */}
-      <div className="mt-8 flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
-        <div className="flex flex-col sm:flex-row sm:items-center space-y-4 sm:space-y-0 sm:space-x-4">
-          <div className="max-w-xs">
-            <label htmlFor="search" className="sr-only">
-              Search
-            </label>
-            <div className="relative">
-              <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                <svg
-                  className="h-5 w-5 text-gray-400"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </div>
-              <input
-                id="search"
-                name="search"
-                className="block w-full rounded-md border border-gray-300 bg-white py-2 pl-10 pr-3 text-sm placeholder-gray-500 focus:border-primary-500 focus:text-gray-900 focus:placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary-500 sm:text-sm"
-                placeholder="Search users"
-                type="search"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
-          </div>
-
-          <div className="flex space-x-4">
-            <div>
-              <select
-                id="role-filter"
-                name="role-filter"
-                className="block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm"
-                value={roleFilter}
-                onChange={(e) => setRoleFilter(e.target.value)}
-              >
-                <option value="all">All Roles</option>
-                <option value="admin">Admin</option>
-                <option value="staff">Staff</option>
-              </select>
-            </div>
-
-            <div>
-              <select
-                id="status-filter"
-                name="status-filter"
-                className="block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm"
-                value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value)}
-              >
-                <option value="all">All Status</option>
-                <option value="active">Active</option>
-                <option value="inactive">Inactive</option>
-              </select>
-            </div>
-          </div>
+      <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm mb-8 flex flex-col sm:flex-row gap-4 items-center justify-between">
+        <div className="relative flex-1 max-w-md">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+          <input
+            type="text"
+            placeholder="Search users..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="input pl-10 w-full"
+          />
         </div>
 
-        <div className="text-sm text-gray-500">
-          Showing {filteredUsers.length} of {users.length} users
+        <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+          <select
+            className="input py-2 text-sm bg-gray-50 border-gray-200"
+            value={roleFilter}
+            onChange={(e) => setRoleFilter(e.target.value)}
+          >
+            <option value="all">All Roles</option>
+            <option value="admin">Admin</option>
+            <option value="staff">Staff</option>
+          </select>
+
+          <select
+            className="input py-2 text-sm bg-gray-50 border-gray-200"
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+          >
+            <option value="all">All Status</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
         </div>
       </div>
 
       {/* Users Table */}
-      <div className="mt-8 flex flex-col">
-        <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
-          <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
-            <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
-              <table className="min-w-full divide-y divide-gray-300">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th
-                      scope="col"
-                      className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
-                    >
-                      User
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                    >
-                      Role
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                    >
-                      Status
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                    >
-                      Last Active
-                    </th>
-                    <th
-                      scope="col"
-                      className="relative py-3.5 pl-3 pr-4 sm:pr-6"
-                    >
-                      <span className="sr-only">Actions</span>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200 bg-white">
-                  {filteredUsers.map((user) => (
-                    <tr key={user.id}>
-                      <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
-                        <div className="flex items-center">
-                          <div className="relative h-10 w-10 flex-shrink-0">
-                            {user.avatar ? (
-                              <>
-                                <Image
-                                  height={40}
-                                  width={40}
-                                  className="h-10 w-10 rounded-full"
-                                  src={user.avatar}
-                                  alt={user.name}
-                                />
-                                {/* Status Dot */}
-                                <span
-                                  className={`absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-white ${user.onlineStatus
-                                    ? "bg-green-500"
-                                    : "bg-yellow-500"
-                                    }`}
-                                ></span>
-                              </>
-                            ) : (
-                              <>
-                                <div className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
-                                  <UserIcon className="h-6 w-6 text-gray-400" />
-                                </div>
-                                {/* Status Dot */}
-                                <span
-                                  className={`absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-white ${user.onlineStatus
-                                    ? "bg-green-500"
-                                    : "bg-yellow-500"
-                                    }`}
-                                ></span>
-                              </>
-                            )}
-                          </div>
-                          <div className="ml-4">
-                            <div className="font-medium text-gray-900">
-                              {user.name}
-                            </div>
-                            <div className="text-gray-500">{user.email}</div>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        <span
-                          className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${user.role === UserRoles.admin
-                            ? "bg-blue-100 text-blue-800"
-                            : "bg-green-100 text-green-800"
-                            }`}
-                        >
-                          {user.role === UserRoles.admin ? "Admin" : "Staff"}
-                        </span>
-                      </td>
-                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        <span
-                          className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${user.status === "active"
-                            ? "bg-green-100 text-green-800"
-                            : "bg-red-100 text-red-800"
-                            }`}
-                        >
-                          {user.status === "active" ? "Active" : "Inactive"}
-                        </span>
-                      </td>
-                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        {user.lastActive
-                          ? new Date(user.lastActive).toLocaleDateString()
-                          : "N/A"}
-                      </td>
-                      <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                        <div className="flex justify-end space-x-3">
-                          <button
-                            type="button"
-                            className="text-gray-400 hover:text-gray-500"
-                            title="Role Info"
-                            onClick={() => setSelectedUserInfo(user)}
-                          >
-                            <InformationCircleIcon className="h-5 w-5" />
-                          </button>
-                          {user.email && (
-                            <button
-                              type="button"
-                              className="text-gray-400 hover:text-gray-500"
-                              title="Email"
-                            >
-                              <EnvelopeIcon className="h-5 w-5" />
-                            </button>
-                          )}
-                          {user.phone && (
-                            <button
-                              type="button"
-                              className="text-gray-400 hover:text-gray-500"
-                              title="Call"
-                            >
-                              <PhoneIcon className="h-5 w-5" />
-                            </button>
-                          )}
-                          {permissions.canEditUsers && (
-                            <button
-                              type="button"
-                              onClick={() => {
-                                setUserToEdit(user);
-                                setEditForm(true);
-                              }}
-                              className="text-primary-600 hover:text-primary-900"
-                              title="Edit"
-                            >
-                              <PencilIcon className="h-5 w-5" />
-                            </button>
-                          )}
-                          {permissions.canDeleteUsers && (
-                            <button
-                              type="button"
-                              className="text-red-600 hover:text-red-900"
-                              title="Delete"
-                              onClick={() => {
-                                setUserToDelete(user.id);
-                                setShowDeleteModal(true);
-                              }}
-                            >
-                              <TrashIcon className="h-5 w-5" />
-                            </button>
-                          )}
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                  {editForm && userToEdit && (
-                    <div
-                      className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50"
-                      onClick={() => {
-                        setEditForm(false);
-                        setUserToEdit(null);
-                      }}
-                    >
-                      <div
-                        className="bg-white rounded-lg shadow-xl max-w-lg w-full mx-4 relative"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <div className="flex items-center justify-between p-6 border-b border-gray-200">
-                          <h2 className="text-lg font-semibold text-gray-900">
-                            Edit User
-                          </h2>
-                          <button
-                            onClick={() => {
-                              setEditForm(false);
-                              setUserToEdit(null);
-                            }}
-                            className="p-1 rounded-full hover:bg-gray-100 transition-colors duration-200"
-                          >
-                            <XMarkIcon className="h-6 w-6 text-gray-500 hover:text-gray-700" />
-                          </button>
-                        </div>
-                        <div className="p-6">
-                          <UserForm
-                            user={userToEdit}
-                            currentUserRole={currentUserRole}
-                            onSubmit={handleUpdateUser}
-                            onCancel={() => {
-                              setEditForm(false);
-                              setUserToEdit(null);
-                            }}
-                            isLoading={isSubmitting}
-                          />
-                        </div>
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50/50">
+              <tr>
+                <th scope="col" className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">User</th>
+                <th scope="col" className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Role</th>
+                <th scope="col" className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</th>
+                <th scope="col" className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Last Active</th>
+                <th scope="col" className="relative px-6 py-4"><span className="sr-only">Actions</span></th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {filteredUsers.map((user) => (
+                <tr key={user.id} className="hover:bg-gray-50/50 transition-colors">
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex items-center">
+                      <div className="relative h-10 w-10 shrink-0">
+                        <Image
+                          height={40}
+                          width={40}
+                          className="h-10 w-10 rounded-full object-cover"
+                          src={user.avatar || `https://ui-avatars.com/api/?name=${user.name}`}
+                          alt={user.name}
+                        />
+                        <span className={cn(
+                          "absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-white",
+                          user.onlineStatus ? "bg-green-500" : "bg-gray-300"
+                        )} />
+                      </div>
+                      <div className="ml-4">
+                        <div className="text-sm font-medium text-gray-900">{user.name}</div>
+                        <div className="text-sm text-gray-500">{user.email}</div>
                       </div>
                     </div>
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className={cn(
+                      "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium",
+                      user.role === UserRoles.admin ? "bg-purple-100 text-purple-800" : "bg-blue-100 text-blue-800"
+                    )}>
+                      {user.role === UserRoles.admin ? "Admin" : "Staff"}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className={cn(
+                      "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium",
+                      user.status === "active" ? "bg-green-100 text-green-800" : "bg-gray-100 text-gray-800"
+                    )}>
+                      {user.status === "active" ? "Active" : "Inactive"}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {user.lastActive ? new Date(user.lastActive).toLocaleDateString() : "Never"}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <div className="flex justify-end gap-2">
+                      <button
+                        onClick={() => setSelectedUserInfo(user)}
+                        className="p-2 text-gray-400 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"
+                      >
+                        <Shield className="w-4 h-4" />
+                      </button>
+                      {permissions.canEditUsers && (
+                        <button
+                          onClick={() => {
+                            setUserToEdit(user);
+                            setEditForm(true);
+                          }}
+                          className="p-2 text-gray-400 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"
+                        >
+                          <Edit2 className="w-4 h-4" />
+                        </button>
+                      )}
+                      {permissions.canDeleteUsers && (
+                        <button
+                          onClick={() => {
+                            setUserToDelete(user.id);
+                            setShowDeleteModal(true);
+                          }}
+                          className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      )}
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-        {/* Role Info Modal (per-user) */}
-        {selectedUserInfo && (
-          <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50"
-            onClick={() => setSelectedUserInfo(null)}
-          >
-            <div
-              className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 relative"
-              onClick={(e) => e.stopPropagation()}
+      </div>
+
+      {/* Modals */}
+      <AnimatePresence>
+        {(showForm || editForm) && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => {
+                setShowForm(false);
+                setEditForm(false);
+              }}
+              className="fixed inset-0 bg-gray-900/50 backdrop-blur-sm"
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="relative bg-white rounded-2xl shadow-xl w-full max-w-lg overflow-hidden"
             >
-              <div className="flex items-center justify-between p-4 border-b border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-900">
-                  {selectedUserInfo.name} —{" "}
-                  {selectedUserInfo.role === UserRoles.admin
-                    ? "Admin"
-                    : "Staff"}
+              <div className="flex items-center justify-between p-6 border-b border-gray-100">
+                <h3 className="text-xl font-semibold text-gray-900">
+                  {editForm ? "Edit User" : "Add New User"}
+                </h3>
+                <button
+                  onClick={() => {
+                    setShowForm(false);
+                    setEditForm(false);
+                  }}
+                  className="p-2 text-gray-400 hover:text-gray-500 hover:bg-gray-100 rounded-lg transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              <div className="p-6">
+                <UserForm
+                  user={editForm ? userToEdit : undefined}
+                  currentUserRole={currentUserRole}
+                  onSubmit={editForm ? handleUpdateUser : handleCreateUser}
+                  onCancel={() => {
+                    setShowForm(false);
+                    setEditForm(false);
+                  }}
+                  isLoading={isSubmitting}
+                />
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Role Info Modal */}
+      <AnimatePresence>
+        {selectedUserInfo && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSelectedUserInfo(null)}
+              className="fixed inset-0 bg-gray-900/50 backdrop-blur-sm"
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="relative bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden"
+            >
+              <div className="flex items-center justify-between p-6 border-b border-gray-100">
+                <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                  <Shield className="w-5 h-5 text-primary-600" />
+                  Role Permissions
                 </h3>
                 <button
                   onClick={() => setSelectedUserInfo(null)}
-                  className="text-gray-500 hover:text-red-500"
-                  aria-label="Close"
+                  className="p-2 text-gray-400 hover:text-gray-500 hover:bg-gray-100 rounded-lg transition-colors"
                 >
-                  <XMarkIcon className="h-5 w-5" />
+                  <X className="w-5 h-5" />
                 </button>
               </div>
+              <div className="p-6">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-12 h-12 rounded-full bg-gray-100 relative overflow-hidden">
+                    <Image
+                      src={selectedUserInfo.avatar || `https://ui-avatars.com/api/?name=${selectedUserInfo.name}`}
+                      alt={selectedUserInfo.name}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                  <div>
+                    <h4 className="font-medium text-gray-900">{selectedUserInfo.name}</h4>
+                    <span className="text-sm text-gray-500 capitalize">{selectedUserInfo.role}</span>
+                  </div>
+                </div>
 
-              <div className="p-4 text-sm text-gray-700 space-y-3">
-                {(() => {
-                  const perms: Record<UserRoles, string[]> = {
-                    [UserRoles.superAdmin]: [
-                      "Full system access",
-                      "Create all user types",
-                      "Delete any user",
-                      "Manage all agents",
-                    ],
-                    [UserRoles.admin]: [
-                      "Create staff users",
-                      "Create agents",
-                      "Retrain agents",
-                      "Delete agents",
-                      "Reply to messages",
-                    ],
-                    [UserRoles.staff]: [
-                      "Retrain agents",
-                      "Reply to messages",
-                      "Manage content",
-                    ],
-                    [UserRoles.editor]: [
-                      "Edit content",
-                      "Reply to messages",
-                    ],
-                    [UserRoles.viewer]: [
-                      "View only access",
-                    ],
-                    [UserRoles.user]: ["Basic user access"],
-                  };
-                  const list = perms[selectedUserInfo.role] || [
-                    "No permissions defined",
-                  ];
-                  return (
-                    <>
-                      <p className="text-sm text-gray-600">Role permissions:</p>
-                      <ul className="list-disc ml-5 space-y-1">
-                        {list.map((p) => (
-                          <li key={p}>{p}</li>
-                        ))}
-                      </ul>
-                    </>
-                  );
-                })()}
+                <h5 className="text-sm font-medium text-gray-900 mb-3">Access Level</h5>
+                <ul className="space-y-2">
+                  {[
+                    "View dashboard analytics",
+                    "Manage assigned agents",
+                    "Reply to user conversations",
+                    "Edit agent settings"
+                  ].map((perm, i) => (
+                    <li key={i} className="flex items-center gap-2 text-sm text-gray-600">
+                      <CheckCircle2 className="w-4 h-4 text-green-500" />
+                      {perm}
+                    </li>
+                  ))}
+                </ul>
               </div>
-            </div>
+            </motion.div>
           </div>
         )}
-      </div>
+      </AnimatePresence>
 
-      {/* Delete Confirmation Modal */}
       {showDeleteModal && (
         <UserDeleteModal
           onConfirm={handleDeleteUser}

@@ -1,18 +1,13 @@
 "use client";
 
-import { useState, useRef } from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { gsap } from "gsap";
-import { useGSAP } from "@gsap/react";
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
-import Image from "next/image";
-import { Menu } from "@headlessui/react";
-import { useCurrentUser, useAuthStore } from "@/store/authStore";
-import { User } from "lucide-react";
+import { useState } from "react";
+import { useCurrentUser } from "@/store/authStore";
 import { ErrorBoundary } from "@/components/common/ErrorBoundary";
-import { UserRoles } from "@/types";
-import { WorkspaceSwitcher } from "@/components/workspace/WorkspaceSwitcher";
+import { Sidebar } from "@/components/dashboard/Sidebar";
+import { Menu } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 export default function DashboardLayout({
   children,
@@ -20,434 +15,68 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const user = useCurrentUser();
-  const logout = useAuthStore((state) => state.logout);
-  const pathname = usePathname();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const sidebarRef = useRef<HTMLDivElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
-  const container = useRef<HTMLDivElement>(null);
-
-  // Handle sidebar collapse animation using GSAP hooks
-  const toggleSidebar = () => {
-    setSidebarCollapsed(!sidebarCollapsed);
-  };
-
-  useGSAP(
-    () => {
-      if (!user) return;
-      // Only run animations on desktop (md breakpoint and above)
-      const isDesktop = window.matchMedia("(min-width: 768px)").matches;
-
-      if (isDesktop && sidebarRef.current && contentRef.current) {
-        const tl = gsap.timeline();
-
-        if (sidebarCollapsed) {
-          tl.to(sidebarRef.current, {
-            width: "4rem",
-            duration: 0.3,
-            ease: "power2.out",
-          }).to(
-            contentRef.current,
-            {
-              paddingLeft: "4rem",
-              duration: 0.3,
-              ease: "power2.out",
-            },
-            "<"
-          );
-        } else {
-          tl.to(sidebarRef.current, {
-            width: "16rem",
-            duration: 0.3,
-            ease: "power2.out",
-          }).to(
-            contentRef.current,
-            {
-              paddingLeft: "16rem",
-              duration: 0.3,
-              ease: "power2.out",
-            },
-            "<"
-          );
-        }
-      }
-    },
-    { dependencies: [sidebarCollapsed, user], scope: container }
-  );
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
   // Show loading or redirect if no user
   if (!user) {
     return (
-      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600 mx-auto"></div>
-          <p className="mt-2 text-gray-600">Loading...</p>
+          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary-600 mx-auto"></div>
+          <p className="mt-4 text-gray-500 font-medium">Loading workspace...</p>
         </div>
       </div>
     );
   }
 
-  const navigation = [
-    {
-      name: "Dashboard",
-      href: "/dashboard",
-      icon: "M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6",
-    },
-    {
-      name: "Analytics",
-      href: "/dashboard/analytics",
-      icon: "M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z",
-    },
-    {
-      name: "Users",
-      href: "/dashboard/users",
-      icon: "M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z",
-    },
-    ...(user?.role === UserRoles.superAdmin ? [
-      {
-        name: "AI Models",
-        href: "/dashboard/models",
-        icon: "M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z",
-      },
-      {
-        name: "Instructions",
-        href: "/dashboard/instructions",
-        icon: "M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z",
-      },
-    ] : []),
-    {
-      name: "Feedback",
-      href: "/dashboard/feedback",
-      icon: "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z",
-    },
-    {
-      name: "Settings",
-      href: "/dashboard/settings",
-      icon: "M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z",
-    },
-  ];
-
-  // Check if the current path is active or a subpath is active
-  const isActive = (href: string) => {
-    if (href === "/dashboard" && pathname === "/dashboard") {
-      return true;
-    }
-    return pathname.startsWith(href) && href !== "/dashboard";
-  };
-
   return (
-    <div ref={container} className="min-h-screen bg-gray-100">
-      {/* Mobile sidebar */}
-      <div
-        className={`fixed inset-0 z-40 flex md:hidden ${sidebarOpen ? "" : "pointer-events-none"}`}
-      >
-        <div
-          className={`fixed inset-0 bg-gray-600 bg-opacity-75 transition-opacity duration-300 ease-linear ${sidebarOpen ? "opacity-100" : "opacity-0"
-            }`}
-          onClick={() => setSidebarOpen(false)}
-        ></div>
-        <div
-          className={`relative flex w-full max-w-xs flex-1 flex-col bg-white pt-5 pb-4 transition duration-300 ease-in-out transform ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
-            }`}
-        >
-          <div className="absolute top-0 right-0 -mr-12 pt-2">
-            <button
-              type="button"
-              className="ml-1 flex h-10 w-10 items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
-              onClick={() => setSidebarOpen(false)}
-            >
-              <span className="sr-only">Close sidebar</span>
-              <Menu />
-            </button>
-          </div>
-          <div className="flex flex-shrink-0 items-center px-4">
-            <Link href="/" className="flex items-center space-x-2">
-              <Image
-                height={40}
-                width={40}
-                src="/images/logo.webp"
-                alt="Boltz"
-                className="h-8 w-8"
-              />{" "}
-              <span className="text-xl font-bold text-primary-600">Boltz</span>
-            </Link>
-          </div>
-          <div className="mt-5 h-0 flex-1 overflow-y-auto">
-            <nav className="space-y-1 px-2">
-              {navigation.map((item) => (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className={`group flex items-center px-2 py-2 text-base font-medium rounded-md ${isActive(item.href)
-                    ? "bg-primary-100 text-primary-900"
-                    : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                    }`}
-                >
-                  <svg
-                    className={`mr-4 h-6 w-6 ${isActive(item.href)
-                      ? "text-primary-600"
-                      : "text-gray-400 group-hover:text-gray-500"
-                      }`}
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d={item.icon}
-                    />
-                  </svg>
-                  {item.name}
-                </Link>
-              ))}
-              <button
-                onClick={logout}
-                className="group flex items-center w-full px-2 py-2 text-base font-medium rounded-md text-gray-600 hover:bg-red-50 hover:text-red-600"
-              >
-                <svg
-                  className="mr-4 h-6 w-6 text-gray-400 group-hover:text-red-500"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                  />
-                </svg>
-                Logout
-              </button>
-            </nav>
-          </div>
-        </div>
-      </div>
+    <div className="min-h-screen bg-gray-50">
+      <Sidebar
+        collapsed={sidebarCollapsed}
+        setCollapsed={setSidebarCollapsed}
+        mobileOpen={mobileSidebarOpen}
+        setMobileOpen={setMobileSidebarOpen}
+      />
 
-      {/* Static sidebar for desktop */}
+      {/* Main Content */}
       <div
-        ref={sidebarRef}
-        className="hidden md:fixed md:inset-y-0 md:flex md:w-64 md:flex-col z-30"
+        className={cn(
+          "flex flex-col min-h-screen transition-all duration-300 ease-in-out",
+          sidebarCollapsed ? "md:pl-20" : "md:pl-72"
+        )}
       >
-        <div className="flex min-h-0 flex-1 flex-col border-r border-gray-200 bg-white relative">
-          {/* Collapse Toggle Button */}
+        {/* Mobile Header */}
+        <div className="sticky top-0 z-30 flex h-16 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm md:hidden">
           <button
-            onClick={toggleSidebar}
-            className="absolute -right-3 top-6 z-40 flex h-6 w-6 items-center justify-center rounded-full bg-white border border-gray-300 shadow-sm hover:bg-gray-50 transition-colors"
+            type="button"
+            className="-m-2.5 p-2.5 text-gray-700 lg:hidden"
+            onClick={() => setMobileSidebarOpen(true)}
           >
-            {sidebarCollapsed ? (
-              <ChevronRightIcon className="h-4 w-4 text-gray-600" />
-            ) : (
-              <ChevronLeftIcon className="h-4 w-4 text-gray-600" />
-            )}
+            <span className="sr-only">Open sidebar</span>
+            <Menu className="h-6 w-6" aria-hidden="true" />
           </button>
-
-          <div className="flex flex-1 flex-col overflow-y-auto pt-5 pb-4">
-            <div className="flex flex-shrink-0 items-center justify-center px-4">
-              <Link href="/" className="flex items-center">
-                {sidebarCollapsed ? (
-                  <Image
-                    height={40}
-                    width={40}
-                    src="/images/logo.webp"
-                    alt="Boltz"
-                    className="h-8 w-8"
-                  />
-                ) : (
-                  <div className="flex items-center space-x-2">
-                    <Image
-                      height={40}
-                      width={40}
-                      src="/images/logo.webp"
-                      alt="Boltz"
-                      className="h-8 w-8"
-                    />
-                    <span className="text-xl font-bold text-primary-600">
-                      Boltz
-                    </span>
-                  </div>
-                )}
+          <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
+            <div className="flex flex-1 items-center gap-2">
+              <Link href="/" className="flex items-center gap-2">
+                <Image
+                  src="/images/logo.webp"
+                  alt="Boltz"
+                  height={32}
+                  width={32}
+                  className="h-8 w-8"
+                />
+                <span className="text-lg font-bold text-gray-900">Boltz</span>
               </Link>
             </div>
-            <div className="px-2 mt-4">
-              <WorkspaceSwitcher />
-            </div>
-            <nav className="mt-5 flex-1 space-y-1 bg-white px-2">
-              {navigation.map((item) => (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-all duration-200 ${isActive(item.href)
-                    ? "bg-primary-100 text-primary-900"
-                    : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                    } ${sidebarCollapsed ? "justify-center" : ""}`}
-                  title={sidebarCollapsed ? item.name : ""}
-                >
-                  <svg
-                    className={`h-6 w-6 transition-all duration-200 ${isActive(item.href)
-                      ? "text-primary-600"
-                      : "text-gray-400 group-hover:text-gray-500"
-                      } ${sidebarCollapsed ? "mr-0" : "mr-3"}`}
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d={item.icon}
-                    />
-                  </svg>
-                  <span
-                    className={`transition-opacity duration-300 ${sidebarCollapsed
-                      ? "opacity-0 w-0 overflow-hidden"
-                      : "opacity-100"
-                      }`}
-                  >
-                    {item.name}
-                  </span>
-                </Link>
-              ))}
-            </nav>
-            {/* Logout Button */}
-            <div className="px-2 pb-2">
-              <button
-                onClick={logout}
-                className={`group flex items-center w-full px-2 py-2 text-sm font-medium rounded-md transition-all duration-200 text-gray-600 hover:bg-red-50 hover:text-red-600 ${sidebarCollapsed ? "justify-center" : ""}`}
-                title={sidebarCollapsed ? "Logout" : ""}
-              >
-                <svg
-                  className={`h-6 w-6 transition-all duration-200 text-gray-400 group-hover:text-red-500 ${sidebarCollapsed ? "mr-0" : "mr-3"}`}
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                  />
-                </svg>
-                <span
-                  className={`transition-opacity duration-300 ${sidebarCollapsed
-                    ? "opacity-0 w-0 overflow-hidden"
-                    : "opacity-100"
-                    }`}
-                >
-                  Logout
-                </span>
-              </button>
-            </div>
           </div>
-          {!sidebarCollapsed && (
-            <div className="flex flex-shrink-0 border-t border-gray-200 p-4 transition-opacity duration-300">
-              <div className="flex items-center">
-                <div className="flex-shrink-0">
-                  <div className="h-8 w-8 rounded-full bg-gray-300 flex justify-center items-center">
-                    {user?.avatar ? (
-                      <Image
-                        src={user.avatar}
-                        height={50}
-                        width={50}
-                        alt={user.name || user.displayName || "User"}
-                        className="rounded-full h-full w-full"
-                      />
-                    ) : (
-                      <User />
-                    )}
-                  </div>
-                </div>
-                <div className="ml-3">
-                  <p className="text-sm font-medium text-gray-700">
-                    {user?.name || user?.displayName || "User"}
-                  </p>
-                  <Link
-                    href="/dashboard/settings"
-                    className="text-xs font-medium text-gray-500 hover:text-gray-700"
-                  >
-                    View profile
-                  </Link>
-                </div>
-              </div>
-            </div>
-          )}
-          {sidebarCollapsed && (
-            <div className="flex flex-shrink-0 border-t border-gray-200 p-2 justify-center">
-              <div className="h-8 w-8 rounded-full bg-gray-300"></div>
-            </div>
-          )}
         </div>
-      </div>
 
-      {/* Main content */}
-      <div ref={contentRef} className="md:pl-64">
-        <div className="mx-auto flex flex-col">
-          <div className="sticky top-0 z-10 flex md:hidden h-16 flex-shrink-0 border-b border-gray-200 bg-white">
-            <div className="flex flex-1 items-center justify-between px-4">
-              <div className="flex items-center space-x-4">
-                <button
-                  type="button"
-                  className="text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500"
-                  onClick={() => setSidebarOpen(true)}
-                >
-                  <span className="sr-only">Open sidebar</span>
-                  <svg
-                    className="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M4 6h16M4 12h16M4 18h16"
-                    />
-                  </svg>
-                </button>
-                <Link href="/" className="flex items-center space-x-2">
-                  <Image
-                    src="/images/logo.webp"
-                    alt="Boltz"
-                    height={40}
-                    width={40}
-                    className="h-8 w-8"
-                  />
-                </Link>
-              </div>
-              <div className="flex items-center">
-                <button
-                  type="button"
-                  className="rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
-                >
-                  <span className="sr-only">View notifications</span>
-                  <svg
-                    className="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-                    />
-                  </svg>
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <main className="flex-1">
+        <main className="flex-1 py-8">
+          <div className="px-4 sm:px-6 lg:px-8">
             <ErrorBoundary>{children}</ErrorBoundary>
-          </main>
-        </div>
+          </div>
+        </main>
       </div>
     </div>
   );

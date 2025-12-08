@@ -227,7 +227,7 @@ export default function AnalyticsInsights({
             }
           >
             <div className="flex items-start">
-              <div className="flex-shrink-0">
+              <div className="shrink-0">
                 {getInsightIcon(insight.type)}
               </div>
               <div className="ml-4 flex-1">

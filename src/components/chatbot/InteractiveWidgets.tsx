@@ -367,11 +367,10 @@ export function PaymentMethodWidget({
                 <div
                   key={provider.id}
                   onClick={() => setSelectedProvider(provider.id)}
-                  className={`flex flex-col items-center justify-center p-3 border rounded-md cursor-pointer hover:bg-gray-50 ${
-                    selectedProvider === provider.id
+                  className={`flex flex-col items-center justify-center p-3 border rounded-md cursor-pointer hover:bg-gray-50 ${selectedProvider === provider.id
                       ? "border-primary-500 bg-primary-50"
                       : "border-gray-200"
-                  }`}
+                    }`}
                 >
                   <div className="h-8 w-8 mb-2 flex items-center justify-center">
                     {provider.id === "stripe" && "💳"}
@@ -541,7 +540,7 @@ export function ProductSearchWidget({
             className="border border-gray-200 rounded-lg p-4"
           >
             <div className="flex">
-              <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
+              <div className="h-24 w-24 shrink-0 overflow-hidden rounded-md border border-gray-200">
                 <Image
                   height={40}
                   width={40}
@@ -660,11 +659,10 @@ export function SubscriptionWidget({
           <div
             key={plan.id}
             onClick={() => setSelectedPlan(plan.id)}
-            className={`relative rounded-lg border p-4 cursor-pointer ${
-              selectedPlan === plan.id
+            className={`relative rounded-lg border p-4 cursor-pointer ${selectedPlan === plan.id
                 ? "border-primary-500 ring-2 ring-primary-500"
                 : "border-gray-300 hover:border-gray-400"
-            } ${plan.popular ? "bg-primary-50" : "bg-white"}`}
+              } ${plan.popular ? "bg-primary-50" : "bg-white"}`}
           >
             {plan.popular && (
               <span className="absolute top-0 right-0 -mt-2 -mr-2 rounded-full bg-primary-600 px-2 py-0.5 text-xs font-medium text-white">

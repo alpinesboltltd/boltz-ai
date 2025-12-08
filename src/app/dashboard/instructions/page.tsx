@@ -7,6 +7,18 @@ import { Spinner } from "@/components/common/Spinner";
 import { toast } from "@/store/toastStore";
 import { useCurrentUser } from "@/store/authStore";
 import { UserRoles } from "@/types";
+import {
+    FileText,
+    Plus,
+    Edit2,
+    Trash2,
+    Search,
+    Calendar,
+    AlertCircle,
+    X
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function InstructionsPage() {
     const user = useCurrentUser();
@@ -87,127 +99,173 @@ export default function InstructionsPage() {
 
     if (loading) {
         return (
-            <div className="flex justify-center items-center h-full">
+            <div className="flex flex-col items-center justify-center min-h-[60vh]">
                 <Spinner size="lg" />
+                <p className="mt-4 text-gray-500 font-medium animate-pulse">Loading instructions...</p>
             </div>
         );
     }
 
     return (
-        <div className="px-4 sm:px-6 lg:px-8 py-8">
-            <div className="sm:flex sm:items-center">
-                <div className="sm:flex-auto">
-                    <h1 className="text-2xl font-semibold text-gray-900">System Instructions</h1>
-                    <p className="mt-2 text-sm text-gray-700">
-                        Manage system instructions for agents.
+        <div className="px-4 sm:px-6 lg:px-8 py-8 animate-fade-in max-w-7xl mx-auto">
+            <div className="sm:flex sm:items-center sm:justify-between mb-8">
+                <div>
+                    <h1 className="text-3xl font-bold text-gray-900 tracking-tight flex items-center gap-3">
+                        <FileText className="w-8 h-8 text-primary-600" />
+                        System Instructions
+                    </h1>
+                    <p className="mt-2 text-gray-500">
+                        Manage global system prompts and behavioral instructions for your agents.
                     </p>
                 </div>
                 {isAdmin && (
-                    <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-                        <button
-                            type="button"
-                            onClick={() => {
-                                setEditingInstruction(null);
-                                setFormData({
-                                    title: "",
-                                    content: "",
-                                });
-                                setIsModalOpen(true);
-                            }}
-                            className="inline-flex items-center justify-center rounded-md border border-transparent bg-primary-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 sm:w-auto"
-                        >
-                            Add Instruction
-                        </button>
-                    </div>
+                    <button
+                        type="button"
+                        onClick={() => {
+                            setEditingInstruction(null);
+                            setFormData({ title: "", content: "" });
+                            setIsModalOpen(true);
+                        }}
+                        className="btn btn-primary flex items-center gap-2 shadow-lg shadow-primary-500/20"
+                    >
+                        <Plus className="w-5 h-5" />
+                        Add Instruction
+                    </button>
                 )}
             </div>
 
-            <div className="mt-8 flex flex-col">
-                <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                    <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
-                        <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
-                            <table className="min-w-full divide-y divide-gray-300">
-                                <thead className="bg-gray-50">
-                                    <tr>
-                                        <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Title</th>
-                                        <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Content Preview</th>
-                                        <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Created At</th>
-                                        {isAdmin && <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-6"><span className="sr-only">Actions</span></th>}
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-gray-200 bg-white">
-                                    {instructions.map((instruction) => (
-                                        <tr key={instruction.id}>
-                                            <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{instruction.title}</td>
-                                            <td className="px-3 py-4 text-sm text-gray-500 max-w-xs truncate">{instruction.content}</td>
-                                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{new Date(instruction.created_at).toLocaleDateString()}</td>
-                                            {isAdmin && (
-                                                <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                                                    <button onClick={() => handleEdit(instruction)} className="text-primary-600 hover:text-primary-900 mr-4">Edit</button>
-                                                    <button onClick={() => handleDelete(instruction.id)} className="text-red-600 hover:text-red-900">Delete</button>
-                                                </td>
-                                            )}
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
+            {instructions.length === 0 ? (
+                <div className="text-center py-16 bg-white rounded-2xl border border-dashed border-gray-300">
+                    <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <FileText className="w-8 h-8 text-gray-400" />
                     </div>
+                    <h3 className="text-lg font-medium text-gray-900">No instructions found</h3>
+                    <p className="text-gray-500 mt-1 mb-6">Get started by creating your first system instruction.</p>
+                    {isAdmin && (
+                        <button
+                            onClick={() => setIsModalOpen(true)}
+                            className="btn btn-secondary"
+                        >
+                            Create Instruction
+                        </button>
+                    )}
                 </div>
-            </div>
-
-            {isModalOpen && (
-                <div className="fixed inset-0 z-10 overflow-y-auto">
-                    <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-                        <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" onClick={() => setIsModalOpen(false)} />
-                        <div className="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
-                            <form onSubmit={handleSubmit}>
-                                <div className="space-y-4">
-                                    <h3 className="text-lg font-medium leading-6 text-gray-900">{editingInstruction ? "Edit Instruction" : "Add Instruction"}</h3>
-
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700">Title</label>
-                                        <input
-                                            type="text"
-                                            required
-                                            value={formData.title}
-                                            onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
-                                        />
+            ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {instructions.map((instruction) => (
+                        <div
+                            key={instruction.id}
+                            className="group bg-white rounded-2xl border border-gray-200 p-6 hover:shadow-lg transition-all duration-300 flex flex-col"
+                        >
+                            <div className="flex justify-between items-start mb-4">
+                                <div className="p-3 bg-primary-50 rounded-xl">
+                                    <FileText className="w-6 h-6 text-primary-600" />
+                                </div>
+                                {isAdmin && (
+                                    <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <button
+                                            onClick={() => handleEdit(instruction)}
+                                            className="p-2 text-gray-400 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"
+                                        >
+                                            <Edit2 className="w-4 h-4" />
+                                        </button>
+                                        <button
+                                            onClick={() => handleDelete(instruction.id)}
+                                            className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                        >
+                                            <Trash2 className="w-4 h-4" />
+                                        </button>
                                     </div>
+                                )}
+                            </div>
 
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700">Content</label>
-                                        <textarea
-                                            required
-                                            rows={5}
-                                            value={formData.content}
-                                            onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
-                                        />
-                                    </div>
+                            <h3 className="text-lg font-semibold text-gray-900 mb-2">{instruction.title}</h3>
+                            <p className="text-sm text-gray-500 mb-4 line-clamp-3 grow">
+                                {instruction.content}
+                            </p>
+
+                            <div className="pt-4 border-t border-gray-100 flex items-center text-xs text-gray-400 gap-2">
+                                <Calendar className="w-3 h-3" />
+                                Created {new Date(instruction.created_at).toLocaleDateString()}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
+
+            <AnimatePresence>
+                {isModalOpen && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => setIsModalOpen(false)}
+                            className="fixed inset-0 bg-gray-900/50 backdrop-blur-sm"
+                        />
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                            className="relative bg-white rounded-2xl shadow-xl w-full max-w-lg overflow-hidden"
+                        >
+                            <div className="flex items-center justify-between p-6 border-b border-gray-100">
+                                <h3 className="text-xl font-semibold text-gray-900">
+                                    {editingInstruction ? "Edit Instruction" : "New Instruction"}
+                                </h3>
+                                <button
+                                    onClick={() => setIsModalOpen(false)}
+                                    className="p-2 text-gray-400 hover:text-gray-500 hover:bg-gray-100 rounded-lg transition-colors"
+                                >
+                                    <X className="w-5 h-5" />
+                                </button>
+                            </div>
+
+                            <form onSubmit={handleSubmit} className="p-6 space-y-6">
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-gray-700">Title</label>
+                                    <input
+                                        type="text"
+                                        required
+                                        value={formData.title}
+                                        onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                                        className="input w-full"
+                                        placeholder="e.g., Customer Support Persona"
+                                    />
                                 </div>
 
-                                <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
-                                    <button
-                                        type="submit"
-                                        className="inline-flex w-full justify-center rounded-md border border-transparent bg-primary-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 sm:col-start-2 sm:text-sm"
-                                    >
-                                        {editingInstruction ? "Update" : "Create"}
-                                    </button>
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-gray-700">Content</label>
+                                    <textarea
+                                        required
+                                        rows={8}
+                                        value={formData.content}
+                                        onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+                                        className="input w-full font-mono text-sm leading-relaxed"
+                                        placeholder="Enter the system instruction content..."
+                                    />
+                                </div>
+
+                                <div className="flex gap-3 pt-2">
                                     <button
                                         type="button"
                                         onClick={() => setIsModalOpen(false)}
-                                        className="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 sm:col-start-1 sm:mt-0 sm:text-sm"
+                                        className="btn btn-secondary flex-1"
                                     >
                                         Cancel
                                     </button>
+                                    <button
+                                        type="submit"
+                                        className="btn btn-primary flex-1"
+                                    >
+                                        {editingInstruction ? "Update Instruction" : "Create Instruction"}
+                                    </button>
                                 </div>
                             </form>
-                        </div>
+                        </motion.div>
                     </div>
-                </div>
-            )}
+                )}
+            </AnimatePresence>
         </div>
     );
 }

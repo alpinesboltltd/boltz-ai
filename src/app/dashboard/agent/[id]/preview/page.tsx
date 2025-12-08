@@ -73,7 +73,7 @@ export default function AgentPreviewPage({
       {showSavedMessage && (
         <div className="mb-6 rounded-md bg-green-50 p-4">
           <div className="flex">
-            <div className="flex-shrink-0">
+            <div className="shrink-0">
               <svg
                 className="h-5 w-5 text-green-400"
                 xmlns="http://www.w3.org/2000/svg"

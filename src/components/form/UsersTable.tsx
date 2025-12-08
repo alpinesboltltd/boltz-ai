@@ -87,7 +87,7 @@ export default function UsersTable({
                   <tr key={user.id}>
                     <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
                       <div className="flex items-center">
-                        <div className="relative h-10 w-10 flex-shrink-0">
+                        <div className="relative h-10 w-10 shrink-0">
                           {user.avatar ? (
                             <>
                               <Image
@@ -98,11 +98,10 @@ export default function UsersTable({
                                 alt={user.name}
                               />
                               <span
-                                className={`absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-white ${
-                                  user.onlineStatus
+                                className={`absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-white ${user.onlineStatus
                                     ? "bg-green-500"
                                     : "bg-yellow-500"
-                                }`}
+                                  }`}
                               ></span>
                             </>
                           ) : (
@@ -111,11 +110,10 @@ export default function UsersTable({
                                 <UserIcon className="h-6 w-6 text-gray-400" />
                               </div>
                               <span
-                                className={`absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-white ${
-                                  user.onlineStatus
+                                className={`absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-white ${user.onlineStatus
                                     ? "bg-green-500"
                                     : "bg-yellow-500"
-                                }`}
+                                  }`}
                               ></span>
                             </>
                           )}
@@ -130,22 +128,20 @@ export default function UsersTable({
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                       <span
-                        className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${
-                          user.role === UserRoles.admin
+                        className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${user.role === UserRoles.admin
                             ? "bg-blue-100 text-blue-800"
                             : "bg-green-100 text-green-800"
-                        }`}
+                          }`}
                       >
                         {user.role === UserRoles.admin ? "Admin" : "Staff"}
                       </span>
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                       <span
-                        className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${
-                          user.status === "active"
+                        className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${user.status === "active"
                             ? "bg-green-100 text-green-800"
                             : "bg-red-100 text-red-800"
-                        }`}
+                          }`}
                       >
                         {user.status === "active" ? "Active" : "Inactive"}
                       </span>

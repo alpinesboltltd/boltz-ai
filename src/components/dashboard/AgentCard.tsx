@@ -1,8 +1,9 @@
-import { LucideIcon, MessageSquare, Trash2 } from "lucide-react";
+import { LucideIcon, MessageSquare, Trash2, MoreVertical, Zap, Star, Bot } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { AgentStatus } from "@/types/agent";
-import { Button } from "../ui/Button";
 import Image from "next/image";
+import { Menu, Transition } from "@headlessui/react";
+import { Fragment } from "react";
 
 interface AgentCardProps {
   agent: {
@@ -29,120 +30,158 @@ export function AgentCard({
   onManage,
   onHire,
 }: AgentCardProps) {
-  const IconComponent = agent.icon || MessageSquare;
+  const IconComponent = agent.icon || Bot;
 
   return (
-    <li className="group">
-      <div className="relative bg-white rounded-2xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-        {/* Status Badge - Top Right */}
-        <div className="absolute top-3 right-3 z-10">
-          <span
-            className={cn(
-              "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium",
-              agent.status === "active"
-                ? "bg-green-100 text-green-700 ring-1 ring-green-600/20"
-                : !agent.isTemplate
-                  ? "bg-yellow-100 text-yellow-700 ring-1 ring-yellow-600/20"
-                  : ""
-            )}
-          >
-            <span
-              className={cn(
-                "w-1.5 h-1.5 rounded-full",
-                agent.status === "active"
-                  ? "bg-green-600 animate-pulse"
-                  : !agent.isTemplate
-                    ? "bg-yellow-600"
-                    : ""
-              )}
-            />
-            {agent.status === "active" && "Active"}
+    <div className="group relative flex flex-col rounded-2xl bg-white border border-gray-200 shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1 overflow-hidden">
+      {/* Card Header / Image */}
+      <div className="relative h-48 overflow-hidden bg-gray-100">
+        {agent.imageUrl ? (
+          <Image
+            src={agent.imageUrl}
+            alt={agent.name}
+            fill
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+        ) : (
+          <div className="absolute inset-0 flex items-center justify-center bg-linear-to-br from-primary-50 to-primary-100/50">
+            <div className="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-gray-900/5 transition-transform duration-300 group-hover:scale-110">
+              <IconComponent className="h-10 w-10 text-primary-600" />
+            </div>
+          </div>
+        )}
+
+        {/* Status Badge */}
+        <div className="absolute top-3 left-3">
+          <span className={cn(
+            "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium shadow-sm backdrop-blur-md",
+            agent.status === "active"
+              ? "bg-green-500/10 text-green-700 ring-1 ring-green-600/20 bg-white/80"
+              : "bg-yellow-500/10 text-yellow-700 ring-1 ring-yellow-600/20 bg-white/80"
+          )}>
+            <span className={cn(
+              "h-1.5 w-1.5 rounded-full",
+              agent.status === "active" ? "bg-green-600 animate-pulse" : "bg-yellow-600"
+            )} />
+            {agent.status === "active" ? "Active" : "Draft"}
           </span>
         </div>
 
-        {/* Delete Button - Top Left */}
-        {!agent.isTemplate && (
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              onDelete(agent.id, agent.name);
-            }}
-            className="absolute top-3 left-3 z-10 p-2 bg-white/90 backdrop-blur-sm rounded-lg shadow-md opacity-0 group-hover:opacity-100 transition-all duration-200 hover:bg-red-50 hover:scale-110"
-            title="Delete agent"
-          >
-            <Trash2 className="w-4 h-4 text-gray-600 hover:text-red-600" />
-          </button>
-        )}
-
-        {/* Icon/Image Section */}
-        <div className="relative h-56 overflow-hidden flex justify-center items-center">
-          {agent.imageUrl ? (
-            <>
-              <Image
-                height={500}
-                width={500}
-                src={agent.imageUrl}
-                alt={agent.name}
-                className="absolute inset-0 object-cover h-full w-full blur-lg scale-110 opacity-30"
-              />
-              <Image
-                height={300}
-                width={300}
-                src={agent.imageUrl}
-                alt={agent.name}
-                className="relative object-contain h-36 w-36 transition-all hover:scale-110 z-10 rounded-full"
-              />
-            </>
-          ) : (
-            <div className="flex items-center justify-center h-full bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 w-full">
-              <div className="p-5 bg-white rounded-2xl shadow-sm group-hover:shadow-md transition-all group-hover:scale-110">
-                <IconComponent
-                  className="w-14 h-14 text-primary-600"
-                  strokeWidth={1.5}
-                />
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Name Section */}
-        <div className="p-4 bg-white border-t border-gray-100">
-          <p className="text-base font-semibold text-gray-900 truncate text-center mb-1">
-            {agent.name}
-          </p>
-          <p className="text-base font-semibold text-gray-500 truncate text-center mb-1">
-            {agent.description}
-          </p>
-          {agent.isTemplate && (
-            <div className="grid grid-cols-4 text-xs text-gray-600 mb-3">
-              <div className="text-center border-r-2 border-black/20 px-3">
-                <div className="font-medium">⭐ {agent.average_rating}</div>
-                <div>Rating</div>
-              </div>
-              <div className="text-center border-r-2 border-black/20 px-3">
-                <div className="font-medium">{agent.credits_per_1k}c</div>
-                <div>Per 1K</div>
-              </div>
-              <div className="text-center border-r-2 border-black/20 px-3">
-                <div className="font-medium">{agent.agent_type}</div>
-                <div>Type</div>
-              </div>
-              <div className="text-center px-3">
-                <div className="font-medium">{agent.ai_model}</div>
-                <div>Model</div>
-              </div>
-            </div>
-          )}
-          <Button
-            className="!rounded-full w-full"
-            size="sm"
-            onClick={agent.isTemplate ? onHire : onManage}
-          >
-            {agent.isTemplate ? "Hire" : "Manage"}
-          </Button>
+        {/* Actions Menu */}
+        <div className="absolute top-3 right-3">
+          <Menu as="div" className="relative inline-block text-left">
+            <Menu.Button className="flex h-8 w-8 items-center justify-center rounded-full bg-white/80 backdrop-blur-md text-gray-500 shadow-sm hover:bg-white hover:text-gray-900 transition-colors focus:outline-none">
+              <MoreVertical className="h-4 w-4" />
+            </Menu.Button>
+            <Transition
+              as={Fragment}
+              enter="transition ease-out duration-100"
+              enterFrom="transform opacity-0 scale-95"
+              enterTo="transform opacity-100 scale-100"
+              leave="transition ease-in duration-75"
+              leaveFrom="transform opacity-100 scale-100"
+              leaveTo="transform opacity-0 scale-95"
+            >
+              <Menu.Items className="absolute right-0 mt-2 w-48 origin-top-right divide-y divide-gray-100 rounded-xl bg-white shadow-lg ring-1 ring-black/5 focus:outline-none z-10">
+                <div className="px-1 py-1">
+                  <Menu.Item>
+                    {({ active }) => (
+                      <button
+                        onClick={agent.isTemplate ? onHire : onManage}
+                        className={cn(
+                          "group flex w-full items-center rounded-lg px-2 py-2 text-sm",
+                          active ? "bg-primary-50 text-primary-900" : "text-gray-900"
+                        )}
+                      >
+                        {agent.isTemplate ? (
+                          <Zap className="mr-2 h-4 w-4 text-primary-500" />
+                        ) : (
+                          <MessageSquare className="mr-2 h-4 w-4 text-primary-500" />
+                        )}
+                        {agent.isTemplate ? "Hire Agent" : "Manage Agent"}
+                      </button>
+                    )}
+                  </Menu.Item>
+                </div>
+                {!agent.isTemplate && (
+                  <div className="px-1 py-1">
+                    <Menu.Item>
+                      {({ active }) => (
+                        <button
+                          onClick={() => onDelete(agent.id, agent.name)}
+                          className={cn(
+                            "group flex w-full items-center rounded-lg px-2 py-2 text-sm",
+                            active ? "bg-red-50 text-red-900" : "text-gray-900"
+                          )}
+                        >
+                          <Trash2 className="mr-2 h-4 w-4 text-red-500" />
+                          Delete
+                        </button>
+                      )}
+                    </Menu.Item>
+                  </div>
+                )}
+              </Menu.Items>
+            </Transition>
+          </Menu>
         </div>
       </div>
-    </li>
+
+      {/* Card Content */}
+      <div className="flex flex-1 flex-col p-5">
+        <div className="flex-1">
+          <div className="flex items-center justify-between gap-2">
+            <h3 className="font-semibold text-gray-900 line-clamp-1" title={agent.name}>
+              {agent.name}
+            </h3>
+            {agent.average_rating && (
+              <div className="flex items-center gap-1 text-xs font-medium text-amber-500 bg-amber-50 px-2 py-0.5 rounded-full">
+                <Star className="h-3 w-3 fill-current" />
+                {agent.average_rating}
+              </div>
+            )}
+          </div>
+          <p className="mt-2 text-sm text-gray-500 line-clamp-2" title={agent.description}>
+            {agent.description || "No description provided."}
+          </p>
+
+          {/* Stats Grid */}
+          <div className="mt-4 grid grid-cols-2 gap-3 border-t border-gray-100 pt-4">
+            <div>
+              <p className="text-xs text-gray-400 font-medium uppercase tracking-wider">Model</p>
+              <p className="mt-0.5 text-sm font-medium text-gray-700 truncate">
+                {typeof agent.ai_model === 'object' && agent.ai_model !== null ? (agent.ai_model as any).name : agent.ai_model || "GPT-4"}
+              </p>
+            </div>
+            <div>
+              <p className="text-xs text-gray-400 font-medium uppercase tracking-wider">Type</p>
+              <p className="mt-0.5 text-sm font-medium text-gray-700 truncate">
+                {agent.agent_type || "General"}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Action Button */}
+        <div className="mt-5 pt-4 border-t border-gray-100">
+          <button
+            onClick={agent.isTemplate ? onHire : onManage}
+            className="flex w-full items-center justify-center rounded-lg bg-gray-50 px-4 py-2.5 text-sm font-medium text-gray-900 hover:bg-primary-50 hover:text-primary-700 transition-colors group-hover:bg-primary-600 group-hover:text-white"
+          >
+            {agent.isTemplate ? (
+              <>
+                <Zap className="mr-2 h-4 w-4" />
+                Hire Agent
+              </>
+            ) : (
+              <>
+                <MessageSquare className="mr-2 h-4 w-4" />
+                Open Chat
+              </>
+            )}
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }

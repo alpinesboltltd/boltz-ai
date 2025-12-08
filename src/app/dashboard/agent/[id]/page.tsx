@@ -5,12 +5,22 @@ import { use } from "react";
 import { Sources } from "@/components/dashboard/Sources";
 import { Activity } from "@/components/dashboard/Activity";
 import { ConversationLogs } from "@/components/dashboard/ConversationLogs";
-// import { Actions } from "@/components/dashboard/Actions";
 import { useDashboardStore, DetailsTab } from "@/store/dashboardStore";
 import { AgentPlayground } from "@/components/chatbot/AgentPlayground";
 import { BotCustomizer } from "@/components/chatbot/BotCustomizer";
 import { useAgentDetailStore } from "@/store/agentDetailStore";
 import { Spinner } from "@/components/common/Spinner";
+import { cn } from "@/lib/utils";
+import {
+  LayoutDashboard,
+  MessageSquare,
+  Database,
+  Palette,
+  Activity as ActivityIcon,
+  CheckCircle2,
+  AlertCircle
+} from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function AgentDetailPage({
   params,
@@ -19,7 +29,7 @@ export default function AgentDetailPage({
 }) {
   const resolvedParams = use(params);
   const agentId = resolvedParams.id;
-  
+
   const { activeTab, setActiveTab } = useDashboardStore();
   const { fetchAgentDetails, loading, error } = useAgentDetailStore();
   const [showSavedMessage, setShowSavedMessage] = useState(false);
@@ -36,123 +46,114 @@ export default function AgentDetailPage({
     setTimeout(() => setShowSavedMessage(false), 3000);
   };
 
-  // Auto-center active tab
-  useEffect(() => {
-    if (tabNavRef.current) {
-      const activeButton = tabNavRef.current.querySelector(
-        `button:nth-child(${Object.values(DetailsTab).indexOf(activeTab) + 1})`
-      ) as HTMLElement;
-
-      if (activeButton) {
-        const nav = tabNavRef.current;
-        const buttonRect = activeButton.getBoundingClientRect();
-        const navRect = nav.getBoundingClientRect();
-        const scrollLeft =
-          activeButton.offsetLeft - navRect.width / 2 + buttonRect.width / 2;
-
-        nav.scrollTo({
-          left: scrollLeft,
-          behavior: "smooth",
-        });
-      }
-    }
-  }, [activeTab]);
+  const tabs = [
+    { id: DetailsTab.PLAYGROUND, label: "Playground", icon: LayoutDashboard },
+    { id: DetailsTab.ACTIVITY, label: "Activity", icon: ActivityIcon },
+    { id: DetailsTab.CONVERSATIONS, label: "Conversations", icon: MessageSquare },
+    { id: DetailsTab.SOURCES, label: "Knowledge Base", icon: Database },
+    { id: DetailsTab.APPEARANCE, label: "Appearance", icon: Palette },
+  ];
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-64">
+      <div className="flex flex-col items-center justify-center min-h-[60vh]">
         <Spinner size="lg" />
+        <p className="mt-4 text-gray-500 font-medium animate-pulse">Loading agent details...</p>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="px-4 sm:px-6 lg:px-8 py-8">
-        <div className="max-w-md mx-auto bg-red-50 border border-red-200 rounded-lg p-6">
-          <div className="flex items-start">
-            <div className="flex-shrink-0">
-              <svg className="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-              </svg>
-            </div>
-            <div className="ml-3 flex-1">
-              <h3 className="text-sm font-medium text-red-800">Failed to load agent</h3>
-              <p className="mt-2 text-sm text-red-700">{error}</p>
-              <button
-                onClick={() => fetchAgentDetails(agentId)}
-                className="mt-4 text-sm font-medium text-red-600 hover:text-red-500"
-              >
-                Try again
-              </button>
-            </div>
+      <div className="px-4 sm:px-6 lg:px-8 py-12">
+        <div className="max-w-md mx-auto bg-red-50 border border-red-200 rounded-2xl p-8 text-center">
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-red-100 mb-4">
+            <AlertCircle className="h-6 w-6 text-red-600" />
           </div>
+          <h3 className="text-lg font-semibold text-red-900 mb-2">Failed to load agent</h3>
+          <p className="text-sm text-red-600 mb-6">{error}</p>
+          <button
+            onClick={() => fetchAgentDetails(agentId)}
+            className="btn btn-primary"
+          >
+            Try again
+          </button>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="px-4 sm:px-6 lg:px-8 pb-8">
+    <div className="px-4 sm:px-6 lg:px-8 pb-8 animate-fade-in">
       {/* Tabs */}
-      <div className="border-b border-gray-200">
+      <div className="sticky top-0 z-20 bg-gray-50/95 backdrop-blur-sm border-b border-gray-200 pt-4 mb-6">
         <nav
           ref={tabNavRef}
           className="-mb-px flex space-x-8 overflow-x-auto scrollbar-hide"
           aria-label="Tabs"
         >
-          {Object.values(DetailsTab).map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab as DetailsTab)}
-              className={`${
-                activeTab === tab
-                  ? "border-primary-500 text-primary-600"
-                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-              } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm capitalize flex-shrink-0`}
-            >
-              {tab}
-            </button>
-          ))}
+          {tabs.map((tab) => {
+            const Icon = tab.icon;
+            const isActive = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id as DetailsTab)}
+                className={cn(
+                  "group inline-flex items-center py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap transition-all duration-200",
+                  isActive
+                    ? "border-primary-500 text-primary-600"
+                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                )}
+              >
+                <Icon className={cn(
+                  "mr-2 h-5 w-5 transition-colors",
+                  isActive ? "text-primary-500" : "text-gray-400 group-hover:text-gray-500"
+                )} />
+                {tab.label}
+              </button>
+            );
+          })}
         </nav>
       </div>
-      {/* // FIXME: Abstract into its own components */}
-      {showSavedMessage && (
-        <div className="mb-6 rounded-md bg-green-50 p-4">
-          <div className="flex">
-            <div className="flex-shrink-0">
-              <svg
-                className="h-5 w-5 text-green-400"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                  clipRule="evenodd"
-                />
-              </svg>
+
+      <AnimatePresence>
+        {showSavedMessage && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="fixed top-24 right-8 z-50 bg-green-50 border border-green-200 rounded-xl p-4 shadow-lg flex items-center gap-3"
+          >
+            <div className="shrink-0">
+              <CheckCircle2 className="h-5 w-5 text-green-500" />
             </div>
-            <div className="ml-3">
-              <p className="text-sm font-medium text-green-800">
-                Customization saved successfully!
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
-      {/* Tab Content */}
-      <div className="mt-3">
-        {activeTab === DetailsTab.PLAYGROUND && <AgentPlayground />}
-        {activeTab === DetailsTab.ACTIVITY && <Activity />}
-        {activeTab === DetailsTab.CONVERSATIONS && <ConversationLogs />}
-        {activeTab === DetailsTab.SOURCES && <Sources />}
-        {/* NOTE: This is a future feature. Do not uncomment */}
-        {/* {activeTab === DetailsTab.ACTION && <Actions />} */}
-        {activeTab === DetailsTab.APPEARANCE && (
-          <BotCustomizer onSave={handleSaveConfig} />
+            <p className="text-sm font-medium text-green-800">
+              Changes saved successfully!
+            </p>
+          </motion.div>
         )}
+      </AnimatePresence>
+
+      {/* Tab Content */}
+      <div className="mt-6 min-h-[500px]">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeTab}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2 }}
+          >
+            {activeTab === DetailsTab.PLAYGROUND && <AgentPlayground />}
+            {activeTab === DetailsTab.ACTIVITY && <Activity />}
+            {activeTab === DetailsTab.CONVERSATIONS && <ConversationLogs />}
+            {activeTab === DetailsTab.SOURCES && <Sources />}
+            {activeTab === DetailsTab.APPEARANCE && (
+              <BotCustomizer onSave={handleSaveConfig} />
+            )}
+          </motion.div>
+        </AnimatePresence>
       </div>
     </div>
   );

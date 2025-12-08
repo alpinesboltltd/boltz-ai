@@ -100,7 +100,7 @@ export function Features() {
 
         <div className="grid md:grid-cols-2 gap-8 mt-12">
           <div className="flex items-start gap-4">
-            <div className="flex-shrink-0">
+            <div className="shrink-0">
               <SparklesIcon className="w-6 h-6 text-primary-600" />
             </div>
             <div>
@@ -111,7 +111,7 @@ export function Features() {
             </div>
           </div>
           <div className="flex items-start gap-4">
-            <div className="flex-shrink-0">
+            <div className="shrink-0">
               <SparklesIcon className="w-6 h-6 text-primary-600" />
             </div>
             <div>

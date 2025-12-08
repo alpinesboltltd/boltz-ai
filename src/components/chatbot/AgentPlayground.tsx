@@ -248,7 +248,7 @@ export function AgentPlayground() {
         alt={data.provider}
         width={20}
         height={20}
-        className="mr-3 flex-shrink-0"
+        className="mr-3 shrink-0"
       />
       <div className="min-w-0">
         <div className="font-medium text-sm truncate">{data.name}</div>

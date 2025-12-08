@@ -9,13 +9,28 @@ import { Profile, UserRoles } from "@/types";
 import { Switch } from "@headlessui/react";
 import { toast } from "@/store/toastStore";
 import { authAPI } from "@/lib/api";
+import {
+  User,
+  Bell,
+  CreditCard,
+  Key,
+  Building,
+  Mail,
+  Shield,
+  Check,
+  Copy,
+  RefreshCw,
+  Trash2,
+  Plus
+} from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export default function SettingsPage() {
   const user = useCurrentUser();
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("profile");
   const [liveMode, setLiveMode] = useState<boolean>(false);
-  // Mock user data
+
   const [userData, setUserData] = useState<
     Profile & {
       notifications: { email: boolean; push: boolean; marketing: boolean };
@@ -38,7 +53,6 @@ export default function SettingsPage() {
     },
   });
 
-  // Mock payment methods
   const [paymentMethods, setPaymentMethods] = useState([
     {
       id: "card_1",
@@ -58,7 +72,6 @@ export default function SettingsPage() {
     },
   ]);
 
-  // Mock subscription data
   const [subscription] = useState({
     plan: "Pro",
     price: "$29/month",
@@ -66,7 +79,7 @@ export default function SettingsPage() {
     nextBillingDate: "2023-12-01",
     features: [
       "10,000 messages per month",
-      "Advanced chatagent customization",
+      "Advanced agent customization",
       "Website & WhatsApp integration",
       "All AI models (Gemini, GPT-4, Claude)",
       "Knowledge base integration",
@@ -77,14 +90,12 @@ export default function SettingsPage() {
 
   const handleProfileSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Profile update is not yet supported by the backend
     toast.info("Coming Soon", "Profile update is currently disabled.");
   };
 
   const handleNotificationChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = e.target;
 
-    // Only email notifications (OTP) are supported via API for now
     if (name === "email") {
       try {
         if (checked) {
@@ -97,7 +108,7 @@ export default function SettingsPage() {
       } catch (error) {
         console.error("Failed to update OTP settings:", error);
         toast.error("Error", "Failed to update OTP settings");
-        return; // Don't update state if API call failed
+        return;
       }
     }
 
@@ -112,26 +123,17 @@ export default function SettingsPage() {
 
   const handleSetDefaultPaymentMethod = async (id: string) => {
     setLoading(true);
-
     try {
-      // In production, this would call the real API
-      // await fetch(`/api/payment-methods/${id}/default`, { method: 'PUT' });
-
-      // For development, simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
-
       setPaymentMethods((prev) =>
         prev.map((method) => ({
           ...method,
           isDefault: method.id === id,
         }))
       );
-      toast.success(
-        "Payment Method Updated",
-        "Default payment method has been updated"
-      );
+      toast.success("Updated", "Default payment method updated");
     } catch {
-      toast.error("Update Failed", "Failed to set default payment method");
+      toast.error("Failed", "Could not update payment method");
     } finally {
       setLoading(false);
     }
@@ -139,21 +141,12 @@ export default function SettingsPage() {
 
   const handleRemovePaymentMethod = async (id: string) => {
     setLoading(true);
-
     try {
-      // In production, this would call the real API
-      // await fetch(`/api/payment-methods/${id}`, { method: 'DELETE' });
-
-      // For development, simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
-
       setPaymentMethods((prev) => prev.filter((method) => method.id !== id));
-      toast.success(
-        "Payment Method Removed",
-        "Payment method has been removed successfully"
-      );
+      toast.success("Removed", "Payment method removed successfully");
     } catch {
-      toast.error("Removal Failed", "Failed to remove payment method");
+      toast.error("Failed", "Could not remove payment method");
     } finally {
       setLoading(false);
     }
@@ -161,15 +154,8 @@ export default function SettingsPage() {
 
   const handleRegenerateApiKey = async () => {
     setLoading(true);
-
     try {
-      // In production, this would call the real API
-      // const response = await fetch('/api/user/api-key', { method: 'POST' });
-      // const data = await response.json();
-
-      // For development, simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
-
       setUserData((prev) => ({
         ...prev,
         api_key: {
@@ -181,553 +167,379 @@ export default function SettingsPage() {
             : userData.api_key.test_key,
         },
       }));
-      toast.success(
-        "API Key Regenerated",
-        "Your API key has been regenerated successfully"
-      );
+      toast.success("Regenerated", "API key regenerated successfully");
     } catch {
-      toast.error("Regeneration Failed", "Failed to regenerate API key");
+      toast.error("Failed", "Could not regenerate API key");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="px-4 sm:px-6 lg:px-8 py-8">
-      <div className="sm:flex sm:items-center">
-        <div className="sm:flex-auto">
-          <h1 className="text-2xl font-semibold text-gray-900">Settings</h1>
-          <p className="mt-2 text-sm text-gray-700">
-            Manage your account settings, payment methods, and subscription.
-          </p>
-        </div>
+    <div className="px-4 sm:px-6 lg:px-8 py-8 animate-fade-in max-w-7xl mx-auto">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Settings</h1>
+        <p className="mt-2 text-gray-500">
+          Manage your account, billing, and API preferences.
+        </p>
       </div>
 
-      <div className="mt-8">
-        <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="mb-6">
-            <TabsTrigger value="profile">Profile</TabsTrigger>
-            <TabsTrigger value="notifications">Notifications</TabsTrigger>
-            <TabsTrigger value="billing">Billing</TabsTrigger>
-            <TabsTrigger value="api">API</TabsTrigger>
-          </TabsList>
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-8">
+        <TabsList className="bg-white/50 backdrop-blur-sm p-1 rounded-xl border border-gray-200 inline-flex">
+          {[
+            { id: "profile", label: "Profile", icon: User },
+            { id: "notifications", label: "Notifications", icon: Bell },
+            { id: "billing", label: "Billing", icon: CreditCard },
+            { id: "api", label: "API Access", icon: Key },
+          ].map((tab) => (
+            <TabsTrigger
+              key={tab.id}
+              value={tab.id}
+              className={cn(
+                "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all",
+                activeTab === tab.id
+                  ? "bg-white text-primary-600 shadow-sm ring-1 ring-black/5"
+                  : "text-gray-500 hover:text-gray-700 hover:bg-gray-100/50"
+              )}
+            >
+              <tab.icon className="w-4 h-4" />
+              {tab.label}
+            </TabsTrigger>
+          ))}
+        </TabsList>
 
-          <TabsContent value="profile">
-            <div className="bg-white shadow rounded-lg">
-              <div className="px-4 py-5 sm:p-6">
-                <h3 className="text-lg font-medium leading-6 text-gray-900">
-                  Profile Information
-                </h3>
-                <p className="mt-1 text-sm text-gray-500">
-                  Update your account information and profile details.
-                </p>
+        <TabsContent value="profile" className="space-y-6">
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+            <div className="p-6 sm:p-8 border-b border-gray-100">
+              <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                <User className="w-5 h-5 text-primary-500" />
+                Profile Information
+              </h3>
+              <p className="mt-1 text-sm text-gray-500">Update your personal details and company info.</p>
+            </div>
 
-                <form onSubmit={handleProfileSubmit} className="mt-6 space-y-6">
-                  <div className="flex items-center">
-                    <div className="h-20 w-20 rounded-full overflow-hidden bg-gray-100">
-                      <Image
-                        width={40}
-                        height={40}
-                        src={userData.avatar || "hello world"} //FIXME: Default avater image for users
-                        alt="Profile"
-                        className="h-full w-full object-cover"
+            <div className="p-6 sm:p-8">
+              <form onSubmit={handleProfileSubmit} className="space-y-8">
+                <div className="flex items-center gap-6">
+                  <div className="relative h-24 w-24 rounded-full overflow-hidden bg-gray-100 ring-4 ring-white shadow-lg">
+                    <Image
+                      src={userData.avatar || "/images/logo.webp"}
+                      alt="Profile"
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    className="btn btn-secondary text-sm"
+                  >
+                    Change Avatar
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-gray-700">Full Name</label>
+                    <div className="relative">
+                      <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                      <input
+                        type="text"
+                        value={userData.name || "Admin"}
+                        onChange={(e) => setUserData({ ...userData, name: e.target.value })}
+                        className="input pl-10 w-full"
                       />
                     </div>
-                    <div className="ml-5">
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-gray-700">Email Address</label>
+                    <div className="relative">
+                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                      <input
+                        type="email"
+                        value={userData.email!}
+                        disabled
+                        className="input pl-10 w-full bg-gray-50 text-gray-500 cursor-not-allowed"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-gray-700">Company</label>
+                    <div className="relative">
+                      <Building className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                      <input
+                        type="text"
+                        value={userData.company}
+                        onChange={(e) => setUserData({ ...userData, company: e.target.value })}
+                        className="input pl-10 w-full"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-gray-700">Role</label>
+                    <div className="relative">
+                      <Shield className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                      <input
+                        type="text"
+                        value={userData.role}
+                        onChange={(e) => setUserData({ ...userData, role: e.target.value as UserRoles })}
+                        className="input pl-10 w-full"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex justify-end pt-4 border-t border-gray-100">
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="btn btn-primary"
+                  >
+                    {loading ? <Spinner size="sm" color="white" /> : "Save Changes"}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="notifications" className="space-y-6">
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+            <div className="p-6 sm:p-8 border-b border-gray-100">
+              <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                <Bell className="w-5 h-5 text-primary-500" />
+                Notification Preferences
+              </h3>
+              <p className="mt-1 text-sm text-gray-500">Choose how you want to be notified.</p>
+            </div>
+
+            <div className="p-6 sm:p-8 space-y-6">
+              {[
+                {
+                  id: "email",
+                  label: "Email Notifications",
+                  desc: "Receive updates about agent activity and important alerts.",
+                },
+                {
+                  id: "push",
+                  label: "Push Notifications",
+                  desc: "Get real-time browser alerts for immediate updates.",
+                },
+                {
+                  id: "marketing",
+                  label: "Marketing Emails",
+                  desc: "Stay updated with new features and promotions.",
+                },
+              ].map((item) => (
+                <div key={item.id} className="flex items-start justify-between p-4 rounded-xl hover:bg-gray-50 transition-colors border border-transparent hover:border-gray-100">
+                  <div>
+                    <label htmlFor={item.id} className="font-medium text-gray-900 block mb-1">
+                      {item.label}
+                    </label>
+                    <p className="text-sm text-gray-500">{item.desc}</p>
+                  </div>
+                  <div className="flex items-center h-6">
+                    <input
+                      id={item.id}
+                      name={item.id}
+                      type="checkbox"
+                      checked={userData.notifications[item.id as keyof typeof userData.notifications]}
+                      onChange={handleNotificationChange}
+                      className="h-5 w-5 text-primary-600 rounded border-gray-300 focus:ring-primary-500 transition-all cursor-pointer"
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="billing" className="space-y-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Current Plan */}
+            <div className="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+              <div className="p-6 sm:p-8 border-b border-gray-100 flex justify-between items-center">
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                    <CreditCard className="w-5 h-5 text-primary-500" />
+                    Current Plan
+                  </h3>
+                  <p className="mt-1 text-sm text-gray-500">You are currently on the <span className="font-medium text-gray-900">{subscription.plan}</span> plan.</p>
+                </div>
+                <span className="px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700 border border-green-200 uppercase tracking-wide">
+                  {subscription.status}
+                </span>
+              </div>
+
+              <div className="p-6 sm:p-8">
+                <div className="flex items-baseline gap-2 mb-6">
+                  <span className="text-4xl font-bold text-gray-900">{subscription.price}</span>
+                </div>
+
+                <div className="space-y-4 mb-8">
+                  {subscription.features.map((feature, idx) => (
+                    <div key={idx} className="flex items-center gap-3 text-sm text-gray-600">
+                      <div className="shrink-0 w-5 h-5 rounded-full bg-green-50 flex items-center justify-center">
+                        <Check className="w-3 h-3 text-green-600" />
+                      </div>
+                      {feature}
+                    </div>
+                  ))}
+                </div>
+
+                <div className="flex gap-3">
+                  <button className="btn btn-primary">Upgrade Plan</button>
+                  <button className="btn btn-ghost text-red-600 hover:text-red-700 hover:bg-red-50">Cancel Subscription</button>
+                </div>
+              </div>
+            </div>
+
+            {/* Payment Methods */}
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden flex flex-col">
+              <div className="p-6 border-b border-gray-100">
+                <h3 className="text-lg font-semibold text-gray-900">Payment Methods</h3>
+              </div>
+
+              <div className="p-6 flex-1 flex flex-col gap-4">
+                {paymentMethods.map((method) => (
+                  <div key={method.id} className="flex items-center justify-between p-4 rounded-xl border border-gray-200 bg-gray-50/50">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-6 bg-white border border-gray-200 rounded flex items-center justify-center">
+                        <span className={cn(
+                          "text-xs font-bold",
+                          method.brand === "visa" ? "text-blue-600" : "text-red-600"
+                        )}>
+                          {method.brand === "visa" ? "VISA" : "MC"}
+                        </span>
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-gray-900">•••• {method.last4}</p>
+                        <p className="text-xs text-gray-500">Exp {method.expMonth}/{method.expYear}</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      {method.isDefault ? (
+                        <span className="text-xs font-medium text-green-600 bg-green-50 px-2 py-1 rounded-full">Default</span>
+                      ) : (
+                        <button
+                          onClick={() => handleSetDefaultPaymentMethod(method.id)}
+                          className="text-xs font-medium text-primary-600 hover:text-primary-700"
+                        >
+                          Set Default
+                        </button>
+                      )}
                       <button
-                        type="button"
-                        className="bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+                        onClick={() => handleRemovePaymentMethod(method.id)}
+                        className="p-1 text-gray-400 hover:text-red-600 transition-colors"
                       >
-                        Change
+                        <Trash2 className="w-4 h-4" />
                       </button>
                     </div>
                   </div>
+                ))}
 
-                  <div className="grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
-                    <div>
-                      <label
-                        htmlFor="name"
-                        className="block text-sm font-medium text-gray-700"
-                      >
-                        Name
-                      </label>
-                      <input
-                        type="text"
-                        name="name"
-                        id="name"
-                        value={userData.name || "Admin"}
-                        onChange={(e) =>
-                          setUserData({ ...userData, name: e.target.value })
-                        }
-                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
-                      />
-                    </div>
-
-                    <div>
-                      <label
-                        htmlFor="email"
-                        className="block text-sm font-medium text-gray-700"
-                      >
-                        Email
-                      </label>
-                      <input
-                        type="email"
-                        name="email"
-                        id="email"
-                        value={userData.email!}
-                        disabled
-                        onChange={(e) =>
-                          setUserData({ ...userData, email: e.target.value })
-                        }
-                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
-                      />
-                    </div>
-
-                    <div>
-                      <label
-                        htmlFor="company"
-                        className="block text-sm font-medium text-gray-700"
-                      >
-                        Company
-                      </label>
-                      <input
-                        type="text"
-                        name="company"
-                        id="company"
-                        value={userData.company}
-                        onChange={(e) =>
-                          setUserData({ ...userData, company: e.target.value })
-                        }
-                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
-                      />
-                    </div>
-
-                    <div>
-                      <label
-                        htmlFor="role"
-                        className="block text-sm font-medium text-gray-700"
-                      >
-                        Role
-                      </label>
-                      {/* FIXME:change to drop down option */}
-                      <input
-                        type="text"
-                        name="role"
-                        id="role"
-                        value={userData.role}
-                        onChange={(e) =>
-                          setUserData({
-                            ...userData,
-                            role: e.target.value as UserRoles,
-                          })
-                        }
-                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="flex justify-end">
-                    <button
-                      type="submit"
-                      disabled={loading}
-                      className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50"
-                    >
-                      {loading ? (
-                        <Spinner size="sm" color="white" />
-                      ) : (
-                        "Save Changes"
-                      )}
-                    </button>
-                  </div>
-                </form>
+                <button className="mt-auto w-full btn btn-secondary flex items-center justify-center gap-2">
+                  <Plus className="w-4 h-4" /> Add Payment Method
+                </button>
               </div>
             </div>
-          </TabsContent>
+          </div>
+        </TabsContent>
 
-          <TabsContent value="notifications">
-            <div className="bg-white shadow rounded-lg">
-              <div className="px-4 py-5 sm:p-6">
-                <h3 className="text-lg font-medium leading-6 text-gray-900">
-                  Notification Settings
-                </h3>
-                <p className="mt-1 text-sm text-gray-500">
-                  Manage how and when you receive notifications.
-                </p>
-
-                <div className="mt-6 space-y-6">
-                  <div className="flex items-start">
-                    <div className="flex items-center h-5">
-                      <input
-                        id="email-notifications"
-                        name="email"
-                        type="checkbox"
-                        checked={userData.notifications.email}
-                        onChange={handleNotificationChange}
-                        className="focus:ring-primary-500 h-4 w-4 text-primary-600 border-gray-300 rounded"
-                      />
-                    </div>
-                    <div className="ml-3 text-sm">
-                      <label
-                        htmlFor="email-notifications"
-                        className="font-medium text-gray-700"
-                      >
-                        Email notifications
-                      </label>
-                      <p className="text-gray-500">
-                        Receive notifications about chatagent activity, updates,
-                        and important alerts via email.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start">
-                    <div className="flex items-center h-5">
-                      <input
-                        id="push-notifications"
-                        name="push"
-                        type="checkbox"
-                        checked={userData.notifications.push}
-                        onChange={handleNotificationChange}
-                        className="focus:ring-primary-500 h-4 w-4 text-primary-600 border-gray-300 rounded"
-                      />
-                    </div>
-                    <div className="ml-3 text-sm">
-                      <label
-                        htmlFor="push-notifications"
-                        className="font-medium text-gray-700"
-                      >
-                        Push notifications
-                      </label>
-                      <p className="text-gray-500">
-                        Receive browser push notifications for real-time alerts
-                        and updates.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start">
-                    <div className="flex items-center h-5">
-                      <input
-                        id="marketing-notifications"
-                        name="marketing"
-                        type="checkbox"
-                        checked={userData.notifications.marketing}
-                        onChange={handleNotificationChange}
-                        className="focus:ring-primary-500 h-4 w-4 text-primary-600 border-gray-300 rounded"
-                      />
-                    </div>
-                    <div className="ml-3 text-sm">
-                      <label
-                        htmlFor="marketing-notifications"
-                        className="font-medium text-gray-700"
-                      >
-                        Marketing emails
-                      </label>
-                      <p className="text-gray-500">
-                        Receive updates about new features, promotions, and
-                        other marketing communications.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex justify-end">
-                    <button
-                      type="button"
-                      onClick={() =>
-                        toast.success(
-                          "Preferences Saved",
-                          "Your notification preferences have been updated"
-                        )
-                      }
-                      className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
-                    >
-                      Save Preferences
-                    </button>
-                  </div>
-                </div>
-              </div>
+        <TabsContent value="api" className="space-y-6">
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+            <div className="p-6 sm:p-8 border-b border-gray-100">
+              <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                <Key className="w-5 h-5 text-primary-500" />
+                API Configuration
+              </h3>
+              <p className="mt-1 text-sm text-gray-500">Manage your API keys for integration.</p>
             </div>
-          </TabsContent>
 
-          <TabsContent value="billing">
-            <div className="space-y-6">
-              <div className="bg-white shadow rounded-lg">
-                <div className="px-4 py-5 sm:p-6">
-                  <h3 className="text-lg font-medium leading-6 text-gray-900">
-                    Current Subscription
-                  </h3>
-
-                  <div className="mt-5 border-t border-gray-200 pt-5">
-                    <dl className="divide-y divide-gray-200">
-                      <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">
-                        <dt className="text-sm font-medium text-gray-500">
-                          Plan
-                        </dt>
-                        <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                          {subscription.plan}
-                        </dd>
-                      </div>
-                      <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">
-                        <dt className="text-sm font-medium text-gray-500">
-                          Price
-                        </dt>
-                        <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                          {subscription.price}
-                        </dd>
-                      </div>
-                      <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">
-                        <dt className="text-sm font-medium text-gray-500">
-                          Status
-                        </dt>
-                        <dd className="mt-1 text-sm sm:mt-0 sm:col-span-2">
-                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                            {subscription.status}
-                          </span>
-                        </dd>
-                      </div>
-                      <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">
-                        <dt className="text-sm font-medium text-gray-500">
-                          Next billing date
-                        </dt>
-                        <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                          {subscription.nextBillingDate}
-                        </dd>
-                      </div>
-                      <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">
-                        <dt className="text-sm font-medium text-gray-500">
-                          Features
-                        </dt>
-                        <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                          <ul className="border border-gray-200 rounded-md divide-y divide-gray-200">
-                            {subscription.features.map((feature, index) => (
-                              <li
-                                key={index}
-                                className="pl-3 pr-4 py-3 flex items-center justify-start text-sm"
-                              >
-                                <svg
-                                  className="flex-shrink-0 h-5 w-5 text-green-500"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  viewBox="0 0 20 20"
-                                  fill="currentColor"
-                                >
-                                  <path
-                                    fillRule="evenodd"
-                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                    clipRule="evenodd"
-                                  />
-                                </svg>
-                                <span className="ml-2 truncate">{feature}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        </dd>
-                      </div>
-                    </dl>
-                  </div>
-
-                  <div className="mt-6 flex space-x-3">
-                    <button
-                      type="button"
-                      className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
-                    >
-                      Upgrade Plan
-                    </button>
-                    <button
-                      type="button"
-                      className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
-                    >
-                      Cancel Subscription
-                    </button>
-                  </div>
+            <div className="p-6 sm:p-8 space-y-8">
+              <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl border border-gray-200">
+                <div>
+                  <h4 className="text-sm font-medium text-gray-900">Environment Mode</h4>
+                  <p className="text-xs text-gray-500 mt-1">Toggle between Test and Live API keys.</p>
                 </div>
-              </div>
-
-              <div className="bg-white shadow rounded-lg">
-                <div className="px-4 py-5 sm:p-6">
-                  <h3 className="text-lg font-medium leading-6 text-gray-900">
-                    Payment Methods
-                  </h3>
-
-                  <div className="mt-5 space-y-4">
-                    {paymentMethods.map((method) => (
-                      <div
-                        key={method.id}
-                        className="flex items-center justify-between p-4 border border-gray-200 rounded-md"
-                      >
-                        <div className="flex items-center">
-                          <div className="flex-shrink-0">
-                            {method.brand === "visa" && (
-                              <span className="text-blue-600 font-bold">
-                                VISA
-                              </span>
-                            )}
-                            {method.brand === "mastercard" && (
-                              <span className="text-red-600 font-bold">MC</span>
-                            )}
-                          </div>
-                          <div className="ml-4">
-                            <p className="text-sm font-medium text-gray-900">
-                              •••• •••• •••• {method.last4}
-                            </p>
-                            <p className="text-sm text-gray-500">
-                              Expires {method.expMonth}/{method.expYear}
-                            </p>
-                          </div>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          {method.isDefault ? (
-                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                              Default
-                            </span>
-                          ) : (
-                            <button
-                              type="button"
-                              onClick={() =>
-                                handleSetDefaultPaymentMethod(method.id)
-                              }
-                              className="text-sm text-primary-600 hover:text-primary-500"
-                            >
-                              Set as default
-                            </button>
-                          )}
-                          <button
-                            type="button"
-                            onClick={() => handleRemovePaymentMethod(method.id)}
-                            className="text-sm text-red-600 hover:text-red-500"
-                          >
-                            Remove
-                          </button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="mt-6">
-                    <button
-                      type="button"
-                      className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
-                    >
-                      Add Payment Method
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </TabsContent>
-
-          <TabsContent value="api">
-            <div className="bg-white shadow rounded-lg">
-              <div className="px-4 py-5 sm:p-6">
-                <h3 className="text-lg font-medium leading-6 text-gray-900">
-                  API Access
-                </h3>
-                <p className="mt-1 text-sm text-gray-500">
-                  Manage your API keys and access tokens for integrating with
-                  our platform.
-                </p>
-
-                <div className="mt-6">
-                  <div className="flex justify-start items-center gap-4">
-                    <label
-                      htmlFor="api-key"
-                      className="block text-sm font-medium text-gray-700"
-                    >
-                      API Key
-                    </label>
-                    <Switch onClick={() => setLiveMode(!liveMode)}>
-                      {liveMode ? "Test keys" : "Live keys"}
-                    </Switch>
-                  </div>
-                  <div className="mt-1 flex rounded-md shadow-sm">
-                    {liveMode ? (
-                      <input
-                        type="text"
-                        name="api-key"
-                        id="api-key"
-                        value={userData.api_key.live_key}
-                        readOnly
-                        className="flex-1 min-w-0 block w-full px-3 py-2 rounded-none rounded-l-md focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300"
-                      />
-                    ) : (
-                      <input
-                        type="text"
-                        name="api-key"
-                        id="api-key"
-                        value={userData.api_key.test_key}
-                        readOnly
-                        className="flex-1 min-w-0 block w-full px-3 py-2 rounded-none rounded-l-md focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300"
-                      />
+                <div className="flex items-center gap-3">
+                  <span className={cn("text-sm font-medium", !liveMode ? "text-primary-600" : "text-gray-500")}>Test</span>
+                  <Switch
+                    checked={liveMode}
+                    onChange={setLiveMode}
+                    className={cn(
+                      liveMode ? "bg-primary-600" : "bg-gray-200",
+                      "relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
                     )}
-                    <button
-                      type="button"
-                      onClick={async () => {
-                        try {
-                          await navigator.clipboard.writeText(
-                            liveMode
-                              ? userData.api_key.live_key
-                              : userData.api_key.test_key
-                          );
-                          toast.success(
-                            "Copied!",
-                            "API key copied to clipboard"
-                          );
-                        } catch (err) {
-                          toast.error(
-                            "Copy Failed",
-                            err instanceof Error
-                              ? err.message
-                              : "Failed to copy API key. Please copy manually."
-                          );
-                        }
-                      }}
-                      className="inline-flex items-center px-3 py-2 border border-l-0 border-gray-300 bg-gray-50 text-gray-500 rounded-r-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
-                    >
-                      Copy
-                    </button>
-                  </div>
+                  >
+                    <span
+                      className={cn(
+                        liveMode ? "translate-x-6" : "translate-x-1",
+                        "inline-block h-4 w-4 transform rounded-full bg-white transition-transform"
+                      )}
+                    />
+                  </Switch>
+                  <span className={cn("text-sm font-medium", liveMode ? "text-primary-600" : "text-gray-500")}>Live</span>
                 </div>
+              </div>
 
-                <div className="mt-6">
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">API Key</label>
+                <div className="flex gap-2">
+                  <div className="relative flex-1">
+                    <input
+                      type="text"
+                      readOnly
+                      value={liveMode ? userData.api_key.live_key : userData.api_key.test_key}
+                      className="input w-full font-mono text-sm bg-gray-50 text-gray-600"
+                    />
+                  </div>
                   <button
-                    type="button"
+                    onClick={async () => {
+                      try {
+                        await navigator.clipboard.writeText(
+                          liveMode ? userData.api_key.live_key : userData.api_key.test_key
+                        );
+                        toast.success("Copied", "API key copied to clipboard");
+                      } catch {
+                        toast.error("Failed", "Could not copy API key");
+                      }
+                    }}
+                    className="btn btn-secondary px-4"
+                  >
+                    <Copy className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+
+              <div className="pt-6 border-t border-gray-100">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h4 className="text-sm font-medium text-gray-900">Regenerate Key</h4>
+                    <p className="text-xs text-gray-500 mt-1 max-w-md">
+                      This will invalidate your current key immediately. Make sure to update your applications.
+                    </p>
+                  </div>
+                  <button
                     onClick={handleRegenerateApiKey}
                     disabled={loading}
-                    className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50"
+                    className="btn btn-ghost text-red-600 hover:text-red-700 hover:bg-red-50"
                   >
-                    {loading ? (
-                      <Spinner size="sm" color="white" />
-                    ) : (
-                      "Regenerate API Key"
+                    {loading ? <Spinner size="sm" /> : (
+                      <span className="flex items-center gap-2">
+                        <RefreshCw className="w-4 h-4" /> Regenerate
+                      </span>
                     )}
                   </button>
-                  <p className="mt-2 text-sm text-gray-500">
-                    Regenerating your API key will invalidate your existing key.
-                    Make sure to update any applications using the old key.
-                  </p>
-                </div>
-
-                <div className="mt-8 border-t border-gray-200 pt-6">
-                  <h4 className="text-sm font-medium text-gray-900">
-                    API Documentation
-                  </h4>
-                  <p className="mt-1 text-sm text-gray-500">
-                    Learn how to integrate with our API and build custom
-                    applications.
-                  </p>
-                  <div className="mt-4">
-                    <a
-                      href="#"
-                      className="text-sm font-medium text-primary-600 hover:text-primary-500"
-                    >
-                      View API Documentation →
-                    </a>
-                  </div>
                 </div>
               </div>
             </div>
-          </TabsContent>
-        </Tabs>
-      </div>
+          </div>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

@@ -55,7 +55,7 @@ export default function ChatInterface({
   avatarStyle = "default",
   avatarImage,
   isOpen = true,
-  onClose = () => {},
+  onClose = () => { },
   darkMode = false,
   fontFamily = "Inter, sans-serif",
   position = "bottom-right",
@@ -420,19 +420,19 @@ export default function ChatInterface({
 
   const darkModeStyles = darkMode
     ? {
-        header: "bg-gray-900 text-white",
-        messageArea: "bg-gray-800",
-        userMessage: primaryColor,
-        botMessage: "bg-gray-700 text-white border-gray-600",
-        input: "bg-gray-700 text-white border-gray-600",
-      }
+      header: "bg-gray-900 text-white",
+      messageArea: "bg-gray-800",
+      userMessage: primaryColor,
+      botMessage: "bg-gray-700 text-white border-gray-600",
+      input: "bg-gray-700 text-white border-gray-600",
+    }
     : {
-        header: primaryColor,
-        messageArea: secondaryColor,
-        userMessage: primaryColor,
-        botMessage: "bg-white text-gray-800 border-gray-200",
-        input: "bg-white text-gray-800 border-gray-300",
-      };
+      header: primaryColor,
+      messageArea: secondaryColor,
+      userMessage: primaryColor,
+      botMessage: "bg-white text-gray-800 border-gray-200",
+      input: "bg-white text-gray-800 border-gray-300",
+    };
 
   return (
     <div
@@ -478,21 +478,19 @@ export default function ChatInterface({
         {messages.map((message) => (
           <div
             key={message.id}
-            className={`mb-4 flex ${
-              message.sender === "user" ? "justify-end" : "justify-start"
-            }`}
+            className={`mb-4 flex ${message.sender === "user" ? "justify-end" : "justify-start"
+              }`}
           >
             {message.sender === "bot" && avatarStyle !== "none" && (
-              <div className="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center mr-2 flex-shrink-0 overflow-hidden">
+              <div className="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center mr-2 shrink-0 overflow-hidden">
                 {getAvatarContent()}
               </div>
             )}
             <div
-              className={`px-4 py-2 rounded-lg max-w-[75%] ${
-                message.sender === "user"
+              className={`px-4 py-2 rounded-lg max-w-[75%] ${message.sender === "user"
                   ? "text-white"
                   : darkModeStyles.botMessage
-              }`}
+                }`}
               style={{
                 backgroundColor:
                   message.sender === "user"
@@ -699,7 +697,7 @@ export default function ChatInterface({
               </p>
             </div>
             {message.sender === "user" && (
-              <div className="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center ml-2 flex-shrink-0">
+              <div className="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center ml-2 shrink-0">
                 <span className="text-sm">👤</span>
               </div>
             )}
@@ -708,7 +706,7 @@ export default function ChatInterface({
         {isTyping && (
           <div className="flex justify-start mb-4">
             {avatarStyle !== "none" && (
-              <div className="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center mr-2 flex-shrink-0 overflow-hidden">
+              <div className="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center mr-2 shrink-0 overflow-hidden">
                 {getAvatarContent()}
               </div>
             )}
@@ -750,11 +748,10 @@ export default function ChatInterface({
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             placeholder="Type your message..."
-            className={`flex-1 border rounded-lg mx-2 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent ${
-              darkMode
+            className={`flex-1 border rounded-lg mx-2 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent ${darkMode
                 ? "bg-gray-700 text-white border-gray-600"
                 : "bg-white text-gray-800 border-gray-300"
-            }`}
+              }`}
           />
           <button
             type="submit"
