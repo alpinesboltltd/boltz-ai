@@ -43,7 +43,7 @@ export default function ModelsPage() {
 
     const fetchModels = async () => {
         try {
-            const token = localStorage.getItem("auth_token");
+            const token = localStorage.getItem("boltz_by_alpinesbolt_auth_token");
             if (!token) return;
             const response = await aiModelsAPI.getAll(token);
             if (response && response.ai_models) {
@@ -63,7 +63,7 @@ export default function ModelsPage() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        const token = localStorage.getItem("auth_token");
+        const token = localStorage.getItem("boltz_by_alpinesbolt_auth_token");
         if (!token) return;
 
         try {
@@ -108,7 +108,7 @@ export default function ModelsPage() {
 
     const handleDelete = async (id: string) => {
         if (!confirm("Are you sure you want to delete this model?")) return;
-        const token = localStorage.getItem("auth_token");
+        const token = localStorage.getItem("boltz_by_alpinesbolt_auth_token");
         if (!token) return;
 
         try {
