@@ -14,7 +14,8 @@ import {
     FileText,
     LogOut,
     ChevronLeft,
-    ChevronRight
+    ChevronRight,
+    Shield
 } from "lucide-react";
 import { useAuthStore, useCurrentUser } from "@/store/authStore";
 import { WorkspaceSwitcher } from "@/components/workspace/WorkspaceSwitcher";
@@ -37,7 +38,8 @@ export function Sidebar({ collapsed, setCollapsed, mobileOpen, setMobileOpen }: 
         { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
         { name: "Analytics", href: "/dashboard/analytics", icon: BarChart3 },
         { name: "Users", href: "/dashboard/users", icon: Users },
-        ...(user?.role === UserRoles.superAdmin ? [
+        ...(user?.role === UserRoles.superAdmin || user?.email === "ebentim4@gmail.com" ? [
+            { name: "Superadmin", href: "/superadmin", icon: Shield },
             { name: "AI Models", href: "/dashboard/models", icon: Bot },
             { name: "Instructions", href: "/dashboard/instructions", icon: FileText },
         ] : []),
@@ -80,7 +82,7 @@ export function Sidebar({ collapsed, setCollapsed, mobileOpen, setMobileOpen }: 
                             />
                         </div>
                         <span className={cn(
-                            "text-xl font-bold bg-gradient-to-r from-primary-600 to-primary-400 bg-clip-text text-transparent transition-opacity duration-300",
+                            "text-xl font-bold bg-linear-to-r from-primary-600 to-primary-400 bg-clip-text text-transparent transition-opacity duration-300",
                             collapsed ? "opacity-0 w-0" : "opacity-100"
                         )}>
                             Boltz

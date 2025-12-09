@@ -155,14 +155,14 @@ export const authAPI = {
   },
 
   enableOTP: async (email: string) => {
-    return await apiRequest("/auth/otp/enable", {
+    return await apiRequest("/otp/enable", {
       method: "POST",
       body: JSON.stringify({ email }),
     });
   },
 
   disableOTP: async (email: string) => {
-    return await apiRequest("/auth/otp/disable", {
+    return await apiRequest("/otp/disable", {
       method: "POST",
       body: JSON.stringify({ email }),
     });
@@ -573,14 +573,14 @@ export const integrationsAPI = {
 // Knowledge Base API
 export const knowledgeAPI = {
   getSources: async (chatagentId: string) => {
-    return await apiRequest(`/agent/${chatagentId}/knowledge/sources`);
+    return await apiRequest(`/agent/${chatagentId}/training/documents`);
   },
 
   uploadDocument: async (chatagentId: string, file: File) => {
     const formData = new FormData();
     formData.append("file", file);
 
-    return await apiRequest(`/agent/${chatagentId}/knowledge/documents`, {
+    return await apiRequest(`/agent/${chatagentId}/train/file`, {
       method: "POST",
       body: formData,
       headers: {},
@@ -588,7 +588,7 @@ export const knowledgeAPI = {
   },
 
   addWebsite: async (chatagentId: string, url: string) => {
-    return await apiRequest(`/agent/${chatagentId}/knowledge/websites`, {
+    return await apiRequest(`/agent/${chatagentId}/train/url`, {
       method: "POST",
       body: JSON.stringify({ url }),
     });

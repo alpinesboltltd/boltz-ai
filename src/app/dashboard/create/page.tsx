@@ -3,44 +3,44 @@
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useCurrentUser, accessToken } from "@/store/authStore";
+import { useWorkspaceStore } from "@/store/workspaceStore";
+import { useAIModelsStore } from "@/store/aiModelsStore";
+import { agentsAPI, systemAPI } from "@/lib/api";
+import { toast } from "@/store/toastStore";
 import {
-  AgentStatus,
+  Agent,
   AgentType,
+  AgentStatus,
   AgentPosition,
   AgentIconSize,
   AgentBubbleStyle,
-  Agent,
-  CreateAgentRequest,
   CreateAgentRequestSchema,
+  CreateAgentRequest
 } from "@/types/agent";
-import { TrainingSources } from "@/components/dashboard/TrainingSources";
-import { BotPreview } from "@/components/chatbot/BotPreview";
-import { agentsAPI, systemAPI } from "@/lib/api";
-import { agentTypeToEnum } from "@/lib/agentTypeSerializer";
-import { accessToken, useCurrentUser } from "@/store/authStore";
-import { useWorkspaceStore } from "@/store/workspaceStore";
-import { useAIModelsStore } from "@/store/aiModelsStore";
-import { Spinner } from "@/components/common/Spinner";
 import { Input } from "@/components/common/Input";
 import { Textarea } from "@/components/common/Textarea";
 import { Select } from "@/components/common/Select";
-import {
-  CheckCircle2,
-  Bot,
-  BrainCircuit,
-  Palette,
-  ArrowRight,
-  ArrowLeft,
-  MessageSquare,
-  Mic,
-  Image as ImageIcon,
-  Sparkles,
-  Zap
-} from "lucide-react";
+import { Spinner } from "@/components/common/Spinner";
+import { TrainingSources } from "@/components/dashboard/TrainingSources";
+import { BotPreview } from "@/components/chatbot/BotPreview";
+import { motion, AnimatePresence } from "framer-motion";
+import { MessageSquare, Mic, ImageIcon, CheckCircle2, ArrowRight, ArrowLeft, Sparkles, Zap } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { toast } from "@/store/toastStore";
+
+interface UITemplate {
+  id: string;
+  name: string;
+  description: string;
+  icon: string;
+}
+
+interface APITemplate {
+  id: string;
+  title: string;
+  content: string;
+}
 
 interface AgentAppearanceForm {
   welcome_message: string;
@@ -52,35 +52,41 @@ interface AgentAppearanceForm {
   font_family: string;
 }
 
-interface APITemplate {
-  id: string;
-  title: string;
-  content: string;
-}
-
-interface UITemplate {
-  id: string;
-  name: string;
-  description: string;
-  icon: string;
-}
-
 const STEPS = [
-  { id: 1, name: "Identity", description: "Name & Personality", icon: Bot },
-  { id: 2, name: "Knowledge", description: "Training Data", icon: BrainCircuit },
-  { id: 3, name: "Appearance", description: "Look & Feel", icon: Palette },
+  { id: 1, name: "Setup", description: "Basic info", icon: MessageSquare },
+  { id: 2, name: "Training", description: "Knowledge base", icon: Sparkles },
+  { id: 3, name: "Customize", description: "Appearance", icon: Zap },
 ];
+
+const agentTypeToEnum = (type: AgentType | string): number => {
+  if (typeof type === "number") return type;
+  switch (type) {
+    case "text": return 1;
+    case "voice": return 2;
+    case "vision": return 0;
+    default: return 1;
+  }
+};
 
 export default function CreateAgentPage() {
   const user = useCurrentUser();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const templateIdParam = searchParams.get("templateId");
+
   const { currentWorkspace } = useWorkspaceStore();
   const [step, setStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [agentId, setAgentId] = useState<string | null>(null);
   const [agentData, setAgentData] = useState<Agent | null>(null);
-  const [selectedTemplate, setSelectedTemplate] = useState("");
+  const [selectedTemplate, setSelectedTemplate] = useState(templateIdParam || "");
   const [templates, setTemplates] = useState<UITemplate[]>([]);
+
+  useEffect(() => {
+    if (templateIdParam) {
+      setSelectedTemplate(templateIdParam);
+    }
+  }, [templateIdParam]);
 
   useEffect(() => {
     const fetchTemplates = async () => {
