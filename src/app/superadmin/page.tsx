@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useCurrentUser } from "@/store/authStore";
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
@@ -13,15 +13,15 @@ import { Textarea } from "@/components/common/Textarea";
 import { toast } from "@/store/toastStore";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CreatePromptTemplateSchema, CreatePromptTemplateRequest } from "@/types/system";
+import { CreatePromptTemplateSchema, CreatePromptTemplateRequest, PromptTemplate } from "@/types/system";
 import { CreateAIModelSchema, CreateAIModelFormValues, AIModel, Provider } from "@/types/aiModels";
 
 // --- Components ---
 
 const DefaultPrompts = () => {
-    const [templates, setTemplates] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [isCreating, setIsCreating] = useState(false);
+    const [templates, setTemplates] = useState<PromptTemplate[]>([]);
 
     const { register, handleSubmit, reset, formState: { errors } } = useForm<CreatePromptTemplateRequest>({
         resolver: zodResolver(CreatePromptTemplateSchema)
@@ -31,9 +31,10 @@ const DefaultPrompts = () => {
         setIsLoading(true);
         try {
             const res = await systemAPI.listTemplates();
-            setTemplates(res.data || []);
+            setTemplates(res.templates || []);
         } catch (error) {
             console.error("Failed to fetch templates", error);
+            toast.error("Error", "Failed to fetch templates");
         } finally {
             setIsLoading(false);
         }
@@ -49,7 +50,7 @@ const DefaultPrompts = () => {
             toast.success("Success", "Template created successfully");
             setIsCreating(false);
             reset();
-            fetchTemplates();
+            await fetchTemplates();
         } catch (error) {
             toast.error("Error", "Failed to create template");
         }
@@ -106,9 +107,9 @@ const DefaultPrompts = () => {
 };
 
 const AIProviders = () => {
-    const [models, setModels] = useState<AIModel[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [isCreating, setIsCreating] = useState(false);
+    const [models, setModels] = useState<AIModel[]>([]);
 
     const { register, handleSubmit, reset, formState: { errors } } = useForm<CreateAIModelFormValues>({
         resolver: zodResolver(CreateAIModelSchema),
@@ -129,6 +130,7 @@ const AIProviders = () => {
             setModels(res.ai_models || []);
         } catch (error) {
             console.error("Failed to fetch models", error);
+            toast.error("Error", "Failed to fetch models");
         } finally {
             setIsLoading(false);
         }
@@ -144,7 +146,7 @@ const AIProviders = () => {
             toast.success("Success", "AI Model added successfully");
             setIsCreating(false);
             reset();
-            fetchModels();
+            await fetchModels();
         } catch (error) {
             toast.error("Error", "Failed to add AI Model");
         }
@@ -155,7 +157,7 @@ const AIProviders = () => {
         try {
             await aiModelsAPI.delete(id, localStorage.getItem("boltz_by_alpinesbolt_auth_token") || "");
             toast.success("Success", "Model deleted");
-            fetchModels();
+            await fetchModels();
         } catch (error) {
             toast.error("Error", "Failed to delete model");
         }
