@@ -24,8 +24,8 @@ test.beforeEach(async ({ page }) => {
 
     await page.addInitScript((value) => {
         window.localStorage.setItem('boltz-auth-storage', JSON.stringify(value));
-        window.localStorage.setItem('auth_token', 'mock-token');
-        document.cookie = 'auth_token=mock-token; path=/; secure; samesite=strict';
+        window.localStorage.setItem('boltz_by_alpinesbolt_auth_token', 'mock-token');
+        document.cookie = 'boltz_by_alpinesbolt_auth_token=mock-token; path=/; secure; samesite=strict';
     }, authState);
 });
 

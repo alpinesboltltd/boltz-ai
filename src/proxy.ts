@@ -20,7 +20,7 @@ export function proxy(request: NextRequest) {
     token = authHeader.substring(7);
   } else {
     // Fallback to cookie
-    token = request.cookies.get("auth_token")?.value;
+    token = request.cookies.get("boltz_by_alpinesbolt_auth_token")?.value;
   }
 
   // If accessing protected path without token, redirect to login

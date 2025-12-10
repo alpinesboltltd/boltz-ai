@@ -27,6 +27,7 @@ import {
   CreateAIModelRequest,
   UpdateAIModelRequest,
 } from "@/types/aiModels";
+import { getCookie } from "./utils/cookies";
 
 // Payload Types
 export interface UpdateAppearancePayload {
@@ -77,8 +78,25 @@ export const apiRequest = async (
   options: RequestInit = {},
   token?: string
 ) => {
-  // Use provided token or get from localStorage as fallback
-  const authToken = token;
+  // Use provided token or get from localStorage/cookies as fallback
+  let authToken = token;
+
+  if (!authToken) {
+    if (typeof window !== 'undefined') {
+      // Client-side: Try localStorage then cookie
+      authToken = localStorage.getItem("boltz_by_alpinesbolt_auth_token") || getCookie("boltz_by_alpinesbolt_auth_token");
+    } else {
+      // Server-side: Try to get from cookies
+      try {
+        const { cookies } = await import("next/headers");
+        const cookieStore = await cookies();
+        authToken = cookieStore.get("boltz_by_alpinesbolt_auth_token")?.value;
+      } catch (error) {
+        // Ignore error if next/headers is not available or fails
+        console.warn("Failed to retrieve auth token on server:", error);
+      }
+    }
+  }
 
   const response = await fetch(`/v1${endpoint}`, {
     ...options,
@@ -114,7 +132,7 @@ export const authAPI = {
       method: "POST",
       body: JSON.stringify({ email, password }),
     });
-    localStorage.setItem("auth_token", data.token);
+    localStorage.setItem("boltz_by_alpinesbolt_auth_token", data.token);
     return data;
   },
 
@@ -123,12 +141,12 @@ export const authAPI = {
       method: "POST",
       body: JSON.stringify({ name, email, password }),
     });
-    localStorage.setItem("auth_token", data.token);
+    localStorage.setItem("boltz_by_alpinesbolt_auth_token", data.token);
     return data;
   },
 
   logout: () => {
-    localStorage.removeItem("auth_token");
+    localStorage.removeItem("boltz_by_alpinesbolt_auth_token");
     return Promise.resolve();
   },
 
@@ -137,14 +155,14 @@ export const authAPI = {
   },
 
   enableOTP: async (email: string) => {
-    return await apiRequest("/auth/otp/enable", {
+    return await apiRequest("/otp/enable", {
       method: "POST",
       body: JSON.stringify({ email }),
     });
   },
 
   disableOTP: async (email: string) => {
-    return await apiRequest("/auth/otp/disable", {
+    return await apiRequest("/otp/disable", {
       method: "POST",
       body: JSON.stringify({ email }),
     });
@@ -555,14 +573,14 @@ export const integrationsAPI = {
 // Knowledge Base API
 export const knowledgeAPI = {
   getSources: async (chatagentId: string) => {
-    return await apiRequest(`/agent/${chatagentId}/knowledge/sources`);
+    return await apiRequest(`/agent/${chatagentId}/training/documents`);
   },
 
   uploadDocument: async (chatagentId: string, file: File) => {
     const formData = new FormData();
     formData.append("file", file);
 
-    return await apiRequest(`/agent/${chatagentId}/knowledge/documents`, {
+    return await apiRequest(`/agent/${chatagentId}/train/file`, {
       method: "POST",
       body: formData,
       headers: {},
@@ -570,7 +588,7 @@ export const knowledgeAPI = {
   },
 
   addWebsite: async (chatagentId: string, url: string) => {
-    return await apiRequest(`/agent/${chatagentId}/knowledge/websites`, {
+    return await apiRequest(`/agent/${chatagentId}/train/url`, {
       method: "POST",
       body: JSON.stringify({ url }),
     });
@@ -741,7 +759,7 @@ export const trainingAPI = {
     // Note: apiRequest handles JSON, but for FormData we need to let browser set Content-Type
     // So we use fetch directly or modify apiRequest. 
     // Let's use fetch directly for file upload to avoid Content-Type issues.
-    const authToken = token || localStorage.getItem("auth_token");
+    const authToken = token || localStorage.getItem("boltz_by_alpinesbolt_auth_token");
     const response = await fetch(`/api/v1/agent/${agentId}/train/file`, {
       method: "POST",
       headers: {

@@ -67,8 +67,7 @@ export default function Dashboard() {
   };
 
   const handleHireTemplate = (templateId: string) => {
-    console.log("Hiring template:", templateId);
-    // Stub function for template hiring
+    router.push(`/dashboard/create?templateId=${templateId}`);
   };
 
   return (

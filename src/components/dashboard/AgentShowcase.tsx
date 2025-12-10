@@ -2,24 +2,72 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { gsap } from "gsap";
-import { MOCK_AGENTS } from "@/constants";
 import { Star, Zap, Shield, Award } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { systemAPI } from "@/lib/api";
+
+interface ShowcaseAgent {
+  id: string;
+  name: string;
+  description: string;
+  imageUrl: string;
+  ai_model: string;
+  average_rating: number;
+  credits_per_1k: number;
+  strengths: string[];
+}
 
 export const AgentShowcase = ({ onHire }: { onHire: (id: string) => void }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [agents, setAgents] = useState<ShowcaseAgent[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const containerRef = useRef<HTMLDivElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % MOCK_AGENTS.length);
-    }, 8000);
-    return () => clearInterval(interval);
+    const fetchTemplates = async () => {
+      try {
+        const res = await systemAPI.listTemplates();
+        const templates = res.data || [];
+
+        // Map templates to showcase format with some default/randomized visual data
+        const mappedAgents: ShowcaseAgent[] = templates.map((t: any, idx: number) => ({
+          id: t.id,
+          name: t.title,
+          description: t.content.length > 150 ? t.content.substring(0, 150) + "..." : t.content,
+          imageUrl: `/images/agents/agent-${(idx % 5) + 1}.webp`, // Assuming you have some agent images
+          ai_model: "GPT-4", // Default or could be part of template metadata if extended
+          average_rating: 4.8 + (idx % 3) * 0.1,
+          credits_per_1k: 10 + (idx % 5),
+          strengths: ["Versatile", "Professional", "Efficient"],
+        }));
+
+        if (mappedAgents.length > 0) {
+          setAgents(mappedAgents);
+        } else {
+          // Fallback if no templates found (optional, or show empty state)
+          setAgents([]);
+        }
+      } catch (error) {
+        console.error("Failed to fetch templates for showcase", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchTemplates();
   }, []);
 
   useEffect(() => {
-    if (!cardRef.current) return;
+    if (agents.length === 0) return;
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % agents.length);
+    }, 8000);
+    return () => clearInterval(interval);
+  }, [agents.length]);
+
+  useEffect(() => {
+    if (!cardRef.current || agents.length === 0) return;
 
     const tl = gsap.timeline();
     tl.fromTo(
@@ -35,9 +83,22 @@ export const AgentShowcase = ({ onHire }: { onHire: (id: string) => void }) => {
       { opacity: 1, y: 0, stagger: 0.1, duration: 0.6, ease: "power2.out" },
       "-=0.4"
     );
-  }, [currentIndex]);
+  }, [currentIndex, agents.length]);
 
-  const agent = MOCK_AGENTS[currentIndex];
+  if (isLoading) {
+    return <div className="flex justify-center py-20"><div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary-600"></div></div>;
+  }
+
+  if (agents.length === 0) {
+    return (
+      <div className="text-center py-20">
+        <h3 className="text-xl font-semibold text-gray-700">No templates available</h3>
+        <p className="text-gray-500">Check back later for new agents.</p>
+      </div>
+    );
+  }
+
+  const agent = agents[currentIndex];
 
   return (
     <div ref={containerRef} className="flex flex-col items-center justify-center py-12 px-4">
@@ -59,12 +120,9 @@ export const AgentShowcase = ({ onHire }: { onHire: (id: string) => void }) => {
               <div className="relative mb-6 animate-item">
                 <div className="absolute inset-0 bg-primary-500/20 blur-3xl rounded-full transform scale-150" />
                 <div className="relative h-40 w-40 rounded-full p-1 bg-white shadow-xl ring-1 ring-black/5">
-                  <Image
-                    src={agent.imageUrl}
-                    alt={agent.name}
-                    fill
-                    className="rounded-full object-cover"
-                  />
+                  <div className="w-full h-full rounded-full bg-gray-200 flex items-center justify-center text-4xl">
+                    🤖
+                  </div>
                 </div>
                 <div className="absolute -bottom-3 -right-3 bg-white p-2 rounded-full shadow-lg border border-gray-100">
                   <div className="bg-yellow-50 p-1.5 rounded-full">
@@ -92,7 +150,7 @@ export const AgentShowcase = ({ onHire }: { onHire: (id: string) => void }) => {
                     <Award className="w-4 h-4" />
                     <span>Rating</span>
                   </div>
-                  <div className="text-xl font-bold text-gray-900">{agent.average_rating}/5.0</div>
+                  <div className="text-xl font-bold text-gray-900">{agent.average_rating.toFixed(1)}/5.0</div>
                 </div>
                 <div className="bg-gray-50 rounded-xl p-4 border border-gray-100">
                   <div className="flex items-center gap-2 mb-1 text-gray-500 text-sm">
@@ -132,7 +190,7 @@ export const AgentShowcase = ({ onHire }: { onHire: (id: string) => void }) => {
 
         {/* Navigation Dots */}
         <div className="flex justify-center gap-3 mt-8">
-          {MOCK_AGENTS.map((_, idx) => (
+          {agents.map((_, idx) => (
             <button
               key={idx}
               onClick={() => setCurrentIndex(idx)}
