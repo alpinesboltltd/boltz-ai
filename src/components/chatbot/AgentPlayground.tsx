@@ -15,7 +15,7 @@ import {
   PlaygroundConfig,
   AgentType,
 } from "@/types/agent";
-import { Chat, agentsAPI } from "@/lib/api";
+import { Chat, agentsAPI, systemAPI } from "@/lib/api";
 import { playgroundAPI } from "@/lib/playground-api";
 import {
   useAgentData,
@@ -37,8 +37,13 @@ export function AgentPlayground() {
   const behavior = useAgentBehavior();
   const appearance = useAgentAppearance();
   const agentId = agent?.id;
-  const { models, getModelsByType } = useAIModelsStore();
+  const { models, getModelsByType, fetchModels } = useAIModelsStore();
 
+  useEffect(() => {
+    fetchModels();
+  }, [fetchModels]);
+
+  // ... (keep primaryColor)
   const primaryColor = useMemo(
     () => appearance?.primary_color || "#0284c7",
     [appearance?.primary_color]
@@ -55,12 +60,39 @@ export function AgentPlayground() {
     temperature: behavior?.temperature || 0.5,
     systemInstruction:
       behavior?.system_instruction || "You are a helpful assistant",
-    selectedTemplate: SYSTEM_PROMPT_TEMPLATES[0].template,
+    selectedTemplate: "",
   });
   const [customPrompts, setCustomPrompts] = useState<SystemPromptTemplate[]>(
     []
   );
+  const [dbPrompts, setDbPrompts] = useState<any[]>([]);
   const [testQueries, setTestQueries] = useState<string[]>([]);
+
+  // Fetch DB Prompts
+  useEffect(() => {
+    const fetchPrompts = async () => {
+      try {
+        // Fetch prompts matching the agent's role, or all if no role matches
+        const res = await systemAPI.listTemplates(agent?.role);
+        if (res.templates) {
+          setDbPrompts(
+            res.templates.map((t: any) => ({
+              id: t.id,
+              name: t.title,
+              template: t.content,
+              description: t.role, // Use role as description for now
+              constraints: [],
+            }))
+          );
+        }
+      } catch (error) {
+        console.error("Failed to fetch system templates:", error);
+      }
+    };
+    if (agent?.role) {
+      fetchPrompts();
+    }
+  }, [agent?.role]);
 
   const loadBehaviorConfig = useCallback(async () => {
     if (!agentId) return;
@@ -86,6 +118,11 @@ export function AgentPlayground() {
     }
   }, [agent, agentId, loadBehaviorConfig]);
 
+  // Combine all prompts
+  const allPrompts = useMemo(() => {
+    return [...SYSTEM_PROMPT_TEMPLATES, ...dbPrompts, ...customPrompts];
+  }, [dbPrompts, customPrompts]);
+
   useEffect(() => {
     if (behavior) {
       setConfig({
@@ -97,12 +134,10 @@ export function AgentPlayground() {
         maxTokens: behavior.max_tokens || 1000,
         systemInstruction:
           behavior.system_instruction || SYSTEM_PROMPT_TEMPLATES[0].template,
-        selectedTemplate: behavior.prompt_template || "ai_agent",
+        selectedTemplate: behavior.prompt_template || "",
       });
     }
   }, [behavior, agent?.ai_model_id, models]);
-
-
 
   useEffect(() => {
     setMessages([
@@ -147,7 +182,7 @@ export function AgentPlayground() {
   };
 
   const handleTemplateChange = (templateId: string) => {
-    const template = SYSTEM_PROMPT_TEMPLATES.find((t) => t.id === templateId);
+    const template = allPrompts.find((t) => t.id === templateId);
     if (template) {
       setConfig((prev) => ({
         ...prev,
@@ -188,12 +223,7 @@ export function AgentPlayground() {
       name: "Custom Prompt",
       description: "User-defined custom prompt",
       template: "You are a helpful assistant.",
-      constraints: [
-        "No data divulgence",
-        "Maintain focus",
-        "Exclusive reliance on training data",
-        "Restrictive role focus",
-      ],
+      constraints: [],
     };
     setCustomPrompts((prev) => [...prev, newPrompt]);
     setConfig((prev) => ({
@@ -216,8 +246,6 @@ export function AgentPlayground() {
       },
     ]);
   };
-
-  const allPrompts = [...SYSTEM_PROMPT_TEMPLATES, ...customPrompts];
 
   // Filter models based on agent type
 
@@ -259,7 +287,9 @@ export function AgentPlayground() {
     </div>
   );
 
-  const modelOptions = getModelsByType(enumToAgentType(agent?.agent_type as number)).map((model) => ({
+  const modelOptions = getModelsByType(
+    enumToAgentType(agent?.agent_type as number)
+  ).map((model) => ({
     value: model.id,
     label: model.name,
     data: model,
@@ -349,99 +379,18 @@ export function AgentPlayground() {
               "bg-white rounded-lg shadow overflow-hidden flex flex-col h-[60vh]"
             )}
           >
-            <div
-              className="text-white px-4 py-3 flex justify-between items-center"
-              style={{ backgroundColor: primaryColor }}
-            >
-              <div>
-                <h3 className="font-medium">Testing: {agent?.name}</h3>
-                <p className="text-xs text-primary-100">
-                  {config.ai_model_name} | Temp: {config.temperature}
-                </p>
-              </div>
-              <button
-                onClick={handleReset}
-                className="p-1 rounded-full hover:bg-primary-500 transition-colors"
-                title="Reset conversation"
-              >
-                <ArrowPathIcon className="h-5 w-5" />
-              </button>
-            </div>
-
-            {/* Messages */}
-            <div className="flex-1 p-4 overflow-y-auto">
-              {messages
-                .filter((m) => m.role !== "system")
-                .map((message, index) => (
-                  <div
-                    key={index}
-                    className={`mb-4 flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
-                  >
-                    <div
-                      className={cn(
-                        "max-w-[85%] px-3 py-2 rounded-lg text-sm",
-                        message.role === "user"
-                          ? "text-white"
-                          : "bg-gray-100 text-gray-800"
-                      )}
-                      style={
-                        message.role === "user"
-                          ? { backgroundColor: primaryColor }
-                          : {}
-                      }
-                    >
-                      <p className="whitespace-pre-wrap">{message.parts}</p>
-                    </div>
-                  </div>
-                ))}
-
-              {isTyping && (
-                <div className="flex justify-start mb-4">
-                  <div className="bg-gray-100 px-4 py-2 rounded-lg">
-                    <div className="flex space-x-1">
-                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                      <div
-                        className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
-                        style={{ animationDelay: "0.2s" }}
-                      ></div>
-                      <div
-                        className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
-                        style={{ animationDelay: "0.4s" }}
-                      ></div>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Input area */}
-            <div className="border-t border-gray-200 p-3">
-              <form onSubmit={handleSendMessage} className="flex space-x-2">
-                <input
-                  type="text"
-                  value={inputValue}
-                  onChange={(e) => setInputValue(e.target.value)}
-                  placeholder="Type your test message..."
-                  className="flex-1 text-sm rounded-md border-gray-300 shadow-sm focus:outline-none focus:ring-2"
-                  style={
-                    {
-                      borderColor: "#D1D5DB",
-                      "--tw-ring-color": primaryColor,
-                    } as any
-                  }
-                  onFocus={(e) => (e.target.style.borderColor = primaryColor)}
-                  onBlur={(e) => (e.target.style.borderColor = "#D1D5DB")}
-                />
-                <button
-                  type="submit"
-                  disabled={isTyping}
-                  className="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50"
-                  style={{ backgroundColor: primaryColor }}
-                >
-                  <PaperAirplaneIcon className="h-4 w-4" />
-                </button>
-              </form>
-            </div>
+            <ChatInterface
+              agent={agent}
+              config={config}
+              messages={messages}
+              isTyping={isTyping}
+              inputValue={inputValue}
+              setInputValue={setInputValue}
+              handleSendMessage={handleSendMessage}
+              handleReset={handleReset}
+              primaryColor={primaryColor}
+              appearance={appearance}
+            />
           </div>
 
           {/* Mobile Tabs for Config and Test Queries */}
@@ -450,19 +399,21 @@ export function AgentPlayground() {
               <nav className="-mb-px flex">
                 <button
                   onClick={() => setShowConfig(true)}
-                  className={`py-2 px-4 text-sm font-medium border-b-2 ${showConfig
-                    ? "border-primary-500 text-primary-600"
-                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                    }`}
+                  className={`py-2 px-4 text-sm font-medium border-b-2 ${
+                    showConfig
+                      ? "border-primary-500 text-primary-600"
+                      : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                  }`}
                 >
                   Configuration
                 </button>
                 <button
                   onClick={() => setShowConfig(false)}
-                  className={`py-2 px-4 text-sm font-medium border-b-2 ${!showConfig
-                    ? "border-primary-500 text-primary-600"
-                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                    }`}
+                  className={`py-2 px-4 text-sm font-medium border-b-2 ${
+                    !showConfig
+                      ? "border-primary-500 text-primary-600"
+                      : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                  }`}
                 >
                   Test Queries
                 </button>
@@ -537,6 +488,7 @@ export function AgentPlayground() {
               handleSendMessage={handleSendMessage}
               handleReset={handleReset}
               primaryColor={primaryColor}
+              appearance={appearance}
             />
           </div>
 
@@ -590,6 +542,7 @@ export function AgentPlayground() {
               handleSendMessage={handleSendMessage}
               handleReset={handleReset}
               primaryColor={primaryColor}
+              appearance={appearance}
             />
           </div>
 
@@ -633,10 +586,15 @@ function ConfigPanel({
         </label>
         <div className="px-3 py-2 bg-gray-50 border border-gray-300 rounded-md text-sm">
           <span className="capitalize font-medium">
-            {agent?.agent_type || "Loading..."}
+            {agent?.agent_type === 1
+              ? "Text"
+              : agent?.agent_type === 2
+                ? "Voice"
+                : "Multimodal"}
           </span>
           <div className="text-xs text-gray-500 mt-1">
-            {agent?.agent_type === agentTypeToEnum(AgentType.TEXT) && "Text-only conversations"}
+            {agent?.agent_type === agentTypeToEnum(AgentType.TEXT) &&
+              "Text-only conversations"}
             {agent?.agent_type === agentTypeToEnum(AgentType.VOICE) &&
               "Voice and audio processing"}
             {agent?.agent_type === agentTypeToEnum(AgentType.VISION) &&
@@ -790,23 +748,55 @@ function ChatInterface({
   handleSendMessage,
   handleReset,
   primaryColor,
+  appearance,
 }: any) {
+  // Appearance overrides
+  const bubbleStyle = appearance?.bubble_style || "round";
+  const fontFamily = appearance?.font_family || "Inter, sans-serif";
+
+  const getBubbleClass = (role: string) => {
+    const base = "max-w-[80%] px-4 py-2 text-sm whitespace-pre-wrap shadow-sm";
+    const rounded =
+      bubbleStyle === "round"
+        ? "rounded-2xl"
+        : bubbleStyle === "square"
+          ? "rounded-md"
+          : "rounded-xl";
+    const corners =
+      role === "user"
+        ? bubbleStyle === "round"
+          ? "rounded-br-none"
+          : ""
+        : bubbleStyle === "round"
+          ? "rounded-bl-none"
+          : "";
+
+    return cn(base, rounded, corners);
+  };
+
   return (
-    <>
+    <div className="flex flex-col h-full" style={{ fontFamily }}>
       <div
-        className="text-white px-4 py-3 flex justify-between items-center"
+        className="text-white px-4 py-3 flex justify-between items-center shrink-0 transition-colors duration-300"
         style={{ backgroundColor: primaryColor }}
       >
         <div>
-          <h3 className="font-medium">Testing: {agent?.name}</h3>
-          <p className="text-xs text-primary-100">
-            Type: {agent?.agent_type} | Model: {config.model} | Temp:{" "}
-            {config.temperature} | Tokens: {config.maxTokens}
+          <h3 className="font-medium flex items-center gap-2">
+            <span>Testing: {agent?.name}</span>
+          </h3>
+          <p className="text-xs opacity-90">
+            Type:{" "}
+            {agent?.agent_type === 1
+              ? "Text"
+              : agent?.agent_type === 2
+                ? "Voice"
+                : "Multimodal"}{" "}
+            | Model: {config.ai_model_name}
           </p>
         </div>
         <button
           onClick={handleReset}
-          className="p-1 rounded-full hover:bg-primary-500 transition-colors"
+          className="p-1.5 rounded-full hover:bg-white/20 transition-colors"
           title="Reset conversation"
         >
           <ArrowPathIcon className="h-5 w-5" />
@@ -814,33 +804,58 @@ function ChatInterface({
       </div>
 
       {/* Messages */}
-      <div className="flex-1 p-4 overflow-y-auto">
+      <div className="flex-1 p-4 overflow-y-auto space-y-4 bg-gray-50/50">
         {messages
           .filter((m: Message) => m.role !== "system")
           .map((message: Message, index: number) => (
             <div
               key={index}
-              className={`mb-4 flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
+              className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
             >
+              {message.role !== "user" &&
+                appearance?.chat_icon &&
+                appearance.chat_icon !== "default" && (
+                  <div className="mr-2 mt-1 w-8 h-8 rounded-full overflow-hidden shrink-0 bg-gray-100 flex items-center justify-center text-lg shadow-sm border border-gray-100">
+                    {appearance.chat_icon === "robot"
+                      ? "🤖"
+                      : appearance.chat_icon === "human"
+                        ? "👤"
+                        : appearance.chat_icon === "custom"
+                          ? "📷"
+                          : "😊"}
+                  </div>
+                )}
               <div
-                className={`max-w-[80%] px-4 py-2 rounded-lg ${message.role === "user"
-                  ? "text-white"
-                  : "bg-gray-100 text-gray-800"
-                  }`}
+                className={cn(
+                  getBubbleClass(message.role),
+                  message.role === "user"
+                    ? "text-white"
+                    : "bg-white text-gray-800 border border-gray-100"
+                )}
                 style={
                   message.role === "user"
                     ? { backgroundColor: primaryColor }
                     : {}
                 }
               >
-                <p className="text-sm whitespace-pre-wrap">{message.parts}</p>
+                <p>{message.parts}</p>
               </div>
             </div>
           ))}
 
         {isTyping && (
-          <div className="flex justify-start mb-4">
-            <div className="bg-gray-100 px-4 py-2 rounded-lg">
+          <div className="flex justify-start">
+            {appearance?.chat_icon && appearance.chat_icon !== "default" && (
+              <div className="mr-2 w-8 h-8 shrink-0"></div> // Spacer
+            )}
+            <div
+              className={cn(
+                "bg-white px-4 py-3 border border-gray-100 shadow-sm",
+                bubbleStyle === "round"
+                  ? "rounded-2xl rounded-bl-none"
+                  : "rounded-xl"
+              )}
+            >
               <div className="flex space-x-1">
                 <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
                 <div
@@ -858,31 +873,35 @@ function ChatInterface({
       </div>
 
       {/* Input area */}
-      <div className="border-t border-gray-200 p-4">
-        <form onSubmit={handleSendMessage} className="flex space-x-2">
+      <div className="border-t border-gray-200 p-4 bg-white shrink-0">
+        <form onSubmit={handleSendMessage} className="flex space-x-3">
           <input
             type="text"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             placeholder="Type your test message..."
-            className="flex-1 rounded-md border-gray-300 shadow-sm focus:outline-none focus:ring-2"
+            className="flex-1 rounded-full border-gray-300 shadow-sm focus:outline-none focus:ring-2 transition-all px-4"
             style={
-              { borderColor: "#D1D5DB", "--tw-ring-color": primaryColor } as any
+              { borderColor: "#E5E7EB", "--tw-ring-color": primaryColor } as any
             }
-            onFocus={(e) => (e.target.style.borderColor = primaryColor)}
-            onBlur={(e) => (e.target.style.borderColor = "#D1D5DB")}
+            onFocus={(e) => {
+              (e.target.style as any).borderColor = primaryColor;
+            }}
+            onBlur={(e) => {
+              (e.target.style as any).borderColor = "#E5E7EB";
+            }}
           />
           <button
             type="submit"
             disabled={isTyping}
-            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50"
+            className="inline-flex items-center p-2 border border-transparent rounded-full shadow-sm text-white focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 transition-transform active:scale-95"
             style={{ backgroundColor: primaryColor }}
           >
-            <PaperAirplaneIcon className="h-5 w-5" />
+            <PaperAirplaneIcon className="h-5 w-5 translate-x-0.5" />
           </button>
         </form>
       </div>
-    </>
+    </div>
   );
 }
 

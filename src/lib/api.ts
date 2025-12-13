@@ -82,9 +82,11 @@ export const apiRequest = async (
   let authToken = token;
 
   if (!authToken) {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       // Client-side: Try localStorage then cookie
-      authToken = localStorage.getItem("boltz_by_alpinesbolt_auth_token") || getCookie("boltz_by_alpinesbolt_auth_token");
+      authToken =
+        localStorage.getItem("boltz_by_alpinesbolt_auth_token") ||
+        getCookie("boltz_by_alpinesbolt_auth_token");
     } else {
       // Server-side: Try to get from cookies
       try {
@@ -98,11 +100,26 @@ export const apiRequest = async (
     }
   }
 
+  // Get Workspace ID from localStorage (client-side only for now)
+  let workspaceId: string | undefined;
+  if (typeof window !== "undefined") {
+    try {
+      const workspaceStorage = localStorage.getItem("workspace-storage");
+      if (workspaceStorage) {
+        const parsed = JSON.parse(workspaceStorage);
+        workspaceId = parsed.state?.currentWorkspace?.id;
+      }
+    } catch (e) {
+      // Silent fail or log
+    }
+  }
+
   const response = await fetch(`/v1${endpoint}`, {
     ...options,
     headers: {
       "Content-Type": "application/json",
       ...(authToken && { Authorization: `Bearer ${authToken}` }),
+      ...(workspaceId && { "X-Workspace-ID": workspaceId }),
       ...options.headers,
     },
     credentials: "include",
@@ -205,10 +222,10 @@ export const systemAPI = {
   },
 
   // Prompt Templates
-  createTemplate: async (title: string, content: string) => {
+  createTemplate: async (title: string, content: string, role?: string) => {
     return await apiRequest("/system/templates", {
       method: "POST",
-      body: JSON.stringify({ title, content }),
+      body: JSON.stringify({ title, content, role }),
     });
   },
 
@@ -216,8 +233,27 @@ export const systemAPI = {
     return await apiRequest(`/system/templates/${id}`);
   },
 
-  listTemplates: async () => {
-    return await apiRequest("/system/templates");
+  listTemplates: async (role?: string) => {
+    const url = role ? `/system/templates?role=${role}` : "/system/templates";
+    return await apiRequest(url);
+  },
+
+  updateTemplate: async (
+    id: string,
+    title?: string,
+    content?: string,
+    role?: string
+  ) => {
+    return await apiRequest(`/system/templates/${id}`, {
+      method: "PATCH",
+      body: JSON.stringify({ title, content, role }),
+    });
+  },
+
+  deleteTemplate: async (id: string) => {
+    return await apiRequest(`/system/templates/${id}`, {
+      method: "DELETE",
+    });
   },
 };
 
@@ -742,24 +778,25 @@ export const trainingAPI = {
       `/agent/${agentId}/train/url`,
       {
         method: "POST",
-        body: JSON.stringify({ url, max_pages: maxPages, exclude_patterns: excludePatterns }),
+        body: JSON.stringify({
+          url,
+          max_pages: maxPages,
+          exclude_patterns: excludePatterns,
+        }),
       },
       token
     );
   },
 
-  trainWithFile: async (
-    agentId: string,
-    file: File,
-    token?: string
-  ) => {
+  trainWithFile: async (agentId: string, file: File, token?: string) => {
     const formData = new FormData();
     formData.append("file", file);
 
     // Note: apiRequest handles JSON, but for FormData we need to let browser set Content-Type
-    // So we use fetch directly or modify apiRequest. 
+    // So we use fetch directly or modify apiRequest.
     // Let's use fetch directly for file upload to avoid Content-Type issues.
-    const authToken = token || localStorage.getItem("boltz_by_alpinesbolt_auth_token");
+    const authToken =
+      token || localStorage.getItem("boltz_by_alpinesbolt_auth_token");
     const response = await fetch(`/api/v1/agent/${agentId}/train/file`, {
       method: "POST",
       headers: {
@@ -795,17 +832,20 @@ export const trainingAPI = {
     );
   },
 
-  deleteTrainingData: async (agentId: string, documentId: string, token?: string) => {
+  deleteTrainingData: async (
+    agentId: string,
+    documentId: string,
+    token?: string
+  ) => {
     return await apiRequest(
       `/agent/${agentId}/training?documentId=${documentId}`,
       {
-        method: "DELETE"
+        method: "DELETE",
       },
       token
     );
-  }
+  },
 };
-
 
 export const workspacesAPI = {
   create: async (name: string, description?: string) => {
@@ -845,6 +885,55 @@ export const scraperAPI = {
       body: JSON.stringify(payload),
     });
   },
+};
+
+// Google Integrations
+export const connectGoogleService = async (
+  agentId: string,
+  service: string
+) => {
+  return apiRequest(
+    `/agent/${agentId}/integrations/google/${service}/connect`,
+    {
+      method: "POST",
+    }
+  );
+};
+
+export const disconnectGoogleService = async (
+  agentId: string,
+  service: string
+) => {
+  return apiRequest(
+    `/agent/${agentId}/integrations/google/${service}/disconnect`,
+    {
+      method: "DELETE",
+    }
+  );
+};
+
+export const getGoogleStatus = async (agentId: string) => {
+  return apiRequest(`/agent/${agentId}/integrations/google/status`);
+};
+
+// Agent Templates & Hiring
+export const getAgentTemplates = async () => {
+  return apiRequest("/agent/templates");
+};
+
+export const hireAgent = async (systemAgentId: string) => {
+  return apiRequest("/agent/hire", {
+    method: "POST",
+    body: JSON.stringify({ system_agent_id: systemAgentId }),
+  });
+};
+
+export const createAgentTemplate = async (data: any) => {
+  // Uses createAgent but with is_template=true
+  return apiRequest("/agent/create", {
+    method: "POST",
+    body: JSON.stringify({ ...data, is_template: true }),
+  });
 };
 
 export default apiRequest;

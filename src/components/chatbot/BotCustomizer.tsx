@@ -3,7 +3,11 @@
 
 import { useState, useEffect } from "react";
 import { BotPreview } from "./BotPreview";
-import { useAgentData, useAgentAppearance } from "@/store/agentDetailStore";
+import {
+  useAgentData,
+  useAgentAppearance,
+  useAgentDetailStore,
+} from "@/store/agentDetailStore";
 import {
   AgentAppearance,
   AgentBubbleStyle,
@@ -18,6 +22,8 @@ interface BotCustomizerProps {
 export function BotCustomizer({ onSave }: BotCustomizerProps) {
   const agent = useAgentData();
   const appearance = useAgentAppearance();
+  const { saveAppearance } = useAgentDetailStore();
+
   const [name, setName] = useState("Agent");
   const [config, setConfig] = useState<Partial<AgentAppearance>>({
     position: "bottom-right" as AgentPosition,
@@ -237,7 +243,10 @@ export function BotCustomizer({ onSave }: BotCustomizerProps) {
           <div className="pt-4">
             <button
               type="button"
-              onClick={onSave}
+              onClick={async () => {
+                await saveAppearance(config);
+                onSave();
+              }}
               className="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
             >
               Save Customization

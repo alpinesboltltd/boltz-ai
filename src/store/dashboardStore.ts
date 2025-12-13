@@ -8,6 +8,7 @@ export enum DetailsTab {
   SOURCES = "sources",
   // ACTION = "action",
   APPEARANCE = "appearance",
+  INTEGRATIONS = "integrations",
 }
 
 interface DashboardState {

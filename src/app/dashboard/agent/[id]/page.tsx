@@ -18,9 +18,11 @@ import {
   Palette,
   Activity as ActivityIcon,
   CheckCircle2,
-  AlertCircle
+  AlertCircle,
+  Puzzle,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Integrations } from "@/components/dashboard/Integrations";
 
 export default function AgentDetailPage({
   params,
@@ -49,8 +51,13 @@ export default function AgentDetailPage({
   const tabs = [
     { id: DetailsTab.PLAYGROUND, label: "Playground", icon: LayoutDashboard },
     { id: DetailsTab.ACTIVITY, label: "Activity", icon: ActivityIcon },
-    { id: DetailsTab.CONVERSATIONS, label: "Conversations", icon: MessageSquare },
+    {
+      id: DetailsTab.CONVERSATIONS,
+      label: "Conversations",
+      icon: MessageSquare,
+    },
     { id: DetailsTab.SOURCES, label: "Knowledge Base", icon: Database },
+    { id: DetailsTab.INTEGRATIONS, label: "Integrations", icon: Puzzle },
     { id: DetailsTab.APPEARANCE, label: "Appearance", icon: Palette },
   ];
 
@@ -58,7 +65,9 @@ export default function AgentDetailPage({
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh]">
         <Spinner size="lg" />
-        <p className="mt-4 text-gray-500 font-medium animate-pulse">Loading agent details...</p>
+        <p className="mt-4 text-gray-500 font-medium animate-pulse">
+          Loading agent details...
+        </p>
       </div>
     );
   }
@@ -70,7 +79,9 @@ export default function AgentDetailPage({
           <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-red-100 mb-4">
             <AlertCircle className="h-6 w-6 text-red-600" />
           </div>
-          <h3 className="text-lg font-semibold text-red-900 mb-2">Failed to load agent</h3>
+          <h3 className="text-lg font-semibold text-red-900 mb-2">
+            Failed to load agent
+          </h3>
           <p className="text-sm text-red-600 mb-6">{error}</p>
           <button
             onClick={() => fetchAgentDetails(agentId)}
@@ -106,10 +117,14 @@ export default function AgentDetailPage({
                     : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
                 )}
               >
-                <Icon className={cn(
-                  "mr-2 h-5 w-5 transition-colors",
-                  isActive ? "text-primary-500" : "text-gray-400 group-hover:text-gray-500"
-                )} />
+                <Icon
+                  className={cn(
+                    "mr-2 h-5 w-5 transition-colors",
+                    isActive
+                      ? "text-primary-500"
+                      : "text-gray-400 group-hover:text-gray-500"
+                  )}
+                />
                 {tab.label}
               </button>
             );
@@ -151,6 +166,9 @@ export default function AgentDetailPage({
             {activeTab === DetailsTab.SOURCES && <Sources />}
             {activeTab === DetailsTab.APPEARANCE && (
               <BotCustomizer onSave={handleSaveConfig} />
+            )}
+            {activeTab === DetailsTab.INTEGRATIONS && (
+              <Integrations agentId={agentId} />
             )}
           </motion.div>
         </AnimatePresence>
