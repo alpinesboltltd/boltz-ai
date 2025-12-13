@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { getAgentTemplates, hireAgent } from "@/lib/api";
+import { agentsAPI } from "@/lib/api"; // Updated import
+import { AgentTemplate } from "@/types/agent"; // Imported type
 import { Spinner } from "@/components/common/Spinner";
 import { useRouter } from "next/navigation";
 import {
@@ -16,20 +17,12 @@ import {
 } from "lucide-react";
 import Select from "react-select";
 
-interface Template {
-  id: string;
-  name: string;
-  description: string;
-  role: string;
-  tags: string[];
-  ai_model_id: string;
-}
-
 const ROLE_ICONS: Record<string, any> = {
   virtual_assistant: Bot,
   customer_support: Headphones,
   sdr: Target,
   bdr: Users,
+  // Add fallback or map others
 };
 
 const ROLE_OPTIONS = [
@@ -42,7 +35,7 @@ const ROLE_OPTIONS = [
 
 export default function MarketplacePage() {
   const router = useRouter();
-  const [templates, setTemplates] = useState<Template[]>([]);
+  const [templates, setTemplates] = useState<AgentTemplate[]>([]);
   const [loading, setLoading] = useState(true);
   const [hiringId, setHiringId] = useState<string | null>(null);
   const [filterRole, setFilterRole] = useState("all");
@@ -54,8 +47,8 @@ export default function MarketplacePage() {
 
   const loadTemplates = async () => {
     try {
-      const res = await getAgentTemplates();
-      setTemplates(res.templates || []);
+      const res = await agentsAPI.listTemplates();
+      setTemplates(res || []);
     } catch (error) {
       console.error("Failed to load templates", error);
     } finally {
@@ -66,7 +59,7 @@ export default function MarketplacePage() {
   const handleHire = async (templateId: string) => {
     setHiringId(templateId);
     try {
-      const res = await hireAgent(templateId);
+      const res: any = await agentsAPI.hire(templateId);
       // specific success handling or redirect?
       // Redirect to the new agent's page
       if (res.agent && res.agent.id) {

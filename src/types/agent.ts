@@ -56,6 +56,15 @@ export interface SystemPromptTemplate {
   constraints: string[];
 }
 
+export interface PromptTemplate {
+  id: string;
+  title: string;
+  content: string;
+  role?: string;
+  created_at?: string;
+  updated_at?: string;
+}
+
 export interface AgentIntegration {
   id: number;
   agent_id: string;
@@ -70,6 +79,19 @@ export interface AgentChannel {
   id: number;
   agent_id: string;
   channel_id: string[];
+  created_at: string;
+  updated_at: string;
+}
+
+export interface AgentTemplate {
+  id: string;
+  name: string;
+  description: string;
+  role: string;
+  agent_type: number;
+  tags: string[];
+  ai_model_id: string;
+  config?: Record<string, any>;
   created_at: string;
   updated_at: string;
 }

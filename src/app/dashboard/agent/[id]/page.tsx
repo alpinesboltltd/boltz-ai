@@ -8,6 +8,7 @@ import { ConversationLogs } from "@/components/dashboard/ConversationLogs";
 import { useDashboardStore, DetailsTab } from "@/store/dashboardStore";
 import { AgentPlayground } from "@/components/chatbot/AgentPlayground";
 import { BotCustomizer } from "@/components/chatbot/BotCustomizer";
+import { AgentBehavior } from "@/components/chatbot/AgentBehavior";
 import { useAgentDetailStore } from "@/store/agentDetailStore";
 import { Spinner } from "@/components/common/Spinner";
 import { cn } from "@/lib/utils";
@@ -20,6 +21,7 @@ import {
   CheckCircle2,
   AlertCircle,
   Puzzle,
+  Brain,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Integrations } from "@/components/dashboard/Integrations";
@@ -57,6 +59,7 @@ export default function AgentDetailPage({
       icon: MessageSquare,
     },
     { id: DetailsTab.SOURCES, label: "Knowledge Base", icon: Database },
+    { id: DetailsTab.AGENT_BEHAVIOR, label: "Behavior", icon: Brain },
     { id: DetailsTab.INTEGRATIONS, label: "Integrations", icon: Puzzle },
     { id: DetailsTab.APPEARANCE, label: "Appearance", icon: Palette },
   ];
@@ -164,6 +167,7 @@ export default function AgentDetailPage({
             {activeTab === DetailsTab.ACTIVITY && <Activity />}
             {activeTab === DetailsTab.CONVERSATIONS && <ConversationLogs />}
             {activeTab === DetailsTab.SOURCES && <Sources />}
+            {activeTab === DetailsTab.AGENT_BEHAVIOR && <AgentBehavior />}
             {activeTab === DetailsTab.APPEARANCE && (
               <BotCustomizer onSave={handleSaveConfig} />
             )}

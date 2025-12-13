@@ -21,13 +21,20 @@ export default function DashboardLayout({
   // Show loading or redirect if no user
   if (!user) {
     if (typeof window !== "undefined") {
-      window.location.href = "/auth/login";
+      // Double check localStorage to avoid redirecting during hydration
+      const hasToken = localStorage.getItem("boltz_by_alpinesbolt_auth_token");
+      if (!hasToken) {
+        // Force logout action to clear any stale cookies and prevent redirect loops
+        window.location.href = "/login?action=logout";
+      }
     }
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary-600 mx-auto"></div>
-          <p className="mt-4 text-gray-500 font-medium">Redirecting to login...</p>
+          <p className="mt-4 text-gray-500 font-medium">
+            Redirecting to login...
+          </p>
         </div>
       </div>
     );

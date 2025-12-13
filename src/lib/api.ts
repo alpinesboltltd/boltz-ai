@@ -7,6 +7,7 @@ import {
   AgentChannel,
   AgentIntegration,
   AgentStats,
+  AgentTemplate,
   CreateAgentAPIRequest,
   SystemPromptTemplate,
   TrainingData,
@@ -295,6 +296,29 @@ export const agentsAPI = {
       token
     );
     return { data: res.agent };
+  },
+
+  createTemplate: async (templateData: Partial<AgentTemplate>) => {
+    const res = await apiRequest("/agent/templates/create", {
+      method: "POST",
+      body: JSON.stringify(templateData),
+    });
+    return res;
+  },
+
+  listTemplates: async (): Promise<AgentTemplate[]> => {
+    const response = await apiRequest("/agent/templates");
+    return response.templates;
+  },
+
+  hire: async (templateId: string) => {
+    // We need workspaceId. `apiRequest` handles it via localStorage or context if enabled.
+    // The endpoint is /agent/hire. Body: { system_agent_id: templateId } (legacy name or update it?)
+    // Handler `HireAgent` uses `req.SystemAgentID`. I'll pass that key to match handler struct `HireAgentRequest`.
+    return await apiRequest("/agent/hire", {
+      method: "POST",
+      body: JSON.stringify({ system_agent_id: templateId }),
+    });
   },
 
   update: async (

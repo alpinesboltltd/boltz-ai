@@ -33,6 +33,13 @@ export function proxy(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
+  // Handle logout query param to break redirect loops and force cookie clearing
+  if (request.nextUrl.searchParams.get("action") === "logout") {
+    const response = NextResponse.next();
+    response.cookies.delete("boltz_by_alpinesbolt_auth_token");
+    return response;
+  }
+
   // If logged in and trying to access auth pages, redirect to dashboard or intended page
   if (token && isAuthPath) {
     const redirectTo = request.nextUrl.searchParams.get("redirect");
