@@ -12,6 +12,9 @@ export interface Agent {
   updated_at: string;
   template?: string;
   workspace_id?: string;
+  role?: string;
+  tags?: string[];
+  is_template?: boolean;
 }
 
 export interface AgentAppearance {
@@ -86,11 +89,11 @@ export interface TrainingData {
   id: number;
   agent_id: string;
   content_type:
-  | "faq"
-  | "knowledge_base"
-  | "procedure"
-  | "external_link"
-  | "website_content";
+    | "faq"
+    | "knowledge_base"
+    | "procedure"
+    | "external_link"
+    | "website_content";
   category: string;
   title: string;
   content: string;
@@ -103,13 +106,17 @@ export interface TrainingData {
   updated_at: string;
 }
 
-export interface AgentBehaviorParsed
-  extends Omit<AgentBehavior, "initial_messages"> {
+export interface AgentBehaviorParsed extends Omit<
+  AgentBehavior,
+  "initial_messages"
+> {
   initial_messages: string[];
 }
 
-export interface TrainingDataWithKeywords
-  extends Omit<TrainingData, "keywords"> {
+export interface TrainingDataWithKeywords extends Omit<
+  TrainingData,
+  "keywords"
+> {
   keywords: string[];
 }
 
