@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { agentsAPI } from "@/lib/api"; // Updated import
 import { AgentTemplate } from "@/types/agent"; // Imported type
 import { Spinner } from "@/components/common/Spinner";
+import { AgentSetupModal } from "@/components/dashboard/AgentSetupModal";
 import { useRouter } from "next/navigation";
 import {
   Bot,
@@ -35,6 +36,10 @@ const ROLE_OPTIONS = [
 
 export default function MarketplacePage() {
   const router = useRouter();
+  const [setupAgent, setSetupAgent] = useState<{
+    id: string;
+    name: string;
+  } | null>(null);
   const [templates, setTemplates] = useState<AgentTemplate[]>([]);
   const [loading, setLoading] = useState(true);
   const [hiringId, setHiringId] = useState<string | null>(null);
@@ -56,18 +61,26 @@ export default function MarketplacePage() {
     }
   };
 
-  const handleHire = async (templateId: string) => {
+  const handleHire = async (templateId: string, templateName: string) => {
     setHiringId(templateId);
     try {
       const res: any = await agentsAPI.hire(templateId);
-      // specific success handling or redirect?
-      // Redirect to the new agent's page
       if (res.agent && res.agent.id) {
-        router.push(`/dashboard/agent/${res.agent.id}`);
+        setSetupAgent({
+          id: res.agent.id,
+          name: templateName || res.agent.name,
+        });
       }
     } catch (error) {
       console.error("Failed to hire agent", error);
+    } finally {
       setHiringId(null);
+    }
+  };
+
+  const handleFinishSetup = () => {
+    if (setupAgent) {
+      router.push(`/dashboard/agent/${setupAgent.id}`);
     }
   };
 
@@ -167,7 +180,7 @@ export default function MarketplacePage() {
 
               <div className="p-6 pt-0 mt-auto">
                 <button
-                  onClick={() => handleHire(template.id)}
+                  onClick={() => handleHire(template.id, template.name)}
                   disabled={!!hiringId}
                   className="w-full py-2.5 px-4 bg-gray-900 hover:bg-primary-600 text-white rounded-lg font-medium transition-all flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed group-hover:shadow-md"
                 >
@@ -193,6 +206,15 @@ export default function MarketplacePage() {
           </p>
         </div>
       )}
+
+      {/* Setup Modal */}
+      <AgentSetupModal
+        isOpen={!!setupAgent}
+        agentId={setupAgent?.id || null}
+        agentName={setupAgent?.name}
+        onClose={() => handleFinishSetup()}
+        onFinish={() => handleFinishSetup()}
+      />
     </div>
   );
 }

@@ -1,20 +1,16 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Image from "next/image";
 import Select from "react-select";
-import {
-  SystemPromptTemplate,
-  PlaygroundConfig,
-  AgentType,
-} from "@/types/agent";
+import { SystemPromptTemplate, PlaygroundConfig } from "@/types/agent";
 import { agentsAPI, systemAPI } from "@/lib/api";
-import { playgroundAPI } from "@/lib/playground-api";
+
 import {
   useAgentData,
   useAgentBehavior,
   useAgentAppearance,
+  useAgentDetailStore,
 } from "@/store/agentDetailStore";
 import { useAIModelsStore } from "@/store/aiModelsStore";
 import { AIModel } from "@/lib/static/ai-models";
@@ -22,6 +18,7 @@ import { agentTypeToEnum, enumToAgentType } from "@/lib/agentTypeSerializer";
 import { SYSTEM_PROMPT_TEMPLATES } from "@/data/systemPrompts";
 
 export function AgentBehavior() {
+  const { fetchAgentDetails } = useAgentDetailStore();
   const agent = useAgentData();
   const behavior = useAgentBehavior();
   const appearance = useAgentAppearance();
@@ -135,17 +132,29 @@ export function AgentBehavior() {
     try {
       // Update agent model if changed
       if (agent && config.ai_model_id !== agent.ai_model_id) {
-        const modelData = models.find((m) => m.id === config.ai_model_id);
-        if (modelData) {
-          await agentsAPI.update(agentId, {
-            id: agentId,
-            ai_model_id: modelData.id,
-          });
-        }
+        // Find model to ensure it exists, though ID is enough
+        await agentsAPI.update(agentId, {
+          id: agentId,
+          ai_model_id: config.ai_model_id,
+        });
       }
 
       // Update behavior configuration
-      await playgroundAPI.saveBehaviorConfig(agentId, config);
+      // Backend expects prompt_template_id, temperature, max_tokens, etc.
+      // We do NOT send systemInstruction text because backend doesn't support raw text update on this endpoint generally,
+      // it expects a template ID or system instruction ID.
+      await agentsAPI.updateBehavior(agentId, {
+        temperature: config.temperature,
+        max_tokens: config.maxTokens,
+        prompt_template_id: config.selectedTemplate || undefined,
+        // If we had a system_instruction_id, we would send it here.
+      });
+
+      // Refresh agent data
+      if (typeof window !== "undefined" && agentId) {
+        fetchAgentDetails(agentId);
+      }
+
       setSuccess(true);
       setTimeout(() => setSuccess(false), 3000);
     } catch (error) {

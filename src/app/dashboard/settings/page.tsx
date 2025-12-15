@@ -21,7 +21,7 @@ import {
   Copy,
   RefreshCw,
   Trash2,
-  Plus
+  Plus,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -93,7 +93,9 @@ export default function SettingsPage() {
     toast.info("Coming Soon", "Profile update is currently disabled.");
   };
 
-  const handleNotificationChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleNotificationChange = async (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const { name, checked } = e.target;
 
     if (name === "email") {
@@ -178,19 +180,26 @@ export default function SettingsPage() {
   return (
     <div className="px-4 sm:px-6 lg:px-8 py-8 animate-fade-in max-w-7xl mx-auto">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Settings</h1>
+        <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
+          Settings
+        </h1>
         <p className="mt-2 text-gray-500">
           Manage your account, billing, and API preferences.
         </p>
       </div>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-8">
+      <Tabs
+        value={activeTab}
+        onValueChange={setActiveTab}
+        className="space-y-8"
+      >
         <TabsList className="bg-white/50 backdrop-blur-sm p-1 rounded-xl border border-gray-200 inline-flex">
           {[
             { id: "profile", label: "Profile", icon: User },
             { id: "notifications", label: "Notifications", icon: Bell },
             { id: "billing", label: "Billing", icon: CreditCard },
             { id: "api", label: "API Access", icon: Key },
+            { id: "security", label: "Security", icon: Shield },
           ].map((tab) => (
             <TabsTrigger
               key={tab.id}
@@ -215,7 +224,9 @@ export default function SettingsPage() {
                 <User className="w-5 h-5 text-primary-500" />
                 Profile Information
               </h3>
-              <p className="mt-1 text-sm text-gray-500">Update your personal details and company info.</p>
+              <p className="mt-1 text-sm text-gray-500">
+                Update your personal details and company info.
+              </p>
             </div>
 
             <div className="p-6 sm:p-8">
@@ -229,30 +240,33 @@ export default function SettingsPage() {
                       className="object-cover"
                     />
                   </div>
-                  <button
-                    type="button"
-                    className="btn btn-secondary text-sm"
-                  >
+                  <button type="button" className="btn btn-secondary text-sm">
                     Change Avatar
                   </button>
                 </div>
 
                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-gray-700">Full Name</label>
+                    <label className="text-sm font-medium text-gray-700">
+                      Full Name
+                    </label>
                     <div className="relative">
                       <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                       <input
                         type="text"
                         value={userData.name || "Admin"}
-                        onChange={(e) => setUserData({ ...userData, name: e.target.value })}
+                        onChange={(e) =>
+                          setUserData({ ...userData, name: e.target.value })
+                        }
                         className="input pl-10 w-full"
                       />
                     </div>
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-gray-700">Email Address</label>
+                    <label className="text-sm font-medium text-gray-700">
+                      Email Address
+                    </label>
                     <div className="relative">
                       <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                       <input
@@ -265,26 +279,37 @@ export default function SettingsPage() {
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-gray-700">Company</label>
+                    <label className="text-sm font-medium text-gray-700">
+                      Company
+                    </label>
                     <div className="relative">
                       <Building className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                       <input
                         type="text"
                         value={userData.company}
-                        onChange={(e) => setUserData({ ...userData, company: e.target.value })}
+                        onChange={(e) =>
+                          setUserData({ ...userData, company: e.target.value })
+                        }
                         className="input pl-10 w-full"
                       />
                     </div>
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-gray-700">Role</label>
+                    <label className="text-sm font-medium text-gray-700">
+                      Role
+                    </label>
                     <div className="relative">
                       <Shield className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                       <input
                         type="text"
                         value={userData.role}
-                        onChange={(e) => setUserData({ ...userData, role: e.target.value as UserRoles })}
+                        onChange={(e) =>
+                          setUserData({
+                            ...userData,
+                            role: e.target.value as UserRoles,
+                          })
+                        }
                         className="input pl-10 w-full"
                       />
                     </div>
@@ -297,7 +322,11 @@ export default function SettingsPage() {
                     disabled={loading}
                     className="btn btn-primary"
                   >
-                    {loading ? <Spinner size="sm" color="white" /> : "Save Changes"}
+                    {loading ? (
+                      <Spinner size="sm" color="white" />
+                    ) : (
+                      "Save Changes"
+                    )}
                   </button>
                 </div>
               </form>
@@ -312,7 +341,9 @@ export default function SettingsPage() {
                 <Bell className="w-5 h-5 text-primary-500" />
                 Notification Preferences
               </h3>
-              <p className="mt-1 text-sm text-gray-500">Choose how you want to be notified.</p>
+              <p className="mt-1 text-sm text-gray-500">
+                Choose how you want to be notified.
+              </p>
             </div>
 
             <div className="p-6 sm:p-8 space-y-6">
@@ -333,9 +364,15 @@ export default function SettingsPage() {
                   desc: "Stay updated with new features and promotions.",
                 },
               ].map((item) => (
-                <div key={item.id} className="flex items-start justify-between p-4 rounded-xl hover:bg-gray-50 transition-colors border border-transparent hover:border-gray-100">
+                <div
+                  key={item.id}
+                  className="flex items-start justify-between p-4 rounded-xl hover:bg-gray-50 transition-colors border border-transparent hover:border-gray-100"
+                >
                   <div>
-                    <label htmlFor={item.id} className="font-medium text-gray-900 block mb-1">
+                    <label
+                      htmlFor={item.id}
+                      className="font-medium text-gray-900 block mb-1"
+                    >
                       {item.label}
                     </label>
                     <p className="text-sm text-gray-500">{item.desc}</p>
@@ -345,7 +382,11 @@ export default function SettingsPage() {
                       id={item.id}
                       name={item.id}
                       type="checkbox"
-                      checked={userData.notifications[item.id as keyof typeof userData.notifications]}
+                      checked={
+                        userData.notifications[
+                          item.id as keyof typeof userData.notifications
+                        ]
+                      }
                       onChange={handleNotificationChange}
                       className="h-5 w-5 text-primary-600 rounded border-gray-300 focus:ring-primary-500 transition-all cursor-pointer"
                     />
@@ -366,7 +407,13 @@ export default function SettingsPage() {
                     <CreditCard className="w-5 h-5 text-primary-500" />
                     Current Plan
                   </h3>
-                  <p className="mt-1 text-sm text-gray-500">You are currently on the <span className="font-medium text-gray-900">{subscription.plan}</span> plan.</p>
+                  <p className="mt-1 text-sm text-gray-500">
+                    You are currently on the{" "}
+                    <span className="font-medium text-gray-900">
+                      {subscription.plan}
+                    </span>{" "}
+                    plan.
+                  </p>
                 </div>
                 <span className="px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700 border border-green-200 uppercase tracking-wide">
                   {subscription.status}
@@ -375,12 +422,17 @@ export default function SettingsPage() {
 
               <div className="p-6 sm:p-8">
                 <div className="flex items-baseline gap-2 mb-6">
-                  <span className="text-4xl font-bold text-gray-900">{subscription.price}</span>
+                  <span className="text-4xl font-bold text-gray-900">
+                    {subscription.price}
+                  </span>
                 </div>
 
                 <div className="space-y-4 mb-8">
                   {subscription.features.map((feature, idx) => (
-                    <div key={idx} className="flex items-center gap-3 text-sm text-gray-600">
+                    <div
+                      key={idx}
+                      className="flex items-center gap-3 text-sm text-gray-600"
+                    >
                       <div className="shrink-0 w-5 h-5 rounded-full bg-green-50 flex items-center justify-center">
                         <Check className="w-3 h-3 text-green-600" />
                       </div>
@@ -391,7 +443,9 @@ export default function SettingsPage() {
 
                 <div className="flex gap-3">
                   <button className="btn btn-primary">Upgrade Plan</button>
-                  <button className="btn btn-ghost text-red-600 hover:text-red-700 hover:bg-red-50">Cancel Subscription</button>
+                  <button className="btn btn-ghost text-red-600 hover:text-red-700 hover:bg-red-50">
+                    Cancel Subscription
+                  </button>
                 </div>
               </div>
             </div>
@@ -399,33 +453,50 @@ export default function SettingsPage() {
             {/* Payment Methods */}
             <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden flex flex-col">
               <div className="p-6 border-b border-gray-100">
-                <h3 className="text-lg font-semibold text-gray-900">Payment Methods</h3>
+                <h3 className="text-lg font-semibold text-gray-900">
+                  Payment Methods
+                </h3>
               </div>
 
               <div className="p-6 flex-1 flex flex-col gap-4">
                 {paymentMethods.map((method) => (
-                  <div key={method.id} className="flex items-center justify-between p-4 rounded-xl border border-gray-200 bg-gray-50/50">
+                  <div
+                    key={method.id}
+                    className="flex items-center justify-between p-4 rounded-xl border border-gray-200 bg-gray-50/50"
+                  >
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-6 bg-white border border-gray-200 rounded flex items-center justify-center">
-                        <span className={cn(
-                          "text-xs font-bold",
-                          method.brand === "visa" ? "text-blue-600" : "text-red-600"
-                        )}>
+                        <span
+                          className={cn(
+                            "text-xs font-bold",
+                            method.brand === "visa"
+                              ? "text-blue-600"
+                              : "text-red-600"
+                          )}
+                        >
                           {method.brand === "visa" ? "VISA" : "MC"}
                         </span>
                       </div>
                       <div>
-                        <p className="text-sm font-medium text-gray-900">•••• {method.last4}</p>
-                        <p className="text-xs text-gray-500">Exp {method.expMonth}/{method.expYear}</p>
+                        <p className="text-sm font-medium text-gray-900">
+                          •••• {method.last4}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          Exp {method.expMonth}/{method.expYear}
+                        </p>
                       </div>
                     </div>
 
                     <div className="flex items-center gap-2">
                       {method.isDefault ? (
-                        <span className="text-xs font-medium text-green-600 bg-green-50 px-2 py-1 rounded-full">Default</span>
+                        <span className="text-xs font-medium text-green-600 bg-green-50 px-2 py-1 rounded-full">
+                          Default
+                        </span>
                       ) : (
                         <button
-                          onClick={() => handleSetDefaultPaymentMethod(method.id)}
+                          onClick={() =>
+                            handleSetDefaultPaymentMethod(method.id)
+                          }
                           className="text-xs font-medium text-primary-600 hover:text-primary-700"
                         >
                           Set Default
@@ -456,17 +527,30 @@ export default function SettingsPage() {
                 <Key className="w-5 h-5 text-primary-500" />
                 API Configuration
               </h3>
-              <p className="mt-1 text-sm text-gray-500">Manage your API keys for integration.</p>
+              <p className="mt-1 text-sm text-gray-500">
+                Manage your API keys for integration.
+              </p>
             </div>
 
             <div className="p-6 sm:p-8 space-y-8">
               <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl border border-gray-200">
                 <div>
-                  <h4 className="text-sm font-medium text-gray-900">Environment Mode</h4>
-                  <p className="text-xs text-gray-500 mt-1">Toggle between Test and Live API keys.</p>
+                  <h4 className="text-sm font-medium text-gray-900">
+                    Environment Mode
+                  </h4>
+                  <p className="text-xs text-gray-500 mt-1">
+                    Toggle between Test and Live API keys.
+                  </p>
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className={cn("text-sm font-medium", !liveMode ? "text-primary-600" : "text-gray-500")}>Test</span>
+                  <span
+                    className={cn(
+                      "text-sm font-medium",
+                      !liveMode ? "text-primary-600" : "text-gray-500"
+                    )}
+                  >
+                    Test
+                  </span>
                   <Switch
                     checked={liveMode}
                     onChange={setLiveMode}
@@ -482,18 +566,31 @@ export default function SettingsPage() {
                       )}
                     />
                   </Switch>
-                  <span className={cn("text-sm font-medium", liveMode ? "text-primary-600" : "text-gray-500")}>Live</span>
+                  <span
+                    className={cn(
+                      "text-sm font-medium",
+                      liveMode ? "text-primary-600" : "text-gray-500"
+                    )}
+                  >
+                    Live
+                  </span>
                 </div>
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">API Key</label>
+                <label className="text-sm font-medium text-gray-700">
+                  API Key
+                </label>
                 <div className="flex gap-2">
                   <div className="relative flex-1">
                     <input
                       type="text"
                       readOnly
-                      value={liveMode ? userData.api_key.live_key : userData.api_key.test_key}
+                      value={
+                        liveMode
+                          ? userData.api_key.live_key
+                          : userData.api_key.test_key
+                      }
                       className="input w-full font-mono text-sm bg-gray-50 text-gray-600"
                     />
                   </div>
@@ -501,7 +598,9 @@ export default function SettingsPage() {
                     onClick={async () => {
                       try {
                         await navigator.clipboard.writeText(
-                          liveMode ? userData.api_key.live_key : userData.api_key.test_key
+                          liveMode
+                            ? userData.api_key.live_key
+                            : userData.api_key.test_key
                         );
                         toast.success("Copied", "API key copied to clipboard");
                       } catch {
@@ -518,9 +617,12 @@ export default function SettingsPage() {
               <div className="pt-6 border-t border-gray-100">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h4 className="text-sm font-medium text-gray-900">Regenerate Key</h4>
+                    <h4 className="text-sm font-medium text-gray-900">
+                      Regenerate Key
+                    </h4>
                     <p className="text-xs text-gray-500 mt-1 max-w-md">
-                      This will invalidate your current key immediately. Make sure to update your applications.
+                      This will invalidate your current key immediately. Make
+                      sure to update your applications.
                     </p>
                   </div>
                   <button
@@ -528,12 +630,138 @@ export default function SettingsPage() {
                     disabled={loading}
                     className="btn btn-ghost text-red-600 hover:text-red-700 hover:bg-red-50"
                   >
-                    {loading ? <Spinner size="sm" /> : (
+                    {loading ? (
+                      <Spinner size="sm" />
+                    ) : (
                       <span className="flex items-center gap-2">
                         <RefreshCw className="w-4 h-4" /> Regenerate
                       </span>
                     )}
                   </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </TabsContent>
+        <TabsContent value="security" className="space-y-6">
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+            <div className="p-6 sm:p-8 border-b border-gray-100">
+              <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                <Shield className="w-5 h-5 text-primary-500" />
+                Security Settings
+              </h3>
+              <p className="mt-1 text-sm text-gray-500">
+                Manage your password and 2-step verification.
+              </p>
+            </div>
+
+            <div className="p-6 sm:p-8 space-y-8">
+              {/* Change Password Section */}
+              <div className="space-y-4">
+                <h4 className="text-sm font-medium text-gray-900">
+                  Change Password
+                </h4>
+                <div className="grid gap-4 max-w-md">
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-gray-700">
+                      New Password
+                    </label>
+                    <div className="relative">
+                      <Key className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                      <input
+                        type="password"
+                        placeholder="Min 8 characters"
+                        className="input pl-10 w-full"
+                        // This needs state management, for simplicity I'll use a controlled input if I can inject state hooks above,
+                        // but standard replace can't inject hooks easily at top.
+                        // I will use an uncontrolled input approach or I need to do a larger replace to add state.
+                        // Let's assume I will inject state in a separate call or use a form component.
+                        // Actually, I should use a Ref or just add the state in a separate edit.
+                        id="new-password-input"
+                      />
+                    </div>
+                  </div>
+                  <button
+                    onClick={async () => {
+                      const input = document.getElementById(
+                        "new-password-input"
+                      ) as HTMLInputElement;
+                      const password = input.value;
+                      if (!password || password.length < 8) {
+                        toast.error(
+                          "Error",
+                          "Password must be at least 8 characters"
+                        );
+                        return;
+                      }
+                      setLoading(true);
+                      try {
+                        await authAPI.changePassword(password);
+                        toast.success(
+                          "Success",
+                          "Password updated successfully"
+                        );
+                        input.value = "";
+                      } catch (err) {
+                        const msg =
+                          err instanceof Error
+                            ? err.message
+                            : "Failed to update password";
+                        toast.error("Error", msg);
+                      } finally {
+                        setLoading(false);
+                      }
+                    }}
+                    disabled={loading}
+                    className="btn btn-primary w-fit"
+                  >
+                    {loading ? (
+                      <Spinner size="sm" color="white" />
+                    ) : (
+                      "Update Password"
+                    )}
+                  </button>
+                </div>
+              </div>
+
+              <div className="border-t border-gray-100 pt-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h4 className="text-sm font-medium text-gray-900">
+                      Two-Factor Authentication (OTP)
+                    </h4>
+                    <p className="text-sm text-gray-500 mt-1">
+                      Secure your account with email OTP.
+                    </p>
+                  </div>
+                  <Switch
+                    checked={userData.notifications.email} // Re-using this prop as it seemed tied to OTP in handleNotificationChange
+                    // Wait, handleNotificationChange logic tied 'email' notification to OTP enable/disable.
+                    // This is slightly confusing UX but I will respect the existing logic or bind it to a new field?
+                    // UserData doesn't have explicit otp_enabled field in the state initialized.
+                    // I will stick to the existing handler logic for now.
+                    onChange={(checked) => {
+                      // simulate event
+                      handleNotificationChange({
+                        target: { name: "email", checked },
+                      } as any);
+                    }}
+                    className={cn(
+                      userData.notifications.email
+                        ? "bg-primary-600"
+                        : "bg-gray-200",
+                      "relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+                    )}
+                  >
+                    <span
+                      className={cn(
+                        userData.notifications.email
+                          ? "translate-x-6"
+                          : "translate-x-1",
+                        "inline-block h-4 w-4 transform rounded-full bg-white transition-transform"
+                      )}
+                    />
+                  </Switch>
                 </div>
               </div>
             </div>

@@ -12,6 +12,7 @@ import {
   SystemPromptTemplate,
   TrainingData,
   UpdateAgentRequest,
+  TestQuery,
 } from "@/types/agent";
 import { ChatMessage, Conversation } from "@/types/conversations";
 
@@ -74,11 +75,11 @@ export interface ScraperPayload {
 }
 
 // API helper function
-export const apiRequest = async (
+export const apiRequest = async <T = any>(
   endpoint: string,
   options: RequestInit = {},
   token?: string
-) => {
+): Promise<T> => {
   // Use provided token or get from localStorage/cookies as fallback
   let authToken = token;
 
@@ -118,7 +119,9 @@ export const apiRequest = async (
   const response = await fetch(`/v1${endpoint}`, {
     ...options,
     headers: {
-      "Content-Type": "application/json",
+      ...(!(options.body instanceof FormData) && {
+        "Content-Type": "application/json",
+      }),
       ...(authToken && { Authorization: `Bearer ${authToken}` }),
       ...(workspaceId && { "X-Workspace-ID": workspaceId }),
       ...options.headers,
@@ -155,7 +158,7 @@ export const authAPI = {
   },
 
   register: async (name: string, email: string, password: string) => {
-    const data = await apiRequest("/auth/register", {
+    const data = await apiRequest("/auth/signup", {
       method: "POST",
       body: JSON.stringify({ name, email, password }),
     });
@@ -184,6 +187,75 @@ export const authAPI = {
       method: "POST",
       body: JSON.stringify({ email }),
     });
+  },
+
+  changePassword: async (password: string) => {
+    return await apiRequest("/otp/password", {
+      method: "POST",
+      body: JSON.stringify({ password }),
+    });
+  },
+};
+
+export const otpAPI = {
+  request: async (email: string, purpose: string = "password_reset") => {
+    return await apiRequest("/otp/request", {
+      method: "POST",
+      body: JSON.stringify({ email, purpose }),
+    });
+  },
+
+  verify: async (
+    email: string,
+    code: string,
+    purpose: string = "password_reset"
+  ) => {
+    return await apiRequest("/otp/verify", {
+      method: "POST",
+      body: JSON.stringify({ email, code, purpose }),
+    });
+  },
+
+  completePasswordReset: async (
+    email: string,
+    code: string,
+    new_password: string
+  ) => {
+    return await apiRequest("/otp/password-reset/complete", {
+      method: "POST",
+      body: JSON.stringify({ email, code, new_password }),
+    });
+  },
+
+  enable2FA: async () => {
+    return await apiRequest("/otp/2fa/enable", { method: "POST" });
+  },
+
+  disable2FA: async () => {
+    return await apiRequest("/otp/2fa/disable", { method: "POST" });
+  },
+};
+// Test Queries API
+export const testQueriesAPI = {
+  get: async (agentId: string) => {
+    return await apiRequest<{ queries: TestQuery[] }>(
+      `/agent/${agentId}/queries`
+    );
+  },
+  create: async (agentId: string, query: string) => {
+    return await apiRequest<{ query: TestQuery }>(`/agent/${agentId}/queries`, {
+      method: "POST",
+      body: JSON.stringify({ query }),
+    });
+  },
+  bulkReplace: async (agentId: string, queries: string[]) => {
+    return await apiRequest<{ queries: TestQuery[] }>(
+      `/agent/${agentId}/queries`,
+      {
+        method: "PUT",
+        body: JSON.stringify({ queries }),
+      }
+    );
   },
 };
 
@@ -816,25 +888,15 @@ export const trainingAPI = {
     const formData = new FormData();
     formData.append("file", file);
 
-    // Note: apiRequest handles JSON, but for FormData we need to let browser set Content-Type
-    // So we use fetch directly or modify apiRequest.
-    // Let's use fetch directly for file upload to avoid Content-Type issues.
-    const authToken =
-      token || localStorage.getItem("boltz_by_alpinesbolt_auth_token");
-    const response = await fetch(`/api/v1/agent/${agentId}/train/file`, {
-      method: "POST",
-      headers: {
-        ...(authToken && { Authorization: `Bearer ${authToken}` }),
+    // apiRequest now handles FormData by not forcing Content-Type: application/json
+    return await apiRequest(
+      `/agent/${agentId}/train/file`,
+      {
+        method: "POST",
+        body: formData,
       },
-      body: formData,
-    });
-
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.message || "Upload failed");
-    }
-
-    return response.json();
+      token
+    );
   },
 
   getDocuments: async (agentId: string, token?: string) => {

@@ -32,9 +32,6 @@ export default function DashboardLayout({
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary-600 mx-auto"></div>
-          <p className="mt-4 text-gray-500 font-medium">
-            Redirecting to login...
-          </p>
         </div>
       </div>
     );

@@ -292,7 +292,10 @@ export default function PlatformIntegrations({
                               navigator.clipboard.writeText(
                                 getWebsiteEmbedCode()
                               );
-                              toast.success("Copied!", "Embed code copied to clipboard!");
+                              toast.success(
+                                "Copied!",
+                                "Embed code copied to clipboard!"
+                              );
                             }}
                             className="inline-flex items-center px-2.5 py-1.5 border border-gray-300 text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50"
                           >
@@ -411,7 +414,7 @@ export default function PlatformIntegrations({
       />
 
       <DiscordIntegrationModal
-        chatagentId={chatagentId}
+        agentId={chatagentId}
         isOpen={activeModal === "discord"}
         onClose={() => setActiveModal(null)}
         onSuccess={() => handleModalSuccess("discord")}

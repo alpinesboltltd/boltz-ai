@@ -70,6 +70,7 @@ export interface AgentIntegration {
   agent_id: string;
   platform: Platform;
   api_key: string | null;
+  api_secret: string | null;
   is_active: boolean;
   created_at: string;
   updated_at: string;
@@ -248,6 +249,7 @@ export enum Platform {
   SHOPIFY = "shopify",
   TELEGRAM = "telegram",
   SLACK = "slack",
+  DISCORD = "discord", // Added DISCORD
 }
 
 export enum MessageRoles {
@@ -273,7 +275,7 @@ export const AgentTypeEnum = {
 export const CreateAgentRequestSchema = z.object({
   name: z.string().min(1, "Agent's name is required"),
   description: z.string().min(1, "describe your agent"),
-  agent_type: z.nativeEnum(AgentType),
+  agent_type: z.enum(AgentType),
   ai_model_id: z.string().min(1, "AI model is required"),
   status: z.enum(statusEnum),
   workspace_id: z.string().optional(),
@@ -282,12 +284,12 @@ export const CreateAgentRequestSchema = z.object({
 
 export const CreateAgentAPIRequestSchema = CreateAgentRequestSchema.extend({
   userId: z.string(),
-  agent_type: z.union([z.nativeEnum(AgentType), z.number()]),
+  agent_type: z.union([z.enum(AgentType), z.number()]),
 });
 
 export const UpdateAgentRequestSchema = CreateAgentRequestSchema.extend({
   id: z.string().min(1, "Agent ID is required"),
-  agent_type: z.union([z.nativeEnum(AgentType), z.number()]),
+  agent_type: z.union([z.enum(AgentType), z.number()]),
 })
   .partial({
     name: true,
@@ -303,3 +305,40 @@ export const UpdateAgentRequestSchema = CreateAgentRequestSchema.extend({
 export type CreateAgentRequest = z.infer<typeof CreateAgentRequestSchema>;
 export type CreateAgentAPIRequest = z.infer<typeof CreateAgentAPIRequestSchema>;
 export type UpdateAgentRequest = z.infer<typeof UpdateAgentRequestSchema>;
+
+// Schema for Agent Model Settings
+export const AgentModelSchema = z.object({
+  ai_model_id: z.string().min(1, "AI Model is required"),
+});
+
+// Schema for Agent Behavior Settings
+export const AgentBehaviorSchema = z.object({
+  temperature: z.number().min(0).max(2),
+  max_tokens: z.number().min(1).max(32000),
+  system_instruction_id: z.string().optional(),
+  prompt_template_id: z.string().optional(),
+  // We can't easily save raw text for system instructions due to backend constraints
+  // So we focus on the template ID for now.
+});
+
+export const AgentAppearanceSchema = z.object({
+  id: z.number().optional(),
+  agent_id: z.string().optional(),
+  position: z.enum(AgentPosition),
+  icon_size: z.enum(AgentIconSize),
+  bubble_style: z.enum(AgentBubbleStyle),
+  chat_icon: z.string(),
+  primary_color: z.string().regex(/^#[0-9A-F]{6}$/i, "Invalid color code"),
+  welcome_message: z.string().min(1, "Welcome message is required"),
+  font_family: z.string().optional(),
+});
+
+// Deprecated: Splitting into AgentModelSchema and AgentBehaviorSchema
+export const PlaygroundConfigSchema = z.object({
+  ai_model_id: z.string().min(1, "AI Model is required"),
+  ai_model_name: z.string().optional(),
+  temperature: z.number().min(0).max(2),
+  maxTokens: z.number().min(1).max(32000), // Adjusted max for modern models
+  systemInstruction: z.string().optional(),
+  selectedTemplate: z.string().optional(),
+});

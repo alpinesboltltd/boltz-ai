@@ -1,9 +1,5 @@
 import { useState, useEffect } from "react";
-import {
-  connectGoogleService,
-  disconnectGoogleService,
-  getGoogleStatus,
-} from "@/lib/api";
+import { getGoogleStatus, agentsAPI } from "@/lib/api";
 import { Spinner } from "@/components/common/Spinner";
 import {
   HardDrive,
@@ -15,8 +11,14 @@ import {
   Globe,
   Linkedin,
   Twitter,
+  MessageSquare,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+
+import { Button } from "@/components/ui/Button";
+import { GoogleServicesModal } from "./GoogleServicesModal";
+import DiscordIntegrationModal from "./DiscordIntegrationModal";
+import { AgentIntegration, Platform } from "@/types/agent";
 
 interface IntegrationsProps {
   agentId: string;
@@ -24,13 +26,18 @@ interface IntegrationsProps {
 
 export const Integrations = ({ agentId }: IntegrationsProps) => {
   const [loading, setLoading] = useState(true);
-  const [status, setStatus] = useState<Record<string, boolean>>({});
-  const [toggling, setToggling] = useState<string | null>(null);
+  const [googleStatus, setGoogleStatus] = useState<Record<string, boolean>>({});
+  const [genericIntegration, setGenericIntegration] =
+    useState<AgentIntegration | null>(null);
+
+  const [isGoogleModalOpen, setIsGoogleModalOpen] = useState(false);
+  const [isDiscordModalOpen, setIsDiscordModalOpen] = useState(false);
+
   const [activeTab, setActiveTab] = useState<"integrations" | "widget">(
     "integrations"
   );
 
-  const services = [
+  const googleServices = [
     {
       id: "drive",
       label: "Google Drive",
@@ -67,18 +74,6 @@ export const Integrations = ({ agentId }: IntegrationsProps) => {
       icon: Table,
       description: "Manage spreadsheets",
     },
-    {
-      id: "linkedin",
-      label: "LinkedIn",
-      icon: Linkedin,
-      description: "Post and interact on LinkedIn",
-    },
-    {
-      id: "x",
-      label: "X (Twitter)",
-      icon: Twitter,
-      description: "Post and engage on X",
-    },
   ];
 
   useEffect(() => {
@@ -87,28 +82,16 @@ export const Integrations = ({ agentId }: IntegrationsProps) => {
 
   const fetchStatus = async () => {
     try {
-      const res = await getGoogleStatus(agentId);
-      setStatus(res.services || {});
+      const [googleRes, integrationRes] = await Promise.all([
+        getGoogleStatus(agentId),
+        agentsAPI.getIntegration(agentId).catch(() => ({ integration: null })),
+      ]);
+      setGoogleStatus(googleRes.services || {});
+      setGenericIntegration(integrationRes.integration);
     } catch (error) {
       console.error("Failed to fetch integration status", error);
     } finally {
       setLoading(false);
-    }
-  };
-
-  const handleToggle = async (serviceId: string, currentState: boolean) => {
-    setToggling(serviceId);
-    try {
-      if (currentState) {
-        await disconnectGoogleService(agentId, serviceId);
-      } else {
-        await connectGoogleService(agentId, serviceId);
-      }
-      setStatus((prev) => ({ ...prev, [serviceId]: !currentState }));
-    } catch (error) {
-      console.error("Failed to toggle service", error);
-    } finally {
-      setToggling(null);
     }
   };
 
@@ -127,6 +110,11 @@ export const Integrations = ({ agentId }: IntegrationsProps) => {
       </div>
     );
   }
+
+  // Check if Discord is active
+  const isDiscordActive =
+    genericIntegration?.platform === Platform.DISCORD &&
+    genericIntegration?.is_active;
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -157,79 +145,142 @@ export const Integrations = ({ agentId }: IntegrationsProps) => {
 
       {activeTab === "integrations" && (
         <div className="space-y-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {services.map((service) => {
-              const Icon = service.icon;
-              const isConnected = status[service.id];
-              const isToggling = toggling === service.id;
+          {/* Google Services Section */}
+          <div className="space-y-6">
+            <div className="flex justify-between items-center bg-gray-50 border border-gray-200 rounded-lg p-4">
+              <div>
+                <h3 className="text-sm font-medium text-gray-900">
+                  Google Integrations
+                </h3>
+                <p className="text-sm text-gray-500">
+                  Manage your connected Google services
+                </p>
+              </div>
+              <Button onClick={() => setIsGoogleModalOpen(true)}>
+                Manage Services
+              </Button>
+            </div>
 
-              return (
-                <div
-                  key={service.id}
-                  className={cn(
-                    "relative group rounded-xl border p-6 transition-all duration-200",
-                    isConnected
-                      ? "bg-primary-50/50 border-primary-200"
-                      : "bg-white border-gray-200 hover:border-gray-300 hover:shadow-sm"
-                  )}
-                >
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-center gap-3">
-                      <div
-                        className={cn(
-                          "p-2.5 rounded-lg transition-colors",
-                          isConnected
-                            ? "bg-primary-100 text-primary-600"
-                            : "bg-gray-100 text-gray-500"
-                        )}
-                      >
-                        <Icon className="w-6 h-6" />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {googleServices.map((service) => {
+                const Icon = service.icon;
+                const isConnected = googleStatus[service.id];
+
+                return (
+                  <div
+                    key={service.id}
+                    className={cn(
+                      "relative group rounded-xl border p-6 transition-all duration-200",
+                      isConnected
+                        ? "bg-primary-50/50 border-primary-200"
+                        : "bg-white border-gray-200 opacity-70"
+                    )}
+                  >
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-center gap-3">
+                        <div
+                          className={cn(
+                            "p-2.5 rounded-lg transition-colors",
+                            isConnected
+                              ? "bg-primary-100 text-primary-600"
+                              : "bg-gray-100 text-gray-500"
+                          )}
+                        >
+                          <Icon className="w-6 h-6" />
+                        </div>
+                        <div>
+                          <h3 className="font-semibold text-gray-900">
+                            {service.label}
+                          </h3>
+                          <p className="text-sm text-gray-500 mt-0.5">
+                            {service.description}
+                          </p>
+                        </div>
                       </div>
-                      <div>
-                        <h3 className="font-semibold text-gray-900">
-                          {service.label}
-                        </h3>
-                        <p className="text-sm text-gray-500 mt-0.5">
-                          {service.description}
-                        </p>
+                    </div>
+
+                    <div className="mt-6 flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <div
+                          className={cn(
+                            "w-2 h-2 rounded-full",
+                            isConnected ? "bg-green-500" : "bg-gray-300"
+                          )}
+                        />
+                        <span className="text-xs font-medium text-gray-600">
+                          {isConnected ? "Active" : "Disconnected"}
+                        </span>
                       </div>
                     </div>
                   </div>
+                );
+              })}
+            </div>
+          </div>
 
-                  <div className="mt-6 flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <div
-                        className={cn(
-                          "w-2 h-2 rounded-full",
-                          isConnected ? "bg-green-500" : "bg-gray-300"
-                        )}
-                      />
-                      <span className="text-xs font-medium text-gray-600">
-                        {isConnected ? "Active" : "Disconnected"}
-                      </span>
-                    </div>
+          {/* Other Integrations Section */}
+          <div className="space-y-6 pt-6 border-t">
+            <div className="flex justify-between items-center">
+              <div>
+                <h3 className="text-lg font-medium text-gray-900">
+                  Platform Integrations
+                </h3>
+                <p className="text-sm text-gray-500">
+                  Connect to other platforms
+                </p>
+              </div>
+            </div>
 
-                    <button
-                      onClick={() => handleToggle(service.id, isConnected)}
-                      disabled={isToggling}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {/* Discord Card */}
+              <div
+                className={cn(
+                  "relative group rounded-xl border p-6 transition-all duration-200 cursor-pointer hover:border-primary-300 hover:shadow-md",
+                  isDiscordActive
+                    ? "bg-primary-50/50 border-primary-200"
+                    : "bg-white border-gray-200"
+                )}
+                onClick={() => setIsDiscordModalOpen(true)}
+              >
+                <div className="flex items-start justify-between">
+                  <div className="flex items-center gap-3">
+                    <div
                       className={cn(
-                        "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2",
-                        isConnected ? "bg-primary-600" : "bg-gray-200",
-                        isToggling && "opacity-50 cursor-wait"
+                        "p-2.5 rounded-lg transition-colors",
+                        isDiscordActive
+                          ? "bg-primary-100 text-primary-600"
+                          : "bg-gray-100 text-gray-500"
                       )}
                     >
-                      <span
-                        aria-hidden="true"
-                        className={cn(
-                          "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out",
-                          isConnected ? "translate-x-5" : "translate-x-0"
-                        )}
-                      />
-                    </button>
+                      <MessageSquare className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-gray-900">Discord</h3>
+                      <p className="text-sm text-gray-500 mt-0.5">
+                        Connect Discord Bot
+                      </p>
+                    </div>
                   </div>
                 </div>
-              );
-            })}
+
+                <div className="mt-6 flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div
+                      className={cn(
+                        "w-2 h-2 rounded-full",
+                        isDiscordActive ? "bg-green-500" : "bg-gray-300"
+                      )}
+                    />
+                    <span className="text-xs font-medium text-gray-600">
+                      {isDiscordActive ? "Active" : "Configure"}
+                    </span>
+                  </div>
+                  <Button variant="ghost" size="sm" className="ml-auto">
+                    Configure
+                  </Button>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div className="border-t pt-8">
@@ -247,6 +298,31 @@ export const Integrations = ({ agentId }: IntegrationsProps) => {
               ))}
             </div>
           </div>
+
+          <GoogleServicesModal
+            isOpen={isGoogleModalOpen}
+            onClose={() => setIsGoogleModalOpen(false)}
+            agentId={agentId}
+            initialServices={Object.keys(googleStatus).filter(
+              (k) => googleStatus[k]
+            )}
+            onSuccess={fetchStatus}
+          />
+
+          <DiscordIntegrationModal
+            isOpen={isDiscordModalOpen}
+            onClose={() => setIsDiscordModalOpen(false)}
+            agentId={agentId}
+            initialData={
+              isDiscordActive
+                ? {
+                    apiKey: genericIntegration?.api_key || "",
+                    apiSecret: genericIntegration?.api_secret || "",
+                  }
+                : undefined
+            }
+            onSuccess={fetchStatus}
+          />
         </div>
       )}
 

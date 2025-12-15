@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useState } from "react";
@@ -24,8 +23,6 @@ export function TrainingSources({
   });
   const [qaData, setQaData] = useState({ question: "", answer: "" });
 
-
-
   const handleFileUpload = async (files: FileList) => {
     try {
       for (const file of Array.from(files)) {
@@ -41,7 +38,11 @@ export function TrainingSources({
     if (!textData.title || !textData.content || !agentId) return;
 
     try {
-      await trainingAPI.trainWithText(agentId, textData.title, textData.content);
+      await trainingAPI.trainWithText(
+        agentId,
+        textData.title,
+        textData.content
+      );
       onDataAdded?.({ type: "text", title: textData.title });
       setTextData({ title: "", content: "" });
     } catch (error) {
@@ -58,7 +59,12 @@ export function TrainingSources({
       .filter((p) => p.length > 0);
 
     try {
-      await trainingAPI.trainWithURL(agentId, urlData, urlOptions.maxPages, excludeList);
+      await trainingAPI.trainWithURL(
+        agentId,
+        urlData,
+        urlOptions.maxPages,
+        excludeList
+      );
       onDataAdded?.({ type: "url", url: urlData });
       setUrlData("");
       setUrlOptions({ maxPages: 10, excludePatterns: "" });
@@ -72,7 +78,11 @@ export function TrainingSources({
 
     try {
       const content = `Question: ${qaData.question}\nAnswer: ${qaData.answer}`;
-      await trainingAPI.trainWithText(agentId, `Q&A: ${qaData.question}`, content);
+      await trainingAPI.trainWithText(
+        agentId,
+        `Q&A: ${qaData.question}`,
+        content
+      );
       onDataAdded?.({ type: "qa", question: qaData.question });
       setQaData({ question: "", answer: "" });
     } catch (error) {
@@ -98,10 +108,11 @@ export function TrainingSources({
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center space-x-2 py-4 px-1 border-b-2 font-medium text-sm transition-colors ${activeTab === tab.id
-                  ? "border-indigo-500 text-indigo-600"
-                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                  }`}
+                className={`flex items-center space-x-2 py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+                  activeTab === tab.id
+                    ? "border-indigo-500 text-indigo-600"
+                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                }`}
               >
                 <Icon className="w-4 h-4" />
                 <span>{tab.label}</span>
@@ -275,7 +286,8 @@ export function TrainingSources({
                 placeholder="/admin&#10;/login&#10;/cart&#10;*.pdf"
               />
               <p className="mt-1 text-xs text-gray-500">
-                Enter URL patterns to exclude (one per line). Supports wildcards (*)
+                Enter URL patterns to exclude (one per line). Supports wildcards
+                (*)
               </p>
             </div>
 

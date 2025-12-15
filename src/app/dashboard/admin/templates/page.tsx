@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import Select from "react-select";
 import CreatableSelect from "react-select/creatable";
+import ReactMarkdown from "react-markdown";
+
 import { AgentTemplate, PromptTemplate } from "../../../../types/agent";
 import { agentsAPI, systemAPI, aiModelsAPI } from "../../../../lib/api";
 import { useRouter } from "next/navigation";
@@ -73,6 +75,9 @@ export default function AdminTemplatesPage() {
     title: "",
     content: "",
   });
+  const [promptEditorTab, setPromptEditorTab] = useState<"write" | "preview">(
+    "write"
+  );
 
   useEffect(() => {
     fetchData();
@@ -586,21 +591,52 @@ export default function AdminTemplatesPage() {
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">
-                  System Prompt Content
-                </label>
-                <textarea
-                  required
-                  value={promptFormData.content}
-                  onChange={(e) =>
-                    setPromptFormData({
-                      ...promptFormData,
-                      content: e.target.value,
-                    })
-                  }
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 outline-none h-64 font-mono text-sm"
-                  placeholder="You are a helpful AI assistant..."
-                />
+                <div className="flex justify-between items-center">
+                  <label className="text-sm font-medium text-gray-700">
+                    System Prompt Content
+                  </label>
+                  <div className="flex bg-gray-100 rounded-lg p-1 text-xs font-medium">
+                    <button
+                      type="button"
+                      onClick={() => setPromptEditorTab("write")}
+                      className={`px-3 py-1 rounded-md transition-colors ${promptEditorTab === "write" ? "bg-white shadow text-gray-900" : "text-gray-500 hover:text-gray-900"}`}
+                    >
+                      Write
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setPromptEditorTab("preview")}
+                      className={`px-3 py-1 rounded-md transition-colors ${promptEditorTab === "preview" ? "bg-white shadow text-gray-900" : "text-gray-500 hover:text-gray-900"}`}
+                    >
+                      Preview
+                    </button>
+                  </div>
+                </div>
+
+                {promptEditorTab === "write" ? (
+                  <textarea
+                    required
+                    value={promptFormData.content}
+                    onChange={(e) =>
+                      setPromptFormData({
+                        ...promptFormData,
+                        content: e.target.value,
+                      })
+                    }
+                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 outline-none h-64 font-mono text-sm"
+                    placeholder="You are a helpful AI assistant... (Markdown supported)"
+                  />
+                ) : (
+                  <div className="w-full px-3 py-2 border rounded-lg h-64 overflow-y-auto bg-gray-50 prose prose-sm max-w-none">
+                    {promptFormData.content ? (
+                      <ReactMarkdown>{promptFormData.content}</ReactMarkdown>
+                    ) : (
+                      <span className="text-gray-400 italic">
+                        Nothing to preview
+                      </span>
+                    )}
+                  </div>
+                )}
               </div>
 
               <div className="flex justify-end">

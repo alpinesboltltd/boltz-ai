@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useState } from "react";
@@ -72,7 +71,9 @@ export default function HumanHandoffSettings({
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const target = e.target as HTMLInputElement;
     const { name, value, type, checked } = target;
 
@@ -82,7 +83,9 @@ export default function HumanHandoffSettings({
     }));
   };
 
-  const handleBusinessHoursChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleBusinessHoursChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const target = e.target as HTMLInputElement;
     const { name, value, type, checked } = target;
 
@@ -102,7 +105,11 @@ export default function HumanHandoffSettings({
     });
   };
 
-  const handleScheduleChange = (index: number, field: string, value: string) => {
+  const handleScheduleChange = (
+    index: number,
+    field: string,
+    value: string
+  ) => {
     setSettings((prev) => {
       const currentBusinessHours = prev.businessHours || {
         enabled: false,
@@ -160,7 +167,9 @@ export default function HumanHandoffSettings({
         ...prev,
         businessHours: {
           ...currentBusinessHours,
-          schedule: (currentBusinessHours.schedule || []).filter((_, i) => i !== index),
+          schedule: (currentBusinessHours.schedule || []).filter(
+            (_, i) => i !== index
+          ),
         },
       };
     });

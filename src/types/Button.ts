@@ -1,20 +1,19 @@
+export type ButtonVariant = "primary" | "secondary" | "danger" | "ghost";
 
-export type ButtonVariant = 'primary' | 'secondary' | 'danger' | 'ghost';
-
-export type ButtonSize = 'sm' | 'md' | 'lg';
+export type ButtonSize = "sm" | "md" | "lg";
 
 export interface ButtonProps {
+  children: React.ReactNode;
 
-    children : React.ReactNode;
+  variant?: ButtonVariant;
 
-    variant?: ButtonVariant;
+  size?: ButtonSize;
 
-    size?: ButtonSize;
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 
-    onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  disabled?: boolean;
 
-    disabled?: boolean;
+  className?: string;
 
-    className? : string;
-
+  type?: "button" | "submit" | "reset";
 }

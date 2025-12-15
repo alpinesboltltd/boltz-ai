@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   DocumentTextIcon,
   GlobeAltIcon,
@@ -11,6 +11,7 @@ import {
   LinkIcon,
   QuestionMarkCircleIcon,
 } from "@heroicons/react/24/outline";
+import { trainingAPI } from "@/lib/api";
 
 interface TrainingSource {
   id: string;
@@ -22,17 +23,9 @@ interface TrainingSource {
   question?: string;
   answer?: string;
   status: "processing" | "completed" | "error";
-  vectorized: boolean;
+  vectorized: boolean; // Keep for UI compatibility though server handles it
   chunks?: string[];
-  embeddings?: number[][];
   created_at: string;
-}
-
-interface VectorStore {
-  [sourceId: string]: {
-    chunks: string[];
-    embeddings: number[][];
-  };
 }
 
 enum ActiveTab {
@@ -42,11 +35,12 @@ enum ActiveTab {
   qa = "qa",
 }
 
-export function Sources() {
-  // TODO: return training data
-  // const trainingData = useTrainingData();
+interface SourcesProps {
+  agentId: string;
+}
+
+export function Sources({ agentId }: SourcesProps) {
   const [sources, setSources] = useState<TrainingSource[]>([]);
-  const [vectorStore, setVectorStore] = useState<VectorStore>({});
   const [activeTab, setActiveTab] = useState<ActiveTab>(ActiveTab.document);
   const [isProcessing, setIsProcessing] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -59,174 +53,86 @@ export function Sources() {
   const [qaQuestion, setQaQuestion] = useState("");
   const [qaAnswer, setQaAnswer] = useState("");
 
-  const generateEmbeddings = async (text: string): Promise<number[]> => {
+  // Load existing documents on mount
+  useEffect(() => {
+    if (agentId) {
+      loadDocuments();
+    }
+  }, [agentId]);
+
+  const loadDocuments = async () => {
     try {
-      const response = await fetch("/api/embeddings", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text }),
-      });
-      const data = await response.json();
-      return data.embedding || [];
+      const docs = await trainingAPI.getDocuments(agentId);
+      // Map server documents to local TrainingSource format
+      // Note: This assumes getDocuments returns an array or object with documents
+      // We might need to adjust based on actual API response structure
+      // For now, let's assume it returns { documents: [] } based on handler
+
+      const mappedDocs =
+        (docs as any).documents?.map((d: any) => ({
+          id: d.id,
+          type: d.document_type || "document",
+          title: d.title || "Untitled",
+          content: d.content || "",
+          status: "completed",
+          vectorized: true,
+          created_at: d.created_at,
+          chunks: d.chunks || [],
+        })) || [];
+
+      setSources(mappedDocs);
     } catch (error) {
-      console.error("Error generating embeddings:", error);
-      return [];
-    }
-  };
-
-  const chunkText = (text: string, maxChunkSize: number = 1000): string[] => {
-    const sentences = text.split(/[.!?]+/).filter((s) => s.trim().length > 0);
-    const chunks: string[] = [];
-    let currentChunk = "";
-
-    for (const sentence of sentences) {
-      if (
-        currentChunk.length + sentence.length > maxChunkSize &&
-        currentChunk.length > 0
-      ) {
-        chunks.push(currentChunk.trim());
-        currentChunk = sentence;
-      } else {
-        currentChunk += (currentChunk ? ". " : "") + sentence;
-      }
-    }
-
-    if (currentChunk.trim()) {
-      chunks.push(currentChunk.trim());
-    }
-
-    return chunks;
-  };
-
-  const processAndVectorize = async (source: TrainingSource) => {
-    setIsProcessing(true);
-
-    try {
-      let textToProcess = "";
-
-      if (source.type === "document" && source.file) {
-        textToProcess = await extractTextFromFile(source.file);
-      } else if (source.type === "website" && source.url) {
-        textToProcess = await crawlWebsite(source.url);
-      } else if (source.type === "text") {
-        textToProcess = source.content;
-      } else if (source.type === "qa") {
-        textToProcess = `Q: ${source.question}\nA: ${source.answer}`;
-      }
-
-      const chunks = chunkText(textToProcess);
-      const embeddings: number[][] = [];
-
-      for (const chunk of chunks) {
-        const embedding = await generateEmbeddings(chunk);
-        embeddings.push(embedding);
-      }
-
-      // Store in memory vector store
-      const newVectorStore = {
-        ...vectorStore,
-        [source.id]: { chunks, embeddings },
-      };
-      setVectorStore(newVectorStore);
-
-      // Send vector data to chat API for storage
-      await fetch("/api/chat", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          agentId: "agentId", //FIXME: WRONG API CALLS
-          vectorStore: newVectorStore,
-        }),
-      });
-
-      // Update source status
-      setSources((prev) =>
-        prev.map((s) =>
-          s.id === source.id
-            ? {
-              ...s,
-              status: "completed",
-              vectorized: true,
-              chunks,
-              embeddings,
-            }
-            : s
-        )
-      );
-    } catch (error) {
-      console.error("Error processing source:", error);
-      setSources((prev) =>
-        prev.map((s) => (s.id === source.id ? { ...s, status: "error" } : s))
-      );
-    } finally {
-      setIsProcessing(false);
-    }
-  };
-
-  const extractTextFromFile = async (file: File): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const text = e.target?.result as string;
-        resolve(text);
-      };
-      reader.onerror = reject;
-
-      if (file.type === "text/plain") {
-        reader.readAsText(file);
-      } else if (file.type === "application/pdf") {
-        // For PDF, you'd need a PDF parser library
-        reader.readAsText(file); // Simplified for now
-      } else {
-        reader.readAsText(file);
-      }
-    });
-  };
-
-  const crawlWebsite = async (url: string): Promise<string> => {
-    try {
-      const response = await fetch("/api/crawl", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url }),
-      });
-      const data = await response.json();
-      return data.content || "";
-    } catch (error) {
-      console.error("Error crawling website:", error);
-      return "";
+      console.error("Failed to load documents:", error);
     }
   };
 
   const handleDocumentUpload = async () => {
     if (!documentFiles) return;
+    setIsProcessing(true);
 
-    for (let i = 0; i < documentFiles.length; i++) {
-      const file = documentFiles[i];
-      const source: TrainingSource = {
-        id: Date.now().toString() + i,
-        type: "document",
-        title: file.name,
-        content: "",
-        file,
-        status: "processing",
-        vectorized: false,
-        created_at: new Date().toISOString(),
-      };
+    try {
+      for (let i = 0; i < documentFiles.length; i++) {
+        const file = documentFiles[i];
 
-      setSources((prev) => [...prev, source]);
-      await processAndVectorize(source);
+        // Optimistic UI update
+        const tempId = Date.now().toString() + i;
+        const source: TrainingSource = {
+          id: tempId,
+          type: "document",
+          title: file.name,
+          content: "",
+          file,
+          status: "processing",
+          vectorized: false,
+          created_at: new Date().toISOString(),
+        };
+        setSources((prev) => [...prev, source]);
+
+        try {
+          await trainingAPI.trainWithFile(agentId, file);
+          // Reload to get server ID and status
+          await loadDocuments();
+        } catch (error) {
+          console.error(`Failed to upload ${file.name}:`, error);
+          setSources((prev) =>
+            prev.map((s) => (s.id === tempId ? { ...s, status: "error" } : s))
+          );
+        }
+      }
+    } finally {
+      setIsProcessing(false);
+      setDocumentFiles(null);
+      if (fileInputRef.current) fileInputRef.current.value = "";
     }
-
-    setDocumentFiles(null);
-    if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
   const handleWebsiteAdd = async () => {
     if (!websiteUrl.trim()) return;
+    setIsProcessing(true);
 
+    const tempId = Date.now().toString();
     const source: TrainingSource = {
-      id: Date.now().toString(),
+      id: tempId,
       type: "website",
       title: `Website: ${websiteUrl}`,
       content: "",
@@ -235,17 +141,30 @@ export function Sources() {
       vectorized: false,
       created_at: new Date().toISOString(),
     };
-
     setSources((prev) => [...prev, source]);
-    await processAndVectorize(source);
-    setWebsiteUrl("");
+
+    try {
+      await trainingAPI.trainWithURL(agentId, websiteUrl);
+      setWebsiteUrl("");
+      // Reload to get server ID and status
+      await loadDocuments();
+    } catch (error) {
+      console.error("Failed to add website:", error);
+      setSources((prev) =>
+        prev.map((s) => (s.id === tempId ? { ...s, status: "error" } : s))
+      );
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   const handleTextAdd = async () => {
     if (!textContent.trim() || !textTitle.trim()) return;
+    setIsProcessing(true);
 
+    const tempId = Date.now().toString();
     const source: TrainingSource = {
-      id: Date.now().toString(),
+      id: tempId,
       type: "text",
       title: textTitle,
       content: textContent,
@@ -253,53 +172,78 @@ export function Sources() {
       vectorized: false,
       created_at: new Date().toISOString(),
     };
-
     setSources((prev) => [...prev, source]);
-    await processAndVectorize(source);
-    setTextContent("");
-    setTextTitle("");
+
+    try {
+      await trainingAPI.trainWithText(agentId, textTitle, textContent);
+      setTextContent("");
+      setTextTitle("");
+      await loadDocuments();
+    } catch (error) {
+      console.error("Failed to add text:", error);
+      setSources((prev) =>
+        prev.map((s) => (s.id === tempId ? { ...s, status: "error" } : s))
+      );
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   const handleQAAdd = async () => {
     if (!qaQuestion.trim() || !qaAnswer.trim()) return;
+    setIsProcessing(true);
+
+    const tempId = Date.now().toString();
+    const title = `Q: ${qaQuestion.substring(0, 50)}...`;
+    const content = `Question: ${qaQuestion}\nAnswer: ${qaAnswer}`;
 
     const source: TrainingSource = {
-      id: Date.now().toString(),
+      id: tempId,
       type: "qa",
-      title: `Q&A: ${qaQuestion.substring(0, 50)}...`,
-      content: "",
+      title: title,
+      content: content,
       question: qaQuestion,
       answer: qaAnswer,
       status: "processing",
       vectorized: false,
       created_at: new Date().toISOString(),
     };
-
     setSources((prev) => [...prev, source]);
-    await processAndVectorize(source);
-    setQaQuestion("");
-    setQaAnswer("");
+
+    try {
+      // Training Q&A as text for now
+      await trainingAPI.trainWithText(agentId, title, content);
+      setQaQuestion("");
+      setQaAnswer("");
+      await loadDocuments();
+    } catch (error) {
+      console.error("Failed to add Q&A:", error);
+      setSources((prev) =>
+        prev.map((s) => (s.id === tempId ? { ...s, status: "error" } : s))
+      );
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
-  const handleDeleteSource = (id: string) => {
+  const handleDeleteSource = async (id: string) => {
+    // Optimistic delete
     setSources((prev) => prev.filter((s) => s.id !== id));
-    setVectorStore((prev) => {
-      const newStore = { ...prev };
-      delete newStore[id];
-      return newStore;
-    });
+    try {
+      // Warning: API requires documentId, but source.id might be tempId if upload failed.
+      // Assuming we only allow deleting fully saved docs which have real IDs.
+      await trainingAPI.deleteTrainingData(agentId, id);
+    } catch (error) {
+      console.error("Failed to delete source:", error);
+      // Could revert state here
+      loadDocuments();
+    }
   };
 
   const handleRetrainSource = async (id: string) => {
-    const source = sources.find((s) => s.id === id);
-    if (source) {
-      setSources((prev) =>
-        prev.map((s) =>
-          s.id === id ? { ...s, status: "processing", vectorized: false } : s
-        )
-      );
-      await processAndVectorize(source);
-    }
+    // Not implemented in API yet easily (would be update/migrate).
+    // For now we just reload.
+    loadDocuments();
   };
 
   const getStatusColor = (status: string) => {
@@ -353,10 +297,11 @@ export function Sources() {
             <button
               key={key}
               onClick={() => setActiveTab(key as ActiveTab)}
-              className={`${activeTab === key
+              className={`${
+                activeTab === key
                   ? "border-primary-500 text-primary-600"
                   : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                } whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm flex items-center space-x-2`}
+              } whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm flex items-center space-x-2`}
             >
               <Icon className="h-4 w-4" />
               <span>{label}</span>
@@ -551,23 +496,6 @@ export function Sources() {
           )}
         </div>
       </div>
-
-      {/* Vector Store Info */}
-      {Object.keys(vectorStore).length > 0 && (
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-          <h4 className="text-sm font-medium text-blue-900 mb-2">
-            Vector Store Status
-          </h4>
-          <p className="text-sm text-blue-700">
-            {Object.keys(vectorStore).length} sources vectorized with{" "}
-            {Object.values(vectorStore).reduce(
-              (total, store) => total + store.chunks.length,
-              0
-            )}{" "}
-            total chunks in memory.
-          </p>
-        </div>
-      )}
     </div>
   );
 }

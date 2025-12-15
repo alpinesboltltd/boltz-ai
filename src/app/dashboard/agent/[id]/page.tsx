@@ -154,7 +154,7 @@ export default function AgentDetailPage({
       </AnimatePresence>
 
       {/* Tab Content */}
-      <div className="mt-6 min-h-[500px]">
+      <div className="mt-6">
         <AnimatePresence mode="wait">
           <motion.div
             key={activeTab}
@@ -166,7 +166,7 @@ export default function AgentDetailPage({
             {activeTab === DetailsTab.PLAYGROUND && <AgentPlayground />}
             {activeTab === DetailsTab.ACTIVITY && <Activity />}
             {activeTab === DetailsTab.CONVERSATIONS && <ConversationLogs />}
-            {activeTab === DetailsTab.SOURCES && <Sources />}
+            {activeTab === DetailsTab.SOURCES && <Sources agentId={agentId} />}
             {activeTab === DetailsTab.AGENT_BEHAVIOR && <AgentBehavior />}
             {activeTab === DetailsTab.APPEARANCE && (
               <BotCustomizer onSave={handleSaveConfig} />

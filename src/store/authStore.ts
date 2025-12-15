@@ -50,6 +50,8 @@ export const useAuthStore = create<AuthState>()(
         if (typeof window !== "undefined") {
           localStorage.removeItem("boltz_by_alpinesbolt_auth_token");
           localStorage.removeItem("boltz-auth-storage");
+          localStorage.removeItem("boltz-agent-storage");
+          localStorage.removeItem("workspace-storage");
           sessionStorage.clear();
 
           // Clear cookie
@@ -72,6 +74,8 @@ export const useAuthStore = create<AuthState>()(
         if (typeof window !== "undefined") {
           localStorage.removeItem("boltz_by_alpinesbolt_auth_token");
           localStorage.removeItem("boltz-auth-storage");
+          localStorage.removeItem("boltz-agent-storage");
+          localStorage.removeItem("workspace-storage");
           sessionStorage.clear();
 
           // Clear cookie
@@ -134,4 +138,4 @@ export const useHasRole = (role: string | string[]) => {
 export const accessToken = () => {
   const token = useAuthStore.getState().token;
   return token || "";
-}; 
+};

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
@@ -14,13 +13,18 @@ import {
   SystemPromptTemplate,
   PlaygroundConfig,
   AgentType,
+  AgentModelSchema,
+  AgentBehaviorSchema,
 } from "@/types/agent";
-import { Chat, agentsAPI, systemAPI } from "@/lib/api";
-import { playgroundAPI } from "@/lib/playground-api";
+import { z } from "zod";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Chat, agentsAPI, systemAPI, testQueriesAPI } from "@/lib/api";
 import {
   useAgentData,
   useAgentBehavior,
   useAgentAppearance,
+  useAgentDetailStore, // Added store access
 } from "@/store/agentDetailStore";
 import { useMemo } from "react";
 import { SYSTEM_PROMPT_TEMPLATES } from "@/data/systemPrompts";
@@ -53,15 +57,6 @@ export function AgentPlayground() {
   const [isTyping, setIsTyping] = useState(false);
   const [showConfig, setShowConfig] = useState(true);
   const mobileTabContentRef = useRef<HTMLDivElement>(null);
-  const [config, setConfig] = useState<PlaygroundConfig>({
-    ai_model_id: agent?.ai_model_id || "adaf",
-    ai_model_name: agent?.name || "gpt-40",
-    maxTokens: behavior?.max_tokens || 500,
-    temperature: behavior?.temperature || 0.5,
-    systemInstruction:
-      behavior?.system_instruction || "You are a helpful assistant",
-    selectedTemplate: "",
-  });
   const [customPrompts, setCustomPrompts] = useState<SystemPromptTemplate[]>(
     []
   );
@@ -98,47 +93,26 @@ export function AgentPlayground() {
     if (!agentId) return;
     try {
       // Load test queries
-      const queries = await playgroundAPI.loadTestQueries(agentId);
-      setTestQueries(queries);
+      const res = await testQueriesAPI.get(agentId);
+      setTestQueries(res.queries.map((q: any) => q.query));
     } catch (error) {
       console.error("Failed to load behavior config:", error);
     }
   }, [agentId]);
 
   useEffect(() => {
-    if (agent) {
-      setConfig((prev) => ({
-        ...prev,
-        ai_model_id: agent.ai_model_id,
-        ai_model_name: agent.name,
-      }));
-    }
+    // Behavior loading moved to child components or handled by global store
     if (agentId) {
       loadBehaviorConfig();
     }
-  }, [agent, agentId, loadBehaviorConfig]);
+  }, [agentId, loadBehaviorConfig]);
 
   // Combine all prompts
   const allPrompts = useMemo(() => {
     return [...SYSTEM_PROMPT_TEMPLATES, ...dbPrompts, ...customPrompts];
   }, [dbPrompts, customPrompts]);
 
-  useEffect(() => {
-    if (behavior) {
-      setConfig({
-        ai_model_id: agent?.ai_model_id || "adaf",
-        ai_model_name:
-          models.find((model) => model.id === agent?.ai_model_id)?.name ||
-          "GPT-3.5 Turbo",
-        temperature: behavior.temperature || 0.7,
-        maxTokens: behavior.max_tokens || 1000,
-        systemInstruction:
-          behavior.system_instruction || SYSTEM_PROMPT_TEMPLATES[0].template,
-        selectedTemplate: behavior.prompt_template || "",
-      });
-    }
-  }, [behavior, agent?.ai_model_id, models]);
-
+  // Initial welcome message
   useEffect(() => {
     setMessages([
       {
@@ -148,7 +122,7 @@ export function AgentPlayground() {
           "Hi, welcome; How can I help you today",
       },
     ]);
-  }, [agent?.name, config.systemInstruction, appearance]);
+  }, [appearance]); // Reduced deps for simplicity since welcome message comes from appearance store
 
   const handleSendMessage = async (
     e?: React.FormEvent,
@@ -181,41 +155,7 @@ export function AgentPlayground() {
     }
   };
 
-  const handleTemplateChange = (templateId: string) => {
-    const template = allPrompts.find((t) => t.id === templateId);
-    if (template) {
-      setConfig((prev) => ({
-        ...prev,
-        selectedTemplate: templateId,
-        systemInstruction: template.template,
-      }));
-    }
-  };
-
-  const handleConfigSave = async () => {
-    if (!agentId) return;
-    try {
-      // Update agent model if changed
-      if (agent && config.ai_model_id !== agent.ai_model_id) {
-        const modelData = models.find((m) => m.id === config.ai_model_id);
-        if (!modelData) {
-          console.error("Model not found");
-          return;
-        }
-        await agentsAPI.update(agentId, {
-          id: agentId,
-          ai_model_id: modelData?.id,
-        });
-      }
-
-      // Update behavior configuration
-      await playgroundAPI.saveBehaviorConfig(agentId, config);
-
-      console.log("Configuration saved successfully");
-    } catch (error) {
-      console.error("Failed to save config:", error);
-    }
-  };
+  /* Removed handleTemplateChange and handleConfigSave as they are now in child components */
 
   const handleAddCustomPrompt = () => {
     const newPrompt: SystemPromptTemplate = {
@@ -226,16 +166,19 @@ export function AgentPlayground() {
       constraints: [],
     };
     setCustomPrompts((prev) => [...prev, newPrompt]);
-    setConfig((prev) => ({
-      ...prev,
-      selectedTemplate: newPrompt.id,
-      systemInstruction: newPrompt.template,
-    }));
+    // Note: Child component BehaviorSettingsForm handles selection via prop passing or internal logic if needed
+    // But since prompts are passed down, we might want to auto-select it?
+    // For now, simpler to just add it to the list.
   };
 
   const saveTestQueries = async (queries: string[]) => {
     if (!agentId) return;
-    await playgroundAPI.saveTestQueries(agentId, queries);
+    if (!agentId) return;
+    try {
+      await testQueriesAPI.bulkReplace(agentId, queries);
+    } catch (error) {
+      console.error("Failed to save test queries:", error);
+    }
   };
 
   const handleReset = () => {
@@ -295,9 +238,7 @@ export function AgentPlayground() {
     data: model,
   }));
 
-  const selectedModel = modelOptions.find(
-    (option) => option.value === config.ai_model_id
-  );
+  /* selectedModel logic moved to child */
 
   // Animate mobile tab transitions
   useGSAP(
@@ -369,7 +310,7 @@ export function AgentPlayground() {
   };
 
   return (
-    <div className="p-4 sm:p-6 min-h-screen bg-gray-50">
+    <div className="bg-gray-50">
       {/* Mobile Layout */}
       <div className="block lg:hidden">
         <div className="space-y-4">
@@ -381,7 +322,10 @@ export function AgentPlayground() {
           >
             <ChatInterface
               agent={agent}
-              config={config}
+              config={{
+                ai_model_name: agent?.name,
+                ...behavior,
+              }}
               messages={messages}
               isTyping={isTyping}
               inputValue={inputValue}
@@ -423,15 +367,13 @@ export function AgentPlayground() {
             <div ref={mobileTabContentRef} className="p-4">
               {showConfig ? (
                 <MobileConfigPanel
-                  config={config}
-                  setConfig={setConfig}
                   agent={agent}
                   allPrompts={allPrompts}
-                  handleTemplateChange={handleTemplateChange}
+                  // handleTemplateChange={handleTemplateChange} // Removed
                   handleAddCustomPrompt={handleAddCustomPrompt}
-                  handleConfigSave={handleConfigSave}
+                  // handleConfigSave={handleConfigSave} // Removed
                   modelOptions={modelOptions}
-                  selectedModel={selectedModel}
+                  // selectedModel={selectedModel} // Removed
                   selectStyles={selectStyles}
                   ModelOption={ModelOption}
                   ModelSingleValue={ModelSingleValue}
@@ -460,15 +402,12 @@ export function AgentPlayground() {
               <Cog6ToothIcon className="h-5 w-5 text-gray-400" />
             </div>
             <ConfigPanel
-              config={config}
-              setConfig={setConfig}
               agent={agent}
               allPrompts={allPrompts}
-              handleTemplateChange={handleTemplateChange}
+              // handleTemplateChange={handleTemplateChange} // Removed
               handleAddCustomPrompt={handleAddCustomPrompt}
-              handleConfigSave={handleConfigSave}
+              // handleConfigSave={handleConfigSave} // Removed
               modelOptions={modelOptions}
-              selectedModel={selectedModel}
               selectStyles={selectStyles}
               ModelOption={ModelOption}
               ModelSingleValue={ModelSingleValue}
@@ -480,7 +419,10 @@ export function AgentPlayground() {
           <div className="bg-white rounded-lg shadow overflow-hidden flex flex-col">
             <ChatInterface
               agent={agent}
-              config={config}
+              config={{
+                ai_model_name: agent?.name, // Fallback
+                ...behavior, // Use behavior store for valid config
+              }}
               messages={messages}
               isTyping={isTyping}
               inputValue={inputValue}
@@ -506,7 +448,7 @@ export function AgentPlayground() {
 
       {/* Desktop Layout */}
       <div className="hidden xl:block">
-        <div className="grid grid-cols-4 gap-6 max-w-7xl mx-auto h-[calc(100vh-8rem)]">
+        <div className="grid grid-cols-4 gap-6 max-w-7xl mx-auto h-[80vh]">
           {/* Configuration Panel */}
           <div className="bg-white rounded-lg shadow p-4 overflow-y-auto">
             <div className="flex items-center justify-between mb-4">
@@ -514,15 +456,12 @@ export function AgentPlayground() {
               <Cog6ToothIcon className="h-5 w-5 text-gray-400" />
             </div>
             <ConfigPanel
-              config={config}
-              setConfig={setConfig}
               agent={agent}
               allPrompts={allPrompts}
-              handleTemplateChange={handleTemplateChange}
+              // handleTemplateChange={handleTemplateChange} // Removed
               handleAddCustomPrompt={handleAddCustomPrompt}
-              handleConfigSave={handleConfigSave}
+              // handleConfigSave={handleConfigSave} // Removed
               modelOptions={modelOptions}
-              selectedModel={selectedModel}
               selectStyles={selectStyles}
               ModelOption={ModelOption}
               ModelSingleValue={ModelSingleValue}
@@ -534,7 +473,10 @@ export function AgentPlayground() {
           <div className="col-span-2 bg-white rounded-lg shadow overflow-hidden flex flex-col">
             <ChatInterface
               agent={agent}
-              config={config}
+              config={{
+                ai_model_name: agent?.name, // Fallback
+                ...behavior, // Use behavior store for valid config
+              }}
               messages={messages}
               isTyping={isTyping}
               inputValue={inputValue}
@@ -563,23 +505,126 @@ export function AgentPlayground() {
 
 // Configuration Panel Component
 function ConfigPanel({
-  config,
-  setConfig,
   agent,
   allPrompts,
   handleTemplateChange,
   handleAddCustomPrompt,
-  handleConfigSave,
   modelOptions,
-  selectedModel,
   selectStyles,
   ModelOption,
   ModelSingleValue,
   primaryColor,
 }: any) {
+  const [activeTab, setActiveTab] = useState<"model" | "behavior">("model");
+  const { fetchAgentDetails } = useAgentDetailStore();
+
   return (
-    <div className="space-y-4">
-      {/* Agent Type Display */}
+    <div className="flex flex-col h-full">
+      {/* Tabs */}
+      <div className="flex space-x-4 border-b border-gray-200 mb-4">
+        <button
+          onClick={() => setActiveTab("model")}
+          className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
+            activeTab === "model"
+              ? "border-primary-500 text-primary-600"
+              : "border-transparent text-gray-500 hover:text-gray-700"
+          }`}
+          style={{
+            borderColor: activeTab === "model" ? primaryColor : "transparent",
+            color: activeTab === "model" ? primaryColor : undefined,
+          }}
+        >
+          Model Settings
+        </button>
+        <button
+          onClick={() => setActiveTab("behavior")}
+          className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
+            activeTab === "behavior"
+              ? "border-primary-500 text-primary-600"
+              : "border-transparent text-gray-500 hover:text-gray-700"
+          }`}
+          style={{
+            borderColor:
+              activeTab === "behavior" ? primaryColor : "transparent",
+            color: activeTab === "behavior" ? primaryColor : undefined,
+          }}
+        >
+          Behavior Settings
+        </button>
+      </div>
+
+      <div className="flex-1 overflow-y-auto">
+        {activeTab === "model" ? (
+          <ModelSettingsForm
+            agent={agent}
+            modelOptions={modelOptions}
+            selectStyles={selectStyles}
+            ModelOption={ModelOption}
+            ModelSingleValue={ModelSingleValue}
+            primaryColor={primaryColor}
+            onSave={() => fetchAgentDetails(agent.id)}
+          />
+        ) : (
+          <BehaviorSettingsForm
+            agent={agent}
+            allPrompts={allPrompts}
+            handleTemplateChange={handleTemplateChange}
+            handleAddCustomPrompt={handleAddCustomPrompt}
+            primaryColor={primaryColor}
+            onSave={() => fetchAgentDetails(agent.id)}
+          />
+        )}
+      </div>
+    </div>
+  );
+}
+
+// Model Settings Form
+function ModelSettingsForm({
+  agent,
+  modelOptions,
+  selectStyles,
+  ModelOption,
+  ModelSingleValue,
+  primaryColor,
+  onSave,
+}: any) {
+  type ModelFormValues = z.infer<typeof AgentModelSchema>;
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    reset,
+  } = useForm<ModelFormValues>({
+    resolver: zodResolver(AgentModelSchema),
+    defaultValues: {
+      ai_model_id: agent?.ai_model_id || "",
+    },
+  });
+
+  useEffect(() => {
+    if (agent) {
+      reset({ ai_model_id: agent.ai_model_id });
+    }
+  }, [agent, reset]);
+
+  const onModelSave = async (data: ModelFormValues) => {
+    try {
+      await agentsAPI.update(agent.id, {
+        id: agent.id,
+        ai_model_id: data.ai_model_id,
+      });
+      console.log("Model saved successfully");
+      onSave();
+    } catch (error) {
+      console.error("Failed to save model:", error);
+    }
+  };
+
+  return (
+    <div className="space-y-6 py-2">
+      {/* Agent Type Display - Just for info */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
           Agent Type
@@ -593,67 +638,146 @@ function ConfigPanel({
                 : "Multimodal"}
           </span>
           <div className="text-xs text-gray-500 mt-1">
-            {agent?.agent_type === agentTypeToEnum(AgentType.TEXT) &&
-              "Text-only conversations"}
-            {agent?.agent_type === agentTypeToEnum(AgentType.VOICE) &&
-              "Voice and audio processing"}
-            {agent?.agent_type === agentTypeToEnum(AgentType.VISION) &&
-              "Text, images, and multimedia"}
+            {agent?.agent_type === 1 && "Text-only conversations"}
+            {agent?.agent_type === 2 && "Voice and audio processing"}
+            {agent?.agent_type === 3 && "Text, images, and multimedia"}
           </div>
         </div>
       </div>
 
-      {/* Model Selection */}
       <div>
-        <label className="block text-sm font-medium text-gray-700">
+        <label className="block text-sm font-medium text-gray-700 mb-1">
           AI Model
         </label>
-        <Select
-          value={selectedModel}
-          onChange={(option: any) => {
-            if (option) {
-              setConfig((prev: any) => ({ ...prev, model: option.value }));
-            }
-          }}
-          options={modelOptions}
-          formatOptionLabel={(option: any) => (
-            <ModelOption data={option.data} />
+        <Controller
+          name="ai_model_id"
+          control={control}
+          render={({ field }) => (
+            <Select
+              value={modelOptions.find((op: any) => op.value === field.value)}
+              onChange={(option: any) => {
+                if (option) {
+                  field.onChange(option.value);
+                }
+              }}
+              options={modelOptions}
+              formatOptionLabel={(option: any) => (
+                <ModelOption data={option.data} />
+              )}
+              components={{
+                SingleValue: ({ data }: any) => (
+                  <ModelSingleValue data={data.data} />
+                ),
+              }}
+              styles={selectStyles}
+              className="text-sm"
+              isSearchable
+              placeholder="Select a model..."
+            />
           )}
-          components={{
-            SingleValue: ({ data }: any) => (
-              <ModelSingleValue data={data.data} />
-            ),
-          }}
-          styles={selectStyles}
-          className="text-sm"
-          isSearchable
-          placeholder="Select a model..."
         />
+        {errors.ai_model_id && (
+          <p className="mt-1 text-sm text-red-600">
+            {errors.ai_model_id.message}
+          </p>
+        )}
       </div>
 
+      <button
+        onClick={handleSubmit(onModelSave, (e) => console.error(e))}
+        disabled={isSubmitting}
+        className="w-full px-4 py-2 text-white rounded-md focus:outline-none focus:ring-2 text-sm transition-opacity hover:opacity-90 disabled:opacity-50"
+        style={{ backgroundColor: primaryColor }}
+      >
+        {isSubmitting ? "Saving..." : "Save Model Settings"}
+      </button>
+    </div>
+  );
+}
+
+// Behavior Settings Form
+function BehaviorSettingsForm({
+  agent,
+  allPrompts,
+  handleTemplateChange,
+  handleAddCustomPrompt,
+  primaryColor,
+  onSave,
+}: any) {
+  const behavior = useAgentBehavior(); // Get behavior from store/hook
+  type BehaviorFormValues = z.infer<typeof AgentBehaviorSchema>;
+
+  const {
+    register,
+    setValue,
+    watch,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    reset,
+  } = useForm<BehaviorFormValues>({
+    resolver: zodResolver(AgentBehaviorSchema),
+    defaultValues: {
+      temperature: behavior?.temperature || 0.7,
+      max_tokens: behavior?.max_tokens || 1000,
+      prompt_template_id: behavior?.prompt_template_id || "",
+      // system_instruction_id is implicit via prompt_template usually, or handled separately
+    },
+  });
+
+  useEffect(() => {
+    if (behavior) {
+      reset({
+        temperature: behavior.temperature,
+        max_tokens: behavior.max_tokens,
+        prompt_template_id: behavior.prompt_template_id || "",
+      });
+    }
+  }, [behavior, reset]);
+
+  // Watch for preview/interaction if needed
+  const currentTemplateId = watch("prompt_template_id");
+  const currentTemplate = allPrompts.find(
+    (t: any) => t.id === currentTemplateId
+  );
+
+  const onBehaviorSave = async (data: BehaviorFormValues) => {
+    try {
+      await agentsAPI.updateBehavior(agent.id, {
+        temperature: data.temperature,
+        max_tokens: data.max_tokens,
+        prompt_template_id: data.prompt_template_id || undefined,
+      });
+      console.log("Behavior saved successfully");
+      onSave();
+    } catch (error) {
+      console.error("Failed to save behavior:", error);
+    }
+  };
+
+  return (
+    <div className="space-y-6 py-2">
       {/* Temperature */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
-          Temperature: {config.temperature}
+          Temperature: {watch("temperature")}
         </label>
         <input
           type="range"
           min="0"
           max="2"
           step="0.1"
-          value={config.temperature}
-          onChange={(e) =>
-            setConfig((prev: any) => ({
-              ...prev,
-              temperature: parseFloat(e.target.value),
-            }))
-          }
+          {...register("temperature", { valueAsNumber: true })}
           className="w-full"
         />
         <div className="flex justify-between text-xs text-gray-500">
           <span>Focused</span>
           <span>Creative</span>
         </div>
+        {errors.temperature && (
+          <p className="mt-1 text-sm text-red-600">
+            {errors.temperature.message}
+          </p>
+        )}
       </div>
 
       {/* Max Tokens */}
@@ -664,19 +788,18 @@ function ConfigPanel({
         <input
           type="number"
           min="100"
-          max="4000"
-          value={config.maxTokens}
-          onChange={(e) =>
-            setConfig((prev: any) => ({
-              ...prev,
-              maxTokens: parseInt(e.target.value),
-            }))
-          }
+          max="32000"
+          {...register("max_tokens", { valueAsNumber: true })}
           className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
         />
+        {errors.max_tokens && (
+          <p className="mt-1 text-sm text-red-600">
+            {errors.max_tokens.message}
+          </p>
+        )}
       </div>
 
-      {/* System Prompt Template */}
+      {/* Prompt Template */}
       <div>
         <div className="flex justify-between items-center mb-1">
           <label className="block text-sm font-medium text-gray-700">
@@ -684,49 +807,53 @@ function ConfigPanel({
           </label>
           <button
             onClick={handleAddCustomPrompt}
+            type="button"
             className="text-xs text-primary-600 hover:text-primary-700"
           >
             + Custom
           </button>
         </div>
         <select
-          value={config.selectedTemplate}
-          onChange={(e) => handleTemplateChange(e.target.value)}
+          {...register("prompt_template_id")}
           className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
         >
+          <option value="">Select a template...</option>
           {allPrompts.map((template: any) => (
             <option key={template.id} value={template.id}>
               {template.name}
             </option>
           ))}
         </select>
+        {errors.prompt_template_id && (
+          <p className="mt-1 text-sm text-red-600">
+            {errors.prompt_template_id.message}
+          </p>
+        )}
       </div>
 
-      {/* Custom System Instruction */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          System Instruction
-        </label>
-        <textarea
-          value={config.systemInstruction}
-          onChange={(e) =>
-            setConfig((prev: any) => ({
-              ...prev,
-              systemInstruction: e.target.value,
-            }))
-          }
-          rows={6}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none scrollbar-hide"
-          placeholder="Enter custom system instruction..."
-        />
-      </div>
+      {/* Read-only System Instruction Preview */}
+      {currentTemplate && (
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            System Instruction Preview
+          </label>
+          <div className="w-full px-3 py-2 border border-gray-200 bg-gray-50 rounded-md text-sm text-gray-600 max-h-40 overflow-y-auto whitespace-pre-wrap">
+            {currentTemplate.template}
+          </div>
+          <p className="text-xs text-gray-500 mt-1">
+            To edit system instructions, create a new custom template or edit
+            the existing one in System Settings.
+          </p>
+        </div>
+      )}
 
       <button
-        onClick={handleConfigSave}
-        className="w-full px-4 py-2 text-white rounded-md focus:outline-none focus:ring-2 text-sm transition-opacity hover:opacity-90"
+        onClick={handleSubmit(onBehaviorSave, (e) => console.error(e))}
+        disabled={isSubmitting}
+        className="w-full px-4 py-2 text-white rounded-md focus:outline-none focus:ring-2 text-sm transition-opacity hover:opacity-90 disabled:opacity-50"
         style={{ backgroundColor: primaryColor }}
       >
-        Save Configuration
+        {isSubmitting ? "Saving..." : "Save Behavior Settings"}
       </button>
     </div>
   );
@@ -791,7 +918,7 @@ function ChatInterface({
               : agent?.agent_type === 2
                 ? "Voice"
                 : "Multimodal"}{" "}
-            | Model: {config.ai_model_name}
+            | Model: {config?.ai_model_name || agent?.name || "Unknown"}
           </p>
         </div>
         <button
