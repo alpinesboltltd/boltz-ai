@@ -5,6 +5,9 @@ import { gsap } from "gsap";
 import { Star, Zap, Shield, Award } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { systemAPI } from "@/lib/api";
+import { Spinner } from "../common/Spinner";
+import { Button } from "../ui/Button";
+import { useRouter } from "next/navigation";
 
 interface ShowcaseAgent {
   id: string;
@@ -18,6 +21,7 @@ interface ShowcaseAgent {
 }
 
 export const AgentShowcase = ({ onHire }: { onHire: (id: string) => void }) => {
+  const router = useRouter();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [agents, setAgents] = useState<ShowcaseAgent[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -31,16 +35,21 @@ export const AgentShowcase = ({ onHire }: { onHire: (id: string) => void }) => {
         const templates = res.data || [];
 
         // Map templates to showcase format with some default/randomized visual data
-        const mappedAgents: ShowcaseAgent[] = templates.map((t: any, idx: number) => ({
-          id: t.id,
-          name: t.title,
-          description: t.content.length > 150 ? t.content.substring(0, 150) + "..." : t.content,
-          imageUrl: `/images/agents/agent-${(idx % 5) + 1}.webp`, // Assuming you have some agent images
-          ai_model: "GPT-4", // Default or could be part of template metadata if extended
-          average_rating: 4.8 + (idx % 3) * 0.1,
-          credits_per_1k: 10 + (idx % 5),
-          strengths: ["Versatile", "Professional", "Efficient"],
-        }));
+        const mappedAgents: ShowcaseAgent[] = templates.map(
+          (t: any, idx: number) => ({
+            id: t.id,
+            name: t.title,
+            description:
+              t.content.length > 150
+                ? t.content.substring(0, 150) + "..."
+                : t.content,
+            imageUrl: `/images/agents/agent-${(idx % 5) + 1}.webp`, // Assuming you have some agent images
+            ai_model: "GPT-4", // Default or could be part of template metadata if extended
+            average_rating: 4.8 + (idx % 3) * 0.1,
+            credits_per_1k: 10 + (idx % 5),
+            strengths: ["Versatile", "Professional", "Efficient"],
+          })
+        );
 
         if (mappedAgents.length > 0) {
           setAgents(mappedAgents);
@@ -86,14 +95,22 @@ export const AgentShowcase = ({ onHire }: { onHire: (id: string) => void }) => {
   }, [currentIndex, agents.length]);
 
   if (isLoading) {
-    return <div className="flex justify-center py-20"><div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary-600"></div></div>;
+    return (
+      <div className="flex justify-center py-20">
+        <Spinner size="lg" color="primary" />
+      </div>
+    );
   }
 
   if (agents.length === 0) {
     return (
       <div className="text-center py-20">
-        <h3 className="text-xl font-semibold text-gray-700">No templates available</h3>
-        <p className="text-gray-500">Check back later for new agents.</p>
+        <p className="text-xl text-gray-700 mb-4">
+          You do not have any agent in your Workspace.
+        </p>
+        <Button onClick={() => router.push("/dashboard/market")}>
+          Hire Agent
+        </Button>
       </div>
     );
   }
@@ -101,13 +118,17 @@ export const AgentShowcase = ({ onHire }: { onHire: (id: string) => void }) => {
   const agent = agents[currentIndex];
 
   return (
-    <div ref={containerRef} className="flex flex-col items-center justify-center py-12 px-4">
+    <div
+      ref={containerRef}
+      className="flex flex-col items-center justify-center py-12 px-4"
+    >
       <div className="text-center mb-10">
         <h2 className="text-3xl font-display font-bold text-gray-900 mb-3">
           Discover Premium AI Agents
         </h2>
         <p className="text-gray-500 max-w-lg mx-auto">
-          Explore our curated collection of specialized AI agents designed to elevate your workflow.
+          Explore our curated collection of specialized AI agents designed to
+          elevate your workflow.
         </p>
       </div>
 
@@ -131,7 +152,9 @@ export const AgentShowcase = ({ onHire }: { onHire: (id: string) => void }) => {
                 </div>
               </div>
 
-              <h3 className="text-2xl font-bold text-gray-900 mb-2 animate-item">{agent.name}</h3>
+              <h3 className="text-2xl font-bold text-gray-900 mb-2 animate-item">
+                {agent.name}
+              </h3>
               <p className="text-primary-600 font-medium bg-primary-50 px-3 py-1 rounded-full text-sm animate-item">
                 {agent.ai_model}
               </p>
@@ -140,8 +163,12 @@ export const AgentShowcase = ({ onHire }: { onHire: (id: string) => void }) => {
             {/* Right Side: Details */}
             <div className="p-8 flex flex-col justify-center">
               <div className="mb-6 animate-item">
-                <h4 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-2">Description</h4>
-                <p className="text-gray-700 leading-relaxed text-lg">{agent.description}</p>
+                <h4 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-2">
+                  Description
+                </h4>
+                <p className="text-gray-700 leading-relaxed text-lg">
+                  {agent.description}
+                </p>
               </div>
 
               <div className="grid grid-cols-2 gap-4 mb-8 animate-item">
@@ -150,19 +177,25 @@ export const AgentShowcase = ({ onHire }: { onHire: (id: string) => void }) => {
                     <Award className="w-4 h-4" />
                     <span>Rating</span>
                   </div>
-                  <div className="text-xl font-bold text-gray-900">{agent.average_rating.toFixed(1)}/5.0</div>
+                  <div className="text-xl font-bold text-gray-900">
+                    {agent.average_rating.toFixed(1)}/5.0
+                  </div>
                 </div>
                 <div className="bg-gray-50 rounded-xl p-4 border border-gray-100">
                   <div className="flex items-center gap-2 mb-1 text-gray-500 text-sm">
                     <Zap className="w-4 h-4" />
                     <span>Credits</span>
                   </div>
-                  <div className="text-xl font-bold text-gray-900">{agent.credits_per_1k}/1k</div>
+                  <div className="text-xl font-bold text-gray-900">
+                    {agent.credits_per_1k}/1k
+                  </div>
                 </div>
               </div>
 
               <div className="mb-8 animate-item">
-                <h4 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">Key Strengths</h4>
+                <h4 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">
+                  Key Strengths
+                </h4>
                 <div className="flex flex-wrap gap-2">
                   {agent.strengths?.map((strength, idx) => (
                     <span
@@ -196,7 +229,9 @@ export const AgentShowcase = ({ onHire }: { onHire: (id: string) => void }) => {
               onClick={() => setCurrentIndex(idx)}
               className={cn(
                 "h-2 rounded-full transition-all duration-300",
-                idx === currentIndex ? "w-8 bg-primary-600" : "w-2 bg-gray-300 hover:bg-gray-400"
+                idx === currentIndex
+                  ? "w-8 bg-primary-600"
+                  : "w-2 bg-gray-300 hover:bg-gray-400"
               )}
               aria-label={`Go to slide ${idx + 1}`}
             />

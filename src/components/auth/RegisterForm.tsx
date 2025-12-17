@@ -213,7 +213,11 @@ export function RegisterForm() {
             )}
           />
 
-          <Button type="submit" className="w-full" disabled={loading}>
+          <Button
+            type="submit"
+            className="w-full flex justify-center items-center"
+            disabled={loading}
+          >
             {loading ? <Spinner size="sm" color="white" /> : "Create account"}
           </Button>
         </form>

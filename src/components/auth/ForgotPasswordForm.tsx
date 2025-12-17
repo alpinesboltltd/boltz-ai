@@ -21,7 +21,7 @@ import {
 import Link from "next/link";
 
 const RequestSchema = z.object({
-  email: z.string().email("Invalid email address"),
+  email: z.email("Invalid email address"),
 });
 
 const ResetSchema = z
@@ -79,7 +79,7 @@ export function ForgotPasswordForm() {
     try {
       await otpAPI.completePasswordReset(email, values.code, values.password);
       toast.success("Success", "Password has been reset. Please login.");
-      router.push("/auth/login");
+      router.push("/login");
     } catch (err) {
       const msg =
         err instanceof Error ? err.message : "Failed to reset password";
@@ -92,7 +92,7 @@ export function ForgotPasswordForm() {
   return (
     <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
       {step === "REQUEST" ? (
-        <Form {...requestForm}>
+        <Form {...requestForm} key="request-form">
           <form
             onSubmit={requestForm.handleSubmit(onRequestSubmit)}
             className="space-y-6"
@@ -124,7 +124,11 @@ export function ForgotPasswordForm() {
               )}
             />
 
-            <Button type="submit" className="w-full" disabled={loading}>
+            <Button
+              type="submit"
+              className="w-full flex justify-center items-center"
+              disabled={loading}
+            >
               {loading ? <Spinner size="sm" color="white" /> : "Send Code"}
             </Button>
 
@@ -139,7 +143,7 @@ export function ForgotPasswordForm() {
           </form>
         </Form>
       ) : (
-        <Form {...resetForm}>
+        <Form {...resetForm} key="reset-form">
           <form
             onSubmit={resetForm.handleSubmit(onResetSubmit)}
             className="space-y-6"
@@ -158,7 +162,12 @@ export function ForgotPasswordForm() {
                 <FormItem>
                   <FormLabel>Verification Code</FormLabel>
                   <FormControl>
-                    <Input placeholder="123456" autoComplete="off" {...field} />
+                    <Input
+                      type="text"
+                      placeholder="123456"
+                      autoComplete="off"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -201,7 +210,11 @@ export function ForgotPasswordForm() {
               )}
             />
 
-            <Button type="submit" className="w-full" disabled={loading}>
+            <Button
+              type="submit"
+              className="w-full flex justify-center items-center"
+              disabled={loading}
+            >
               {loading ? <Spinner size="sm" color="white" /> : "Reset Password"}
             </Button>
 

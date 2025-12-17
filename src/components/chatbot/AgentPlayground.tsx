@@ -11,8 +11,6 @@ import {
 import {
   MessageRoles,
   SystemPromptTemplate,
-  PlaygroundConfig,
-  AgentType,
   AgentModelSchema,
   AgentBehaviorSchema,
 } from "@/types/agent";
@@ -34,7 +32,7 @@ import { Message } from "@/types";
 import { cn } from "@/lib/utils";
 import { useAIModelsStore } from "@/store/aiModelsStore";
 import { AIModel } from "@/lib/static/ai-models";
-import { agentTypeToEnum, enumToAgentType } from "@/lib/agentTypeSerializer";
+import { enumToAgentType } from "@/lib/agentTypeSerializer";
 
 export function AgentPlayground() {
   const agent = useAgentData();

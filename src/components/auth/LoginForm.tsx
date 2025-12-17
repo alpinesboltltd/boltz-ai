@@ -202,7 +202,11 @@ export function LoginForm() {
           </div>
 
           <div>
-            <Button type="submit" className="w-full" disabled={loading}>
+            <Button
+              type="submit"
+              className="w-full flex justify-center items-center"
+              disabled={loading}
+            >
               {loading ? <Spinner size="sm" color="white" /> : "Sign in"}
             </Button>
           </div>

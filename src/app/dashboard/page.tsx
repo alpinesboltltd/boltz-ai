@@ -6,10 +6,12 @@ import { useAgentStore } from "@/store/agentStore";
 import { useAuthStore, useCurrentUser } from "@/store/authStore";
 import { useRouter } from "next/navigation";
 import { AgentCard } from "@/components/dashboard/AgentCard";
-import { AgentShowcase } from "@/components/dashboard/AgentShowcase";
 import { useToast } from "@/hooks/useToast";
+import { ConfirmDialog } from "@/components/common/ConfirmDialog";
 import { Plus, Sparkles, Bot, Zap } from "lucide-react";
-import { Tab } from "@headlessui/react";
+import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
+import { Button } from "@/components/ui/Button";
+import { useWorkspaceStore } from "@/store/workspaceStore";
 
 enum ActiveTabs {
   AGENTS = "Agents",
@@ -20,54 +22,58 @@ enum ActiveTabs {
 export default function Dashboard() {
   const router = useRouter();
   const user = useCurrentUser();
+  const { currentWorkspace } = useWorkspaceStore();
   const { clearAuth, token } = useAuthStore();
   const { agents, setAgents, deleteAgent } = useAgentStore();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+  const [agentToDelete, setAgentToDelete] = useState<{
+    id: string;
+    name: string;
+  } | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
-    const getChatbot = async () => {
+    const getAgentByWorkspace = async () => {
       if (!user) {
         clearAuth();
         return;
       }
       try {
-        const { agents } = await agentsAPI.getAll(user.id!, token!);
+        const { agents } = await agentsAPI.getByWorkspaceId(
+          currentWorkspace?.id!,
+          token!
+        );
         if (agents) setAgents(agents);
       } catch (error) {
         console.error("Failed to fetch agents:", error);
       }
     };
 
-    getChatbot();
-  }, [user, clearAuth, setAgents, token]);
+    getAgentByWorkspace();
+  }, [user, clearAuth, setAgents, token, currentWorkspace]);
 
-  const handleDeleteAgent = async (agentId: string, agentName: string) => {
-    if (
-      !window.confirm(
-        `Are you sure you want to permanently delete the agent "${agentName}"?`
-      )
-    ) {
-      return;
-    }
-    setIsLoading(true);
+  const confirmDeleteAgent = async () => {
+    if (!agentToDelete) return;
     try {
-      await agentsAPI.delete(agentId, token!);
-      deleteAgent(agentId);
-      toast.success("Agent Deleted", `${agentName} has been removed.`);
+      await agentsAPI.delete(agentToDelete.id, token!);
+      deleteAgent(agentToDelete.id);
+      toast.success("Agent Deleted", `${agentToDelete.name} has been removed.`);
     } catch (e) {
       console.error("Deletion failed:", e);
       toast.error(
         "Deletion Failed",
-        `Unable to delete ${agentName}. Please try again.`
+        `Unable to delete ${agentToDelete.name}. Please try again.`
       );
     } finally {
-      setIsLoading(false);
+      setDeleteConfirmOpen(false);
+      setAgentToDelete(null);
     }
   };
 
-  const handleHireTemplate = (templateId: string) => {
-    router.push(`/dashboard/create?templateId=${templateId}`);
+  const handleDeleteClick = (agentId: string, agentName: string) => {
+    setAgentToDelete({ id: agentId, name: agentName });
+    setDeleteConfirmOpen(true);
   };
 
   return (
@@ -83,13 +89,13 @@ export default function Dashboard() {
           </p>
         </div>
         <div className="flex gap-3">
-          <button
+          <Button
             onClick={() => router.push("/dashboard/create")}
-            className="btn btn-primary shadow-lg shadow-primary-500/20"
+            className="btn"
           >
             <Plus className="mr-2 h-4 w-4" />
             Create New Agent
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -131,8 +137,8 @@ export default function Dashboard() {
       </div>
 
       {/* Tabs */}
-      <Tab.Group>
-        <Tab.List className="flex space-x-1 rounded-xl bg-gray-100 p-1 max-w-md">
+      <TabGroup>
+        <TabList className="flex space-x-1 rounded-xl bg-gray-100 p-1 max-w-md">
           {Object.values(ActiveTabs).map((tab) => (
             <Tab
               key={tab}
@@ -149,16 +155,16 @@ export default function Dashboard() {
               {tab}
             </Tab>
           ))}
-        </Tab.List>
-        <Tab.Panels className="mt-6">
-          <Tab.Panel className="outline-none">
+        </TabList>
+        <TabPanels className="mt-6">
+          <TabPanel className="outline-none">
             {agents && agents.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {agents.map((chatagent) => (
                   <AgentCard
                     key={chatagent.id}
                     agent={chatagent}
-                    onDelete={handleDeleteAgent}
+                    onDelete={handleDeleteClick}
                     onManage={() =>
                       router.push(`/dashboard/agent/${chatagent.id}`)
                     }
@@ -174,27 +180,48 @@ export default function Dashboard() {
                     <Plus className="h-6 w-6 text-primary-500" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900">Create New Agent</h3>
-                    <p className="text-sm text-gray-500 mt-1">Start from scratch or use a template</p>
+                    <h3 className="font-semibold text-gray-900">
+                      Create New Agent
+                    </h3>
+                    <p className="text-sm text-gray-500 mt-1">
+                      Start from scratch or use a template
+                    </p>
                   </div>
                 </button>
               </div>
             ) : (
-              <AgentShowcase onHire={handleHireTemplate} />
+              <div className="text-center py-20">
+                <p className="text-xl text-gray-700 mb-4">
+                  You do not have any agent in your Workspace.
+                </p>
+                <Button onClick={() => router.push("/dashboard/market")}>
+                  Hire Agent
+                </Button>
+              </div>
             )}
-          </Tab.Panel>
-          <Tab.Panel>
+          </TabPanel>
+          <TabPanel>
             <div className="card flex items-center justify-center min-h-[400px] text-gray-500">
               Usage analytics coming soon...
             </div>
-          </Tab.Panel>
-          <Tab.Panel>
+          </TabPanel>
+          <TabPanel>
             <div className="card flex items-center justify-center min-h-[400px] text-gray-500">
               Global settings coming soon...
             </div>
-          </Tab.Panel>
-        </Tab.Panels>
-      </Tab.Group>
+          </TabPanel>
+        </TabPanels>
+      </TabGroup>
+
+      <ConfirmDialog
+        isOpen={deleteConfirmOpen}
+        onClose={() => setDeleteConfirmOpen(false)}
+        onConfirm={confirmDeleteAgent}
+        title="Delete Agent"
+        description={`Are you sure you want to permanently delete the agent "${agentToDelete?.name}"? This action cannot be undone.`}
+        confirmText="Delete Agent"
+        variant="danger"
+      />
     </div>
   );
 }

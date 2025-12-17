@@ -16,6 +16,7 @@ import {
   ArrowRight,
   ArrowLeft,
 } from "lucide-react";
+import { ConfirmDialog } from "@/components/common/ConfirmDialog";
 
 const ROLE_OPTIONS = [
   { value: "virtual_assistant", label: "Virtual Assistant" },
@@ -78,6 +79,8 @@ export default function AdminTemplatesPage() {
   const [promptEditorTab, setPromptEditorTab] = useState<"write" | "preview">(
     "write"
   );
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+  const [promptToDelete, setPromptToDelete] = useState<string | null>(null);
 
   useEffect(() => {
     fetchData();
@@ -204,11 +207,26 @@ export default function AdminTemplatesPage() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const handleDeletePrompt = async (id: string) => {
-    if (!confirm("Delete?")) return;
-    await systemAPI.deleteTemplate(id);
-    const res = await systemAPI.listTemplates();
-    setPromptTemplates(res.templates || []);
+  const handleDeletePromptClick = (id: string) => {
+    setPromptToDelete(id);
+    setDeleteConfirmOpen(true);
+  };
+
+  const confirmDeletePrompt = async () => {
+    if (!promptToDelete) return;
+    try {
+      await systemAPI.deleteTemplate(promptToDelete);
+      const res = await systemAPI.listTemplates();
+      setPromptTemplates(res.templates || []);
+    } catch (err: any) {
+      console.error("Failed to delete template", err);
+      // Maybe show toast error here if possible, but existing code didn't use toast (except local state?)
+      // Ah, page has error state.
+      setError(err.message || "Failed to delete template");
+    } finally {
+      setDeleteConfirmOpen(false);
+      setPromptToDelete(null);
+    }
   };
   const handleCancelEdit = () => {
     setEditingPromptId(null);
@@ -682,7 +700,7 @@ export default function AdminTemplatesPage() {
                             <Edit2 size={16} />
                           </button>
                           <button
-                            onClick={() => handleDeletePrompt(template.id)}
+                            onClick={() => handleDeletePromptClick(template.id)}
                             className="p-1 text-gray-500 hover:text-red-600 transition-colors"
                             title="Delete"
                           >
@@ -701,6 +719,15 @@ export default function AdminTemplatesPage() {
           </div>
         )}
       </div>
+      <ConfirmDialog
+        isOpen={deleteConfirmOpen}
+        onClose={() => setDeleteConfirmOpen(false)}
+        onConfirm={confirmDeletePrompt}
+        title="Delete Template"
+        description="Are you sure you want to delete this prompt template?"
+        confirmText="Delete"
+        variant="danger"
+      />
     </div>
   );
 }

@@ -1,9 +1,25 @@
-import { LucideIcon, MessageSquare, Trash2, MoreVertical, Zap, Star, Bot } from "lucide-react";
+import {
+  LucideIcon,
+  MessageSquare,
+  Trash2,
+  MoreVertical,
+  Zap,
+  Star,
+  Bot,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { AgentStatus } from "@/types/agent";
 import Image from "next/image";
-import { Menu, Transition } from "@headlessui/react";
+import {
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuItems,
+  Transition,
+} from "@headlessui/react";
 import { Fragment } from "react";
+import { enumToAgentType } from "@/lib/agentTypeSerializer";
+import { Button } from "../ui/Button";
 
 interface AgentCardProps {
   agent: {
@@ -53,16 +69,22 @@ export function AgentCard({
 
         {/* Status Badge */}
         <div className="absolute top-3 left-3">
-          <span className={cn(
-            "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium shadow-sm backdrop-blur-md",
-            agent.status === "active"
-              ? "bg-green-500/10 text-green-700 ring-1 ring-green-600/20 bg-white/80"
-              : "bg-yellow-500/10 text-yellow-700 ring-1 ring-yellow-600/20 bg-white/80"
-          )}>
-            <span className={cn(
-              "h-1.5 w-1.5 rounded-full",
-              agent.status === "active" ? "bg-green-600 animate-pulse" : "bg-yellow-600"
-            )} />
+          <span
+            className={cn(
+              "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium shadow-sm backdrop-blur-md",
+              agent.status === "active"
+                ? "bg-green-500/10 text-green-700 ring-1 ring-green-600/20 bg-white/80"
+                : "bg-yellow-500/10 text-yellow-700 ring-1 ring-yellow-600/20 bg-white/80"
+            )}
+          >
+            <span
+              className={cn(
+                "h-1.5 w-1.5 rounded-full",
+                agent.status === "active"
+                  ? "bg-green-600 animate-pulse"
+                  : "bg-yellow-600"
+              )}
+            />
             {agent.status === "active" ? "Active" : "Draft"}
           </span>
         </div>
@@ -70,9 +92,9 @@ export function AgentCard({
         {/* Actions Menu */}
         <div className="absolute top-3 right-3">
           <Menu as="div" className="relative inline-block text-left">
-            <Menu.Button className="flex h-8 w-8 items-center justify-center rounded-full bg-white/80 backdrop-blur-md text-gray-500 shadow-sm hover:bg-white hover:text-gray-900 transition-colors focus:outline-none">
+            <MenuButton className="flex h-8 w-8 items-center justify-center rounded-full bg-white/80 backdrop-blur-md text-gray-500 shadow-sm hover:bg-white hover:text-gray-900 transition-colors focus:outline-none">
               <MoreVertical className="h-4 w-4" />
-            </Menu.Button>
+            </MenuButton>
             <Transition
               as={Fragment}
               enter="transition ease-out duration-100"
@@ -82,15 +104,17 @@ export function AgentCard({
               leaveFrom="transform opacity-100 scale-100"
               leaveTo="transform opacity-0 scale-95"
             >
-              <Menu.Items className="absolute right-0 mt-2 w-48 origin-top-right divide-y divide-gray-100 rounded-xl bg-white shadow-lg ring-1 ring-black/5 focus:outline-none z-10">
+              <MenuItems className="absolute right-0 mt-2 w-48 origin-top-right divide-y divide-gray-100 rounded-xl bg-white shadow-lg ring-1 ring-black/5 focus:outline-none z-10">
                 <div className="px-1 py-1">
-                  <Menu.Item>
-                    {({ active }) => (
+                  <MenuItem>
+                    {({ focus }) => (
                       <button
                         onClick={agent.isTemplate ? onHire : onManage}
                         className={cn(
                           "group flex w-full items-center rounded-lg px-2 py-2 text-sm",
-                          active ? "bg-primary-50 text-primary-900" : "text-gray-900"
+                          focus
+                            ? "bg-primary-50 text-primary-900"
+                            : "text-gray-900"
                         )}
                       >
                         {agent.isTemplate ? (
@@ -101,27 +125,27 @@ export function AgentCard({
                         {agent.isTemplate ? "Hire Agent" : "Manage Agent"}
                       </button>
                     )}
-                  </Menu.Item>
+                  </MenuItem>
                 </div>
                 {!agent.isTemplate && (
                   <div className="px-1 py-1">
-                    <Menu.Item>
-                      {({ active }) => (
+                    <MenuItem>
+                      {({ focus }) => (
                         <button
                           onClick={() => onDelete(agent.id, agent.name)}
                           className={cn(
                             "group flex w-full items-center rounded-lg px-2 py-2 text-sm",
-                            active ? "bg-red-50 text-red-900" : "text-gray-900"
+                            focus ? "bg-red-50 text-red-900" : "text-gray-900"
                           )}
                         >
                           <Trash2 className="mr-2 h-4 w-4 text-red-500" />
                           Delete
                         </button>
                       )}
-                    </Menu.Item>
+                    </MenuItem>
                   </div>
                 )}
-              </Menu.Items>
+              </MenuItems>
             </Transition>
           </Menu>
         </div>
@@ -131,7 +155,10 @@ export function AgentCard({
       <div className="flex flex-1 flex-col p-5">
         <div className="flex-1">
           <div className="flex items-center justify-between gap-2">
-            <h3 className="font-semibold text-gray-900 line-clamp-1" title={agent.name}>
+            <h3
+              className="font-semibold text-gray-900 line-clamp-1"
+              title={agent.name}
+            >
               {agent.name}
             </h3>
             {agent.average_rating && (
@@ -141,22 +168,31 @@ export function AgentCard({
               </div>
             )}
           </div>
-          <p className="mt-2 text-sm text-gray-500 line-clamp-2" title={agent.description}>
+          <p
+            className="mt-2 text-sm text-gray-500 line-clamp-2"
+            title={agent.description}
+          >
             {agent.description || "No description provided."}
           </p>
 
           {/* Stats Grid */}
           <div className="mt-4 grid grid-cols-2 gap-3 border-t border-gray-100 pt-4">
             <div>
-              <p className="text-xs text-gray-400 font-medium uppercase tracking-wider">Model</p>
-              <p className="mt-0.5 text-sm font-medium text-gray-700 truncate">
-                {typeof agent.ai_model === 'object' && agent.ai_model !== null ? (agent.ai_model as any).name : agent.ai_model || "GPT-4"}
+              <p className="text-xs text-gray-400 font-medium uppercase tracking-wider">
+                Model
+              </p>
+              <p className="mt-0.5 text-sm font-medium text-gray-700 truncate uppercase">
+                {typeof agent.ai_model === "object" && agent.ai_model !== null
+                  ? (agent.ai_model as any).name
+                  : agent.ai_model || "GPT-4"}
               </p>
             </div>
             <div>
-              <p className="text-xs text-gray-400 font-medium uppercase tracking-wider">Type</p>
-              <p className="mt-0.5 text-sm font-medium text-gray-700 truncate">
-                {agent.agent_type || "General"}
+              <p className="text-xs text-gray-400 font-medium uppercase tracking-wider">
+                Type
+              </p>
+              <p className="mt-0.5 text-sm font-medium text-gray-700 truncate capitalize">
+                {enumToAgentType(agent.agent_type as number)}
               </p>
             </div>
           </div>
@@ -164,9 +200,9 @@ export function AgentCard({
 
         {/* Action Button */}
         <div className="mt-5 pt-4 border-t border-gray-100">
-          <button
+          <Button
             onClick={agent.isTemplate ? onHire : onManage}
-            className="flex w-full items-center justify-center rounded-lg bg-gray-50 px-4 py-2.5 text-sm font-medium text-gray-900 hover:bg-primary-50 hover:text-primary-700 transition-colors group-hover:bg-primary-600 group-hover:text-white"
+            className="btn w-full"
           >
             {agent.isTemplate ? (
               <>
@@ -179,7 +215,7 @@ export function AgentCard({
                 Open Chat
               </>
             )}
-          </button>
+          </Button>
         </div>
       </div>
     </div>

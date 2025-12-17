@@ -14,6 +14,7 @@ import {
   MessageSquare,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { toast } from "@/store/toastStore";
 
 import { Button } from "@/components/ui/Button";
 import { GoogleServicesModal } from "./GoogleServicesModal";
@@ -348,7 +349,7 @@ export const Integrations = ({ agentId }: IntegrationsProps) => {
                 <button
                   onClick={() => {
                     navigator.clipboard.writeText(getWidgetCode());
-                    alert("Widget code copied to clipboard!");
+                    toast.info("Success", "Widget code copied to clipboard!");
                   }}
                   className="absolute top-3 right-3 bg-white/10 hover:bg-white/20 text-white px-3 py-1.5 rounded text-xs font-medium transition-colors backdrop-blur-sm"
                 >

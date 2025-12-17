@@ -339,6 +339,17 @@ export const agentsAPI = {
     return await apiRequest(`/agent/agents/${userId}`, {}, token);
   },
 
+  getByWorkspaceId: async (
+    workspaceId: string,
+    token?: string
+  ): Promise<{ agents: Agent[] }> => {
+    return await apiRequest(
+      `/agent/agents/workspace/${workspaceId}`,
+      {},
+      token
+    );
+  },
+
   getById: async (
     id: string,
     token: string
