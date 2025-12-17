@@ -357,7 +357,7 @@ export function Sources({ agentId }: SourcesProps) {
               className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 disabled:opacity-50"
             >
               <GlobeAltIcon className="h-4 w-4 mr-2" />
-              Crawl & Process
+              Process
             </button>
           </div>
         )}
