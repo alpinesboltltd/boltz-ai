@@ -14,6 +14,27 @@ import {
   UpdateAgentRequest,
   TestQuery,
 } from "@/types/agent";
+
+export interface DocumentChunk {
+  id: string;
+  content: string;
+  metadata: Record<string, any>;
+  created_at: string;
+}
+
+export interface TrainingDocument {
+  id: string;
+  agent_id: string;
+  title: string;
+  document_type: "text" | "pdf" | "audio" | "video" | "faq" | "image";
+  source_url?: string;
+  is_active: boolean;
+  processed_at?: string;
+  created_at: string;
+  updated_at: string;
+  chunks?: DocumentChunk[];
+}
+
 import { ChatMessage, Conversation } from "@/types/conversations";
 
 import {
@@ -862,13 +883,14 @@ export const trainingAPI = {
     agentId: string,
     title: string,
     content: string,
+    type: string = "text",
     token?: string
   ) => {
-    return await apiRequest(
+    return await apiRequest<{ message: string }>(
       `/agent/${agentId}/train/text`,
       {
         method: "POST",
-        body: JSON.stringify({ title, content }),
+        body: JSON.stringify({ title, content, type }),
       },
       token
     );
@@ -881,7 +903,7 @@ export const trainingAPI = {
     excludePatterns: string[] = [],
     token?: string
   ) => {
-    return await apiRequest(
+    return await apiRequest<{ message: string }>(
       `/agent/${agentId}/train/url`,
       {
         method: "POST",
@@ -900,7 +922,7 @@ export const trainingAPI = {
     formData.append("file", file);
 
     // apiRequest now handles FormData by not forcing Content-Type: application/json
-    return await apiRequest(
+    return await apiRequest<{ message: string }>(
       `/agent/${agentId}/train/file`,
       {
         method: "POST",
@@ -911,15 +933,27 @@ export const trainingAPI = {
   },
 
   getDocuments: async (agentId: string, token?: string) => {
-    return await apiRequest(`/agent/${agentId}/training/documents`, {}, token);
+    return await apiRequest<{ documents: TrainingDocument[] }>(
+      `/agent/${agentId}/training/documents`,
+      {},
+      token
+    );
   },
 
   getStats: async (agentId: string, token?: string) => {
-    return await apiRequest(`/agent/${agentId}/training/stats`, {}, token);
+    return await apiRequest<Record<string, unknown>>(
+      `/agent/${agentId}/training/stats`,
+      {},
+      token
+    );
   },
 
   query: async (agentId: string, query: string, token?: string) => {
-    return await apiRequest(
+    return await apiRequest<{
+      context: string;
+      chunks: any[];
+      query: string;
+    }>(
       `/agent/${agentId}/training/query`,
       {
         method: "POST",
@@ -931,11 +965,15 @@ export const trainingAPI = {
 
   deleteTrainingData: async (
     agentId: string,
-    documentId: string,
+    documentId?: string, // Made optional to match backend flexibility, but practically usually provided
     token?: string
   ) => {
-    return await apiRequest(
-      `/agent/${agentId}/training?documentId=${documentId}`,
+    const url = documentId
+      ? `/agent/${agentId}/training?documentId=${documentId}`
+      : `/agent/${agentId}/training`;
+
+    return await apiRequest<{ message: string }>(
+      url,
       {
         method: "DELETE",
       },

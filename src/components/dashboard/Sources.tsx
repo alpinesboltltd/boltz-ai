@@ -11,20 +11,21 @@ import {
   LinkIcon,
   QuestionMarkCircleIcon,
 } from "@heroicons/react/24/outline";
-import { trainingAPI } from "@/lib/api";
+import { trainingAPI, TrainingDocument } from "@/lib/api";
+import { toast } from "@/store/toastStore";
 
 interface TrainingSource {
   id: string;
   type: "document" | "website" | "text" | "qa";
   title: string;
-  content: string;
+  content: string; // Kept for UI state (optimistic), backend might not return full content
   url?: string;
   file?: File;
   question?: string;
   answer?: string;
   status: "processing" | "completed" | "error";
   vectorized: boolean; // Keep for UI compatibility though server handles it
-  chunks?: string[];
+  chunksCount?: number;
   created_at: string;
 }
 
@@ -47,9 +48,18 @@ export function Sources({ agentId }: SourcesProps) {
 
   // Form states
   const [documentFiles, setDocumentFiles] = useState<FileList | null>(null);
+
+  // Website Form Config
   const [websiteUrl, setWebsiteUrl] = useState("");
+  const [maxPages, setMaxPages] = useState(5);
+  const [excludePatterns, setExcludePatterns] = useState("");
+  const [trace, setTrace] = useState(true);
+
+  // Text Form
   const [textContent, setTextContent] = useState("");
   const [textTitle, setTextTitle] = useState("");
+
+  // QA Form
   const [qaQuestion, setQaQuestion] = useState("");
   const [qaAnswer, setQaAnswer] = useState("");
 
@@ -60,37 +70,62 @@ export function Sources({ agentId }: SourcesProps) {
     }
   }, [agentId]);
 
+  const mapDocumentType = (
+    type: TrainingDocument["document_type"]
+  ): TrainingSource["type"] => {
+    switch (type) {
+      case "text":
+      case "pdf":
+      case "audio":
+      case "video":
+      case "image":
+        return "document"; // Map all file types to document for simplified UI
+      case "faq":
+        return "qa";
+      default:
+        return "document";
+    }
+  };
+
   const loadDocuments = async () => {
     try {
-      const docs = await trainingAPI.getDocuments(agentId);
-      // Map server documents to local TrainingSource format
-      // Note: This assumes getDocuments returns an array or object with documents
-      // We might need to adjust based on actual API response structure
-      // For now, let's assume it returns { documents: [] } based on handler
+      const response = await trainingAPI.getDocuments(agentId);
 
-      const mappedDocs =
-        (docs as any).documents?.map((d: any) => ({
-          id: d.id,
-          type: d.document_type || "document",
-          title: d.title || "Untitled",
-          content: d.content || "",
-          status: "completed",
-          vectorized: true,
-          created_at: d.created_at,
-          chunks: d.chunks || [],
-        })) || [];
+      const mappedDocs: TrainingSource[] = response.documents.map((d) => ({
+        id: d.id,
+        type: mapDocumentType(d.document_type),
+        title: d.title,
+        content: "", // Content is extracted into chunks, not fully returned
+        status: "completed",
+        vectorized: true,
+        created_at: d.created_at,
+        chunksCount: d.chunks?.length || 0,
+        url: d.source_url,
+      }));
 
       setSources(mappedDocs);
     } catch (error) {
       console.error("Failed to load documents:", error);
+      toast.error("Failed to load training documents");
     }
   };
 
   const handleDocumentUpload = async () => {
     if (!documentFiles) return;
+
+    // Validate file sizes (limit 10MB)
+    const MAX_SIZE = 10 * 1024 * 1024;
+    for (let i = 0; i < documentFiles.length; i++) {
+      if (documentFiles[i].size > MAX_SIZE) {
+        toast.error(`File ${documentFiles[i].name} exceeds 10MB limit`);
+        return;
+      }
+    }
+
     setIsProcessing(true);
 
     try {
+      let successCount = 0;
       for (let i = 0; i < documentFiles.length; i++) {
         const file = documentFiles[i];
 
@@ -110,14 +145,19 @@ export function Sources({ agentId }: SourcesProps) {
 
         try {
           await trainingAPI.trainWithFile(agentId, file);
-          // Reload to get server ID and status
-          await loadDocuments();
+          successCount++;
         } catch (error) {
           console.error(`Failed to upload ${file.name}:`, error);
           setSources((prev) =>
             prev.map((s) => (s.id === tempId ? { ...s, status: "error" } : s))
           );
+          toast.error(`Failed to upload ${file.name}`);
         }
+      }
+
+      if (successCount > 0) {
+        toast.success(`Successfully uploaded ${successCount} documents`);
+        await loadDocuments();
       }
     } finally {
       setIsProcessing(false);
@@ -144,8 +184,13 @@ export function Sources({ agentId }: SourcesProps) {
     setSources((prev) => [...prev, source]);
 
     try {
-      await trainingAPI.trainWithURL(agentId, websiteUrl);
+      const patterns = excludePatterns
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean);
+      await trainingAPI.trainWithURL(agentId, websiteUrl, maxPages, patterns);
       setWebsiteUrl("");
+      toast.success("Website training started");
       // Reload to get server ID and status
       await loadDocuments();
     } catch (error) {
@@ -153,6 +198,7 @@ export function Sources({ agentId }: SourcesProps) {
       setSources((prev) =>
         prev.map((s) => (s.id === tempId ? { ...s, status: "error" } : s))
       );
+      toast.error("Failed to process website");
     } finally {
       setIsProcessing(false);
     }
@@ -175,15 +221,17 @@ export function Sources({ agentId }: SourcesProps) {
     setSources((prev) => [...prev, source]);
 
     try {
-      await trainingAPI.trainWithText(agentId, textTitle, textContent);
+      await trainingAPI.trainWithText(agentId, textTitle, textContent, "text");
       setTextContent("");
       setTextTitle("");
+      toast.success("Text content added");
       await loadDocuments();
     } catch (error) {
       console.error("Failed to add text:", error);
       setSources((prev) =>
         prev.map((s) => (s.id === tempId ? { ...s, status: "error" } : s))
       );
+      toast.error("Failed to add text content");
     } finally {
       setIsProcessing(false);
     }
@@ -211,16 +259,18 @@ export function Sources({ agentId }: SourcesProps) {
     setSources((prev) => [...prev, source]);
 
     try {
-      // Training Q&A as text for now
-      await trainingAPI.trainWithText(agentId, title, content);
+      // Training Q&A with explicit type "faq"
+      await trainingAPI.trainWithText(agentId, title, content, "faq");
       setQaQuestion("");
       setQaAnswer("");
+      toast.success("Q&A pair added");
       await loadDocuments();
     } catch (error) {
       console.error("Failed to add Q&A:", error);
       setSources((prev) =>
         prev.map((s) => (s.id === tempId ? { ...s, status: "error" } : s))
       );
+      toast.error("Failed to add Q&A pair");
     } finally {
       setIsProcessing(false);
     }
@@ -230,11 +280,11 @@ export function Sources({ agentId }: SourcesProps) {
     // Optimistic delete
     setSources((prev) => prev.filter((s) => s.id !== id));
     try {
-      // Warning: API requires documentId, but source.id might be tempId if upload failed.
-      // Assuming we only allow deleting fully saved docs which have real IDs.
       await trainingAPI.deleteTrainingData(agentId, id);
+      toast.success("Source deleted");
     } catch (error) {
       console.error("Failed to delete source:", error);
+      toast.error("Failed to delete source");
       // Could revert state here
       loadDocuments();
     }
@@ -244,6 +294,7 @@ export function Sources({ agentId }: SourcesProps) {
     // Not implemented in API yet easily (would be update/migrate).
     // For now we just reload.
     loadDocuments();
+    toast.info("Retraining not available yet, refreshing list");
   };
 
   const getStatusColor = (status: string) => {
@@ -325,7 +376,7 @@ export function Sources({ agentId }: SourcesProps) {
                 className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100"
               />
               <p className="text-xs text-gray-500 mt-1">
-                Supported: TXT, PDF, DOC, DOCX
+                Supported: TXT, PDF, DOC, DOCX (Max 10MB)
               </p>
             </div>
             <button
@@ -342,14 +393,61 @@ export function Sources({ agentId }: SourcesProps) {
         {activeTab === "website" && (
           <div className="space-y-4">
             <h3 className="text-lg font-medium">Add Website</h3>
-            <div>
-              <input
-                type="url"
-                value={websiteUrl}
-                onChange={(e) => setWebsiteUrl(e.target.value)}
-                placeholder="https://example.com"
-                className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500"
-              />
+            <div className="space-y-3">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  URL
+                </label>
+                <input
+                  type="url"
+                  value={websiteUrl}
+                  onChange={(e) => setWebsiteUrl(e.target.value)}
+                  placeholder="https://example.com"
+                  className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Max Pages
+                  </label>
+                  <input
+                    type="number"
+                    min={1}
+                    max={50}
+                    value={maxPages}
+                    onChange={(e) => setMaxPages(parseInt(e.target.value) || 1)}
+                    className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Exclude (comma-separated)
+                  </label>
+                  <input
+                    type="text"
+                    value={excludePatterns}
+                    onChange={(e) => setExcludePatterns(e.target.value)}
+                    placeholder="login, signup, admin"
+                    className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500"
+                  />
+                </div>
+              </div>
+              <div className="flex items-center">
+                <input
+                  id="trace"
+                  type="checkbox"
+                  checked={trace}
+                  onChange={(e) => setTrace(e.target.checked)}
+                  className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+                />
+                <label
+                  htmlFor="trace"
+                  className="ml-2 block text-sm text-gray-900"
+                >
+                  Follow links (Trace)
+                </label>
+              </div>
             </div>
             <button
               onClick={handleWebsiteAdd}
@@ -357,7 +455,7 @@ export function Sources({ agentId }: SourcesProps) {
               className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 disabled:opacity-50"
             >
               <GlobeAltIcon className="h-4 w-4 mr-2" />
-              Process
+              Process Website
             </button>
           </div>
         )}
@@ -465,9 +563,11 @@ export function Sources({ agentId }: SourcesProps) {
                           ✓ Vectorized
                         </span>
                       )}
-                      {source.chunks && (
+                      {(source.chunksCount !== undefined
+                        ? source.chunksCount > 0
+                        : false) && (
                         <span className="text-xs text-gray-500">
-                          {source.chunks.length} chunks
+                          {source.chunksCount} chunks
                         </span>
                       )}
                     </div>
