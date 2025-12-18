@@ -1,8 +1,21 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { ButtonVariant, ButtonSize, ButtonProps } from "@/types/Button";
 import React from "react";
+
+export type ButtonVariant =
+  | "primary"
+  | "secondary"
+  | "danger"
+  | "ghost"
+  | "outline";
+export type ButtonSize = "sm" | "md" | "lg";
+
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: ButtonVariant;
+  size?: ButtonSize;
+  isLoading?: boolean;
+}
 
 const BASE_STYLES =
   "rounded-md transition duration-150 ease-in-out shadow-sm focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed";
@@ -14,6 +27,8 @@ const VARIANT_STYLES: Record<ButtonVariant, string> = {
   danger: "bg-red-600 text-white hover:bg-red-700 focus:ring-red-500",
   ghost:
     "bg-transparent border border-gray-300 text-gray-700 hover:bg-gray-100 focus:ring-gray-300",
+  outline:
+    "bg-transparent border border-gray-300 text-gray-700 hover:bg-gray-50 focus:ring-indigo-500",
 };
 
 const SIZE_STYLES: Record<ButtonSize, string> = {

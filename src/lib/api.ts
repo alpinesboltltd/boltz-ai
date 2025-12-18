@@ -216,6 +216,20 @@ export const authAPI = {
       body: JSON.stringify({ password }),
     });
   },
+
+  resendVerificationEmail: async (email: string) => {
+    return await apiRequest("/auth/resend-verification", {
+      method: "POST",
+      body: JSON.stringify({ email }),
+    });
+  },
+
+  verifyToken: async (id_token: string) => {
+    return await apiRequest("/auth/verify", {
+      method: "POST",
+      body: JSON.stringify({ id_token }),
+    });
+  },
 };
 
 export const otpAPI = {

@@ -12,6 +12,8 @@ import { Spinner } from "@/components/common/Spinner";
 import { useAuthStore } from "@/store/authStore";
 import { toast } from "@/store/toastStore";
 import { authAPI } from "@/lib/api";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "@/configs/firebase";
 
 import { Button } from "@/components/ui/Button";
 import {
@@ -46,12 +48,50 @@ export function LoginForm() {
   });
 
   const [loading, setLoading] = useState(false);
+  const [unverifiedEmail, setUnverifiedEmail] = useState<string | null>(null);
+  const [resendLoading, setResendLoading] = useState(false);
+
+  const handleResendVerification = async () => {
+    if (!unverifiedEmail) return;
+    setResendLoading(true);
+    try {
+      await authAPI.resendVerificationEmail(unverifiedEmail);
+      toast.success("Verification Sent", "Please check your email inbox.");
+      setUnverifiedEmail(null); // Clear state after sending
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error
+          ? err.message
+          : "Failed to send verification email";
+      toast.error("Error", errorMessage);
+    } finally {
+      setResendLoading(false);
+    }
+  };
 
   const onSubmit = async (value: SigninFormInputs) => {
     setLoading(true);
     try {
-      // Use authAPI.login instead of raw fetch
-      const data = await authAPI.login(value.email, value.password);
+      // 1. Authenticate with Firebase Client SDK
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        value.email,
+        value.password
+      );
+      const firebaseUser = userCredential.user;
+      console.log(firebaseUser, "USERS");
+
+      // 2. Check Email Verification
+      if (!firebaseUser.emailVerified) {
+        setUnverifiedEmail(value.email);
+        throw new Error("EMAIL_NOT_VERIFIED");
+      }
+
+      // 3. Get ID Token
+      const idToken = await firebaseUser.getIdToken();
+
+      // 4. Verify with Backend to get Session Token & User Profile
+      const data = await authAPI.verifyToken(idToken);
 
       const { user, token } = data;
 
@@ -66,9 +106,42 @@ export function LoginForm() {
         ? decodeURIComponent(redirectTo)
         : "/dashboard";
       router.push(targetUrl);
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : "Login failed";
-      toast.error("Login Failed", errorMessage);
+    } catch (err: any) {
+      // Handle Firebase specific errors if possible, or generic
+      let errorMessage = "Login failed";
+
+      if (err instanceof Error) {
+        errorMessage = err.message;
+      }
+      // Firebase auth errors often have a code
+      if (err.code) {
+        switch (err.code) {
+          case "auth/invalid-credential":
+            errorMessage = "Invalid email or password";
+            break;
+          case "auth/user-not-found":
+            errorMessage = "Account not found";
+            break;
+          case "auth/wrong-password":
+            errorMessage = "Invalid password";
+            break;
+          case "auth/too-many-requests":
+            errorMessage = "Too many failed attempts. Please try again later.";
+            break;
+          case "auth/user-disabled":
+            errorMessage = "Account disabled.";
+            break;
+        }
+      }
+
+      if (errorMessage === "EMAIL_NOT_VERIFIED") {
+        toast.error(
+          "Account Unverified",
+          "Please verify your email address to login."
+        );
+      } else {
+        toast.error("Login Failed", errorMessage);
+      }
     } finally {
       setLoading(false);
     }
@@ -212,6 +285,26 @@ export function LoginForm() {
           </div>
         </form>
       </Form>
+
+      {unverifiedEmail && (
+        <div className="mt-4 p-4 bg-yellow-50 rounded-md">
+          <p className="text-sm text-yellow-800 mb-3">
+            Your email address has not been verified yet.
+          </p>
+          <Button
+            variant="outline"
+            className="w-full border-yellow-300 text-yellow-800 hover:bg-yellow-100"
+            onClick={handleResendVerification}
+            disabled={resendLoading}
+          >
+            {resendLoading ? (
+              <Spinner size="sm" />
+            ) : (
+              "Resend Verification Email"
+            )}
+          </Button>
+        </div>
+      )}
 
       <div className="mt-6">
         <div className="relative">
