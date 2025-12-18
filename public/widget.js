@@ -1,13 +1,13 @@
 (function () {
   "use strict";
 
-  if (typeof window.BOLTZ_CONFIG === "undefined") {
-    console.error("BOLTZ_CONFIG not found");
+  if (typeof window.LEVEL_X_CONFIG === "undefined") {
+    console.error("LEVEL_X_CONFIG not found");
     return;
   }
 
-  const config = window.BOLTZ_CONFIG;
-  const apiUrl = "http://localhost:3000/api"; //http://192.168.1.162:3000/api";
+  const config = window.LEVEL_X_CONFIG;
+  const apiUrl = config.apiUrl || "http://localhost:3000/api";
   let botConfig = {};
   let isOpen = false;
 

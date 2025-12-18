@@ -36,7 +36,7 @@ export default function AgentPreviewPage({
   };
 
   const embedCode = `<script>
-  window.BOLTZ_CONFIG = {
+  window.LEVEL_X_CONFIG = {
     id: "${id}",
   };
 </script>
@@ -101,9 +101,10 @@ export default function AgentPreviewPage({
           <Tab
             className={({ selected }) =>
               `w-full rounded-lg py-2.5 text-sm font-medium leading-5 
-              ${selected
-                ? "bg-white text-primary-700 shadow"
-                : "text-primary-600 hover:bg-white/[0.12] hover:text-primary-700"
+              ${
+                selected
+                  ? "bg-white text-primary-700 shadow"
+                  : "text-primary-600 hover:bg-white/[0.12] hover:text-primary-700"
               }`
             }
           >
@@ -112,9 +113,10 @@ export default function AgentPreviewPage({
           <Tab
             className={({ selected }) =>
               `w-full rounded-lg py-2.5 text-sm font-medium leading-5 
-              ${selected
-                ? "bg-white text-primary-700 shadow"
-                : "text-primary-600 hover:bg-white/[0.12] hover:text-primary-700"
+              ${
+                selected
+                  ? "bg-white text-primary-700 shadow"
+                  : "text-primary-600 hover:bg-white/[0.12] hover:text-primary-700"
               }`
             }
           >
@@ -123,9 +125,10 @@ export default function AgentPreviewPage({
           <Tab
             className={({ selected }) =>
               `w-full rounded-lg py-2.5 text-sm font-medium leading-5 
-              ${selected
-                ? "bg-white text-primary-700 shadow"
-                : "text-primary-600 hover:bg-white/[0.12] hover:text-primary-700"
+              ${
+                selected
+                  ? "bg-white text-primary-700 shadow"
+                  : "text-primary-600 hover:bg-white/[0.12] hover:text-primary-700"
               }`
             }
           >

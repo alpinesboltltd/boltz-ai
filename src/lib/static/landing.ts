@@ -109,7 +109,7 @@ export const pricingTiers: PricingTier[] = [
 export const testimonials: Testimonial[] = [
   {
     content:
-      "Boltz Ai transformed our customer support. We reduced response times by 80% and increased satisfaction by 35%.",
+      "Level-x Ai transformed our customer support. We reduced response times by 80% and increased satisfaction by 35%.",
     author: "Sarah Johnson",
     role: "Customer Success Manager",
     company: "TechCorp Inc.",

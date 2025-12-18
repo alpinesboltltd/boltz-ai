@@ -22,11 +22,11 @@ Appearance is driven by the bot appearance API plus optional CSS overrides.
 ## CSS Overrides
 
 ```css
-#boltz-bubble {
+#level-x-bubble {
   width: 70px;
   height: 70px;
 }
-#boltz-chat {
+#level-x-chat {
   width: 400px;
   height: 600px;
 }
@@ -35,15 +35,15 @@ Appearance is driven by the bot appearance API plus optional CSS overrides.
 ## Programmatic Access
 
 ```js
-if (window.BOLTZ_CONFIG) {
-  console.log("Bot:", window.BOLTZ_CONFIG.botId);
+if (window.LEVEL_X_CONFIG) {
+  console.log("Agent:", window.LEVEL_X_CONFIG.agentId);
 }
 ```
 
 ## Hiding / Showing
 
 ```js
-document.getElementById("boltz-widget").style.display = "none";
+document.getElementById("level-x-widget").style.display = "none";
 ```
 
 Continue to API reference for dynamic updates.

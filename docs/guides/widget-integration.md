@@ -3,14 +3,14 @@ title: Widget Integration
 sidebar_position: 1
 ---
 
-The Boltz widget is a floating chat interface you can embed in any site or app. All methods require setting `window.BOLTZ_CONFIG` before the loader script executes.
+The Level-x widget is a floating chat interface you can embed in any site or app. All methods require setting `window.LEVEL_X_CONFIG` before the loader script executes.
 
 ## Basic Two-Script Pattern
 
 ```html
 <script>
-  window.BOLTZ_CONFIG = {
-    botId: "your-bot-id",
+  window.LEVEL_X_CONFIG = {
+    agentId: "your-agent-id",
     apiUrl: "http://localhost:3000/api",
   };
 </script>
@@ -22,8 +22,8 @@ The Boltz widget is a floating chat interface you can embed in any site or app. 
 ```html
 <head>
   <script>
-    window.BOLTZ_CONFIG = {
-      botId: "4k8afeknd",
+    window.LEVEL_X_CONFIG = {
+      agentId: "4k8afeknd",
       apiUrl: "http://localhost:3000/api",
     };
   </script>
@@ -45,7 +45,7 @@ export default function RootLayout({
       <head>
         <script
           dangerouslySetInnerHTML={{
-            __html: `window.BOLTZ_CONFIG = { botId: "4k8afeknd", apiUrl: "http://localhost:3000/api" };`,
+            __html: `window.LEVEL_X_CONFIG = { agentId: "4k8afeknd", apiUrl: "http://localhost:3000/api" };`,
           }}
         />
         <script src="http://localhost:3000/widget.js" async />
@@ -61,20 +61,20 @@ export default function RootLayout({
 ```tsx
 import Script from "next/script";
 
-export function BoltzWidget({
-  botId,
+export function LevelXWidget({
+  agentId,
   apiUrl = "http://localhost:3000/api",
 }: {
-  botId: string;
+  agentId: string;
   apiUrl?: string;
 }) {
   return (
     <>
       <Script
-        id="boltz-config"
+        id="level-x-config"
         strategy="beforeInteractive"
         dangerouslySetInnerHTML={{
-          __html: `window.BOLTZ_CONFIG = { botId: "${botId}", apiUrl: "${apiUrl}" };`,
+          __html: `window.LEVEL_X_CONFIG = { agentId: "${agentId}", apiUrl: "${apiUrl}" };`,
         }}
       />
       <Script
@@ -91,24 +91,24 @@ export function BoltzWidget({
 ```tsx
 import { useEffect } from "react";
 
-export function useBoltzWidget({
-  botId,
+export function useLevelXWidget({
+  agentId,
   apiUrl = "http://localhost:3000/api",
 }: {
-  botId: string;
+  agentId: string;
   apiUrl?: string;
 }) {
   useEffect(() => {
-    (window as any).BOLTZ_CONFIG = { botId, apiUrl };
+    (window as any).LEVEL_X_CONFIG = { agentId, apiUrl };
     const script = document.createElement("script");
     script.src = "http://localhost:3000/widget.js";
     script.async = true;
     document.head.appendChild(script);
     return () => {
-      document.getElementById("boltz-widget")?.remove();
+      document.getElementById("level-x-widget")?.remove();
       script.remove();
     };
-  }, [botId, apiUrl]);
+  }, [agentId, apiUrl]);
 }
 ```
 
@@ -116,8 +116,8 @@ export function useBoltzWidget({
 
 ```tsx
 if (shouldShow) {
-  window.BOLTZ_CONFIG = {
-    botId: "4k8afeknd",
+  window.LEVEL_X_CONFIG = {
+    agentId: "4k8afeknd",
     apiUrl: "http://localhost:3000/api",
   };
   const script = document.createElement("script");
@@ -129,10 +129,10 @@ if (shouldShow) {
 
 ## Configuration Fields
 
-| Field  | Type   | Required | Description                        |
-| ------ | ------ | -------- | ---------------------------------- |
-| botId  | string | Yes      | Your bot identifier                |
-| apiUrl | string | Yes      | Base API endpoint (include `/api`) |
+| Field   | Type   | Required | Description                        |
+| ------- | ------ | -------- | ---------------------------------- |
+| agentId | string | Yes      | Your agent identifier              |
+| apiUrl  | string | Yes      | Base API endpoint (include `/api`) |
 
 ## Troubleshooting
 

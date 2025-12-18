@@ -34,18 +34,18 @@ The widget uses inline styles but can be customized with CSS:
 
 ```css
 /* Hide the widget */
-#boltz-widget {
+#level-x-widget {
   display: none !important;
 }
 
 /* Customize bubble size */
-#boltz-bubble {
+#level-x-bubble {
   width: 70px !important;
   height: 70px !important;
 }
 
 /* Customize chat window */
-#boltz-chat {
+#level-x-chat {
   width: 400px !important;
   height: 600px !important;
 }
@@ -57,14 +57,14 @@ Access widget programmatically:
 
 ```javascript
 // Check if widget is loaded
-if (window.BOLTZ_CONFIG) {
-  console.log('Widget configured for bot:', window.BOLTZ_CONFIG.botId);
+if (window.LEVEL_X_CONFIG) {
+  console.log("Widget configured for bot:", window.LEVEL_X_CONFIG.botId);
 }
 
 // Hide/show widget
-const widget = document.getElementById('boltz-widget');
+const widget = document.getElementById("level-x-widget");
 if (widget) {
-  widget.style.display = 'none'; // Hide
-  widget.style.display = 'block'; // Show
+  widget.style.display = "none"; // Hide
+  widget.style.display = "block"; // Show
 }
 ```

@@ -3,12 +3,12 @@ title: Quick Start
 sidebar_position: 2
 ---
 
-Embed the Boltz widget on any page with two scripts: configuration + loader.
+Embed the Level-x widget on any page with two scripts: configuration + loader.
 
 ```html
 <script>
-  window.BOLTZ_CONFIG = {
-    botId: "your-bot-id",
+  window.LEVEL_X_CONFIG = {
+    agentId: "your-agent-id",
     apiUrl: "http://localhost:3000/api",
   };
 </script>
@@ -17,7 +17,7 @@ Embed the Boltz widget on any page with two scripts: configuration + loader.
 
 ## Steps
 
-1. Create or identify a bot ID from your dashboard (placeholder process during early development)
+1. Create or identify an agent ID from your dashboard (placeholder process during early development)
 2. Add the configuration script before the widget loader tag
 3. Deploy / serve `widget.js` from your Next.js public directory (default path: `/widget.js`)
 4. Verify in DevTools Console that no 404s or CORS errors occur
@@ -25,7 +25,7 @@ Embed the Boltz widget on any page with two scripts: configuration + loader.
 ## Basic Verification Checklist
 
 - Network tab shows 200 for `/widget.js`
-- A request to `/api/chatagents/{botId}/appearance` succeeds (or returns JSON 404 with structured error)
+- A request to `/api/chatagents/{agentId}/appearance` succeeds (or returns JSON 404 with structured error)
 - A floating chat bubble renders in the bottom-right corner
 
 For framework‑specific usage (Next.js component, hook, dynamic load) see the integration guide under Guides.

@@ -1,11 +1,13 @@
-# Boltz AI - Requirements Document
+# Level-x - Requirements Document
 
 ## 1. Overview
-Boltz AI is a platform for hiring digital employees (Virtual Assistant, SDR, BDR, Customer Service) that can be embedded into websites and social media platforms. These agents operate at Level 4 autonomy.
+
+Level-x is a platform for hiring digital employees (Virtual Assistant, SDR, BDR, Customer Service) that can be embedded into websites and social media platforms. These agents operate at Level 4 autonomy.
 
 ## 2. Core Modules
 
 ### 2.1. Digital Employees (Agents)
+
 - **Types**:
   1. Virtual Assistant
   2. Sales Development Representative (SDR)
@@ -18,12 +20,14 @@ Boltz AI is a platform for hiring digital employees (Virtual Assistant, SDR, BDR
   - Meeting participation (Zoom, Teams, Jitsi).
 
 ### 2.2. Workspaces
+
 - Users must belong to at least one workspace.
 - Users can create multiple workspaces.
 - Role-based access control (Owner, Member, etc.).
 - Agents are scoped to workspaces.
 
 ### 2.3. Training
+
 - **Channels**:
   1. Text
   2. QnA
@@ -32,6 +36,7 @@ Boltz AI is a platform for hiring digital employees (Virtual Assistant, SDR, BDR
 - **Knowledge Base**: Centralized knowledge management for agents.
 
 ### 2.4. Integrations
+
 - **Social/Messaging**: WhatsApp, Slack, Messenger, Telegram.
 - **Ecommerce**: Shopify, WooCommerce.
 - **CRM**: Salesforce, HubSpot, Zendesk.
@@ -40,6 +45,7 @@ Boltz AI is a platform for hiring digital employees (Virtual Assistant, SDR, BDR
 - **Analytics**: Google Analytics, Microsoft Clarity, Facebook Conversion API, Mixpanel.
 
 ## 3. User Interface (Frontend)
+
 - **Workspace Management**: Switcher, Create, Settings.
 - **Agent Marketplace/Creation**: Select from default types or create custom.
 - **Workflow Builder**: Visual builder for agent tasks.
@@ -47,6 +53,7 @@ Boltz AI is a platform for hiring digital employees (Virtual Assistant, SDR, BDR
 - **Dashboard**: Analytics and Agent status.
 
 ## 4. MVP Requirements (Tonight)
+
 - **Focus**: Virtual Assistant Agent.
 - **Features**:
   - Workspace creation and management.

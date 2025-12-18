@@ -3,9 +3,9 @@ title: Overview
 sidebar_position: 1
 ---
 
-# Boltz Platform Overview
+# Level-x Platform Overview
 
-Boltz is an AI chat platform enabling you to embed intelligent assistants into your products. This documentation is organized to help you move from zero to production quickly:
+Level-x is an AI chat platform enabling you to embed intelligent assistants into your products. This documentation is organized to help you move from zero to production quickly:
 
 1. Getting Started – fundamentals & quick start
 2. Guides – task‑oriented walkthroughs (integration, customization, deployment)

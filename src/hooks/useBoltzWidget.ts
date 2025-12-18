@@ -2,29 +2,32 @@
 
 import { useEffect } from "react";
 
-interface BoltzConfig {
+interface LevelXConfig {
   id: string;
+  apiUrl?: string;
 }
 
 declare global {
   interface Window {
-    // Global Boltz widget config
-    BOLTZ_CONFIG?: {
+    // Global Level-x widget config
+    LEVEL_X_CONFIG?: {
       id: string;
+      apiUrl?: string;
     };
   }
 }
 
-export function useBoltzWidget(config: BoltzConfig) {
+export function useLevelXWidget(config: LevelXConfig) {
   useEffect(() => {
     // Set global config
-    window.BOLTZ_CONFIG = {
+    window.LEVEL_X_CONFIG = {
       id: config.id,
+      apiUrl: config.apiUrl,
     };
 
     // Load widget script
     const script = document.createElement("script");
-    script.src = "http://192.168.1.162:3000/widget.js";
+    script.src = "/widget.js";
     script.async = true;
     document.head.appendChild(script);
 
@@ -36,5 +39,5 @@ export function useBoltzWidget(config: BoltzConfig) {
       }
       document.head.removeChild(script);
     };
-  }, [config.id]);
+  }, [config.id, config.apiUrl]);
 }

@@ -94,7 +94,7 @@ export function Sidebar({
             <div className="relative h-8 w-8 shrink-0">
               <Image
                 src="/images/logo.webp"
-                alt="Boltz"
+                alt="Level-x"
                 fill
                 className="object-contain"
               />
@@ -105,7 +105,7 @@ export function Sidebar({
                 collapsed ? "opacity-0 w-0" : "opacity-100"
               )}
             >
-              Boltz
+              Level-x
             </span>
           </Link>
 

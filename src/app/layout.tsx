@@ -4,9 +4,9 @@ import { ToastProvider } from "@/components/ui/ToastProvider";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Boltz - AI Chatbot Platform",
+  title: "Level-X |Level 4 Autonomous Digital Employees",
   description:
-    "Create custom AI agents with no-code builder, powered by Google Gemini, GPT-4, Claude, and more.",
+    "Beyond automation. Level X provides Level 4 autonomous digital employees to handle complex workflows independently. Deploy the future of work today.",
 };
 
 export default function RootLayout({
@@ -30,7 +30,7 @@ export default function RootLayout({
         <script
           dangerouslySetInnerHTML={{
             __html: `
-              window.BOLTZ_CONFIG = {
+              window.LEVEL_X_CONFIG = {
                 id: "9e0c8d37-5520-4a16-903a-49dd0a30fa30",
               };
             `,

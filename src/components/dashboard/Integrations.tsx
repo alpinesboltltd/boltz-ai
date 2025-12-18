@@ -99,7 +99,7 @@ export const Integrations = ({ agentId }: IntegrationsProps) => {
   const getWidgetCode = () => {
     if (typeof window === "undefined") return "";
     return `<script>
-  window.BOLTZ_CONFIG = { id: "${agentId}" };
+  window.LEVEL_X_CONFIG = { id: "${agentId}" };
 </script>
 <script src="${window.location.origin}/widget.js" async></script>`;
   };

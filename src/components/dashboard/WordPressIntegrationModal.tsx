@@ -28,7 +28,10 @@ export default function WordPressIntegrationModal({
     // window.location.href = `/api/integrations/wordpress/download-plugin?chatagentId=${chatagentId}`;
 
     // For development, show a message
-    toast.info("Download", "In production, this would download the WordPress plugin.");
+    toast.info(
+      "Download",
+      "In production, this would download the WordPress plugin."
+    );
     setStep(2);
   };
 
@@ -101,14 +104,14 @@ export default function WordPressIntegrationModal({
                   Installation Steps
                 </h4>
                 <ol className="mt-2 text-xs text-blue-700 list-decimal list-inside space-y-1">
-                  <li>Download the Boltz WordPress plugin</li>
+                  <li>Download the Level-x WordPress plugin</li>
                   <li>Log in to your WordPress admin panel</li>
                   <li>Go to Plugins &gt; Add New &gt; Upload Plugin</li>
                   <li>
                     Upload the downloaded ZIP file and activate the plugin
                   </li>
                   <li>
-                    Go to Boltz settings in WordPress and enter your chatagent
+                    Go to Level-x settings in WordPress and enter your chatagent
                     ID:{" "}
                     <span className="font-mono bg-blue-100 px-1 rounded">
                       {chatagentId}

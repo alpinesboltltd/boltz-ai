@@ -237,7 +237,7 @@ export default function PlatformIntegrations({
   }
 </script>
 <script 
-  src="https://cdn.Boltz/widget.js" 
+  src="https://cdn.Level-x/widget.js" 
   async>
 </script>`;
   };

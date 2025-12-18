@@ -67,12 +67,12 @@ export default function DashboardLayout({
               <Link href="/" className="flex items-center gap-2">
                 <Image
                   src="/images/logo.webp"
-                  alt="Boltz"
+                  alt="Level-x"
                   height={32}
                   width={32}
                   className="h-8 w-8"
                 />
-                <span className="text-lg font-bold text-gray-900">Boltz</span>
+                <span className="text-lg font-bold text-gray-900">Level-x</span>
               </Link>
             </div>
           </div>
