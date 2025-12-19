@@ -12,7 +12,6 @@ import {
   Plus,
   Edit2,
   Trash2,
-  Zap,
   Eye,
   Mic,
   MessageSquare,

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, use } from "react";
 import { useRouter } from "next/navigation";
 import { useAgentStore } from "@/store/agentStore";
 import { Spinner } from "@/components/common/Spinner";
@@ -13,12 +13,18 @@ import {
   Database,
   FileText,
   Bot,
-  AlertCircle
+  AlertCircle,
 } from "lucide-react";
 import { motion } from "framer-motion";
 
-export default function KnowledgeCenterPage() {
+export default function KnowledgeCenterPage({
+  params,
+}: {
+  params: Promise<{ workspaceId: string }>;
+}) {
   const router = useRouter();
+  const resolvedParams = use(params);
+  const workspaceId = resolvedParams.workspaceId;
   const user = useCurrentUser();
   const { token } = useAuthStore();
   const { agents, setAgents } = useAgentStore();
@@ -46,9 +52,10 @@ export default function KnowledgeCenterPage() {
     fetchAgents();
   }, [fetchAgents]);
 
-  const filteredAgents = agents.filter(agent =>
-    agent.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    agent.description.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredAgents = agents.filter(
+    (agent) =>
+      agent.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      agent.description.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
@@ -58,10 +65,13 @@ export default function KnowledgeCenterPage() {
           <div className="p-2 bg-primary-100 rounded-lg">
             <BookOpen className="w-6 h-6 text-primary-600" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Knowledge Center</h1>
+          <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
+            Knowledge Center
+          </h1>
         </div>
         <p className="text-gray-500 max-w-2xl">
-          Manage the knowledge base for your AI agents. Select an agent to view and edit its training data, documents, and FAQs.
+          Manage the knowledge base for your AI agents. Select an agent to view
+          and edit its training data, documents, and FAQs.
         </p>
       </div>
 
@@ -87,20 +97,26 @@ export default function KnowledgeCenterPage() {
       ) : error ? (
         <div className="bg-red-50 border border-red-200 rounded-xl p-6 text-center">
           <AlertCircle className="w-8 h-8 text-red-500 mx-auto mb-2" />
-          <h3 className="text-lg font-medium text-red-900">Failed to load agents</h3>
+          <h3 className="text-lg font-medium text-red-900">
+            Failed to load agents
+          </h3>
           <p className="text-red-600 mb-4">{error}</p>
-          <button onClick={() => fetchAgents()} className="btn btn-secondary">Try Again</button>
+          <button onClick={() => fetchAgents()} className="btn btn-secondary">
+            Try Again
+          </button>
         </div>
       ) : filteredAgents.length === 0 ? (
         <div className="text-center py-12 bg-gray-50 rounded-2xl border border-dashed border-gray-300">
           <Bot className="w-12 h-12 text-gray-400 mx-auto mb-3" />
           <h3 className="text-lg font-medium text-gray-900">No agents found</h3>
           <p className="text-gray-500 mb-4">
-            {searchQuery ? "Try adjusting your search terms." : "Create your first agent to start adding knowledge."}
+            {searchQuery
+              ? "Try adjusting your search terms."
+              : "Create your first agent to start adding knowledge."}
           </p>
           {!searchQuery && (
             <button
-              onClick={() => router.push("/dashboard/create")}
+              onClick={() => router.push(`/workspace/${workspaceId}/create`)}
               className="btn btn-primary"
             >
               Create Agent
@@ -116,7 +132,11 @@ export default function KnowledgeCenterPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.05 }}
               className="group bg-white rounded-2xl border border-gray-200 p-6 hover:shadow-lg transition-all duration-300 cursor-pointer relative overflow-hidden"
-              onClick={() => router.push(`/dashboard/agent/${agent.id}?tab=sources`)}
+              onClick={() =>
+                router.push(
+                  `/workspace/${workspaceId}/agent/${agent.id}?tab=sources`
+                )
+              }
             >
               <div className="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity">
                 <ArrowRight className="w-5 h-5 text-primary-500" />
@@ -127,8 +147,12 @@ export default function KnowledgeCenterPage() {
                   <Bot className="w-6 h-6" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900 line-clamp-1">{agent.name}</h3>
-                  <p className="text-sm text-gray-500 line-clamp-1 capitalize">{agent.agent_type}</p>
+                  <h3 className="font-semibold text-gray-900 line-clamp-1">
+                    {agent.name}
+                  </h3>
+                  <p className="text-sm text-gray-500 line-clamp-1 capitalize">
+                    {agent.agent_type}
+                  </p>
                 </div>
               </div>
 

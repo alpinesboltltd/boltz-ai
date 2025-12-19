@@ -90,7 +90,10 @@ export default function Dashboard() {
         </div>
         <div className="flex gap-3">
           <Button
-            onClick={() => router.push("/dashboard/create")}
+            onClick={() =>
+              currentWorkspace?.id &&
+              router.push(`/workspace/${currentWorkspace.id}/create`)
+            }
             className="btn"
           >
             <Plus className="mr-2 h-4 w-4" />
@@ -166,14 +169,19 @@ export default function Dashboard() {
                     agent={chatagent}
                     onDelete={handleDeleteClick}
                     onManage={() =>
-                      router.push(`/dashboard/agent/${chatagent.id}`)
+                      router.push(
+                        `/workspace/${currentWorkspace?.id}/agent/${chatagent.id}`
+                      )
                     }
                   />
                 ))}
 
                 {/* Add New Agent Card */}
                 <button
-                  onClick={() => router.push("/dashboard/create")}
+                  onClick={() =>
+                    currentWorkspace?.id &&
+                    router.push(`/workspace/${currentWorkspace.id}/create`)
+                  }
                   className="group relative flex flex-col items-center justify-center gap-4 rounded-xl border-2 border-dashed border-gray-200 bg-gray-50/50 p-6 text-center hover:border-primary-300 hover:bg-primary-50/50 transition-all duration-300"
                 >
                   <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-sm group-hover:scale-110 transition-transform duration-300">
@@ -194,7 +202,12 @@ export default function Dashboard() {
                 <p className="text-xl text-gray-700 mb-4">
                   You do not have any agent in your Workspace.
                 </p>
-                <Button onClick={() => router.push("/dashboard/market")}>
+                <Button
+                  onClick={() =>
+                    currentWorkspace?.id &&
+                    router.push(`/workspace/${currentWorkspace.id}/market`)
+                  }
+                >
                   Hire Agent
                 </Button>
               </div>

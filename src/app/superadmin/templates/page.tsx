@@ -5,8 +5,8 @@ import Select from "react-select";
 import CreatableSelect from "react-select/creatable";
 import ReactMarkdown from "react-markdown";
 
-import { AgentTemplate, PromptTemplate } from "../../../../types/agent";
-import { agentsAPI, systemAPI, aiModelsAPI } from "../../../../lib/api";
+import { AgentTemplate, PromptTemplate } from "@/types/agent";
+import { agentsAPI, systemAPI, aiModelsAPI } from "@/lib/api";
 import { useRouter } from "next/navigation";
 import {
   CheckCircle2,
@@ -23,11 +23,7 @@ const ROLE_OPTIONS = [
   { value: "customer_support", label: "Customer Support" },
   { value: "sdr", label: "Sales Development Rep" },
   { value: "bdr", label: "Business Development Rep" },
-];
-
-const AGENT_TYPE_OPTIONS = [
-  { value: 1, label: "Chat" },
-  { value: 2, label: "Task" },
+  { value: "recruiter", label: "Recruiter" },
 ];
 
 export default function AdminTemplatesPage() {
@@ -88,11 +84,13 @@ export default function AdminTemplatesPage() {
 
   const fetchData = async () => {
     try {
+      const token =
+        localStorage.getItem("boltz_by_alpinesbolt_auth_token") || "";
       const [modelsRes, promptsRes] = await Promise.all([
-        aiModelsAPI.getAll(""), // pass token? Assuming empty string works or handled by wrapper? Wrapper needs token usually, but api.ts logic checks localStorage.
+        aiModelsAPI.getAll(token),
         systemAPI.listTemplates(),
       ]);
-      setAiModels(modelsRes.ai_models || []); // Adjust based on actual response structure
+      setAiModels(modelsRes.ai_models || []);
       setPromptTemplates(promptsRes.templates || []);
     } catch (err) {
       console.error("Failed to fetch initial data", err);
@@ -124,7 +122,7 @@ export default function AdminTemplatesPage() {
             bubble_style: agentFormData.bubble_style,
           },
           behavior: {
-            prompt_template_id: agentFormData.prompt_template_id, // If empty string, backend logic might ignore or handle
+            prompt_template_id: agentFormData.prompt_template_id,
             fallback_message: agentFormData.fallback_message,
             offline_message: agentFormData.offline_message,
             temperature: agentFormData.temperature,
@@ -220,17 +218,11 @@ export default function AdminTemplatesPage() {
       setPromptTemplates(res.templates || []);
     } catch (err: any) {
       console.error("Failed to delete template", err);
-      // Maybe show toast error here if possible, but existing code didn't use toast (except local state?)
-      // Ah, page has error state.
       setError(err.message || "Failed to delete template");
     } finally {
       setDeleteConfirmOpen(false);
       setPromptToDelete(null);
     }
-  };
-  const handleCancelEdit = () => {
-    setEditingPromptId(null);
-    setPromptFormData({ title: "", content: "" });
   };
 
   return (

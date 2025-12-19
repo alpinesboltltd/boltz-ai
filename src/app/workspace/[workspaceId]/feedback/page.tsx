@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import { Spinner } from "@/components/common/Spinner";
 import {
   Star,
@@ -12,7 +12,7 @@ import {
   User,
   Calendar,
   MessageCircle,
-  ArrowUpRight
+  ArrowUpRight,
 } from "lucide-react";
 import { toast } from "@/store/toastStore";
 import { cn } from "@/lib/utils";
@@ -28,7 +28,12 @@ interface Feedback {
   userIdentifier?: string;
 }
 
-export default function FeedbackPage() {
+export default function FeedbackPage({
+  params,
+}: {
+  params: Promise<{ workspaceId: string }>;
+}) {
+  const resolvedParams = use(params);
   const [feedback, setFeedback] = useState<Feedback[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<"all" | "positive" | "negative">("all");
@@ -40,7 +45,7 @@ export default function FeedbackPage() {
   useEffect(() => {
     async function loadFeedback() {
       try {
-        // Mock data for development
+        // Mock data for development - fetch by workspaceId in real app
         await new Promise((resolve) => setTimeout(resolve, 1000));
 
         const mockChatbots = [
@@ -80,8 +85,10 @@ export default function FeedbackPage() {
       }
     }
 
-    loadFeedback();
-  }, []);
+    if (resolvedParams.workspaceId) {
+      loadFeedback();
+    }
+  }, [resolvedParams.workspaceId]);
 
   const filteredFeedback = feedback.filter((item) => {
     const matchesChatbot =
@@ -97,26 +104,26 @@ export default function FeedbackPage() {
   const averageRating =
     feedback.length > 0
       ? (
-        feedback.reduce((sum, item) => sum + item.rating, 0) / feedback.length
-      ).toFixed(1)
+          feedback.reduce((sum, item) => sum + item.rating, 0) / feedback.length
+        ).toFixed(1)
       : "0.0";
 
   const positivePercentage =
     feedback.length > 0
       ? Math.round(
-        (feedback.filter((item) => item.rating >= 4).length /
-          feedback.length) *
-        100
-      )
+          (feedback.filter((item) => item.rating >= 4).length /
+            feedback.length) *
+            100
+        )
       : 0;
 
   const negativePercentage =
     feedback.length > 0
       ? Math.round(
-        (feedback.filter((item) => item.rating <= 2).length /
-          feedback.length) *
-        100
-      )
+          (feedback.filter((item) => item.rating <= 2).length /
+            feedback.length) *
+            100
+        )
       : 0;
 
   const renderStars = (rating: number) => {
@@ -135,7 +142,9 @@ export default function FeedbackPage() {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh]">
         <Spinner size="lg" />
-        <p className="mt-4 text-gray-500 font-medium animate-pulse">Loading feedback...</p>
+        <p className="mt-4 text-gray-500 font-medium animate-pulse">
+          Loading feedback...
+        </p>
       </div>
     );
   }
@@ -145,10 +154,11 @@ export default function FeedbackPage() {
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 tracking-tight flex items-center gap-3">
           <MessageSquare className="w-8 h-8 text-primary-600" />
-          User Feedback
+          Workspace Feedback
         </h1>
         <p className="mt-2 text-gray-500">
-          Review and analyze user sentiment across your agents.
+          Review and analyze user sentiment across your agents in this
+          workspace.
         </p>
       </div>
 
@@ -161,8 +171,12 @@ export default function FeedbackPage() {
             </div>
             <div className="ml-5 w-0 flex-1">
               <dl>
-                <dt className="text-sm font-medium text-gray-500 truncate">Average Rating</dt>
-                <dd className="text-2xl font-bold text-gray-900 mt-1">{averageRating}/5.0</dd>
+                <dt className="text-sm font-medium text-gray-500 truncate">
+                  Average Rating
+                </dt>
+                <dd className="text-2xl font-bold text-gray-900 mt-1">
+                  {averageRating}/5.0
+                </dd>
               </dl>
             </div>
           </div>
@@ -175,8 +189,12 @@ export default function FeedbackPage() {
             </div>
             <div className="ml-5 w-0 flex-1">
               <dl>
-                <dt className="text-sm font-medium text-gray-500 truncate">Positive Feedback</dt>
-                <dd className="text-2xl font-bold text-gray-900 mt-1">{positivePercentage}%</dd>
+                <dt className="text-sm font-medium text-gray-500 truncate">
+                  Positive Feedback
+                </dt>
+                <dd className="text-2xl font-bold text-gray-900 mt-1">
+                  {positivePercentage}%
+                </dd>
               </dl>
             </div>
           </div>
@@ -189,8 +207,12 @@ export default function FeedbackPage() {
             </div>
             <div className="ml-5 w-0 flex-1">
               <dl>
-                <dt className="text-sm font-medium text-gray-500 truncate">Negative Feedback</dt>
-                <dd className="text-2xl font-bold text-gray-900 mt-1">{negativePercentage}%</dd>
+                <dt className="text-sm font-medium text-gray-500 truncate">
+                  Negative Feedback
+                </dt>
+                <dd className="text-2xl font-bold text-gray-900 mt-1">
+                  {negativePercentage}%
+                </dd>
               </dl>
             </div>
           </div>
@@ -233,7 +255,9 @@ export default function FeedbackPage() {
       {/* Feedback List */}
       <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
         <div className="p-6 border-b border-gray-100 flex justify-between items-center">
-          <h2 className="text-lg font-semibold text-gray-900">Recent Feedback</h2>
+          <h2 className="text-lg font-semibold text-gray-900">
+            Recent Feedback
+          </h2>
           <span className="text-sm text-gray-500">
             Showing {filteredFeedback.length} of {feedback.length} items
           </span>
@@ -242,14 +266,19 @@ export default function FeedbackPage() {
         <div className="divide-y divide-gray-100">
           {filteredFeedback.length > 0 ? (
             filteredFeedback.map((item) => (
-              <div key={item.id} className="p-6 hover:bg-gray-50 transition-colors">
+              <div
+                key={item.id}
+                className="p-6 hover:bg-gray-50 transition-colors"
+              >
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center text-primary-600">
                       <MessageCircle className="w-5 h-5" />
                     </div>
                     <div>
-                      <h3 className="text-sm font-medium text-gray-900">{item.chatagentName}</h3>
+                      <h3 className="text-sm font-medium text-gray-900">
+                        {item.chatagentName}
+                      </h3>
                       <div className="flex items-center gap-2 mt-0.5">
                         <div className="flex">{renderStars(item.rating)}</div>
                         <span className="text-xs text-gray-400">•</span>
@@ -262,7 +291,12 @@ export default function FeedbackPage() {
                   </div>
 
                   <button
-                    onClick={() => toast.info("Navigation", `View conversation ${item.conversationId}`)}
+                    onClick={() =>
+                      toast.info(
+                        "Navigation",
+                        `View conversation ${item.conversationId}`
+                      )
+                    }
                     className="btn btn-ghost btn-sm text-primary-600 hover:text-primary-700 hover:bg-primary-50"
                   >
                     View Context <ArrowUpRight className="w-4 h-4 ml-1" />
@@ -287,8 +321,12 @@ export default function FeedbackPage() {
               <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Search className="w-8 h-8 text-gray-400" />
               </div>
-              <h3 className="text-lg font-medium text-gray-900">No feedback found</h3>
-              <p className="text-gray-500 mt-1">Try adjusting your filters to see more results.</p>
+              <h3 className="text-lg font-medium text-gray-900">
+                No feedback found
+              </h3>
+              <p className="text-gray-500 mt-1">
+                Try adjusting your filters to see more results.
+              </p>
             </div>
           )}
         </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import { agentsAPI } from "@/lib/api"; // Updated import
 import { AgentTemplate } from "@/types/agent"; // Imported type
 import { Spinner } from "@/components/common/Spinner";
@@ -34,8 +34,14 @@ const ROLE_OPTIONS = [
   { value: "bdr", label: "Business Development" },
 ];
 
-export default function MarketplacePage() {
+export default function MarketplacePage({
+  params,
+}: {
+  params: Promise<{ workspaceId: string }>;
+}) {
   const router = useRouter();
+  const resolvedParams = use(params);
+  const workspaceId = resolvedParams.workspaceId;
   const [setupAgent, setSetupAgent] = useState<{
     id: string;
     name: string;
@@ -80,7 +86,7 @@ export default function MarketplacePage() {
 
   const handleFinishSetup = () => {
     if (setupAgent) {
-      router.push(`/dashboard/agent/${setupAgent.id}`);
+      router.push(`/workspace/${workspaceId}/agent/${setupAgent.id}`);
     }
   };
 
