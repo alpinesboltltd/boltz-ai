@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
-import { useRouter, useParams } from "next/navigation";
+import { useState, useEffect, useCallback, use } from "react";
+import { useRouter } from "next/navigation";
 import { useAgentStore } from "@/store/agentStore";
 import { Spinner } from "@/components/common/Spinner";
 import { agentsAPI } from "@/lib/api";
@@ -17,10 +17,14 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 
-export default function KnowledgeCenterPage() {
+export default function KnowledgeCenterPage({
+  params,
+}: {
+  params: Promise<{ workspaceId: string }>;
+}) {
   const router = useRouter();
-  const params = useParams();
-  const workspaceId = params?.workspaceId as string;
+  const resolvedParams = use(params);
+  const workspaceId = resolvedParams.workspaceId;
   const user = useCurrentUser();
   const { token } = useAuthStore();
   const { agents, setAgents } = useAgentStore();

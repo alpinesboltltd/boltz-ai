@@ -7,7 +7,6 @@ import { SuperAdminSidebar } from "@/components/layout/SuperAdminSidebar";
 import { ErrorBoundary } from "@/components/common/ErrorBoundary";
 import { useCurrentUser } from "@/store/authStore";
 import { UserRoles } from "@/types";
-import { Spinner } from "@/components/common/Spinner";
 import { cn } from "@/lib/utils";
 
 export default function SuperAdminLayout({

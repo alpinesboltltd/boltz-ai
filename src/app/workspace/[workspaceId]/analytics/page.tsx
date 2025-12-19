@@ -1,9 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import { format, subDays } from "date-fns";
 import { Spinner } from "@/components/common/Spinner";
-import { useParams } from "next/navigation";
 import {
   MessageSquare,
   Users,
@@ -163,9 +162,13 @@ const doughnutOptions = {
   },
 };
 
-export default function AnalyticsPage() {
-  const params = useParams();
-  const workspaceId = params?.workspaceId as string;
+export default function AnalyticsPage({
+  params,
+}: {
+  params: Promise<{ workspaceId: string }>;
+}) {
+  const resolvedParams = use(params);
+  const workspaceId = resolvedParams.workspaceId;
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [timeRange, setTimeRange] = useState("30d");

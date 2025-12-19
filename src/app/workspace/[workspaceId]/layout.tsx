@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, use } from "react";
 import { PrimarySidebar } from "@/components/layout/PrimarySidebar";
 import { WorkspaceSidebar } from "@/components/layout/WorkspaceSidebar";
 import { ErrorBoundary } from "@/components/common/ErrorBoundary";
@@ -10,8 +10,9 @@ export default function WorkspaceLayout({
   params,
 }: {
   children: React.ReactNode;
-  params: { workspaceId: string };
+  params: Promise<{ workspaceId: string }>;
 }) {
+  const resolvedParams = use(params);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
@@ -33,7 +34,7 @@ export default function WorkspaceLayout({
       >
         <div className="flex flex-1 h-screen overflow-hidden">
           {/* Secondary Sidebar (Workspace Specific) */}
-          <WorkspaceSidebar workspaceId={params.workspaceId} />
+          <WorkspaceSidebar workspaceId={resolvedParams.workspaceId} />
 
           {/* Page Content */}
           <main className="flex-1 overflow-y-auto bg-white">

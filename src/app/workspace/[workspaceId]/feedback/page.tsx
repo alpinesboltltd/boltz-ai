@@ -1,7 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useParams } from "next/navigation";
+import { useState, useEffect, use } from "react";
 import { Spinner } from "@/components/common/Spinner";
 import {
   Star,
@@ -29,9 +28,12 @@ interface Feedback {
   userIdentifier?: string;
 }
 
-export default function FeedbackPage() {
-  const params = useParams();
-  const workspaceId = params?.workspaceId as string;
+export default function FeedbackPage({
+  params,
+}: {
+  params: Promise<{ workspaceId: string }>;
+}) {
+  const resolvedParams = use(params);
   const [feedback, setFeedback] = useState<Feedback[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<"all" | "positive" | "negative">("all");
@@ -83,10 +85,10 @@ export default function FeedbackPage() {
       }
     }
 
-    if (workspaceId) {
+    if (resolvedParams.workspaceId) {
       loadFeedback();
     }
-  }, [workspaceId]);
+  }, [resolvedParams.workspaceId]);
 
   const filteredFeedback = feedback.filter((item) => {
     const matchesChatbot =

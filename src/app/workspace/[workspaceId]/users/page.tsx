@@ -1,7 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useParams } from "next/navigation";
+import { useState, useEffect, use } from "react";
 import { Spinner } from "@/components/common/Spinner";
 import {
   User,
@@ -34,9 +33,13 @@ interface User {
   onlineStatus?: boolean;
 }
 
-export default function UsersPage() {
-  const params = useParams();
-  const workspaceId = params?.workspaceId as string;
+export default function UsersPage({
+  params,
+}: {
+  params: Promise<{ workspaceId: string }>;
+}) {
+  const resolvedParams = use(params);
+  const workspaceId = resolvedParams.workspaceId;
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
