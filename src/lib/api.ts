@@ -1096,7 +1096,7 @@ export const icpAPI = {
     }),
 
   list: (workspaceId: string) =>
-    apiRequest<ICP[]>(`/workspaces/${workspaceId}/icps`, {
+    apiRequest<ICP[]>(`/workspaces/icps/${workspaceId}`, {
       method: "GET",
     }),
 
