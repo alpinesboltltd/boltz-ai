@@ -1,27 +1,21 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useParams } from "next/navigation";
 import { Spinner } from "@/components/common/Spinner";
 import {
   User,
-  Mail,
-  Phone,
-  MoreVertical,
-  Trash2,
-  Edit2,
   UserPlus,
   Search,
-  Filter,
   Shield,
+  Edit2,
+  Trash2,
+  X,
   CheckCircle2,
-  XCircle,
-  X
 } from "lucide-react";
 import { useUserPermissions } from "@/hooks/useUserPermissions";
 import { UserRoles } from "@/types";
 import UserDeleteModal from "@/components/form/UserDeleteModal";
-import UserFilters from "@/components/form/UserFilters";
-import UsersTable from "@/components/form/UsersTable";
 import UserForm from "@/components/form/userForm";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
@@ -41,6 +35,8 @@ interface User {
 }
 
 export default function UsersPage() {
+  const params = useParams();
+  const workspaceId = params?.workspaceId as string;
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -64,6 +60,7 @@ export default function UsersPage() {
       try {
         await new Promise((resolve) => setTimeout(resolve, 1000));
 
+        // In real app, fetch users for workspaceId
         const roles = [UserRoles.staff, UserRoles.admin];
         const mockUsers = Array.from({ length: 20 }, (_, i) => {
           const roleIndex = i % 2;
@@ -91,8 +88,10 @@ export default function UsersPage() {
       }
     }
 
-    loadUsers();
-  }, []);
+    if (workspaceId) {
+      loadUsers();
+    }
+  }, [workspaceId]);
 
   const handleCreateUser = async (data: {
     name: string;
@@ -145,13 +144,13 @@ export default function UsersPage() {
         prev.map((user) =>
           user.id === userToEdit.id
             ? {
-              ...user,
-              name: data.name,
-              email: data.email,
-              phone: data.phone,
-              whatsapp: data.whatsapp,
-              role: data.role,
-            }
+                ...user,
+                name: data.name,
+                email: data.email,
+                phone: data.phone,
+                whatsapp: data.whatsapp,
+                role: data.role,
+              }
             : user
         )
       );
@@ -199,7 +198,9 @@ export default function UsersPage() {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh]">
         <Spinner size="lg" />
-        <p className="mt-4 text-gray-500 font-medium animate-pulse">Loading users...</p>
+        <p className="mt-4 text-gray-500 font-medium animate-pulse">
+          Loading users...
+        </p>
       </div>
     );
   }
@@ -271,16 +272,41 @@ export default function UsersPage() {
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50/50">
               <tr>
-                <th scope="col" className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">User</th>
-                <th scope="col" className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Role</th>
-                <th scope="col" className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</th>
-                <th scope="col" className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Last Active</th>
-                <th scope="col" className="relative px-6 py-4"><span className="sr-only">Actions</span></th>
+                <th
+                  scope="col"
+                  className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider"
+                >
+                  User
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider"
+                >
+                  Role
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider"
+                >
+                  Status
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider"
+                >
+                  Last Active
+                </th>
+                <th scope="col" className="relative px-6 py-4">
+                  <span className="sr-only">Actions</span>
+                </th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {filteredUsers.map((user) => (
-                <tr key={user.id} className="hover:bg-gray-50/50 transition-colors">
+                <tr
+                  key={user.id}
+                  className="hover:bg-gray-50/50 transition-colors"
+                >
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       <div className="relative h-10 w-10 shrink-0">
@@ -288,38 +314,57 @@ export default function UsersPage() {
                           height={40}
                           width={40}
                           className="h-10 w-10 rounded-full object-cover"
-                          src={user.avatar || `https://ui-avatars.com/api/?name=${user.name}`}
+                          src={
+                            user.avatar ||
+                            `https://ui-avatars.com/api/?name=${user.name}`
+                          }
                           alt={user.name}
                         />
-                        <span className={cn(
-                          "absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-white",
-                          user.onlineStatus ? "bg-green-500" : "bg-gray-300"
-                        )} />
+                        <span
+                          className={cn(
+                            "absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-white",
+                            user.onlineStatus ? "bg-green-500" : "bg-gray-300"
+                          )}
+                        />
                       </div>
                       <div className="ml-4">
-                        <div className="text-sm font-medium text-gray-900">{user.name}</div>
-                        <div className="text-sm text-gray-500">{user.email}</div>
+                        <div className="text-sm font-medium text-gray-900">
+                          {user.name}
+                        </div>
+                        <div className="text-sm text-gray-500">
+                          {user.email}
+                        </div>
                       </div>
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={cn(
-                      "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium",
-                      user.role === UserRoles.admin ? "bg-purple-100 text-purple-800" : "bg-blue-100 text-blue-800"
-                    )}>
+                    <span
+                      className={cn(
+                        "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium",
+                        user.role === UserRoles.admin
+                          ? "bg-purple-100 text-purple-800"
+                          : "bg-blue-100 text-blue-800"
+                      )}
+                    >
                       {user.role === UserRoles.admin ? "Admin" : "Staff"}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={cn(
-                      "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium",
-                      user.status === "active" ? "bg-green-100 text-green-800" : "bg-gray-100 text-gray-800"
-                    )}>
+                    <span
+                      className={cn(
+                        "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium",
+                        user.status === "active"
+                          ? "bg-green-100 text-green-800"
+                          : "bg-gray-100 text-gray-800"
+                      )}
+                    >
                       {user.status === "active" ? "Active" : "Inactive"}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {user.lastActive ? new Date(user.lastActive).toLocaleDateString() : "Never"}
+                    {user.lastActive
+                      ? new Date(user.lastActive).toLocaleDateString()
+                      : "Never"}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <div className="flex justify-end gap-2">
@@ -444,27 +489,39 @@ export default function UsersPage() {
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-12 h-12 rounded-full bg-gray-100 relative overflow-hidden">
                     <Image
-                      src={selectedUserInfo.avatar || `https://ui-avatars.com/api/?name=${selectedUserInfo.name}`}
+                      src={
+                        selectedUserInfo.avatar ||
+                        `https://ui-avatars.com/api/?name=${selectedUserInfo.name}`
+                      }
                       alt={selectedUserInfo.name}
                       fill
                       className="object-cover"
                     />
                   </div>
                   <div>
-                    <h4 className="font-medium text-gray-900">{selectedUserInfo.name}</h4>
-                    <span className="text-sm text-gray-500 capitalize">{selectedUserInfo.role}</span>
+                    <h4 className="font-medium text-gray-900">
+                      {selectedUserInfo.name}
+                    </h4>
+                    <span className="text-sm text-gray-500 capitalize">
+                      {selectedUserInfo.role}
+                    </span>
                   </div>
                 </div>
 
-                <h5 className="text-sm font-medium text-gray-900 mb-3">Access Level</h5>
+                <h5 className="text-sm font-medium text-gray-900 mb-3">
+                  Access Level
+                </h5>
                 <ul className="space-y-2">
                   {[
                     "View dashboard analytics",
                     "Manage assigned agents",
                     "Reply to user conversations",
-                    "Edit agent settings"
+                    "Edit agent settings",
                   ].map((perm, i) => (
-                    <li key={i} className="flex items-center gap-2 text-sm text-gray-600">
+                    <li
+                      key={i}
+                      className="flex items-center gap-2 text-sm text-gray-600"
+                    >
                       <CheckCircle2 className="w-4 h-4 text-green-500" />
                       {perm}
                     </li>

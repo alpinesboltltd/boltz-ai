@@ -10,7 +10,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Spinner } from "@/components/common/Spinner";
 
-export default function DashboardLayout({
+export default function SettingsLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -22,10 +22,8 @@ export default function DashboardLayout({
   // Show loading or redirect if no user
   if (!user) {
     if (typeof window !== "undefined") {
-      // Double check localStorage to avoid redirecting during hydration
       const hasToken = localStorage.getItem("boltz_by_alpinesbolt_auth_token");
       if (!hasToken) {
-        // Force logout action to clear any stale cookies and prevent redirect loops
         window.location.href = "/login?action=logout";
       }
     }

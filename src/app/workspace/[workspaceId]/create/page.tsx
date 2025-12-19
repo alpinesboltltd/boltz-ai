@@ -17,7 +17,7 @@ import {
   AgentIconSize,
   AgentBubbleStyle,
   CreateAgentRequestSchema,
-  CreateAgentRequest
+  CreateAgentRequest,
 } from "@/types/agent";
 import { Input } from "@/components/common/Input";
 import { Textarea } from "@/components/common/Textarea";
@@ -26,7 +26,16 @@ import { Spinner } from "@/components/common/Spinner";
 import { TrainingSources } from "@/components/dashboard/TrainingSources";
 import { BotPreview } from "@/components/chatbot/BotPreview";
 import { motion, AnimatePresence } from "framer-motion";
-import { MessageSquare, Mic, ImageIcon, CheckCircle2, ArrowRight, ArrowLeft, Sparkles, Zap } from "lucide-react";
+import {
+  MessageSquare,
+  Mic,
+  ImageIcon,
+  CheckCircle2,
+  ArrowRight,
+  ArrowLeft,
+  Sparkles,
+  Zap,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface UITemplate {
@@ -61,10 +70,14 @@ const STEPS = [
 const agentTypeToEnum = (type: AgentType | string): number => {
   if (typeof type === "number") return type;
   switch (type) {
-    case "text": return 1;
-    case "voice": return 2;
-    case "vision": return 0;
-    default: return 1;
+    case "text":
+      return 1;
+    case "voice":
+      return 2;
+    case "vision":
+      return 0;
+    default:
+      return 1;
   }
 };
 
@@ -79,7 +92,9 @@ export default function CreateAgentPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [agentId, setAgentId] = useState<string | null>(null);
   const [agentData, setAgentData] = useState<Agent | null>(null);
-  const [selectedTemplate, setSelectedTemplate] = useState(templateIdParam || "");
+  const [selectedTemplate, setSelectedTemplate] = useState(
+    templateIdParam || ""
+  );
   const [templates, setTemplates] = useState<UITemplate[]>([]);
 
   useEffect(() => {
@@ -151,7 +166,10 @@ export default function CreateAgentPage() {
     try {
       setIsLoading(true);
       if (!user || !user.id) {
-        toast.error("Creation Failed", "No user found. Please login and try again.");
+        toast.error(
+          "Creation Failed",
+          "No user found. Please login and try again."
+        );
         return;
       }
 
@@ -196,7 +214,7 @@ export default function CreateAgentPage() {
     setIsLoading(true);
     try {
       // Simulate training completion
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       setStep(3);
     } catch (error) {
       console.error("Error updating training:", error);
@@ -223,9 +241,11 @@ export default function CreateAgentPage() {
         agentsAPI.createBehavior({
           agent_id: agentId,
           initial_messages: JSON.stringify([data.welcome_message]),
-          fallback_message: "I'm sorry, I don't understand that question. Could you rephrase it?",
+          fallback_message:
+            "I'm sorry, I don't understand that question. Could you rephrase it?",
           enable_human_handoff: false,
-          offline_message: "Our team is currently offline. Please leave a message and we'll get back to you.",
+          offline_message:
+            "Our team is currently offline. Please leave a message and we'll get back to you.",
           system_instruction: "You are a helpful AI assistant.",
           prompt_template: "{{conversation}}",
           prompt_template_id: selectedTemplate || undefined,
@@ -236,11 +256,14 @@ export default function CreateAgentPage() {
         }),
       ]);
 
-      router.push(`/dashboard/agent/${agentId}`);
+      router.push(`/workspace/${currentWorkspace?.id}/agent/${agentId}`);
       toast.success("Success", "Agent created successfully!");
     } catch (error) {
       console.error("Error finalizing agent:", error);
-      toast.error("Creation Failed", "Failed to create agent. Please try again.");
+      toast.error(
+        "Creation Failed",
+        "Failed to create agent. Please try again."
+      );
     } finally {
       setIsLoading(false);
     }
@@ -259,7 +282,8 @@ export default function CreateAgentPage() {
             Create New AI Agent
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Design, train, and deploy your intelligent assistant in three simple steps.
+            Design, train, and deploy your intelligent assistant in three simple
+            steps.
           </p>
         </div>
 
@@ -278,7 +302,10 @@ export default function CreateAgentPage() {
               const isCurrent = step === s.id;
 
               return (
-                <div key={s.id} className="flex flex-col items-center gap-2 bg-gray-50 px-2">
+                <div
+                  key={s.id}
+                  className="flex flex-col items-center gap-2 bg-gray-50 px-2"
+                >
                   <div
                     className={cn(
                       "w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 border-4",
@@ -290,10 +317,17 @@ export default function CreateAgentPage() {
                     <Icon className="w-5 h-5" />
                   </div>
                   <div className="text-center">
-                    <p className={cn("text-sm font-semibold transition-colors", isActive ? "text-primary-700" : "text-gray-500")}>
+                    <p
+                      className={cn(
+                        "text-sm font-semibold transition-colors",
+                        isActive ? "text-primary-700" : "text-gray-500"
+                      )}
+                    >
                       {s.name}
                     </p>
-                    <p className="text-xs text-gray-400 hidden sm:block">{s.description}</p>
+                    <p className="text-xs text-gray-400 hidden sm:block">
+                      {s.description}
+                    </p>
                   </div>
                 </div>
               );
@@ -316,7 +350,10 @@ export default function CreateAgentPage() {
                   exit={{ opacity: 0, x: -20 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <form onSubmit={agentForm.handleSubmit(handleAgentSubmit)} className="space-y-8">
+                  <form
+                    onSubmit={agentForm.handleSubmit(handleAgentSubmit)}
+                    className="space-y-8"
+                  >
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                       <div className="space-y-6">
                         <Input
@@ -337,12 +374,29 @@ export default function CreateAgentPage() {
 
                       <div className="space-y-6">
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-3">Agent Type</label>
+                          <label className="block text-sm font-medium text-gray-700 mb-3">
+                            Agent Type
+                          </label>
                           <div className="grid grid-cols-1 gap-3">
                             {[
-                              { value: AgentType.TEXT, label: "Text Only", icon: MessageSquare, desc: "Best for chat support" },
-                              { value: AgentType.VOICE, label: "Voice Only", icon: Mic, desc: "For phone/voice interactions" },
-                              { value: AgentType.VISION, label: "Multimodal", icon: ImageIcon, desc: "Text, voice & image support" },
+                              {
+                                value: AgentType.TEXT,
+                                label: "Text Only",
+                                icon: MessageSquare,
+                                desc: "Best for chat support",
+                              },
+                              {
+                                value: AgentType.VOICE,
+                                label: "Voice Only",
+                                icon: Mic,
+                                desc: "For phone/voice interactions",
+                              },
+                              {
+                                value: AgentType.VISION,
+                                label: "Multimodal",
+                                icon: ImageIcon,
+                                desc: "Text, voice & image support",
+                              },
                             ].map((type) => (
                               <label
                                 key={type.value}
@@ -359,15 +413,23 @@ export default function CreateAgentPage() {
                                   value={type.value}
                                   className="sr-only"
                                 />
-                                <div className={cn(
-                                  "p-2 rounded-lg mr-4",
-                                  selectedAgentType === type.value ? "bg-primary-100 text-primary-600" : "bg-gray-100 text-gray-500"
-                                )}>
+                                <div
+                                  className={cn(
+                                    "p-2 rounded-lg mr-4",
+                                    selectedAgentType === type.value
+                                      ? "bg-primary-100 text-primary-600"
+                                      : "bg-gray-100 text-gray-500"
+                                  )}
+                                >
                                   <type.icon className="w-5 h-5" />
                                 </div>
                                 <div>
-                                  <span className="block text-sm font-semibold text-gray-900">{type.label}</span>
-                                  <span className="block text-xs text-gray-500">{type.desc}</span>
+                                  <span className="block text-sm font-semibold text-gray-900">
+                                    {type.label}
+                                  </span>
+                                  <span className="block text-xs text-gray-500">
+                                    {type.desc}
+                                  </span>
                                 </div>
                                 {selectedAgentType === type.value && (
                                   <CheckCircle2 className="absolute right-4 w-5 h-5 text-primary-600" />
@@ -380,7 +442,9 @@ export default function CreateAgentPage() {
                     </div>
 
                     <div className="border-t border-gray-100 pt-8">
-                      <label className="block text-sm font-medium text-gray-700 mb-4">Select AI Model</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-4">
+                        Select AI Model
+                      </label>
                       {modelsLoading ? (
                         <div className="flex items-center justify-center py-8 text-gray-500 gap-2">
                           <Spinner size="sm" /> Loading models...
@@ -411,7 +475,9 @@ export default function CreateAgentPage() {
                                   <CheckCircle2 className="w-4 h-4 text-primary-600" />
                                 )}
                               </div>
-                              <h3 className="text-sm font-semibold text-gray-900 mb-1">{model.name}</h3>
+                              <h3 className="text-sm font-semibold text-gray-900 mb-1">
+                                {model.name}
+                              </h3>
                               <div className="mt-auto pt-2 flex items-center text-xs text-gray-500">
                                 <Zap className="w-3 h-3 mr-1 text-yellow-500" />
                                 {model.credits_per_1k} credits/1k
@@ -421,7 +487,9 @@ export default function CreateAgentPage() {
                         </div>
                       )}
                       {agentForm.formState.errors.ai_model_id && (
-                        <p className="mt-2 text-sm text-red-600">{agentForm.formState.errors.ai_model_id.message}</p>
+                        <p className="mt-2 text-sm text-red-600">
+                          {agentForm.formState.errors.ai_model_id.message}
+                        </p>
                       )}
                     </div>
 
@@ -431,7 +499,9 @@ export default function CreateAgentPage() {
                         disabled={isLoading}
                         className="btn btn-primary px-8 py-3 shadow-lg shadow-primary-500/25"
                       >
-                        {isLoading ? <Spinner size="sm" color="white" /> : (
+                        {isLoading ? (
+                          <Spinner size="sm" color="white" />
+                        ) : (
                           <span className="flex items-center">
                             Continue <ArrowRight className="ml-2 w-4 h-4" />
                           </span>
@@ -453,8 +523,12 @@ export default function CreateAgentPage() {
                   <div className="space-y-6">
                     <div className="flex items-center justify-between">
                       <div>
-                        <h2 className="text-xl font-semibold text-gray-900">Knowledge Base</h2>
-                        <p className="text-gray-500 text-sm mt-1">Train your agent with custom data sources.</p>
+                        <h2 className="text-xl font-semibold text-gray-900">
+                          Knowledge Base
+                        </h2>
+                        <p className="text-gray-500 text-sm mt-1">
+                          Train your agent with custom data sources.
+                        </p>
                       </div>
                       <Sparkles className="w-6 h-6 text-yellow-500" />
                     </div>
@@ -463,7 +537,9 @@ export default function CreateAgentPage() {
                       <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
                         <TrainingSources
                           agentId={agentId}
-                          onDataAdded={(data) => console.log("Training data added:", data)}
+                          onDataAdded={(data) =>
+                            console.log("Training data added:", data)
+                          }
                         />
                       </div>
                     )}
@@ -482,7 +558,9 @@ export default function CreateAgentPage() {
                         disabled={isLoading}
                         className="btn btn-primary px-8 shadow-lg shadow-primary-500/25"
                       >
-                        {isLoading ? <Spinner size="sm" color="white" /> : (
+                        {isLoading ? (
+                          <Spinner size="sm" color="white" />
+                        ) : (
                           <span className="flex items-center">
                             Continue <ArrowRight className="ml-2 w-4 h-4" />
                           </span>
@@ -502,9 +580,16 @@ export default function CreateAgentPage() {
                   transition={{ duration: 0.3 }}
                 >
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                    <form onSubmit={appearanceForm.handleSubmit(handleAppearanceSubmit)} className="space-y-6">
+                    <form
+                      onSubmit={appearanceForm.handleSubmit(
+                        handleAppearanceSubmit
+                      )}
+                      className="space-y-6"
+                    >
                       <div>
-                        <h2 className="text-xl font-semibold text-gray-900 mb-6">Customize Appearance</h2>
+                        <h2 className="text-xl font-semibold text-gray-900 mb-6">
+                          Customize Appearance
+                        </h2>
 
                         <div className="space-y-6">
                           <Textarea
@@ -563,7 +648,9 @@ export default function CreateAgentPage() {
                           disabled={isLoading}
                           className="btn btn-primary px-8 shadow-lg shadow-primary-500/25"
                         >
-                          {isLoading ? <Spinner size="sm" color="white" /> : (
+                          {isLoading ? (
+                            <Spinner size="sm" color="white" />
+                          ) : (
                             <span className="flex items-center">
                               Create Agent <Sparkles className="ml-2 w-4 h-4" />
                             </span>
@@ -573,7 +660,9 @@ export default function CreateAgentPage() {
                     </form>
 
                     <div className="bg-gray-50 rounded-2xl p-8 border border-gray-200 flex flex-col items-center justify-center min-h-[500px]">
-                      <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-8">Live Preview</h3>
+                      <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-8">
+                        Live Preview
+                      </h3>
                       <BotPreview
                         botConfig={appearanceData}
                         name={agentData?.name || "Your Agent"}

@@ -5,7 +5,7 @@ import { agentsAPI } from "@/lib/api"; // Updated import
 import { AgentTemplate } from "@/types/agent"; // Imported type
 import { Spinner } from "@/components/common/Spinner";
 import { AgentSetupModal } from "@/components/dashboard/AgentSetupModal";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import {
   Bot,
   Users,
@@ -36,6 +36,8 @@ const ROLE_OPTIONS = [
 
 export default function MarketplacePage() {
   const router = useRouter();
+  const params = useParams();
+  const workspaceId = params?.workspaceId as string;
   const [setupAgent, setSetupAgent] = useState<{
     id: string;
     name: string;
@@ -80,7 +82,7 @@ export default function MarketplacePage() {
 
   const handleFinishSetup = () => {
     if (setupAgent) {
-      router.push(`/dashboard/agent/${setupAgent.id}`);
+      router.push(`/workspace/${workspaceId}/agent/${setupAgent.id}`);
     }
   };
 

@@ -1,27 +1,20 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useParams } from "next/navigation";
 import { systemAPI } from "@/lib/api";
 import { SystemInstruction } from "@/types/system";
 import { Spinner } from "@/components/common/Spinner";
 import { toast } from "@/store/toastStore";
 import { useCurrentUser } from "@/store/authStore";
 import { UserRoles } from "@/types";
-import {
-  FileText,
-  Plus,
-  Edit2,
-  Trash2,
-  Search,
-  Calendar,
-  AlertCircle,
-  X,
-} from "lucide-react";
-import { cn } from "@/lib/utils";
+import { FileText, Plus, Edit2, Trash2, Calendar, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ConfirmDialog } from "@/components/common/ConfirmDialog";
 
 export default function InstructionsPage() {
+  const params = useParams();
+  const workspaceId = params?.workspaceId as string;
   const user = useCurrentUser();
   const [instructions, setInstructions] = useState<SystemInstruction[]>([]);
   const [loading, setLoading] = useState(true);
@@ -37,10 +30,13 @@ export default function InstructionsPage() {
     null
   );
 
-  const isAdmin = user?.role === UserRoles.superAdmin;
+  // Allow admin/staff to edit instructions? Or just admin?
+  const canEdit =
+    user?.role === UserRoles.admin || user?.role === UserRoles.superAdmin; // Assuming workspace admins can edit
 
   const fetchInstructions = async () => {
     try {
+      // In a real app, pass workspaceId to listInstructions
       const response = await systemAPI.listInstructions();
       if (response && response.instructions) {
         setInstructions(response.instructions);
@@ -54,8 +50,10 @@ export default function InstructionsPage() {
   };
 
   useEffect(() => {
-    fetchInstructions();
-  }, []);
+    if (workspaceId) {
+      fetchInstructions();
+    }
+  }, [workspaceId]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -132,14 +130,14 @@ export default function InstructionsPage() {
         <div>
           <h1 className="text-3xl font-bold text-gray-900 tracking-tight flex items-center gap-3">
             <FileText className="w-8 h-8 text-primary-600" />
-            System Instructions
+            Workspace Instructions
           </h1>
           <p className="mt-2 text-gray-500">
-            Manage global system prompts and behavioral instructions for your
-            agents.
+            Manage prompts and behavioral instructions specific to this
+            workspace.
           </p>
         </div>
-        {isAdmin && (
+        {canEdit && (
           <button
             type="button"
             onClick={() => {
@@ -164,9 +162,9 @@ export default function InstructionsPage() {
             No instructions found
           </h3>
           <p className="text-gray-500 mt-1 mb-6">
-            Get started by creating your first system instruction.
+            Get started by creating your first instruction.
           </p>
-          {isAdmin && (
+          {canEdit && (
             <button
               onClick={() => setIsModalOpen(true)}
               className="btn btn-secondary"
@@ -186,7 +184,7 @@ export default function InstructionsPage() {
                 <div className="p-3 bg-primary-50 rounded-xl">
                   <FileText className="w-6 h-6 text-primary-600" />
                 </div>
-                {isAdmin && (
+                {canEdit && (
                   <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                     <button
                       onClick={() => handleEdit(instruction)}
@@ -277,7 +275,7 @@ export default function InstructionsPage() {
                       setFormData({ ...formData, content: e.target.value })
                     }
                     className="input w-full font-mono text-sm leading-relaxed"
-                    placeholder="Enter the system instruction content..."
+                    placeholder="Enter the instruction content..."
                   />
                 </div>
 

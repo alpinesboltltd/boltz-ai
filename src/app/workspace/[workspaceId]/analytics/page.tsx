@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { format, subDays } from "date-fns";
 import { Spinner } from "@/components/common/Spinner";
+import { useParams } from "next/navigation";
 import {
   MessageSquare,
   Users,
@@ -13,7 +14,7 @@ import {
   Download,
   FileText,
   Filter,
-  BarChart3
+  BarChart3,
 } from "lucide-react";
 import {
   Chart as ChartJS,
@@ -59,23 +60,23 @@ const chartOptions = {
         boxWidth: 6,
         font: {
           family: "'Inter', sans-serif",
-          size: 11
-        }
-      }
+          size: 11,
+        },
+      },
     },
     tooltip: {
       enabled: true,
       mode: "index" as const,
       intersect: false,
-      backgroundColor: 'rgba(255, 255, 255, 0.9)',
-      titleColor: '#1f2937',
-      bodyColor: '#4b5563',
-      borderColor: '#e5e7eb',
+      backgroundColor: "rgba(255, 255, 255, 0.9)",
+      titleColor: "#1f2937",
+      bodyColor: "#4b5563",
+      borderColor: "#e5e7eb",
       borderWidth: 1,
       padding: 10,
       cornerRadius: 8,
       displayColors: true,
-      boxPadding: 4
+      boxPadding: 4,
     },
   },
   scales: {
@@ -89,10 +90,10 @@ const chartOptions = {
       ticks: {
         font: {
           family: "'Inter', sans-serif",
-          size: 10
+          size: 10,
         },
-        color: '#9ca3af'
-      }
+        color: "#9ca3af",
+      },
     },
     x: {
       grid: {
@@ -101,10 +102,10 @@ const chartOptions = {
       ticks: {
         font: {
           family: "'Inter', sans-serif",
-          size: 10
+          size: 10,
         },
-        color: '#9ca3af'
-      }
+        color: "#9ca3af",
+      },
     },
   },
   elements: {
@@ -115,15 +116,15 @@ const chartOptions = {
     },
     line: {
       tension: 0.4,
-      borderWidth: 2
-    }
+      borderWidth: 2,
+    },
   },
 };
 
 const doughnutOptions = {
   responsive: true,
   maintainAspectRatio: false,
-  cutout: '75%',
+  cutout: "75%",
   plugins: {
     legend: {
       position: "right" as const,
@@ -132,16 +133,16 @@ const doughnutOptions = {
         boxWidth: 6,
         font: {
           family: "'Inter', sans-serif",
-          size: 11
-        }
-      }
+          size: 11,
+        },
+      },
     },
     tooltip: {
       enabled: true,
-      backgroundColor: 'rgba(255, 255, 255, 0.9)',
-      titleColor: '#1f2937',
-      bodyColor: '#4b5563',
-      borderColor: '#e5e7eb',
+      backgroundColor: "rgba(255, 255, 255, 0.9)",
+      titleColor: "#1f2937",
+      bodyColor: "#4b5563",
+      borderColor: "#e5e7eb",
       borderWidth: 1,
       padding: 10,
       cornerRadius: 8,
@@ -163,6 +164,8 @@ const doughnutOptions = {
 };
 
 export default function AnalyticsPage() {
+  const params = useParams();
+  const workspaceId = params?.workspaceId as string;
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [timeRange, setTimeRange] = useState("30d");
@@ -202,11 +205,11 @@ export default function AnalyticsPage() {
         // Mock data for now if API fails or is not ready
         // In a real scenario, this would be a robust fetch
         // const response = await fetch(
-        //   `/api/analytics?timeRange=${timeRange}&agentId=${selectedChatbot}`
+        //   `/api/workspaces/${workspaceId}/analytics?timeRange=${timeRange}&agentId=${selectedChatbot}`
         // );
 
         // Simulating API call for UI development
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise((resolve) => setTimeout(resolve, 1000));
 
         // Mock data structure matching the expected API response
         const mockData = {
@@ -226,11 +229,25 @@ export default function AnalyticsPage() {
             users: Math.floor(Math.random() * 80) + 20,
           })),
           topQuestions: [
-            { question: "How do I reset my password?", count: 120, category: "Support" },
-            { question: "What are your pricing plans?", count: 95, category: "Sales" },
-            { question: "Can I integrate with Slack?", count: 80, category: "Technical" },
+            {
+              question: "How do I reset my password?",
+              count: 120,
+              category: "Support",
+            },
+            {
+              question: "What are your pricing plans?",
+              count: 95,
+              category: "Sales",
+            },
+            {
+              question: "Can I integrate with Slack?",
+              count: 80,
+              category: "Technical",
+            },
           ],
-          conversationsByHour: Array.from({ length: 24 }, () => Math.floor(Math.random() * 50)),
+          conversationsByHour: Array.from({ length: 24 }, () =>
+            Math.floor(Math.random() * 50)
+          ),
           userSatisfaction: { satisfied: 85, neutral: 10, unsatisfied: 5 },
           platformDistribution: [
             { platform: "Web", percentage: 60 },
@@ -238,7 +255,9 @@ export default function AnalyticsPage() {
             { platform: "Slack", percentage: 10 },
           ],
           sentimentAnalysis: Array.from({ length: 30 }, (_, i) => ({
-            date: new Date(Date.now() - (29 - i) * 24 * 60 * 60 * 1000).toISOString(),
+            date: new Date(
+              Date.now() - (29 - i) * 24 * 60 * 60 * 1000
+            ).toISOString(),
             positive: Math.floor(Math.random() * 60) + 20,
             neutral: Math.floor(Math.random() * 20) + 10,
             negative: Math.floor(Math.random() * 10),
@@ -246,7 +265,7 @@ export default function AnalyticsPage() {
           agents: [
             { id: "1", name: "Support Bot" },
             { id: "2", name: "Sales Assistant" },
-          ]
+          ],
         };
 
         const data = mockData; // Replace with await response.json() when API is ready
@@ -290,14 +309,18 @@ export default function AnalyticsPage() {
       }
     }
 
-    loadAnalytics();
-  }, [timeRange, selectedChatbot]);
+    if (workspaceId) {
+      loadAnalytics();
+    }
+  }, [timeRange, selectedChatbot, workspaceId]);
 
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh]">
         <Spinner size="lg" />
-        <p className="mt-4 text-gray-500 font-medium animate-pulse">Gathering insights...</p>
+        <p className="mt-4 text-gray-500 font-medium animate-pulse">
+          Gathering insights...
+        </p>
       </div>
     );
   }
@@ -307,7 +330,9 @@ export default function AnalyticsPage() {
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="text-center max-w-md mx-auto p-8 bg-red-50 rounded-2xl border border-red-100">
           <AlertCircle className="w-10 h-10 text-red-500 mx-auto mb-4" />
-          <h3 className="text-lg font-semibold text-red-900 mb-2">Failed to load analytics</h3>
+          <h3 className="text-lg font-semibold text-red-900 mb-2">
+            Failed to load analytics
+          </h3>
           <p className="text-red-600 mb-6">{error}</p>
           <button
             onClick={() => window.location.reload()}
@@ -381,24 +406,79 @@ export default function AnalyticsPage() {
       {/* Stats Cards */}
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-8">
         {[
-          { label: "Total Messages", value: analytics.totalMessages.toLocaleString(), icon: MessageSquare, color: "text-blue-600", bg: "bg-blue-50" },
-          { label: "Unique Users", value: analytics.uniqueUsers.toLocaleString(), icon: Users, color: "text-green-600", bg: "bg-green-50" },
-          { label: "Avg Rating", value: `${analytics.avgRating}/5.0`, icon: Star, color: "text-yellow-600", bg: "bg-yellow-50" },
-          { label: "Response Rate", value: `${(analytics.responseRate * 100).toFixed(1)}%`, icon: TrendingUp, color: "text-purple-600", bg: "bg-purple-50" },
-          { label: "Avg Response Time", value: `${analytics.avgResponseTime}s`, icon: Clock, color: "text-indigo-600", bg: "bg-indigo-50" },
-          { label: "Escalation Rate", value: `${(analytics.escalationRate * 100).toFixed(1)}%`, icon: AlertCircle, color: "text-red-600", bg: "bg-red-50" },
-          { label: "Conversions", value: analytics.conversionsCount.toLocaleString(), icon: TrendingUp, color: "text-teal-600", bg: "bg-teal-50" },
-          { label: "Avg Session", value: `${analytics.avgSessionDuration}m`, icon: Clock, color: "text-orange-600", bg: "bg-orange-50" },
+          {
+            label: "Total Messages",
+            value: analytics.totalMessages.toLocaleString(),
+            icon: MessageSquare,
+            color: "text-blue-600",
+            bg: "bg-blue-50",
+          },
+          {
+            label: "Unique Users",
+            value: analytics.uniqueUsers.toLocaleString(),
+            icon: Users,
+            color: "text-green-600",
+            bg: "bg-green-50",
+          },
+          {
+            label: "Avg Rating",
+            value: `${analytics.avgRating}/5.0`,
+            icon: Star,
+            color: "text-yellow-600",
+            bg: "bg-yellow-50",
+          },
+          {
+            label: "Response Rate",
+            value: `${(analytics.responseRate * 100).toFixed(1)}%`,
+            icon: TrendingUp,
+            color: "text-purple-600",
+            bg: "bg-purple-50",
+          },
+          {
+            label: "Avg Response Time",
+            value: `${analytics.avgResponseTime}s`,
+            icon: Clock,
+            color: "text-indigo-600",
+            bg: "bg-indigo-50",
+          },
+          {
+            label: "Escalation Rate",
+            value: `${(analytics.escalationRate * 100).toFixed(1)}%`,
+            icon: AlertCircle,
+            color: "text-red-600",
+            bg: "bg-red-50",
+          },
+          {
+            label: "Conversions",
+            value: analytics.conversionsCount.toLocaleString(),
+            icon: TrendingUp,
+            color: "text-teal-600",
+            bg: "bg-teal-50",
+          },
+          {
+            label: "Avg Session",
+            value: `${analytics.avgSessionDuration}m`,
+            icon: Clock,
+            color: "text-orange-600",
+            bg: "bg-orange-50",
+          },
         ].map((stat, idx) => (
-          <div key={idx} className="bg-white overflow-hidden shadow-sm rounded-xl border border-gray-100 hover:shadow-md transition-shadow p-5">
+          <div
+            key={idx}
+            className="bg-white overflow-hidden shadow-sm rounded-xl border border-gray-100 hover:shadow-md transition-shadow p-5"
+          >
             <div className="flex items-center">
               <div className={cn("shrink-0 rounded-lg p-3", stat.bg)}>
                 <stat.icon className={cn("h-6 w-6", stat.color)} />
               </div>
               <div className="ml-5 w-0 flex-1">
                 <dl>
-                  <dt className="text-sm font-medium text-gray-500 truncate">{stat.label}</dt>
-                  <dd className="text-xl font-bold text-gray-900 mt-1">{stat.value}</dd>
+                  <dt className="text-sm font-medium text-gray-500 truncate">
+                    {stat.label}
+                  </dt>
+                  <dd className="text-xl font-bold text-gray-900 mt-1">
+                    {stat.value}
+                  </dd>
                 </dl>
               </div>
             </div>
@@ -410,7 +490,9 @@ export default function AnalyticsPage() {
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 mb-8">
         {/* Messages and Users Over Time */}
         <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
-          <h2 className="text-lg font-semibold text-gray-900 mb-6">Growth Trends</h2>
+          <h2 className="text-lg font-semibold text-gray-900 mb-6">
+            Growth Trends
+          </h2>
           <div className="h-80">
             <Line
               data={{
@@ -449,7 +531,9 @@ export default function AnalyticsPage() {
 
         {/* User Satisfaction */}
         <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
-          <h2 className="text-lg font-semibold text-gray-900 mb-6">User Satisfaction</h2>
+          <h2 className="text-lg font-semibold text-gray-900 mb-6">
+            User Satisfaction
+          </h2>
           <div className="h-80 flex items-center justify-center">
             <Doughnut
               data={{
@@ -477,7 +561,9 @@ export default function AnalyticsPage() {
 
         {/* Activity by Hour */}
         <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
-          <h2 className="text-lg font-semibold text-gray-900 mb-6">Peak Activity Hours</h2>
+          <h2 className="text-lg font-semibold text-gray-900 mb-6">
+            Peak Activity Hours
+          </h2>
           <div className="h-80">
             <Bar
               data={{
@@ -498,14 +584,18 @@ export default function AnalyticsPage() {
 
         {/* Platform Distribution */}
         <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
-          <h2 className="text-lg font-semibold text-gray-900 mb-6">Platform Distribution</h2>
+          <h2 className="text-lg font-semibold text-gray-900 mb-6">
+            Platform Distribution
+          </h2>
           <div className="h-80 flex items-center justify-center">
             <Doughnut
               data={{
                 labels: analytics.platformDistribution.map((p) => p.platform),
                 datasets: [
                   {
-                    data: analytics.platformDistribution.map((p) => p.percentage),
+                    data: analytics.platformDistribution.map(
+                      (p) => p.percentage
+                    ),
                     backgroundColor: [
                       "rgb(59, 130, 246)",
                       "rgb(16, 185, 129)",
@@ -524,7 +614,9 @@ export default function AnalyticsPage() {
 
       {/* Sentiment Analysis */}
       <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 mb-8">
-        <h2 className="text-lg font-semibold text-gray-900 mb-6">Sentiment Analysis</h2>
+        <h2 className="text-lg font-semibold text-gray-900 mb-6">
+          Sentiment Analysis
+        </h2>
         <div className="h-80">
           <Line
             data={{
@@ -578,17 +670,24 @@ export default function AnalyticsPage() {
       {/* Top Questions */}
       <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
         <div className="p-6 border-b border-gray-100">
-          <h2 className="text-lg font-semibold text-gray-900">Top User Questions</h2>
+          <h2 className="text-lg font-semibold text-gray-900">
+            Top User Questions
+          </h2>
         </div>
         <div className="divide-y divide-gray-100">
           {analytics.topQuestions.map((item, index) => (
-            <div key={index} className="p-4 hover:bg-gray-50 transition-colors flex items-center justify-between">
+            <div
+              key={index}
+              className="p-4 hover:bg-gray-50 transition-colors flex items-center justify-between"
+            >
               <div className="flex items-center gap-4">
                 <span className="shrink-0 w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-sm font-bold text-gray-600">
                   {index + 1}
                 </span>
                 <div>
-                  <p className="text-sm font-medium text-gray-900">{item.question}</p>
+                  <p className="text-sm font-medium text-gray-900">
+                    {item.question}
+                  </p>
                   <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800 mt-1">
                     {item.category}
                   </span>
