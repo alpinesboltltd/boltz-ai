@@ -1101,18 +1101,18 @@ export const icpAPI = {
     }),
 
   get: (workspaceId: string, icpId: string) =>
-    apiRequest<ICP>(`/workspaces/${workspaceId}/icps/${icpId}`, {
+    apiRequest<ICP>(`/workspaces/icps/${workspaceId}/${icpId}`, {
       method: "GET",
     }),
 
   update: (workspaceId: string, icpId: string, icp: Partial<ICP>) =>
-    apiRequest<ICP>(`/workspaces/${workspaceId}/icps/${icpId}`, {
+    apiRequest<ICP>(`/workspaces/icps/${workspaceId}/${icpId}`, {
       method: "PUT",
       body: JSON.stringify(icp),
     }),
 
   delete: (workspaceId: string, icpId: string) =>
-    apiRequest(`/workspaces/${workspaceId}/icps/${icpId}`, {
+    apiRequest(`/workspaces/icps/${workspaceId}/${icpId}`, {
       method: "DELETE",
     }),
 
