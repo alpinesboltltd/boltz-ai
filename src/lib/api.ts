@@ -1085,4 +1085,45 @@ export const createAgentTemplate = async (data: any) => {
   });
 };
 
+// ICP API
+import { ICP } from "@/schemas/icp";
+
+export const icpAPI = {
+  create: (workspaceId: string, icp: Partial<ICP>) =>
+    apiRequest<ICP>(`/workspaces/${workspaceId}/icps`, {
+      method: "POST",
+      body: JSON.stringify(icp),
+    }),
+
+  list: (workspaceId: string) =>
+    apiRequest<ICP[]>(`/workspaces/${workspaceId}/icps`, {
+      method: "GET",
+    }),
+
+  get: (workspaceId: string, icpId: string) =>
+    apiRequest<ICP>(`/workspaces/${workspaceId}/icps/${icpId}`, {
+      method: "GET",
+    }),
+
+  update: (workspaceId: string, icpId: string, icp: Partial<ICP>) =>
+    apiRequest<ICP>(`/workspaces/${workspaceId}/icps/${icpId}`, {
+      method: "PUT",
+      body: JSON.stringify(icp),
+    }),
+
+  delete: (workspaceId: string, icpId: string) =>
+    apiRequest(`/workspaces/${workspaceId}/icps/${icpId}`, {
+      method: "DELETE",
+    }),
+
+  resolve: (workspaceId: string, agentRole: string) =>
+    apiRequest<{ icp_context: string; count: number }>("/agent/icp/resolve", {
+      method: "POST",
+      body: JSON.stringify({
+        workspace_id: workspaceId,
+        agent_role: agentRole,
+      }),
+    }),
+};
+
 export default apiRequest;

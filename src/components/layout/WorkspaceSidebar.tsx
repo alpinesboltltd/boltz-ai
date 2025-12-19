@@ -11,6 +11,7 @@ import {
   FileText,
   BookOpen,
   ShoppingBag,
+  Target,
 } from "lucide-react";
 
 import { useWorkspaceStore } from "@/store/workspaceStore";
@@ -30,6 +31,11 @@ export function WorkspaceSidebar({ workspaceId }: WorkspaceSidebarProps) {
       icon: BarChart3,
     },
     { name: "Users", href: `/workspace/${workspaceId}/users`, icon: Users },
+    {
+      name: "ICPs",
+      href: `/workspace/${workspaceId}/icps`,
+      icon: Target,
+    },
     {
       name: "Instructions",
       href: `/workspace/${workspaceId}/instructions`,
