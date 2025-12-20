@@ -98,7 +98,7 @@ export function ICPList({ workspaceId }: ICPListProps) {
           </p>
         </div>
         <Link href={`/workspace/${workspaceId}/icps/new`}>
-          <Button>
+          <Button className="flex justify-center items-center">
             <Plus className="w-4 h-4 mr-2" /> Create ICP
           </Button>
         </Link>

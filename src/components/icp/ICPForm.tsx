@@ -911,6 +911,7 @@ export function ICPForm({ initialData, workspaceId }: ICPFormProps) {
                 variant="outline"
                 onClick={prevStep}
                 disabled={currentStep === 1}
+                className="flex justify-center items-center"
               >
                 <ArrowLeft className="w-4 h-4 mr-2" /> Back
               </Button>
@@ -923,7 +924,11 @@ export function ICPForm({ initialData, workspaceId }: ICPFormProps) {
                   <Save className="w-4 h-4 mr-2" /> Save ICP
                 </Button>
               ) : (
-                <Button type="button" onClick={nextStep}>
+                <Button
+                  type="button"
+                  onClick={nextStep}
+                  className="flex justify-center items-center"
+                >
                   Next <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
               )}
