@@ -26,7 +26,7 @@ export function HeroSection() {
                 Start Building Free
               </Link>
               <Link
-                href="/dashboard/agents/create"
+                href="/register"
                 className="px-8 py-4 border border-primary-600 text-primary-600 font-medium rounded-lg hover:bg-primary-50 transition-colors"
               >
                 View Demo

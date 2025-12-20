@@ -10,6 +10,8 @@ import { AgentPlayground } from "@/components/chatbot/AgentPlayground";
 import { BotCustomizer } from "@/components/chatbot/BotCustomizer";
 import { AgentBehavior } from "@/components/chatbot/AgentBehavior";
 import { useAgentDetailStore } from "@/store/agentDetailStore";
+import { useWorkspaceStore } from "@/store/workspaceStore";
+import { useRecentActionsStore } from "@/store/recentActionsStore";
 import { Spinner } from "@/components/common/Spinner";
 import { cn } from "@/lib/utils";
 import {
@@ -35,15 +37,35 @@ export default function AgentDetailPage({
   const agentId = resolvedParams.id;
 
   const { activeTab, setActiveTab } = useDashboardStore();
-  const { fetchAgentDetails, loading, error } = useAgentDetailStore();
+  const { fetchAgentDetails, loading, error, data } = useAgentDetailStore();
+  const { currentWorkspace } = useWorkspaceStore();
+  const { addAgentInteraction } = useRecentActionsStore();
   const [showSavedMessage, setShowSavedMessage] = useState(false);
   const tabNavRef = useRef<HTMLDivElement>(null);
+  const trackedAgentRef = useRef<string | null>(null);
 
   useEffect(() => {
     if (agentId) {
       fetchAgentDetails(agentId);
     }
   }, [agentId, fetchAgentDetails]);
+
+  // Track agent interaction when data is loaded (only once per agent)
+  useEffect(() => {
+    if (
+      data?.agent &&
+      currentWorkspace &&
+      trackedAgentRef.current !== data.agent.id
+    ) {
+      addAgentInteraction(
+        currentWorkspace.id,
+        currentWorkspace.name,
+        data.agent.id,
+        data.agent.name
+      );
+      trackedAgentRef.current = data.agent.id;
+    }
+  }, [data?.agent?.id, currentWorkspace?.id]);
 
   const handleSaveConfig = () => {
     setShowSavedMessage(true);

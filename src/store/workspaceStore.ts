@@ -14,6 +14,7 @@ interface WorkspaceState {
     description?: string
   ) => Promise<Workspace | null>;
   setCurrentWorkspace: (workspace: Workspace) => void;
+  clearCurrentWorkspace: () => void;
 }
 
 export const useWorkspaceStore = create<WorkspaceState>()(
@@ -31,9 +32,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           const workspaces = response as Workspace[];
           set({ workspaces, isLoading: false });
 
-          if (!get().currentWorkspace && workspaces.length > 0) {
-            set({ currentWorkspace: workspaces[0] });
-          }
+          // No auto-selection - user must explicitly choose a workspace
         } catch (error: unknown) {
           set({ error: (error as Error).message, isLoading: false });
         }
@@ -58,6 +57,10 @@ export const useWorkspaceStore = create<WorkspaceState>()(
 
       setCurrentWorkspace: (workspace: Workspace) => {
         set({ currentWorkspace: workspace });
+      },
+
+      clearCurrentWorkspace: () => {
+        set({ currentWorkspace: null });
       },
     }),
     {

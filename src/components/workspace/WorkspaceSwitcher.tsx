@@ -3,6 +3,7 @@
 import { useState, useEffect, Fragment } from "react";
 import { useRouter } from "next/navigation";
 import { useWorkspaceStore } from "@/store/workspaceStore";
+import { useRecentActionsStore } from "@/store/recentActionsStore";
 import { ChevronDown, Plus, Check, Briefcase, Building2 } from "lucide-react";
 import {
   Menu,
@@ -29,6 +30,7 @@ export function WorkspaceSwitcher({ collapsed }: WorkspaceSwitcherProps) {
     createWorkspace,
     fetchWorkspaces,
   } = useWorkspaceStore();
+  const { addWorkspaceEntry } = useRecentActionsStore();
   const router = useRouter();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -53,38 +55,11 @@ export function WorkspaceSwitcher({ collapsed }: WorkspaceSwitcherProps) {
     }
   };
 
-  if (!currentWorkspace && workspaces.length === 0) {
-    return (
-      <>
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className={cn(
-            "group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200 text-gray-600 hover:bg-gray-50 hover:text-gray-900 w-full",
-            collapsed && "justify-center px-0"
-          )}
-          title="Create Workspace"
-        >
-          <Plus className="h-5 w-5 shrink-0 text-gray-400 group-hover:text-gray-600" />
-          <span
-            className={cn(
-              "truncate transition-all duration-300",
-              collapsed ? "w-0 opacity-0 hidden" : "w-auto opacity-100"
-            )}
-          >
-            Create Workspace
-          </span>
-        </button>
-        <CreateWorkspaceModal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          onSubmit={handleCreateWorkspace}
-          name={newWorkspaceName}
-          setName={setNewWorkspaceName}
-          isLoading={isLoading}
-        />
-      </>
-    );
-  }
+  const handleWorkspaceClick = (workspace: { id: string; name: string }) => {
+    setCurrentWorkspace(workspace as any);
+    addWorkspaceEntry(workspace.id, workspace.name);
+    router.push(`/workspace/${workspace.id}/analytics`);
+  };
 
   return (
     <div className="relative w-full">
@@ -95,7 +70,7 @@ export function WorkspaceSwitcher({ collapsed }: WorkspaceSwitcherProps) {
               "group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200 text-gray-600 hover:bg-gray-50 hover:text-gray-900 w-full",
               collapsed && "justify-center px-0"
             )}
-            title={collapsed ? currentWorkspace?.name : undefined}
+            title={collapsed ? (currentWorkspace?.name || "My Workspaces") : undefined}
           >
             <div className="flex h-5 w-5 shrink-0 items-center justify-center">
               <Building2 className="h-5 w-5 text-gray-400 group-hover:text-gray-600" />
@@ -106,7 +81,7 @@ export function WorkspaceSwitcher({ collapsed }: WorkspaceSwitcherProps) {
                 collapsed ? "w-0 opacity-0 hidden" : "w-auto opacity-100"
               )}
             >
-              {currentWorkspace?.name || "Select Workspace"}
+              {currentWorkspace?.name || "My Workspaces"}
             </span>
             {!collapsed && (
               <ChevronDown className="h-4 w-4 text-gray-400 transition-transform duration-200 group-data-open:rotate-180" />
@@ -137,10 +112,7 @@ export function WorkspaceSwitcher({ collapsed }: WorkspaceSwitcherProps) {
                 <MenuItem key={workspace.id}>
                   {({ focus }) => (
                     <button
-                      onClick={() => {
-                        setCurrentWorkspace(workspace);
-                        router.push(`/workspace/${workspace.id}/analytics`);
-                      }}
+                      onClick={() => handleWorkspaceClick(workspace)}
                       className={cn(
                         "group flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm transition-colors",
                         focus

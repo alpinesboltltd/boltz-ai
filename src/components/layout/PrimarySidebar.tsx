@@ -8,10 +8,11 @@ import {
   ChevronLeft,
   ChevronRight,
   Settings,
-  Briefcase,
   LayoutDashboard,
   Shield,
 } from "lucide-react";
+import { useEffect, useRef } from "react";
+import { gsap } from "gsap";
 import { UserRoles } from "@/types";
 import { useAuthStore, useCurrentUser } from "@/store/authStore";
 import { WorkspaceSwitcher } from "@/components/workspace/WorkspaceSwitcher";
@@ -31,6 +32,49 @@ export function PrimarySidebar({
 }: PrimarySidebarProps) {
   const user = useCurrentUser();
   const logout = useAuthStore((state) => state.logout);
+  const sidebarRef = useRef<HTMLElement>(null);
+  const textRefs = useRef<(HTMLElement | null)[]>([]);
+
+  // Animate sidebar on collapse/expand
+  useEffect(() => {
+    if (!sidebarRef.current) return;
+
+    const timeline = gsap.timeline();
+
+    // Animate sidebar width
+    timeline.to(sidebarRef.current, {
+      width: collapsed ? 80 : 288, // w-20 = 80px, w-72 = 288px
+      duration: 0.35,
+      ease: "power2.inOut",
+    });
+
+    // Animate text elements opacity
+    const allTextElements = textRefs.current.filter(Boolean);
+
+    if (collapsed) {
+      // Fade out text first, then shrink sidebar
+      timeline.to(
+        allTextElements,
+        {
+          opacity: 0,
+          duration: 0.15,
+          ease: "power2.out",
+        },
+        0
+      );
+    } else {
+      // Expand sidebar first, then fade in text
+      timeline.to(
+        allTextElements,
+        {
+          opacity: 1,
+          duration: 0.2,
+          ease: "power2.in",
+        },
+        0.15
+      );
+    }
+  }, [collapsed]);
 
   return (
     <>
@@ -44,11 +88,12 @@ export function PrimarySidebar({
 
       {/* Sidebar Container */}
       <aside
+        ref={sidebarRef}
         className={cn(
-          "fixed inset-y-0 left-0 z-50 flex flex-col bg-white border-r border-gray-200 transition-all duration-300 ease-in-out",
-          collapsed ? "w-20" : "w-72",
+          "fixed inset-y-0 left-0 z-50 flex flex-col bg-white border-r border-gray-200",
           mobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
         )}
+        style={{ width: collapsed ? 80 : 288 }}
       >
         {/* Header */}
         <div className="flex h-16 items-center justify-between px-4 border-b border-gray-100">
@@ -65,9 +110,12 @@ export function PrimarySidebar({
               />
             </div>
             <span
+              ref={(el) => {
+                textRefs.current[0] = el;
+              }}
               className={cn(
-                "text-xl font-bold bg-linear-to-r from-primary-600 to-primary-400 bg-clip-text text-transparent transition-opacity duration-300",
-                collapsed ? "opacity-0 w-0" : "opacity-100"
+                "text-xl font-bold bg-linear-to-r from-primary-600 to-primary-400 bg-clip-text text-transparent",
+                collapsed && "w-0"
               )}
             >
               Level-x
@@ -98,9 +146,12 @@ export function PrimarySidebar({
           >
             <LayoutDashboard className="h-5 w-5 shrink-0 text-gray-400 group-hover:text-gray-600" />
             <span
+              ref={(el) => {
+                textRefs.current[1] = el;
+              }}
               className={cn(
-                "truncate transition-all duration-300",
-                collapsed ? "w-0 opacity-0 hidden" : "w-auto opacity-100"
+                "truncate",
+                collapsed && "w-0 hidden"
               )}
             >
               Dashboard
@@ -120,9 +171,12 @@ export function PrimarySidebar({
             >
               <Shield className="h-5 w-5 shrink-0 text-gray-400 group-hover:text-gray-600" />
               <span
+                ref={(el) => {
+                  textRefs.current[2] = el;
+                }}
                 className={cn(
-                  "truncate transition-all duration-300",
-                  collapsed ? "w-0 opacity-0 hidden" : "w-auto opacity-100"
+                  "truncate",
+                  collapsed && "w-0 hidden"
                 )}
               >
                 Super Admin
@@ -144,9 +198,12 @@ export function PrimarySidebar({
           >
             <Settings className="h-5 w-5 shrink-0 text-gray-400 group-hover:text-gray-600" />
             <span
+              ref={(el) => {
+                textRefs.current[3] = el;
+              }}
               className={cn(
-                "truncate transition-all duration-300",
-                collapsed ? "w-0 opacity-0 hidden" : "w-auto opacity-100"
+                "truncate",
+                collapsed && "w-0 hidden"
               )}
             >
               Settings
@@ -175,9 +232,12 @@ export function PrimarySidebar({
             </div>
 
             <div
+              ref={(el) => {
+                textRefs.current[4] = el;
+              }}
               className={cn(
-                "flex flex-1 flex-col overflow-hidden transition-all duration-300",
-                collapsed ? "w-0 opacity-0 hidden" : "w-auto opacity-100"
+                "flex flex-1 flex-col overflow-hidden",
+                collapsed && "w-0 hidden"
               )}
             >
               <span className="truncate text-sm font-medium text-gray-900">

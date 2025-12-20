@@ -6,9 +6,10 @@ import { useAgentStore } from "@/store/agentStore";
 import { useAuthStore, useCurrentUser } from "@/store/authStore";
 import { useRouter } from "next/navigation";
 import { AgentCard } from "@/components/dashboard/AgentCard";
+import { RecentActions } from "@/components/dashboard/RecentActions";
 import { useToast } from "@/hooks/useToast";
 import { ConfirmDialog } from "@/components/common/ConfirmDialog";
-import { Plus, Sparkles, Bot, Zap } from "lucide-react";
+import { Plus, Sparkles, Bot, Zap, Clock } from "lucide-react";
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
 import { Button } from "@/components/ui/Button";
 import { useWorkspaceStore } from "@/store/workspaceStore";
@@ -39,9 +40,16 @@ export default function Dashboard() {
         clearAuth();
         return;
       }
+
+      // Only fetch agents if a workspace is selected
+      if (!currentWorkspace?.id) {
+        setAgents([]);
+        return;
+      }
+
       try {
         const { agents } = await agentsAPI.getByWorkspaceId(
-          currentWorkspace?.id!,
+          currentWorkspace.id,
           token!
         );
         if (agents) setAgents(agents);
@@ -102,7 +110,7 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Stats Overview (Placeholder for now) */}
+      {/* Stats Overview */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="card bg-linear-to-br from-primary-500 to-primary-600 text-white border-none">
           <div className="flex items-center gap-4">
@@ -137,6 +145,15 @@ export default function Dashboard() {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Recent Activity Section */}
+      <div>
+        <div className="mb-3 flex items-center gap-2">
+          <Clock className="h-4 w-4 text-gray-500" />
+          <h3 className="text-sm font-semibold text-gray-700">Recent Activity</h3>
+        </div>
+        <RecentActions />
       </div>
 
       {/* Tabs */}
