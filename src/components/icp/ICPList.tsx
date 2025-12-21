@@ -157,7 +157,10 @@ export function ICPList({ workspaceId }: ICPListProps) {
                   href={`/workspace/${workspaceId}/icps/${icp.id}`}
                   className="w-full mr-2"
                 >
-                  <Button variant="outline" className="w-full">
+                  <Button
+                    variant="outline"
+                    className="w-full flex justify-center items-center"
+                  >
                     <Edit className="w-4 h-4 mr-2" /> Edit
                   </Button>
                 </Link>

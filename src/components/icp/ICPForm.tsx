@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { icpSchema, ICP } from "@/schemas/icp";
+import { Agent } from "@/types/agent";
 import { Button } from "@/components/ui/Button";
 import {
   Card,
@@ -24,7 +25,7 @@ import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 import { toast } from "@/store/toastStore";
-import { icpAPI } from "@/lib/api";
+import { icpAPI, agentsAPI } from "@/lib/api";
 import { Loader2, ArrowLeft, ArrowRight, Save } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Textarea } from "../ui/textarea";
@@ -51,6 +52,26 @@ export function ICPForm({ initialData, workspaceId }: ICPFormProps) {
   const [currentStep, setCurrentStep] = useState(1);
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [availableAgents, setAvailableAgents] = useState<Agent[]>([]);
+  const [isLoadingAgents, setIsLoadingAgents] = useState(false);
+
+  useEffect(() => {
+    const fetchAgents = async () => {
+      setIsLoadingAgents(true);
+      try {
+        const response = await agentsAPI.getByWorkspaceId(workspaceId);
+        setAvailableAgents(response.agents || []);
+      } catch (error) {
+        console.error("Failed to fetch agents:", error);
+        toast.error("Failed to load agents for selection");
+      } finally {
+        setIsLoadingAgents(false);
+      }
+    };
+    if (workspaceId) {
+      fetchAgents();
+    }
+  }, [workspaceId]);
 
   const form = useForm<ICP>({
     resolver: zodResolver(icpSchema),
@@ -272,49 +293,63 @@ export function ICPForm({ initialData, workspaceId }: ICPFormProps) {
                           Which AI employees should use this profile?
                         </FormLabel>
                         <div className="grid grid-cols-2 gap-2 mt-2">
-                          {[
-                            "SDR",
-                            "BDR",
-                            "Customer Support",
-                            "Virtual Assistant",
-                            "Operations",
-                          ].map((agent) => (
-                            <FormField
-                              key={agent}
-                              control={form.control}
-                              name="intended_agents"
-                              render={({ field }) => {
-                                return (
-                                  <FormItem
-                                    key={agent}
-                                    className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4"
-                                  >
-                                    <FormControl>
-                                      <Checkbox
-                                        checked={field.value?.includes(agent)}
-                                        onCheckedChange={(checked) => {
-                                          const current = field.value || [];
-                                          return checked
-                                            ? field.onChange([
-                                                ...current,
-                                                agent,
-                                              ])
-                                            : field.onChange(
-                                                current.filter(
-                                                  (value) => value !== agent
-                                                )
-                                              );
-                                        }}
-                                      />
-                                    </FormControl>
-                                    <FormLabel className="font-normal">
-                                      {agent}
-                                    </FormLabel>
-                                  </FormItem>
-                                );
-                              }}
-                            />
-                          ))}
+                          {isLoadingAgents ? (
+                            <div className="flex items-center gap-2 p-4 text-sm text-muted-foreground">
+                              <Loader2 className="h-4 w-4 animate-spin" />
+                              Loading agents...
+                            </div>
+                          ) : availableAgents.length === 0 ? (
+                            <div className="p-4 text-sm text-muted-foreground col-span-2">
+                              No agents found in this workspace. Create an agent
+                              first.
+                            </div>
+                          ) : (
+                            availableAgents.map((agent) => (
+                              <FormField
+                                key={agent.id}
+                                control={form.control}
+                                name="intended_agents"
+                                render={({ field }) => {
+                                  return (
+                                    <FormItem
+                                      key={agent.id}
+                                      className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4"
+                                    >
+                                      <FormControl>
+                                        <Checkbox
+                                          checked={field.value?.includes(
+                                            agent.id
+                                          )}
+                                          onCheckedChange={(checked) => {
+                                            const current = field.value || [];
+                                            return checked
+                                              ? field.onChange([
+                                                  ...current,
+                                                  agent.id,
+                                                ])
+                                              : field.onChange(
+                                                  current.filter(
+                                                    (value) =>
+                                                      value !== agent.id
+                                                  )
+                                                );
+                                          }}
+                                        />
+                                      </FormControl>
+                                      <FormLabel className="font-normal cursor-pointer text-sm">
+                                        <span className="font-medium block">
+                                          {agent.name}
+                                        </span>
+                                        <span className="text-xs text-muted-foreground">
+                                          {agent?.role?.replace("_", " ")}
+                                        </span>
+                                      </FormLabel>
+                                    </FormItem>
+                                  );
+                                }}
+                              />
+                            ))
+                          )}
                         </div>
                         <FormDescription>
                           Only selected AI employees will load this ICP during
