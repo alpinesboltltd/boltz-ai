@@ -1,23 +1,26 @@
 "use client";
 
 import { useEffect } from "react";
-import { useRouter, useParams } from "next/navigation";
-import { Spinner } from "@/components/common/Spinner";
+import { useParams } from "next/navigation";
+import { WorkspaceDashboard } from "@/components/dashboard/WorkspaceDashboard";
+import { useWorkspaceStore } from "@/store/workspaceStore";
 
 export default function WorkspacePage() {
-  const router = useRouter();
   const params = useParams();
   const workspaceId = params?.workspaceId as string;
+  const { currentWorkspace, setCurrentWorkspace } = useWorkspaceStore();
 
-  useEffect(() => {
-    if (workspaceId) {
-      router.replace(`/workspace/${workspaceId}/analytics`);
-    }
-  }, [workspaceId, router]);
+  // Ensure the workspace store is synced with the URL
+  /* 
+     Rationale: We are navigating to a specific workspace URL.
+     Ideally, we should fetch the workspace details if not already present, 
+     but for now we assume the layout or middleware handles basic validation.
+     However, updating the global store is good practice so the sidebar highlights correctly.
+  */
 
   return (
-    <div className="flex items-center justify-center min-h-screen">
-      <Spinner size="lg" />
+    <div className="container mx-auto px-4 py-8">
+      <WorkspaceDashboard workspaceId={workspaceId} />
     </div>
   );
 }
