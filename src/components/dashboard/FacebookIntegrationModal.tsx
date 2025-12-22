@@ -50,11 +50,6 @@ export default function FacebookIntegrationModal({
 
     try {
       // In production, this would call the real API
-      // await fetch(`/api/chatagents/${chatagentId}/integrations/facebook/configure`, {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ pageId, accessToken }),
-      // });
 
       // For development, simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1500));

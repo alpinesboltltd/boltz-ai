@@ -231,15 +231,9 @@ export default function PlatformIntegrations({
 
   const getWebsiteEmbedCode = () => {
     return `<script>
-  window.boltzConfig = {
-    chatagentId: "${chatagentId}",
-    position: "bottom-right",
-  }
+  window.LEVEL_X_CONFIG = { id: ${chatagentId} };
 </script>
-<script 
-  src="https://cdn.Level-x/widget.js" 
-  async>
-</script>`;
+<script src="https://level-x.alpinesbolt.com/widget.js" async></script>`;
   };
 
   return (

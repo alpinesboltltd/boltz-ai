@@ -1,23 +1,21 @@
-import { HeroSection } from "@/components/landing/HeroSection";
-import { FeaturesSection } from "@/components/landing/FeaturesSection";
-import { Features } from "@/components/landing/Features";
-import { PricingSection } from "@/components/landing/PricingSection";
-import { TestimonialsSection } from "@/components/landing/TestimonialsSection";
-import { CTASection } from "@/components/landing/CTASection";
-import { Header } from "@/components/common/Header";
-import { Footer } from "@/components/common/Footer";
+import HeroSection from "@/components/landing/HeroSection";
+import ProblemSolutionSection from "@/components/landing/ProblemSolutionSection";
+import FeatureGridSection from "@/components/landing/FeatureGridSection";
+import ReliabilitySection from "@/components/landing-option/ReliabilitySection"; // Swapped: "Trust Terminal" from Option
+import IntegrationsSection from "@/components/landing-option/IntegrationsSection"; // Added: "Orbit" from Option
+import UseCaseSliderSection from "@/components/landing/UseCaseSliderSection";
+import FooterSection from "@/components/landing/FooterSection";
 
 export default function Home() {
   return (
-    <main className="w-full overflow-x-hidden">
-      <Header />
+    <main className="min-h-screen bg-background text-foreground selection:bg-[#0ea5e9] selection:text-white">
       <HeroSection />
-      <FeaturesSection />
-      <Features />
-      <PricingSection />
-      <TestimonialsSection />
-      <CTASection />
-      <Footer />
+      <ProblemSolutionSection />
+      <FeatureGridSection />
+      <ReliabilitySection />
+      <IntegrationsSection />
+      <UseCaseSliderSection />
+      <FooterSection />
     </main>
   );
 }

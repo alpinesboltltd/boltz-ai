@@ -6,24 +6,29 @@ export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <header className="bg-white shadow-sm">
+    <header className="sticky top-0 z-50 w-full border-b border-gray-200/20 bg-white/80 dark:bg-[#020617]/80 backdrop-blur-md shadow-sm transition-colors duration-300">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           <Link href="/" className="shrink-0">
-            <span className="text-2xl font-bold text-primary-600">Level-x</span>
+            <span className="text-2xl font-bold text-gray-900 dark:text-white">
+              Level-x
+            </span>
           </Link>
           <nav className="hidden md:ml-10 md:flex md:space-x-8 justify-center flex-1">
             <Link
               href="/integrations"
-              className="text-gray-500 hover:text-gray-900"
+              className="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition-colors"
             >
               Integrations
             </Link>
-            <Link href="/pricing" className="text-gray-500 hover:text-gray-900">
+            <Link
+              href="/pricing"
+              className="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition-colors"
+            >
               Pricing
             </Link>
             <div className="relative group">
-              <button className="text-gray-500 hover:text-gray-900 inline-flex items-center">
+              <button className="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white inline-flex items-center transition-colors">
                 Use Case
                 <svg
                   className="ml-1 h-4 w-4"
@@ -198,7 +203,10 @@ export function Header() {
                 </Link>  */}
           </nav>
           <div className="hidden md:flex md:items-center md:space-x-4">
-            <Link href="/login" className="text-gray-500 hover:text-gray-900">
+            <Link
+              href="/login"
+              className="text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition-colors"
+            >
               Log in
             </Link>
             <Link
@@ -279,7 +287,7 @@ export function Header() {
             </Link>
             <Link
               href="/dashboard"
-              className="block px-3 py-2 text-base font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900"
+              className="block px-3 py-2 text-base font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-slate-800 dark:hover:text-white transition-colors"
             >
               Dashboard
             </Link>

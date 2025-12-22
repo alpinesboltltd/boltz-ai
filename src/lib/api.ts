@@ -1126,4 +1126,22 @@ export const icpAPI = {
     }),
 };
 
+// Waitlist API
+export const waitlistAPI = {
+  join: async (data: {
+    name: string;
+    email: string;
+    organization?: string;
+    role?: string;
+    inquiry?: string;
+    marketing_consent: boolean;
+  }) => {
+    console.log("Hello world");
+    return await apiRequest("/waitlist/join", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  },
+};
+
 export default apiRequest;
