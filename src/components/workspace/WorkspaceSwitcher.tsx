@@ -58,7 +58,7 @@ export function WorkspaceSwitcher({ collapsed }: WorkspaceSwitcherProps) {
   const handleWorkspaceClick = (workspace: { id: string; name: string }) => {
     setCurrentWorkspace(workspace as any);
     addWorkspaceEntry(workspace.id, workspace.name);
-    router.push(`/workspace/${workspace.id}/analytics`);
+    router.push(`/workspace/${workspace.id}`);
   };
 
   return (
@@ -70,7 +70,9 @@ export function WorkspaceSwitcher({ collapsed }: WorkspaceSwitcherProps) {
               "group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200 text-gray-600 hover:bg-gray-50 hover:text-gray-900 w-full",
               collapsed && "justify-center px-0"
             )}
-            title={collapsed ? (currentWorkspace?.name || "My Workspaces") : undefined}
+            title={
+              collapsed ? currentWorkspace?.name || "My Workspaces" : undefined
+            }
           >
             <div className="flex h-5 w-5 shrink-0 items-center justify-center">
               <Building2 className="h-5 w-5 text-gray-400 group-hover:text-gray-600" />
