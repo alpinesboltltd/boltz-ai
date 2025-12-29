@@ -210,7 +210,7 @@ export interface TestQuery {
 export enum AgentType {
   TEXT = "text",
   VOICE = "voice",
-  VISION = "vision",
+  MULTIMODAL = "multimodal",
 }
 
 export enum AgentPosition {

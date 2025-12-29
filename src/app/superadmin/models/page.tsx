@@ -22,6 +22,8 @@ import {
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import { ConfirmDialog } from "@/components/common/ConfirmDialog";
+import { useSupportedProvidersStore } from "@/store/supportedProvidersStore";
+import { Select } from "@/components/common/Select";
 
 export default function ModelsPage() {
   const user = useCurrentUser();
@@ -143,6 +145,15 @@ export default function ModelsPage() {
       </div>
     );
   }
+
+  const {
+    providers: supportedProviders,
+    fetchProviders: fetchSupportedProviders,
+  } = useSupportedProvidersStore();
+
+  useEffect(() => {
+    fetchSupportedProviders();
+  }, []);
 
   return (
     <div className="px-4 sm:px-6 lg:px-8 py-8 animate-fade-in max-w-7xl mx-auto">
@@ -346,19 +357,23 @@ export default function ModelsPage() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-gray-700">
-                      Provider
-                    </label>
-                    <input
-                      type="text"
+                    <Select
+                      label="Provider"
                       required
                       value={formData.provider}
                       onChange={(e) =>
                         setFormData({ ...formData, provider: e.target.value })
                       }
-                      className="input w-full"
-                      placeholder="e.g. OpenAI"
-                    />
+                    >
+                      <option value="">Select a provider</option>
+                      {supportedProviders
+                        .filter((p) => p.is_active)
+                        .map((provider) => (
+                          <option key={provider.id} value={provider.name}>
+                            {provider.name}
+                          </option>
+                        ))}
+                    </Select>
                   </div>
                 </div>
 

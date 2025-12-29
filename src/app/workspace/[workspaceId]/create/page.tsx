@@ -7,6 +7,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useCurrentUser, accessToken } from "@/store/authStore";
 import { useWorkspaceStore } from "@/store/workspaceStore";
 import { useAIModelsStore } from "@/store/aiModelsStore";
+import { useSupportedProvidersStore } from "@/store/supportedProvidersStore";
 import { agentsAPI, systemAPI } from "@/lib/api";
 import { toast } from "@/store/toastStore";
 import {
@@ -25,6 +26,7 @@ import { Select } from "@/components/common/Select";
 import { Spinner } from "@/components/common/Spinner";
 import { TrainingSources } from "@/components/dashboard/TrainingSources";
 import { BotPreview } from "@/components/chatbot/BotPreview";
+import { ModelSelector } from "@/components/common/ModelSelector";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   MessageSquare,
@@ -74,7 +76,7 @@ const agentTypeToEnum = (type: AgentType | string): number => {
       return 1;
     case "voice":
       return 2;
-    case "vision":
+    case "multimodal":
       return 0;
     default:
       return 1;
@@ -154,13 +156,27 @@ export default function CreateAgentPage() {
     fetchModels,
     getModelsByType,
   } = useAIModelsStore();
-  const availableModels = getModelsByType(selectedAgentType);
+
+  const {
+    providers: supportedProviders,
+    fetchProviders: fetchSupportedProviders,
+  } = useSupportedProvidersStore();
+
+  const [selectedProviderFilter, setSelectedProviderFilter] =
+    useState<string>("all");
+
+  const availableModels = getModelsByType(selectedAgentType).filter(
+    (m) =>
+      selectedProviderFilter === "all" ||
+      m.provider.toLowerCase() === selectedProviderFilter.toLowerCase()
+  );
 
   useEffect(() => {
     if (models.length === 0) {
       fetchModels();
     }
-  }, [models.length, fetchModels]);
+    fetchSupportedProviders();
+  }, [models.length, fetchModels, fetchSupportedProviders]);
 
   const handleAgentSubmit = async (data: CreateAgentRequest) => {
     try {
@@ -392,7 +408,7 @@ export default function CreateAgentPage() {
                                 desc: "For phone/voice interactions",
                               },
                               {
-                                value: AgentType.VISION,
+                                value: AgentType.MULTIMODAL,
                                 label: "Multimodal",
                                 icon: ImageIcon,
                                 desc: "Text, voice & image support",
@@ -442,50 +458,61 @@ export default function CreateAgentPage() {
                     </div>
 
                     <div className="border-t border-gray-100 pt-8">
-                      <label className="block text-sm font-medium text-gray-700 mb-4">
-                        Select AI Model
-                      </label>
-                      {modelsLoading ? (
-                        <div className="flex items-center justify-center py-8 text-gray-500 gap-2">
-                          <Spinner size="sm" /> Loading models...
-                        </div>
-                      ) : (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                          {availableModels.map((model) => (
-                            <label
-                              key={model.id}
-                              className={cn(
-                                "relative flex flex-col p-4 border rounded-xl cursor-pointer transition-all hover:shadow-md",
-                                selectedModel === model.id
-                                  ? "border-primary-500 bg-primary-50/30 ring-1 ring-primary-500"
-                                  : "border-gray-200 hover:border-gray-300"
-                              )}
-                            >
-                              <input
-                                {...agentForm.register("ai_model_id")}
-                                type="radio"
-                                value={model.id}
-                                className="sr-only"
-                              />
-                              <div className="flex justify-between items-start mb-2">
-                                <span className="inline-flex items-center px-2 py-1 rounded-md bg-gray-100 text-xs font-medium text-gray-600">
-                                  {model.provider}
-                                </span>
-                                {selectedModel === model.id && (
-                                  <CheckCircle2 className="w-4 h-4 text-primary-600" />
+                      <div className="mb-4">
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Select AI Model
+                        </label>
+                        <p className="text-sm text-gray-500">
+                          Choose the AI model that powers your agent.
+                        </p>
+                      </div>
+
+                      <div className="space-y-4">
+                        <ModelSelector
+                          value={selectedModel}
+                          onChange={(modelId) =>
+                            agentForm.setValue("ai_model_id", modelId)
+                          }
+                          models={availableModels}
+                          loading={modelsLoading}
+                        />
+
+                        {/* Provider Filters */}
+                        <div className="flex flex-wrap gap-2">
+                          <button
+                            type="button"
+                            onClick={() => setSelectedProviderFilter("all")}
+                            className={cn(
+                              "px-3 py-1 text-xs font-medium rounded-full transition-colors",
+                              selectedProviderFilter === "all"
+                                ? "bg-gray-900 text-white"
+                                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                            )}
+                          >
+                            All
+                          </button>
+                          {supportedProviders
+                            .filter((p) => p.is_active)
+                            .map((p) => (
+                              <button
+                                type="button"
+                                key={p.id}
+                                onClick={() =>
+                                  setSelectedProviderFilter(p.name)
+                                }
+                                className={cn(
+                                  "px-3 py-1 text-xs font-medium rounded-full transition-colors",
+                                  selectedProviderFilter === p.name
+                                    ? "bg-gray-900 text-white"
+                                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                                 )}
-                              </div>
-                              <h3 className="text-sm font-semibold text-gray-900 mb-1">
-                                {model.name}
-                              </h3>
-                              <div className="mt-auto pt-2 flex items-center text-xs text-gray-500">
-                                <Zap className="w-3 h-3 mr-1 text-yellow-500" />
-                                {model.credits_per_1k} credits/1k
-                              </div>
-                            </label>
-                          ))}
+                              >
+                                {p.name}
+                              </button>
+                            ))}
                         </div>
-                      )}
+                      </div>
+
                       {agentForm.formState.errors.ai_model_id && (
                         <p className="mt-2 text-sm text-red-600">
                           {agentForm.formState.errors.ai_model_id.message}
