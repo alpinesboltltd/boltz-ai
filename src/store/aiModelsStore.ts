@@ -41,7 +41,7 @@ export const useAIModelsStore = create<AIModelsState>((set, get) => ({
         return models.filter((m) => m.supports_text);
       case AgentType.VOICE:
         return models.filter((m) => m.supports_voice);
-      case AgentType.VISION:
+      case AgentType.MULTIMODAL:
         return models.filter((m) => m.supports_vision);
       default:
         return models;

@@ -13,7 +13,7 @@ export const agentTypeToEnum = (type: AgentType): number => {
       return AgentTypeEnum.TEXT;
     case AgentType.VOICE:
       return AgentTypeEnum.VOICE;
-    case AgentType.VISION:
+    case AgentType.MULTIMODAL:
       return AgentTypeEnum.MULTIMODAL;
     default:
       return AgentTypeEnum.TEXT;
@@ -27,7 +27,7 @@ export const enumToAgentType = (enumValue: number): AgentType => {
     case AgentTypeEnum.VOICE:
       return AgentType.VOICE;
     case AgentTypeEnum.MULTIMODAL:
-      return AgentType.VISION;
+      return AgentType.MULTIMODAL;
     default:
       return AgentType.TEXT;
   }

@@ -5,7 +5,6 @@ import ReliabilitySection from "@/components/landing-option/ReliabilitySection";
 import IntegrationsSection from "@/components/landing-option/IntegrationsSection"; // Added: "Orbit" from Option
 import UseCaseSliderSection from "@/components/landing/UseCaseSliderSection";
 import FooterSection from "@/components/landing/FooterSection";
-import { ToastProvider } from "@/components/ui/ToastProvider";
 import { Header } from "@/components/common/Header";
 
 export default function Home() {
