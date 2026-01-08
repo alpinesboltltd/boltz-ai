@@ -17,6 +17,7 @@ import {
   ArrowLeft,
 } from "lucide-react";
 import { ConfirmDialog } from "@/components/common/ConfirmDialog";
+import { ModelSelector } from "@/components/common/ModelSelector";
 
 const ROLE_OPTIONS = [
   { value: "virtual_assistant", label: "Virtual Assistant" },
@@ -368,21 +369,15 @@ export default function AdminTemplatesPage() {
                   <label className="text-sm font-medium text-gray-700">
                     AI Model (Required)
                   </label>
-                  <Select
-                    options={aiModels.map((m) => ({
-                      value: m.id,
-                      label: m.name,
-                    }))}
-                    value={aiModels
-                      .map((m) => ({ value: m.id, label: m.name }))
-                      .find((o) => o.value === agentFormData.ai_model_id)}
-                    onChange={(o) =>
+                  <ModelSelector
+                    value={agentFormData.ai_model_id}
+                    onChange={(modelId) =>
                       setAgentFormData({
                         ...agentFormData,
-                        ai_model_id: o?.value || "",
+                        ai_model_id: modelId,
                       })
                     }
-                    placeholder="Select Model..."
+                    models={aiModels}
                   />
                   {/* Validation message if needed */}
                 </div>

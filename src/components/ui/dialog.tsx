@@ -1,18 +1,24 @@
 "use client";
 
 import * as React from "react";
-import { Dialog as HeadlessDialog, Transition } from "@headlessui/react";
-import { X } from "lucide-react";
+import {
+  DialogPanel,
+  Dialog as HeadlessDialog,
+  Transition,
+  TransitionChild,
+} from "@headlessui/react";
 import { cn } from "@/lib/utils";
 
 const Dialog = ({
   open,
   onOpenChange,
   children,
+  className,
 }: {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
   children: React.ReactNode;
+  className?: string;
 }) => {
   // Headless UI Dialog handles open state internally if not controlled,
   // but here we are adapting to a controlled API pattern often used (open/onOpenChange)
@@ -26,7 +32,7 @@ const Dialog = ({
         className="relative z-50"
         onClose={() => onOpenChange?.(false)}
       >
-        <Transition.Child
+        <TransitionChild
           as={React.Fragment}
           enter="ease-out duration-300"
           enterFrom="opacity-0"
@@ -36,11 +42,11 @@ const Dialog = ({
           leaveTo="opacity-0"
         >
           <div className="fixed inset-0 bg-black/25" />
-        </Transition.Child>
+        </TransitionChild>
 
         <div className="fixed inset-0 overflow-y-auto">
           <div className="flex min-h-full items-center justify-center p-4 text-center">
-            <Transition.Child
+            <TransitionChild
               as={React.Fragment}
               enter="ease-out duration-300"
               enterFrom="opacity-0 scale-95"
@@ -49,14 +55,15 @@ const Dialog = ({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <HeadlessDialog.Panel
+              <DialogPanel
                 className={cn(
-                  "w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all"
+                  "w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all",
+                  className
                 )}
               >
                 {children}
-              </HeadlessDialog.Panel>
-            </Transition.Child>
+              </DialogPanel>
+            </TransitionChild>
           </div>
         </div>
       </HeadlessDialog>

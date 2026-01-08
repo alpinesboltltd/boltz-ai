@@ -38,7 +38,6 @@ export default function RootLayout({
         <script src="https://level-x.alpinesbolt.com/widget.js" async />
       </head>
       <body className="min-h-screen bg-background text-foreground font-sans w-full overflow-x-hidden">
-        <Header />
         <ToastProvider>{children}</ToastProvider>
       </body>
     </html>

@@ -14,6 +14,7 @@ import {
   Target,
   ChevronLeft,
   ChevronRight,
+  LayoutDashboard,
 } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
@@ -38,6 +39,11 @@ export function WorkspaceSidebar({
   const headerTextRef = useRef<HTMLHeadingElement>(null);
 
   const navigation = [
+    {
+      name: "Dashboard",
+      href: `/workspace/${workspaceId}`,
+      icon: LayoutDashboard,
+    },
     {
       name: "Analytics",
       href: `/workspace/${workspaceId}/analytics`,

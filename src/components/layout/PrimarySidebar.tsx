@@ -8,8 +8,8 @@ import {
   ChevronLeft,
   ChevronRight,
   Settings,
-  LayoutDashboard,
   Shield,
+  Home,
 } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
@@ -144,15 +144,12 @@ export function PrimarySidebar({
             )}
             title="Dashboard"
           >
-            <LayoutDashboard className="h-5 w-5 shrink-0 text-gray-400 group-hover:text-gray-600" />
+            <Home className="h-5 w-5 shrink-0 text-gray-400 group-hover:text-gray-600" />
             <span
               ref={(el) => {
                 textRefs.current[1] = el;
               }}
-              className={cn(
-                "truncate",
-                collapsed && "w-0 hidden"
-              )}
+              className={cn("truncate", collapsed && "w-0 hidden")}
             >
               Dashboard
             </span>
@@ -174,10 +171,7 @@ export function PrimarySidebar({
                 ref={(el) => {
                   textRefs.current[2] = el;
                 }}
-                className={cn(
-                  "truncate",
-                  collapsed && "w-0 hidden"
-                )}
+                className={cn("truncate", collapsed && "w-0 hidden")}
               >
                 Super Admin
               </span>
@@ -201,10 +195,7 @@ export function PrimarySidebar({
               ref={(el) => {
                 textRefs.current[3] = el;
               }}
-              className={cn(
-                "truncate",
-                collapsed && "w-0 hidden"
-              )}
+              className={cn("truncate", collapsed && "w-0 hidden")}
             >
               Settings
             </span>

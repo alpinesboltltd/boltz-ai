@@ -417,7 +417,7 @@ export const agentsAPI = {
   },
 
   createTemplate: async (templateData: Partial<AgentTemplate>) => {
-    const res = await apiRequest("/agent/templates/create", {
+    const res = await apiRequest("/system/templates/agents/create", {
       method: "POST",
       body: JSON.stringify(templateData),
     });
@@ -425,7 +425,7 @@ export const agentsAPI = {
   },
 
   listTemplates: async (): Promise<AgentTemplate[]> => {
-    const response = await apiRequest("/agent/templates");
+    const response = await apiRequest("/system/templates/agents");
     return response.templates;
   },
 
@@ -1145,3 +1145,42 @@ export const waitlistAPI = {
 };
 
 export default apiRequest;
+
+// Supported Providers API (Admin only)
+export const supportedProviderAPI = {
+  create: async (name: string) => {
+    return await apiRequest("/supported-providers", {
+      method: "POST",
+      body: JSON.stringify({ name }),
+    });
+  },
+
+  getAll: async () => {
+    return await apiRequest<{
+      providers: {
+        id: string;
+        name: string;
+        is_active: boolean;
+        created_at: string;
+        updated_at: string;
+      }[];
+    }>("/supported-providers");
+  },
+
+  getById: async (id: string) => {
+    return await apiRequest(`/supported-providers/${id}`);
+  },
+
+  update: async (id: string, is_active: boolean) => {
+    return await apiRequest(`/supported-providers/${id}`, {
+      method: "PATCH",
+      body: JSON.stringify({ is_active }),
+    });
+  },
+
+  delete: async (id: string) => {
+    return await apiRequest(`/supported-providers/${id}`, {
+      method: "DELETE",
+    });
+  },
+};
