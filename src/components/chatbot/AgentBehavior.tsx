@@ -34,14 +34,8 @@ export function AgentBehavior() {
     [appearance?.primary_color]
   );
 
-  const [config, setConfig] = useState<PlaygroundConfig>({
-    ai_model_id: agent?.ai_model_id || "",
-    ai_model_name: agent?.name || "",
-    maxTokens: behavior?.max_tokens || 500,
-    temperature: behavior?.temperature || 0.5,
-    systemInstruction: behavior?.system_instruction || "",
-    selectedTemplate: "",
-  });
+  // Only initialize config when behavior data is available
+  const [config, setConfig] = useState<PlaygroundConfig | null>(null);
 
   const [customPrompts, setCustomPrompts] = useState<SystemPromptTemplate[]>(
     []
@@ -100,12 +94,12 @@ export function AgentBehavior() {
 
   const handleTemplateChange = (templateId: string) => {
     const template = allPrompts.find((t) => t.id === templateId);
-    if (template) {
-      setConfig((prev) => ({
-        ...prev,
+    if (template && config) {
+      setConfig({
+        ...config,
         selectedTemplate: templateId,
         systemInstruction: template.template,
-      }));
+      });
     }
   };
 
@@ -118,15 +112,17 @@ export function AgentBehavior() {
       constraints: [],
     };
     setCustomPrompts((prev) => [...prev, newPrompt]);
-    setConfig((prev) => ({
-      ...prev,
-      selectedTemplate: newPrompt.id,
-      systemInstruction: newPrompt.template,
-    }));
+    if (config) {
+      setConfig({
+        ...config,
+        selectedTemplate: newPrompt.id,
+        systemInstruction: newPrompt.template,
+      });
+    }
   };
 
   const handleConfigSave = async () => {
-    if (!agentId) return;
+    if (!agentId || !config) return;
     setLoading(true);
     setSuccess(false);
     try {
@@ -211,8 +207,22 @@ export function AgentBehavior() {
   }));
 
   const selectedModel = modelOptions.find(
-    (option) => option.value === config.ai_model_id
+    (option) => option.value === config?.ai_model_id
   );
+
+  // Show loading state while config is initializing
+  if (!config) {
+    return (
+      <div className="max-w-4xl mx-auto p-6 bg-white rounded-2xl shadow-sm border border-gray-200">
+        <div className="flex items-center justify-center py-12">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
+          <span className="ml-3 text-gray-500">
+            Loading behavior settings...
+          </span>
+        </div>
+      </div>
+    );
+  }
 
   // Styles
   const selectStyles = {
@@ -242,7 +252,7 @@ export function AgentBehavior() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8 p-6 bg-white rounded-xl shadow-sm border border-gray-200">
+    <div className="max-w-4xl mx-auto space-y-8 p-6 bg-white rounded-2xl shadow-sm border border-gray-200">
       <div className="border-b pb-4">
         <h2 className="text-xl font-bold text-gray-900">Agent Behavior</h2>
         <p className="text-sm text-gray-500 mt-1">
@@ -260,8 +270,8 @@ export function AgentBehavior() {
             <Select
               value={selectedModel}
               onChange={(option: any) => {
-                if (option) {
-                  setConfig((prev) => ({ ...prev, ai_model_id: option.value }));
+                if (option && config) {
+                  setConfig({ ...config, ai_model_id: option.value });
                 }
               }}
               options={modelOptions}
@@ -286,16 +296,18 @@ export function AgentBehavior() {
             </label>
             <input
               type="range"
-              min="0"
-              max="2"
+              min="0.1"
+              max="1"
               step="0.1"
               value={config.temperature}
-              onChange={(e) =>
-                setConfig((prev) => ({
-                  ...prev,
-                  temperature: parseFloat(e.target.value),
-                }))
-              }
+              onChange={(option: any) => {
+                if (option && config) {
+                  setConfig({
+                    ...config,
+                    temperature: parseFloat(option.target.value),
+                  });
+                }
+              }}
               className="w-full cursor-pointer accent-primary-600"
               style={{ accentColor: primaryColor }}
             />
@@ -314,12 +326,14 @@ export function AgentBehavior() {
               min="100"
               max="128000"
               value={config.maxTokens}
-              onChange={(e) =>
-                setConfig((prev) => ({
-                  ...prev,
-                  maxTokens: parseInt(e.target.value),
-                }))
-              }
+              onChange={(option: any) => {
+                if (option && config) {
+                  setConfig({
+                    ...config,
+                    maxTokens: parseInt(option.target.value),
+                  });
+                }
+              }}
               className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
             />
           </div>
@@ -359,12 +373,14 @@ export function AgentBehavior() {
             </label>
             <textarea
               value={config.systemInstruction}
-              onChange={(e) =>
-                setConfig((prev) => ({
-                  ...prev,
-                  systemInstruction: e.target.value,
-                }))
-              }
+              onChange={(e) => {
+                if (config) {
+                  setConfig({
+                    ...config,
+                    systemInstruction: e.target.value,
+                  });
+                }
+              }}
               rows={12}
               className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 scrollbar-hide font-mono"
               placeholder="Enter custom system instruction..."

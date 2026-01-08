@@ -1,13 +1,11 @@
 "use client";
 
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useCurrentUser } from "@/store/authStore";
-import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
-import { cn } from "@/lib/utils";
+import { SuperAdminNav } from "@/components/layout/SuperAdminNav";
 import {
   Shield,
-  Database,
   Cpu,
   DollarSign,
   Bot,
@@ -389,6 +387,7 @@ export default function SuperadminPage() {
   const user = useCurrentUser();
   const router = useRouter();
   const [isAuthorized, setIsAuthorized] = useState(false);
+  const [activeTab, setActiveTab] = useState("ai-models");
 
   useEffect(() => {
     if (user) {
@@ -408,16 +407,10 @@ export default function SuperadminPage() {
     );
   }
 
-  const tabs = [
-    { name: "Prompts & Templates", icon: Database, component: DefaultPrompts },
-    { name: "AI Providers", icon: Cpu, component: AIProviders },
-    { name: "Cost & Tokens", icon: DollarSign, component: CostSettings },
-    { name: "Default Agents", icon: Bot, component: DefaultAgents },
-  ];
-
   return (
-    <div className="min-h-screen bg-gray-50/50 p-8">
-      <div className="max-w-7xl mx-auto space-y-8">
+    <div className="min-h-screen bg-gray-50/50">
+      {/* Header */}
+      <div className="bg-white border-b border-gray-200 px-8 py-6">
         <div className="flex items-center gap-4">
           <div className="p-3 bg-red-100 rounded-xl text-red-600">
             <Shield className="w-8 h-8" />
@@ -431,44 +424,21 @@ export default function SuperadminPage() {
             </p>
           </div>
         </div>
+      </div>
 
-        <TabGroup>
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-            {/* Sidebar Navigation */}
-            <TabList className="flex flex-col space-y-2 bg-white p-4 rounded-2xl shadow-sm border border-gray-100 h-fit">
-              {tabs.map((tab) => (
-                <Tab
-                  key={tab.name}
-                  className={({ selected }) =>
-                    cn(
-                      "flex items-center gap-3 w-full px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 outline-none",
-                      selected
-                        ? "bg-primary-50 text-primary-700 shadow-sm"
-                        : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                    )
-                  }
-                >
-                  <tab.icon className="w-5 h-5" />
-                  {tab.name}
-                </Tab>
-              ))}
-            </TabList>
+      {/* Horizontal Navigation */}
+      <SuperAdminNav activeTab={activeTab} setActiveTab={setActiveTab} />
 
-            {/* Content Area */}
-            <div className="lg:col-span-3">
-              <TabPanels>
-                {tabs.map((tab, idx) => (
-                  <TabPanel
-                    key={idx}
-                    className="bg-white rounded-2xl shadow-sm border border-gray-100 min-h-[500px] outline-none animate-fade-in"
-                  >
-                    <tab.component />
-                  </TabPanel>
-                ))}
-              </TabPanels>
-            </div>
+      {/* Content Area */}
+      <div className="p-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-200 min-h-[500px] animate-fade-in">
+            {activeTab === "ai-models" && <AIProviders />}
+            {activeTab === "templates" && <DefaultPrompts />}
+            {activeTab === "settings" && <CostSettings />}
+            {activeTab === "feedback" && <DefaultAgents />}
           </div>
-        </TabGroup>
+        </div>
       </div>
     </div>
   );

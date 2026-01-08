@@ -15,6 +15,7 @@ import {
   ChevronLeft,
   ChevronRight,
   LayoutDashboard,
+  ListTodo,
 } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
@@ -48,6 +49,11 @@ export function WorkspaceSidebar({
       name: "Analytics",
       href: `/workspace/${workspaceId}/analytics`,
       icon: BarChart3,
+    },
+    {
+      name: "Objectives",
+      href: `/workspace/${workspaceId}/objectives`,
+      icon: ListTodo,
     },
     { name: "Users", href: `/workspace/${workspaceId}/users`, icon: Users },
     {

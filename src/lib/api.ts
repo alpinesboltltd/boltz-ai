@@ -1184,3 +1184,54 @@ export const supportedProviderAPI = {
     });
   },
 };
+
+// Objectives API
+export const objectivesAPI = {
+  create: async (
+    workspaceId: string,
+    description: string,
+    agentId?: string
+  ) => {
+    return await apiRequest<{ objective: any }>(
+      `/workspaces/objectives/${workspaceId}`,
+      {
+        method: "POST",
+        body: JSON.stringify({ description, agent_id: agentId }),
+      }
+    );
+  },
+  getByWorkspace: async (workspaceId: string) => {
+    return await apiRequest<{ objectives: any[] }>(
+      `/workspaces/objectives/${workspaceId}`
+    );
+  },
+  get: async (objectiveId: string) => {
+    return await apiRequest<{ objective: any }>(`/objectives/${objectiveId}`);
+  },
+  execute: async (objectiveId: string) => {
+    return await apiRequest<{ objective: any }>(
+      `/objectives/${objectiveId}/execute`,
+      { method: "POST" }
+    );
+  },
+};
+
+// Activity API
+export const activityAPI = {
+  getByWorkspace: async (workspaceId: string, limit?: number) => {
+    const url = `/workspaces/activities/${workspaceId}${limit ? `?limit=${limit}` : ""}`;
+    return await apiRequest<{ activities: any[] }>(url);
+  },
+};
+
+// Analysis API
+export const analysisAPI = {
+  getByWorkspace: async (workspaceId: string) => {
+    return await apiRequest<{ analysis: any }>(
+      `/workspaces/analysis/${workspaceId}`
+    );
+  },
+  getByAgent: async (agentId: string) => {
+    return await apiRequest<{ analysis: any }>(`/agent/${agentId}/analysis`);
+  },
+};

@@ -57,7 +57,7 @@ const Dialog = ({
             >
               <DialogPanel
                 className={cn(
-                  "w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all",
+                  "w-full max-w-md max-h-[90vh] transform rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all overflow-y-auto scrollbar-hide",
                   className
                 )}
               >

@@ -116,7 +116,10 @@ export function ICPList({ workspaceId }: ICPListProps) {
       ) : (
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {icps.map((icp) => (
-            <Card key={icp.id} className="flex flex-col">
+            <Card
+              key={icp.id}
+              className="flex flex-col transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+            >
               <CardHeader>
                 <div className="flex justify-between items-start">
                   <CardTitle className="truncate pr-2" title={icp.name}>
