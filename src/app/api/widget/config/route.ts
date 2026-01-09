@@ -1,51 +1,59 @@
 import { NextResponse } from "next/server";
 
+// CORS headers for widget endpoints (allows embedding on any domain)
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type",
+};
+
+// Handle preflight requests
+export async function OPTIONS() {
+  return NextResponse.json({}, { headers: corsHeaders });
+}
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const agentId = searchParams.get("agentId");
+  console.log("AGENT ID", agentId);
 
   if (!agentId) {
     return NextResponse.json(
       { error: "Agent ID is required" },
-      { status: 400 }
+      { status: 400, headers: corsHeaders }
     );
   }
 
-  const apiUrl = process.env.API_BASE_URL;
+  const apiUrl = process.env.API_BASE_URL || "http://localhost:8080";
 
   try {
-    // Parallel fetch for agent data and appearance
-    const [agentRes, appearanceRes] = await Promise.all([
-      fetch(`${apiUrl}/api/v1/agent/${agentId}`, {
-        headers: {
-          "Content-Type": "application/json",
-          // Add any necessary internal auth headers here if needed
-        },
-      }),
-      fetch(`${apiUrl}/api/v1/agent/${agentId}/appearance`, {
+    // Call the public widget config endpoint on the Go service
+    const response = await fetch(
+      `${apiUrl}/api/v1/widget/config?agentId=${agentId}`,
+      {
         headers: {
           "Content-Type": "application/json",
         },
-      }),
-    ]);
+      }
+    );
+    console.log("requests,requests");
 
-    // We expect both to succeed for a full config, but we can be resilient
-    const agentData = await agentRes.json().catch(() => ({}));
-    const appearanceData = await appearanceRes.json().catch(() => ({}));
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("Widget config error:", errorText);
+      return NextResponse.json(
+        { error: "Failed to fetch configuration" },
+        { status: response.status, headers: corsHeaders }
+      );
+    }
 
-    // Merge relevant data
-    const config = {
-      name: agentData.agent?.name || "Chat with us",
-      ...appearanceData.appearance,
-    };
-    console.log(config, "aconfig");
-
-    return NextResponse.json({ data: config });
+    const data = await response.json();
+    return NextResponse.json(data, { headers: corsHeaders });
   } catch (error) {
     console.error("Config proxy error:", error);
     return NextResponse.json(
       { error: "Failed to fetch configuration" },
-      { status: 500 }
+      { status: 500, headers: corsHeaders }
     );
   }
 }
