@@ -3,7 +3,6 @@
 import { ReactNode, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { PrimarySidebar } from "@/components/layout/PrimarySidebar";
-import { SuperAdminSidebar } from "@/components/layout/SuperAdminSidebar";
 import { ErrorBoundary } from "@/components/common/ErrorBoundary";
 import { useCurrentUser } from "@/store/authStore";
 import { UserRoles } from "@/types";
@@ -51,15 +50,10 @@ export default function SuperAdminLayout({
           sidebarCollapsed ? "md:pl-20" : "md:pl-72"
         )}
       >
-        <div className="flex flex-1">
-          {/* Secondary Context Navigation */}
-          <SuperAdminSidebar />
-
-          {/* Main Content Area */}
-          <main className="flex-1 min-w-0 overflow-y-auto h-screen p-4 md:p-8">
-            <ErrorBoundary>{children}</ErrorBoundary>
-          </main>
-        </div>
+        {/* Main Content Area */}
+        <main className="flex-1 min-w-0 overflow-y-auto h-screen">
+          <ErrorBoundary>{children}</ErrorBoundary>
+        </main>
       </div>
     </div>
   );

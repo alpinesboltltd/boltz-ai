@@ -9,8 +9,6 @@ import {
   Presentation,
   Table,
   Globe,
-  Linkedin,
-  Twitter,
   MessageSquare,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -116,7 +114,7 @@ export const Integrations = ({ agentId }: IntegrationsProps) => {
 
   // Check if Discord is active
   const isDiscordActive =
-    genericIntegration?.platform === Platform.DISCORD &&
+    genericIntegration?.integration_id?.includes(Platform.DISCORD) &&
     genericIntegration?.is_active;
 
   return (

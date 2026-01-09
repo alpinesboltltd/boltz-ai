@@ -18,7 +18,7 @@ export interface Agent {
 }
 
 export interface AgentAppearance {
-  id: number;
+  id: string;
   agent_id: string;
   primary_color: string;
   font_family: string;
@@ -32,7 +32,7 @@ export interface AgentAppearance {
 }
 
 export interface AgentBehavior {
-  id: number;
+  id: string;
   agent_id: string;
   initial_messages: string;
   fallback_message: string;
@@ -66,18 +66,18 @@ export interface PromptTemplate {
 }
 
 export interface AgentIntegration {
-  id: number;
+  id: string;
   agent_id: string;
-  platform: Platform;
-  api_key: string | null;
-  api_secret: string | null;
+  integration_id: string[];
+  api_key?: string;
+  api_secret?: string;
   is_active: boolean;
   created_at: string;
   updated_at: string;
 }
 
 export interface AgentChannel {
-  id: number;
+  id: string;
   agent_id: string;
   channel_id: string[];
   created_at: string;
@@ -98,7 +98,7 @@ export interface AgentTemplate {
 }
 
 export interface AgentStats {
-  id: number;
+  id: string;
   agent_id: string;
   total_messages: number;
   unique_users: number;
@@ -109,7 +109,7 @@ export interface AgentStats {
 }
 
 export interface TrainingData {
-  id: number;
+  id: string;
   agent_id: string;
   content_type:
     | "faq"
@@ -191,6 +191,10 @@ export interface ChatHistoryItem {
   parts: string;
 }
 
+/**
+ * @deprecated Use AgentModelSettings and AgentBehaviorSettings instead.
+ * This interface mixes model and behavior concerns.
+ */
 export interface PlaygroundConfig {
   ai_model_id: string;
   ai_model_name: string;
@@ -198,6 +202,22 @@ export interface PlaygroundConfig {
   maxTokens: number;
   systemInstruction: string;
   selectedTemplate: string;
+}
+
+/** Settings for AI model selection (stored on Agent entity) */
+export interface AgentModelSettings {
+  ai_model_id: string;
+  ai_model_name?: string;
+}
+
+/** Settings for agent behavior (stored on AgentBehavior entity) */
+export interface AgentBehaviorSettings {
+  temperature: number;
+  max_tokens: number;
+  system_instruction_id?: string;
+  prompt_template_id?: string;
+  system_instruction?: string;
+  prompt_template?: string;
 }
 
 export interface TestQuery {
@@ -322,7 +342,7 @@ export const AgentBehaviorSchema = z.object({
 });
 
 export const AgentAppearanceSchema = z.object({
-  id: z.number().optional(),
+  id: z.string().optional(),
   agent_id: z.string().optional(),
   position: z.enum(AgentPosition),
   icon_size: z.enum(AgentIconSize),

@@ -17,7 +17,6 @@ import {
 import { Button } from "@/components/ui/Button";
 import { Spinner } from "@/components/common/Spinner";
 import { agentsAPI } from "@/lib/api";
-import { Platform } from "@/types/agent";
 import {
   Dialog,
   DialogContent,
@@ -26,6 +25,7 @@ import {
   DialogDescription,
 } from "../ui/dialog";
 import { Input } from "../ui/input";
+import { Platform } from "@/types/agent";
 
 const discordSchema = z.object({
   applicationId: z.string().min(1, "Application ID is required"),
@@ -73,7 +73,7 @@ export default function DiscordIntegrationModal({
     try {
       await agentsAPI.createIntegration({
         agent_id: agentId,
-        platform: Platform.DISCORD,
+        integration_id: [Platform.DISCORD],
         api_key: data.applicationId,
         api_secret: data.botToken,
         is_active: true,

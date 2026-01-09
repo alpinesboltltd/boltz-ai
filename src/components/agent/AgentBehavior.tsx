@@ -3,7 +3,7 @@
 import { useState, useEffect, useMemo } from "react";
 import Image from "next/image";
 import Select from "react-select";
-import { SystemPromptTemplate, PlaygroundConfig } from "@/types/agent";
+import { SystemPromptTemplate } from "@/types/agent";
 import { agentsAPI, systemAPI } from "@/lib/api";
 
 import {
@@ -16,6 +16,17 @@ import { useAIModelsStore } from "@/store/aiModelsStore";
 import { AIModel } from "@/lib/static/ai-models";
 import { agentTypeToEnum, enumToAgentType } from "@/lib/agentTypeSerializer";
 import { SYSTEM_PROMPT_TEMPLATES } from "@/data/systemPrompts";
+
+/** Local form state combining model selection and behavior settings */
+interface BehaviorFormValues {
+  ai_model_id: string;
+  ai_model_name: string;
+  temperature: number;
+  max_tokens: number;
+  system_instruction_id?: string;
+  prompt_template_id?: string;
+  system_instruction: string;
+}
 
 export function AgentBehavior() {
   const { fetchAgentDetails } = useAgentDetailStore();
@@ -34,14 +45,8 @@ export function AgentBehavior() {
     [appearance?.primary_color]
   );
 
-  const [config, setConfig] = useState<PlaygroundConfig>({
-    ai_model_id: agent?.ai_model_id || "",
-    ai_model_name: agent?.name || "",
-    maxTokens: behavior?.max_tokens || 500,
-    temperature: behavior?.temperature || 0.5,
-    systemInstruction: behavior?.system_instruction || "",
-    selectedTemplate: "",
-  });
+  // Form state using new interface
+  const [formValues, setFormValues] = useState<BehaviorFormValues | null>(null);
 
   const [customPrompts, setCustomPrompts] = useState<SystemPromptTemplate[]>(
     []
@@ -81,17 +86,18 @@ export function AgentBehavior() {
   // Sync state with behavior prop
   useEffect(() => {
     if (behavior) {
-      setConfig({
+      setFormValues({
         ai_model_id: agent?.ai_model_id || "",
         ai_model_name:
           models.find((model) => model.id === agent?.ai_model_id)?.name || "",
-        temperature: behavior.temperature || 0.7,
-        maxTokens: behavior.max_tokens || 1000,
-        systemInstruction:
-          behavior.system_instruction || SYSTEM_PROMPT_TEMPLATES[0].template,
-        selectedTemplate: behavior.prompt_template || "",
+        temperature: behavior.temperature,
+        max_tokens: behavior.max_tokens,
+        system_instruction_id: behavior.system_instruction_id,
+        prompt_template_id: behavior.prompt_template_id,
+        system_instruction: behavior.system_instruction,
       });
     }
+    console.log(behavior, "BEHAVIOR");
   }, [behavior, agent?.ai_model_id, models]);
 
   const allPrompts = useMemo(() => {
@@ -100,12 +106,12 @@ export function AgentBehavior() {
 
   const handleTemplateChange = (templateId: string) => {
     const template = allPrompts.find((t) => t.id === templateId);
-    if (template) {
-      setConfig((prev) => ({
-        ...prev,
-        selectedTemplate: templateId,
-        systemInstruction: template.template,
-      }));
+    if (template && formValues) {
+      setFormValues({
+        ...formValues,
+        prompt_template_id: templateId,
+        system_instruction: template.template,
+      });
     }
   };
 
@@ -118,36 +124,34 @@ export function AgentBehavior() {
       constraints: [],
     };
     setCustomPrompts((prev) => [...prev, newPrompt]);
-    setConfig((prev) => ({
-      ...prev,
-      selectedTemplate: newPrompt.id,
-      systemInstruction: newPrompt.template,
-    }));
+    if (formValues) {
+      setFormValues({
+        ...formValues,
+        prompt_template_id: newPrompt.id,
+        system_instruction: newPrompt.template,
+      });
+    }
   };
 
   const handleConfigSave = async () => {
-    if (!agentId) return;
+    if (!agentId || !formValues) return;
     setLoading(true);
     setSuccess(false);
     try {
       // Update agent model if changed
-      if (agent && config.ai_model_id !== agent.ai_model_id) {
-        // Find model to ensure it exists, though ID is enough
+      if (agent && formValues.ai_model_id !== agent.ai_model_id) {
         await agentsAPI.update(agentId, {
           id: agentId,
-          ai_model_id: config.ai_model_id,
+          ai_model_id: formValues.ai_model_id,
         });
       }
 
       // Update behavior configuration
-      // Backend expects prompt_template_id, temperature, max_tokens, etc.
-      // We do NOT send systemInstruction text because backend doesn't support raw text update on this endpoint generally,
-      // it expects a template ID or system instruction ID.
       await agentsAPI.updateBehavior(agentId, {
-        temperature: config.temperature,
-        max_tokens: config.maxTokens,
-        prompt_template_id: config.selectedTemplate || undefined,
-        // If we had a system_instruction_id, we would send it here.
+        temperature: formValues.temperature,
+        max_tokens: formValues.max_tokens,
+        prompt_template_id: formValues.prompt_template_id || undefined,
+        system_instruction_id: formValues.system_instruction_id || undefined,
       });
 
       // Refresh agent data
@@ -168,8 +172,8 @@ export function AgentBehavior() {
   const ModelOption = ({ data }: { data: AIModel }) => (
     <div className="flex items-center p-2">
       <Image
-        src={data.image}
-        alt={data.provider}
+        src={`/images/${data.provider.toLowerCase()}.svg`}
+        alt={data.name}
         width={24}
         height={24}
         className="mr-3"
@@ -187,7 +191,7 @@ export function AgentBehavior() {
   const ModelSingleValue = ({ data }: { data: AIModel }) => (
     <div className="flex items-center py-1">
       <Image
-        src={data.image}
+        src={`/images/${data.provider.toLowerCase()}.svg`}
         alt={data.provider}
         width={20}
         height={20}
@@ -211,8 +215,22 @@ export function AgentBehavior() {
   }));
 
   const selectedModel = modelOptions.find(
-    (option) => option.value === config.ai_model_id
+    (option) => option.value === formValues?.ai_model_id
   );
+
+  // Show loading state while formValues is initializing
+  if (!formValues) {
+    return (
+      <div className="max-w-4xl mx-auto p-6 bg-white rounded-2xl shadow-sm border border-gray-200">
+        <div className="flex items-center justify-center py-12">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
+          <span className="ml-3 text-gray-500">
+            Loading behavior settings...
+          </span>
+        </div>
+      </div>
+    );
+  }
 
   // Styles
   const selectStyles = {
@@ -242,7 +260,7 @@ export function AgentBehavior() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8 p-6 bg-white rounded-xl shadow-sm border border-gray-200">
+    <div className="max-w-4xl mx-auto space-y-8 p-6 bg-white rounded-2xl shadow-sm border border-gray-200">
       <div className="border-b pb-4">
         <h2 className="text-xl font-bold text-gray-900">Agent Behavior</h2>
         <p className="text-sm text-gray-500 mt-1">
@@ -260,8 +278,8 @@ export function AgentBehavior() {
             <Select
               value={selectedModel}
               onChange={(option: any) => {
-                if (option) {
-                  setConfig((prev) => ({ ...prev, ai_model_id: option.value }));
+                if (option && formValues) {
+                  setFormValues({ ...formValues, ai_model_id: option.value });
                 }
               }}
               options={modelOptions}
@@ -282,20 +300,22 @@ export function AgentBehavior() {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Temperature: {config.temperature}
+              Temperature: {formValues.temperature}
             </label>
             <input
               type="range"
-              min="0"
-              max="2"
+              min="0.1"
+              max="1"
               step="0.1"
-              value={config.temperature}
-              onChange={(e) =>
-                setConfig((prev) => ({
-                  ...prev,
-                  temperature: parseFloat(e.target.value),
-                }))
-              }
+              value={formValues.temperature}
+              onChange={(e) => {
+                if (formValues) {
+                  setFormValues({
+                    ...formValues,
+                    temperature: parseFloat(e.target.value),
+                  });
+                }
+              }}
               className="w-full cursor-pointer accent-primary-600"
               style={{ accentColor: primaryColor }}
             />
@@ -313,13 +333,15 @@ export function AgentBehavior() {
               type="number"
               min="100"
               max="128000"
-              value={config.maxTokens}
-              onChange={(e) =>
-                setConfig((prev) => ({
-                  ...prev,
-                  maxTokens: parseInt(e.target.value),
-                }))
-              }
+              value={formValues.max_tokens}
+              onChange={(e) => {
+                if (formValues) {
+                  setFormValues({
+                    ...formValues,
+                    max_tokens: parseInt(e.target.value),
+                  });
+                }
+              }}
               className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
             />
           </div>
@@ -340,7 +362,7 @@ export function AgentBehavior() {
               </button>
             </div>
             <select
-              value={config.selectedTemplate}
+              value={formValues.prompt_template_id || ""}
               onChange={(e) => handleTemplateChange(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 bg-white"
             >
@@ -358,13 +380,15 @@ export function AgentBehavior() {
               System Instruction
             </label>
             <textarea
-              value={config.systemInstruction}
-              onChange={(e) =>
-                setConfig((prev) => ({
-                  ...prev,
-                  systemInstruction: e.target.value,
-                }))
-              }
+              value={formValues.system_instruction}
+              onChange={(e) => {
+                if (formValues) {
+                  setFormValues({
+                    ...formValues,
+                    system_instruction: e.target.value,
+                  });
+                }
+              }}
               rows={12}
               className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 scrollbar-hide font-mono"
               placeholder="Enter custom system instruction..."

@@ -5,7 +5,7 @@ import { Conversation } from "@/types/conversations";
 import { sanitizedContent as DOMPurify } from "@/lib/utils";
 import { Button } from "@headlessui/react";
 import { useAgentData } from "@/store/agentDetailStore";
-import { AgentPlayground } from "../chatbot/AgentPlayground";
+import { AgentPlayground } from "../agent/AgentPlayground";
 
 enum Tabs {
   CHAT_LOG = "Chat Logs",

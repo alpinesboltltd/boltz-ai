@@ -5,20 +5,20 @@ import {
   AgentBehavior,
   AgentIntegration,
   AgentStats,
+  AgentChannel,
   TrainingData,
-  SystemPromptTemplate,
 } from "@/types/agent";
 import { agentsAPI } from "@/lib/api";
 import { accessToken } from "./authStore";
 
 interface AgentDetailData {
   agent: Agent;
-  agent_appearance: AgentAppearance;
-  agent_behavior: AgentBehavior;
-  agent_integration: AgentIntegration;
-  agent_stats: AgentStats;
-  training_data: TrainingData;
-  system_prompt_template: SystemPromptTemplate;
+  agent_appearance: AgentAppearance | null;
+  agent_behavior: AgentBehavior | null;
+  agent_integration: AgentIntegration | null;
+  agent_channel: AgentChannel | null;
+  agent_stats: AgentStats | null;
+  training_data: TrainingData[];
 }
 
 interface AgentDetailState {
@@ -53,6 +53,14 @@ export const useAgentDetailStore = create<AgentDetailState>((set, get) => ({
     set({ loading: true, error: null });
     try {
       const response = await agentsAPI.getById(agentId, token);
+      console.log("[AgentDetailStore] API response:", response);
+      console.log("[AgentDetailStore] agent:", response.agent);
+      console.log(
+        "[AgentDetailStore] agent.ai_model_id:",
+        response.agent?.ai_model_id
+      );
+      console.log("[AgentDetailStore] behavior:", response.agent_behavior);
+      console.log("[AgentDetailStore] appearance:", response.agent_appearance);
       set({
         data: response,
         currentAgentId: response.agent.id,
@@ -97,12 +105,15 @@ export const useAgentDetailStore = create<AgentDetailState>((set, get) => ({
 
   saveAppearance: async (appearance: Partial<AgentAppearance>) => {
     const { currentAgentId, data } = get();
-    if (!currentAgentId || !data) return;
+    if (!currentAgentId || !data || !data.agent_appearance) return;
 
     try {
       await agentsAPI.updateAppearance(currentAgentId, appearance);
       // Update local state deeply merging
-      const newAppearance = { ...data.agent_appearance, ...appearance };
+      const newAppearance: AgentAppearance = {
+        ...data.agent_appearance,
+        ...appearance,
+      } as AgentAppearance;
       set({
         data: {
           ...data,
