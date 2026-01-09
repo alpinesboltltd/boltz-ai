@@ -8,8 +8,8 @@ import {
   CodeBracketIcon,
   EyeIcon,
 } from "@heroicons/react/24/outline";
-import { BotCustomizer } from "@/components/chatbot/BotCustomizer";
-import { AgentPlayground } from "@/components/chatbot/AgentPlayground";
+import { BotCustomizer } from "@/components/agent/BotCustomizer";
+import { AgentPlayground } from "@/components/agent/AgentPlayground";
 import { Tab, TabGroup, TabList, TabPanels, TabPanel } from "@headlessui/react";
 import { toast } from "@/store/toastStore";
 

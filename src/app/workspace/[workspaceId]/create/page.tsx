@@ -25,7 +25,7 @@ import { Textarea } from "@/components/common/Textarea";
 import { Select } from "@/components/common/Select";
 import { Spinner } from "@/components/common/Spinner";
 import { TrainingSources } from "@/components/dashboard/TrainingSources";
-import { BotPreview } from "@/components/chatbot/BotPreview";
+import { BotPreview } from "@/components/agent/BotPreview";
 import { ModelSelector } from "@/components/common/ModelSelector";
 import { motion, AnimatePresence } from "framer-motion";
 import {

@@ -194,7 +194,7 @@ export function AgentPlayground() {
   const ModelOption = ({ data }: { data: AIModel }) => (
     <div className="flex items-center p-2">
       <Image
-        src={data.image}
+        src={`/images/${data.provider.toLowerCase()}.svg`}
         alt={data.provider}
         width={24}
         height={24}
@@ -213,7 +213,7 @@ export function AgentPlayground() {
   const ModelSingleValue = ({ data }: { data: AIModel }) => (
     <div className="flex items-center py-1">
       <Image
-        src={data.image}
+        src={`/images/${data.provider.toLowerCase()}.svg`}
         alt={data.provider}
         width={20}
         height={20}
@@ -715,10 +715,9 @@ function BehaviorSettingsForm({
   } = useForm<BehaviorFormValues>({
     resolver: zodResolver(AgentBehaviorSchema),
     defaultValues: {
-      temperature: behavior?.temperature || 0.7,
-      max_tokens: behavior?.max_tokens || 1000,
+      temperature: behavior?.temperature,
+      max_tokens: behavior?.max_tokens,
       prompt_template_id: behavior?.prompt_template_id || "",
-      // system_instruction_id is implicit via prompt_template usually, or handled separately
     },
   });
 

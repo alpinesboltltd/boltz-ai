@@ -9,7 +9,6 @@ import {
   AgentStats,
   AgentTemplate,
   CreateAgentAPIRequest,
-  SystemPromptTemplate,
   TrainingData,
   UpdateAgentRequest,
   TestQuery,
@@ -390,13 +389,12 @@ export const agentsAPI = {
     token: string
   ): Promise<{
     agent: Agent;
-    agent_integration: AgentIntegration;
-    agent_appearance: AgentAppearance;
-    agent_behavior: AgentBehavior;
-    agent_integrations: AgentIntegration;
-    agent_stats: AgentStats;
-    training_data: TrainingData;
-    system_prompt_template: SystemPromptTemplate;
+    agent_appearance: AgentAppearance | null;
+    agent_behavior: AgentBehavior | null;
+    agent_integration: AgentIntegration | null;
+    agent_channel: AgentChannel | null;
+    agent_stats: AgentStats | null;
+    training_data: TrainingData[];
   }> => {
     return await apiRequest(`/agent/${id}`, {}, token);
   },
