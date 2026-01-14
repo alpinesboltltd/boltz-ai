@@ -60,6 +60,11 @@ export const useAuthStore = create<AuthState>()(
         }
 
         toast.info("Signed Out", "You have been successfully signed out");
+
+        // Redirect to login
+        if (typeof window !== "undefined") {
+          window.location.href = "/login";
+        }
       },
 
       clearAuth: () => {

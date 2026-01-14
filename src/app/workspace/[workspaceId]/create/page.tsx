@@ -386,6 +386,31 @@ export default function CreateAgentPage() {
                           placeholder="Describe what your AI agent will do..."
                           className="resize-none"
                         />
+
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Prompt Template (Optional)
+                          </label>
+                          <select
+                            value={selectedTemplate}
+                            onChange={(e) => {
+                              setSelectedTemplate(e.target.value);
+                              agentForm.setValue("template_id", e.target.value);
+                            }}
+                            className="w-full px-4 py-2 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all bg-white"
+                          >
+                            <option value="">Select a template...</option>
+                            {templates.map((t) => (
+                              <option key={t.id} value={t.id}>
+                                {t.name}
+                              </option>
+                            ))}
+                          </select>
+                          <p className="mt-1 text-xs text-gray-500">
+                            Choose a base personality or instruction set for
+                            your agent.
+                          </p>
+                        </div>
                       </div>
 
                       <div className="space-y-6">

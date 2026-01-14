@@ -144,6 +144,93 @@ export function generateStyles(config: AgentAppearanceConfig): string {
       word-wrap: break-word;
     }
 
+    .lx-message-content p {
+      margin: 8px 0;
+    }
+
+    .lx-message-content p:first-child {
+      margin-top: 0;
+    }
+
+    .lx-message-content p:last-child {
+      margin-bottom: 0;
+    }
+
+    .lx-message-content ul, .lx-message-content ol {
+      margin: 8px 0;
+      padding-left: 20px;
+    }
+
+    .lx-message-content li {
+      margin: 4px 0;
+      list-style-type: disc;
+    }
+
+    .lx-message-content ol li {
+      list-style-type: decimal;
+    }
+
+    .lx-message-content strong {
+      font-weight: 600;
+    }
+
+    .lx-message-content em {
+      font-style: italic;
+    }
+
+    .lx-message-content h1, .lx-message-content h2, .lx-message-content h3, 
+    .lx-message-content h4, .lx-message-content h5, .lx-message-content h6 {
+      margin: 12px 0 8px;
+      font-weight: 600;
+      line-height: 1.3;
+    }
+    
+    .lx-message-content h1 { font-size: 1.5em; }
+    .lx-message-content h2 { font-size: 1.3em; }
+    .lx-message-content h3 { font-size: 1.1em; }
+    
+    .lx-message-content blockquote {
+      border-left: 3px solid rgba(0,0,0,0.1);
+      padding-left: 10px;
+      margin: 8px 0;
+      font-style: italic;
+      color: inherit;
+      opacity: 0.8;
+    }
+
+    .lx-message-content pre {
+      background: rgba(0,0,0,0.05);
+      padding: 10px;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 8px 0;
+      font-family: monospace;
+      font-size: 0.9em;
+    }
+
+    .lx-message-content code {
+      font-family: monospace;
+      background: rgba(0,0,0,0.05);
+      padding: 2px 4px;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+    
+    .lx-message-content pre code {
+      background: none;
+      padding: 0;
+    }
+
+    /* Adjust styles for user vs assistant */
+    .lx-message-user .lx-message-content blockquote {
+      border-left-color: rgba(255,255,255,0.3);
+    }
+    
+    .lx-message-user .lx-message-content pre,
+    .lx-message-user .lx-message-content code {
+      background: rgba(255,255,255,0.15);
+    }
+
     .lx-message-user {
       align-self: flex-end;
     }

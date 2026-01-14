@@ -1,11 +1,22 @@
 "use client";
 
-import { Suspense } from "react";
+import { Suspense, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useIsAuthenticated } from "@/store/authStore";
 import { Spinner } from "@/components/common/Spinner";
 import { LoginForm } from "@/components/auth/LoginForm";
 
 export default function LoginPage() {
+  const router = useRouter();
+  const isAuthenticated = useIsAuthenticated();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.replace("/dashboard");
+    }
+  }, [isAuthenticated, router]);
+
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">

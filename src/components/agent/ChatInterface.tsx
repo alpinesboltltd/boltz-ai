@@ -12,6 +12,7 @@ import {
   BankTransferWidget,
 } from "./InteractiveWidgets";
 import Image from "next/image";
+import ReactMarkdown from "react-markdown";
 import VoiceRecorder from "./VoiceRecorder";
 import type {
   ChatWidget,
@@ -55,7 +56,7 @@ export default function ChatInterface({
   avatarStyle = "default",
   avatarImage,
   isOpen = true,
-  onClose = () => { },
+  onClose = () => {},
   darkMode = false,
   fontFamily = "Inter, sans-serif",
   position = "bottom-right",
@@ -64,7 +65,7 @@ export default function ChatInterface({
     {
       id: 1,
       text: welcomeMessage,
-      sender: "bot",
+      sender: "assistant",
       timestamp: new Date(),
       hasVoice: true,
     },
@@ -105,7 +106,7 @@ export default function ChatInterface({
         const botMessage: ChatMessage = {
           id: messages.length + 2,
           text: response.text,
-          sender: "bot",
+          sender: "assistant",
           timestamp: new Date(),
           hasVoice: true,
           widget: response.widget,
@@ -151,7 +152,7 @@ export default function ChatInterface({
       const botMessage: ChatMessage = {
         id: messages.length + 2,
         text: botResponse,
-        sender: "bot",
+        sender: "assistant",
         timestamp: new Date(),
         hasVoice: true,
       };
@@ -420,19 +421,19 @@ export default function ChatInterface({
 
   const darkModeStyles = darkMode
     ? {
-      header: "bg-gray-900 text-white",
-      messageArea: "bg-gray-800",
-      userMessage: primaryColor,
-      botMessage: "bg-gray-700 text-white border-gray-600",
-      input: "bg-gray-700 text-white border-gray-600",
-    }
+        header: "bg-gray-900 text-white",
+        messageArea: "bg-gray-800",
+        userMessage: primaryColor,
+        botMessage: "bg-gray-700 text-white border-gray-600",
+        input: "bg-gray-700 text-white border-gray-600",
+      }
     : {
-      header: primaryColor,
-      messageArea: secondaryColor,
-      userMessage: primaryColor,
-      botMessage: "bg-white text-gray-800 border-gray-200",
-      input: "bg-white text-gray-800 border-gray-300",
-    };
+        header: primaryColor,
+        messageArea: secondaryColor,
+        userMessage: primaryColor,
+        botMessage: "bg-white text-gray-800 border-gray-200",
+        input: "bg-white text-gray-800 border-gray-300",
+      };
 
   return (
     <div
@@ -478,19 +479,21 @@ export default function ChatInterface({
         {messages.map((message) => (
           <div
             key={message.id}
-            className={`mb-4 flex ${message.sender === "user" ? "justify-end" : "justify-start"
-              }`}
+            className={`mb-4 flex ${
+              message.sender === "user" ? "justify-end" : "justify-start"
+            }`}
           >
-            {message.sender === "bot" && avatarStyle !== "none" && (
+            {message.sender === "assistant" && avatarStyle !== "none" && (
               <div className="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center mr-2 shrink-0 overflow-hidden">
                 {getAvatarContent()}
               </div>
             )}
             <div
-              className={`px-4 py-2 rounded-lg max-w-[75%] ${message.sender === "user"
+              className={`px-4 py-2 rounded-lg max-w-[75%] ${
+                message.sender === "user"
                   ? "text-white"
                   : darkModeStyles.botMessage
-                }`}
+              }`}
               style={{
                 backgroundColor:
                   message.sender === "user"
@@ -498,7 +501,45 @@ export default function ChatInterface({
                     : undefined,
               }}
             >
-              <p className="text-sm">{message.text}</p>
+              <div
+                className={`text-sm prose dark:prose-invert max-w-none ${message.sender === "user" ? "text-white prose-headings:text-white prose-p:text-white prose-strong:text-white prose-li:text-white" : ""}`}
+              >
+                <ReactMarkdown
+                  components={{
+                    p: ({ children }) => (
+                      <span className="block mb-1 last:mb-0">{children}</span>
+                    ),
+                    a: ({ href, children }) => (
+                      <a
+                        href={href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="underline hover:text-blue-300"
+                      >
+                        {children}
+                      </a>
+                    ),
+                    code: ({
+                      node,
+                      inline,
+                      className,
+                      children,
+                      ...props
+                    }: any) => {
+                      return (
+                        <code
+                          className={`${className} ${inline ? "bg-black/20 rounded px-1" : "block bg-black/80 rounded p-2 my-2 overflow-x-auto"}`}
+                          {...props}
+                        >
+                          {children}
+                        </code>
+                      );
+                    },
+                  }}
+                >
+                  {message.text}
+                </ReactMarkdown>
+              </div>
 
               {message.audioUrl && (
                 <audio
@@ -521,7 +562,7 @@ export default function ChatInterface({
                             {
                               id: messages.length + 1,
                               text: `Meeting booked for ${time}`,
-                              sender: "bot",
+                              sender: "assistant",
                               timestamp: new Date(),
                             },
                           ]);
@@ -541,7 +582,7 @@ export default function ChatInterface({
                               {
                                 id: messages.length + 1,
                                 text: `Card ending in ${cardDetails.cardNumber.slice(-4)} has been added`,
-                                sender: "bot",
+                                sender: "assistant",
                                 timestamp: new Date(),
                               },
                             ]);
@@ -562,7 +603,7 @@ export default function ChatInterface({
                               {
                                 id: messages.length + 1,
                                 text: `You selected the card ending in ${card.last4}`,
-                                sender: "bot",
+                                sender: "assistant",
                                 timestamp: new Date(),
                               },
                             ]);
@@ -591,7 +632,7 @@ export default function ChatInterface({
                               {
                                 id: messages.length + 1,
                                 text: `Added ${product.name} to your cart`,
-                                sender: "bot",
+                                sender: "assistant",
                                 timestamp: new Date(),
                               },
                             ]);
@@ -612,7 +653,7 @@ export default function ChatInterface({
                               {
                                 id: messages.length + 1,
                                 text: `Here are the details for ${product.name}: ${product.description}`,
-                                sender: "bot",
+                                sender: "assistant",
                                 timestamp: new Date(),
                               },
                             ]);
@@ -642,7 +683,7 @@ export default function ChatInterface({
                               {
                                 id: messages.length + 1,
                                 text: `Your subscription has been changed to the ${plan.name} plan`,
-                                sender: "bot",
+                                sender: "assistant",
                                 timestamp: new Date(),
                               },
                             ]);
@@ -658,7 +699,7 @@ export default function ChatInterface({
                   </>
                 )}
 
-              {message.sender === "bot" &&
+              {message.sender === "assistant" &&
                 message.widget &&
                 activeWidget !== `${message.id}-${message.widget.type}` && (
                   <button
@@ -679,7 +720,7 @@ export default function ChatInterface({
                   </button>
                 )}
 
-              {message.sender === "bot" && message.hasVoice && (
+              {message.sender === "assistant" && message.hasVoice && (
                 <button
                   onClick={() => playVoiceResponse(message.id)}
                   className="mt-1 text-xs flex items-center opacity-70 hover:opacity-100"
@@ -748,10 +789,11 @@ export default function ChatInterface({
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             placeholder="Type your message..."
-            className={`flex-1 border rounded-lg mx-2 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent ${darkMode
+            className={`flex-1 border rounded-lg mx-2 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent ${
+              darkMode
                 ? "bg-gray-700 text-white border-gray-600"
                 : "bg-white text-gray-800 border-gray-300"
-              }`}
+            }`}
           />
           <button
             type="submit"
