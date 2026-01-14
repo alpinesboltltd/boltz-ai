@@ -50,6 +50,7 @@ import {
   UpdateAIModelRequest,
 } from "@/types/aiModels";
 import { getCookie } from "./utils/cookies";
+import { useAuthStore } from "@/store/authStore";
 
 // Payload Types
 export interface UpdateAppearancePayload {
@@ -150,6 +151,10 @@ export const apiRequest = async <T = any>(
   });
 
   if (!response.ok) {
+    if (response.status === 401) {
+      useAuthStore.getState().logout();
+    }
+
     let errorMessage = `Request failed with status ${response.status}`;
 
     try {

@@ -1,4 +1,6 @@
 import type { AgentAppearanceConfig, ChatMessage } from "./types";
+import { marked } from "marked";
+import DOMPurify from "isomorphic-dompurify";
 
 /**
  * SVG icons used in the widget
@@ -95,7 +97,8 @@ export function addMessage(message: ChatMessage): HTMLDivElement {
 
   const msgDiv = document.createElement("div");
   msgDiv.className = `lx-message lx-message-${message.role}`;
-  msgDiv.innerHTML = `<div class="lx-message-content">${escapeHtml(message.content)}</div>`;
+  const html = DOMPurify.sanitize(marked.parse(message.content) as string);
+  msgDiv.innerHTML = `<div class="lx-message-content">${html}</div>`;
 
   messages.appendChild(msgDiv);
   messages.scrollTop = messages.scrollHeight;
