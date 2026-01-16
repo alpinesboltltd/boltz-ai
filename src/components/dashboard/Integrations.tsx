@@ -1,107 +1,95 @@
 import { useState, useEffect } from "react";
-import { getGoogleStatus, agentsAPI } from "@/lib/api";
+import { agentsAPI, integrationsAPI } from "@/lib/api";
 import { Spinner } from "@/components/common/Spinner";
 import {
-  HardDrive,
-  Calendar,
-  Mail,
-  BookOpen,
-  Presentation,
-  Table,
-  Globe,
-  MessageSquare,
+  Puzzle,
+  AlertCircle,
+  CheckCircle2,
+  XCircle,
+  RefreshCw,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { useWorkspaceStore } from "@/store/workspaceStore";
 import { toast } from "@/store/toastStore";
-
-import { Button } from "@/components/ui/Button";
-import { GoogleServicesModal } from "./GoogleServicesModal";
-import DiscordIntegrationModal from "./DiscordIntegrationModal";
-import { AgentIntegration, Platform } from "@/types/agent";
+import { Agent } from "@/types/agent";
 
 interface IntegrationsProps {
   agentId: string;
 }
 
 export const Integrations = ({ agentId }: IntegrationsProps) => {
+  const { currentWorkspace } = useWorkspaceStore();
   const [loading, setLoading] = useState(true);
-  const [googleStatus, setGoogleStatus] = useState<Record<string, boolean>>({});
-  const [genericIntegration, setGenericIntegration] =
-    useState<AgentIntegration | null>(null);
-
-  const [isGoogleModalOpen, setIsGoogleModalOpen] = useState(false);
-  const [isDiscordModalOpen, setIsDiscordModalOpen] = useState(false);
-
-  const [activeTab, setActiveTab] = useState<"integrations" | "widget">(
-    "integrations"
-  );
-
-  const googleServices = [
-    {
-      id: "drive",
-      label: "Google Drive",
-      icon: HardDrive,
-      description: "Access and manage files",
-    },
-    {
-      id: "calendar",
-      label: "Google Calendar",
-      icon: Calendar,
-      description: "Schedule and manage events",
-    },
-    {
-      id: "mail",
-      label: "Gmail",
-      icon: Mail,
-      description: "Send and read emails",
-    },
-    {
-      id: "classroom",
-      label: "Google Classroom",
-      icon: BookOpen,
-      description: "Manage classes and assignments",
-    },
-    {
-      id: "slides",
-      label: "Google Slides",
-      icon: Presentation,
-      description: "Create and edit presentations",
-    },
-    {
-      id: "sheets",
-      label: "Google Sheets",
-      icon: Table,
-      description: "Manage spreadsheets",
-    },
-  ];
+  const [agent, setAgent] = useState<Agent | null>(null);
+  const [workspaceIntegrations, setWorkspaceIntegrations] = useState<any[]>([]);
+  const [disabledList, setDisabledList] = useState<string[]>([]);
+  const [updating, setUpdating] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchStatus();
-  }, [agentId]);
+    if (agentId && currentWorkspace) {
+      fetchData();
+    }
+  }, [agentId, currentWorkspace?.id]);
 
-  const fetchStatus = async () => {
+  const fetchData = async () => {
+    if (!currentWorkspace?.id) return;
+    setLoading(true);
     try {
-      const [googleRes, integrationRes] = await Promise.all([
-        getGoogleStatus(agentId),
-        agentsAPI.getIntegration(agentId).catch(() => ({ integration: null })),
+      const [agentRes, integrationsRes] = await Promise.all([
+        agentsAPI.getById(agentId),
+        integrationsAPI.getWorkspaceIntegrations(currentWorkspace.id),
       ]);
-      setGoogleStatus(googleRes.services || {});
-      setGenericIntegration(integrationRes.integration);
+
+      setAgent(agentRes.agent);
+      setWorkspaceIntegrations(integrationsRes.integrations || []);
+
+      // Ensure disabled_integrations is initialized
+      const integration = agentRes.agent;
+      // @ts-ignore - The type might not be fully updated in frontend types yet
+      setDisabledList(integration?.disabled_integrations || []);
     } catch (error) {
-      console.error("Failed to fetch integration status", error);
+      console.error("Failed to load data:", error);
+      toast.error("Failed to load integrations data");
     } finally {
       setLoading(false);
     }
   };
 
-  const getWidgetCode = () => {
-    if (typeof window === "undefined") return "";
-    return `<script>
-  window.LEVEL_X_CONFIG = { 
-    id: "${agentId}"
-  };
-</script>
-<script src="https://level-x.alpinesbolt.com/widget.js" async></script>`;
+  const handleToggle = async (
+    integrationName: string,
+    currentlyEnabled: boolean
+  ) => {
+    if (updating) return;
+    setUpdating(integrationName);
+
+    let newDisabledList = [...disabledList];
+    if (currentlyEnabled) {
+      // Disable it (add to list)
+      if (!newDisabledList.includes(integrationName)) {
+        newDisabledList.push(integrationName);
+      }
+    } else {
+      // Enable it (remove from list)
+      newDisabledList = newDisabledList.filter((n) => n !== integrationName);
+    }
+
+    try {
+      // Optimistic update
+      setDisabledList(newDisabledList);
+
+      await agentsAPI.createIntegration({
+        agent_id: agentId,
+        disabled_integrations: newDisabledList,
+      });
+
+      toast.success("Integration settings updated");
+    } catch (error) {
+      console.error("Failed to update integration:", error);
+      toast.error("Failed to update settings");
+      // Revert
+      setDisabledList(disabledList);
+    } finally {
+      setUpdating(null);
+    }
   };
 
   if (loading) {
@@ -112,257 +100,124 @@ export const Integrations = ({ agentId }: IntegrationsProps) => {
     );
   }
 
-  // Check if Discord is active
-  const isDiscordActive =
-    genericIntegration?.integration_id?.includes(Platform.DISCORD) &&
-    genericIntegration?.is_active;
+  // Pre-define common integration metadata for display
+  const getIntegrationMeta = (name: string) => {
+    const map: Record<string, { label: string; description: string }> = {
+      google: {
+        label: "Google Workspace",
+        description: "Access Drive, Docs, Calendar",
+      },
+      slack: { label: "Slack", description: "Send messages and alerts" },
+      twilio: { label: "Twilio", description: "SMS and Voice capabilities" },
+      discord: {
+        label: "Discord",
+        description: "Interact with Discord channels",
+      },
+      notion: {
+        label: "Notion",
+        description: "Access Notion pages and databases",
+      },
+    };
+    return (
+      map[name.toLowerCase()] || {
+        label: name,
+        description: "External integration",
+      }
+    );
+  };
 
   return (
-    <div className="space-y-6 animate-fade-in">
-      <div className="flex border-b border-gray-200">
-        <button
-          onClick={() => setActiveTab("integrations")}
-          className={cn(
-            "px-6 py-3 text-sm font-medium border-b-2 transition-colors",
-            activeTab === "integrations"
-              ? "border-primary-600 text-primary-600"
-              : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-          )}
-        >
-          Integrations
-        </button>
-        <button
-          onClick={() => setActiveTab("widget")}
-          className={cn(
-            "px-6 py-3 text-sm font-medium border-b-2 transition-colors",
-            activeTab === "widget"
-              ? "border-primary-600 text-primary-600"
-              : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-          )}
-        >
-          Website Widget
-        </button>
+    <div className="space-y-6 animate-fade-in max-w-4xl">
+      <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 flex gap-3">
+        <Puzzle className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
+        <div>
+          <h3 className="text-sm font-medium text-blue-900">
+            Workspace Integrations
+          </h3>
+          <p className="text-sm text-blue-700 mt-1">
+            This agent has access to all enabled Workspace Integrations by
+            default. You can disable specific integrations for this agent below.
+          </p>
+        </div>
       </div>
 
-      {activeTab === "integrations" && (
-        <div className="space-y-8">
-          {/* Google Services Section */}
-          <div className="space-y-6">
-            <div className="flex justify-between items-center bg-gray-50 border border-gray-200 rounded-lg p-4">
-              <div>
-                <h3 className="text-sm font-medium text-gray-900">
-                  Google Integrations
-                </h3>
-                <p className="text-sm text-gray-500">
-                  Manage your connected Google services
-                </p>
-              </div>
-              <Button onClick={() => setIsGoogleModalOpen(true)}>
-                Manage Services
-              </Button>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {googleServices.map((service) => {
-                const Icon = service.icon;
-                const isConnected = googleStatus[service.id];
-
-                return (
-                  <div
-                    key={service.id}
-                    className={cn(
-                      "relative group rounded-xl border p-6 transition-all duration-200",
-                      isConnected
-                        ? "bg-primary-50/50 border-primary-200"
-                        : "bg-white border-gray-200 opacity-70"
-                    )}
-                  >
-                    <div className="flex items-start justify-between">
-                      <div className="flex items-center gap-3">
-                        <div
-                          className={cn(
-                            "p-2.5 rounded-lg transition-colors",
-                            isConnected
-                              ? "bg-primary-100 text-primary-600"
-                              : "bg-gray-100 text-gray-500"
-                          )}
-                        >
-                          <Icon className="w-6 h-6" />
-                        </div>
-                        <div>
-                          <h3 className="font-semibold text-gray-900">
-                            {service.label}
-                          </h3>
-                          <p className="text-sm text-gray-500 mt-0.5">
-                            {service.description}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="mt-6 flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <div
-                          className={cn(
-                            "w-2 h-2 rounded-full",
-                            isConnected ? "bg-green-500" : "bg-gray-300"
-                          )}
-                        />
-                        <span className="text-xs font-medium text-gray-600">
-                          {isConnected ? "Active" : "Disconnected"}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Other Integrations Section */}
-          <div className="space-y-6 pt-6 border-t">
-            <div className="flex justify-between items-center">
-              <div>
-                <h3 className="text-lg font-medium text-gray-900">
-                  Platform Integrations
-                </h3>
-                <p className="text-sm text-gray-500">
-                  Connect to other platforms
-                </p>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {/* Discord Card */}
-              <div
-                className={cn(
-                  "relative group rounded-xl border p-6 transition-all duration-200 cursor-pointer hover:border-primary-300 hover:shadow-md",
-                  isDiscordActive
-                    ? "bg-primary-50/50 border-primary-200"
-                    : "bg-white border-gray-200"
-                )}
-                onClick={() => setIsDiscordModalOpen(true)}
-              >
-                <div className="flex items-start justify-between">
-                  <div className="flex items-center gap-3">
-                    <div
-                      className={cn(
-                        "p-2.5 rounded-lg transition-colors",
-                        isDiscordActive
-                          ? "bg-primary-100 text-primary-600"
-                          : "bg-gray-100 text-gray-500"
-                      )}
-                    >
-                      <MessageSquare className="w-6 h-6" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-gray-900">Discord</h3>
-                      <p className="text-sm text-gray-500 mt-0.5">
-                        Connect Discord Bot
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mt-6 flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <div
-                      className={cn(
-                        "w-2 h-2 rounded-full",
-                        isDiscordActive ? "bg-green-500" : "bg-gray-300"
-                      )}
-                    />
-                    <span className="text-xs font-medium text-gray-600">
-                      {isDiscordActive ? "Active" : "Configure"}
-                    </span>
-                  </div>
-                  <Button variant="ghost" size="sm" className="ml-auto">
-                    Configure
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="border-t pt-8">
-            <h3 className="text-lg font-medium text-gray-900 mb-6">
-              Coming Soon
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 opacity-60">
-              {["Slack", "Telegram"].map((name) => (
-                <div
-                  key={name}
-                  className="border border-dashed border-gray-300 rounded-xl p-6 bg-gray-50 flex items-center justify-center"
-                >
-                  <span className="text-gray-500 font-medium">{name}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <GoogleServicesModal
-            isOpen={isGoogleModalOpen}
-            onClose={() => setIsGoogleModalOpen(false)}
-            agentId={agentId}
-            initialServices={Object.keys(googleStatus).filter(
-              (k) => googleStatus[k]
-            )}
-            onSuccess={fetchStatus}
-          />
-
-          <DiscordIntegrationModal
-            isOpen={isDiscordModalOpen}
-            onClose={() => setIsDiscordModalOpen(false)}
-            agentId={agentId}
-            initialData={
-              isDiscordActive
-                ? {
-                    apiKey: genericIntegration?.api_key || "",
-                    apiSecret: genericIntegration?.api_secret || "",
-                  }
-                : undefined
-            }
-            onSuccess={fetchStatus}
-          />
+      {workspaceIntegrations.length === 0 ? (
+        <div className="text-center py-12 bg-gray-50 rounded-2xl border border-dashed border-gray-200">
+          <Puzzle className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+          <h3 className="text-lg font-medium text-gray-900">
+            No Integrations Configured
+          </h3>
+          <p className="text-gray-500 mb-4 max-w-sm mx-auto">
+            Your workspace hasn't connected to any external services yet.
+          </p>
+          {/* Link to workspace settings could go here */}
         </div>
-      )}
+      ) : (
+        <div className="grid grid-cols-1 gap-4">
+          {workspaceIntegrations.map((integration) => {
+            const meta = getIntegrationMeta(integration.integration_name);
+            const isEnabled = !disabledList.includes(
+              integration.integration_name
+            );
+            const isUpdating = updating === integration.integration_name;
 
-      {activeTab === "widget" && (
-        <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
-          <div className="flex items-start gap-6">
-            <div className="p-3 bg-primary-100 rounded-lg text-primary-600">
-              <Globe className="w-8 h-8" />
-            </div>
-            <div className="flex-1">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                Embed Website Widget
-              </h3>
-              <p className="text-gray-500 mb-6">
-                Copy and paste this code snippet into your website's HTML, just
-                before the closing <code>&lt;/body&gt;</code> tag.
-              </p>
+            return (
+              <div
+                key={integration.id}
+                className={`
+                  flex items-center justify-between p-5 rounded-xl border transition-all duration-200
+                  ${
+                    isEnabled
+                      ? "bg-white border-gray-200 shadow-sm"
+                      : "bg-gray-50 border-gray-200 opacity-75"
+                  }
+                `}
+              >
+                <div className="flex items-center gap-4">
+                  <div
+                    className={`p-3 rounded-lg ${isEnabled ? "bg-primary-50 text-primary-600" : "bg-gray-200 text-gray-500"}`}
+                  >
+                    <Puzzle className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h4 className="translate-y-px font-semibold text-gray-900">
+                      {meta.label}
+                    </h4>
+                    <p className="text-sm text-gray-500">{meta.description}</p>
+                  </div>
+                </div>
 
-              <div className="relative group">
-                <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm font-mono leading-relaxed">
-                  {getWidgetCode()}
-                </pre>
-                <button
-                  onClick={() => {
-                    navigator.clipboard.writeText(getWidgetCode());
-                    toast.info("Success", "Widget code copied to clipboard!");
-                  }}
-                  className="absolute top-3 right-3 bg-white/10 hover:bg-white/20 text-white px-3 py-1.5 rounded text-xs font-medium transition-colors backdrop-blur-sm"
-                >
-                  Copy Code
-                </button>
+                <div className="flex items-center gap-3">
+                  {isEnabled ? (
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-green-50 text-green-700 border border-green-100">
+                      <CheckCircle2 className="w-3.5 h-3.5" />
+                      Enabled
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600 border border-gray-200">
+                      <XCircle className="w-3.5 h-3.5" />
+                      Disabled
+                    </span>
+                  )}
+
+                  <div className="h-6 w-px bg-gray-200 mx-2" />
+
+                  <label className="relative inline-flex items-center cursor-pointer">
+                    <input
+                      type="checkbox"
+                      className="sr-only peer"
+                      checked={isEnabled}
+                      onChange={() =>
+                        handleToggle(integration.integration_name, isEnabled)
+                      }
+                      disabled={isUpdating}
+                    />
+                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-600"></div>
+                  </label>
+                </div>
               </div>
-
-              <div className="mt-8 p-4 bg-yellow-50 text-yellow-800 rounded-lg text-sm border border-yellow-100">
-                <strong>Note:</strong> Customize your agent's appearance using
-                the "Appearance" tab in the playground.
-              </div>
-            </div>
-          </div>
+            );
+          })}
         </div>
       )}
     </div>

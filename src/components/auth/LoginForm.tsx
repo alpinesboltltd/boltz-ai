@@ -79,7 +79,6 @@ export function LoginForm() {
         value.password
       );
       const firebaseUser = userCredential.user;
-      console.log(firebaseUser, "USERS");
 
       // 2. Check Email Verification
       if (!firebaseUser.emailVerified) {

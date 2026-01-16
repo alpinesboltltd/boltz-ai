@@ -69,6 +69,7 @@ export interface AgentIntegration {
   id: string;
   agent_id: string;
   integration_id: string[];
+  disabled_integrations?: string[];
   api_key?: string;
   api_secret?: string;
   is_active: boolean;

@@ -97,7 +97,6 @@ export function AgentBehavior() {
         system_instruction: behavior.system_instruction,
       });
     }
-    console.log(behavior, "BEHAVIOR");
   }, [behavior, agent?.ai_model_id, models]);
 
   const allPrompts = useMemo(() => {

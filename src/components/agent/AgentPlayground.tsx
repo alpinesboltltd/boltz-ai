@@ -145,7 +145,6 @@ export function AgentPlayground() {
         parts: reply,
       };
       setMessages((prev) => [...prev, assistantMessage]);
-      console.log(reply);
     } catch (error) {
       console.error("Failed to send message:", error);
     } finally {
@@ -613,7 +612,6 @@ function ModelSettingsForm({
         id: agent.id,
         ai_model_id: data.ai_model_id,
       });
-      console.log("Model saved successfully");
       onSave();
     } catch (error) {
       console.error("Failed to save model:", error);
@@ -744,7 +742,6 @@ function BehaviorSettingsForm({
         max_tokens: data.max_tokens,
         prompt_template_id: data.prompt_template_id || undefined,
       });
-      console.log("Behavior saved successfully");
       onSave();
     } catch (error) {
       console.error("Failed to save behavior:", error);

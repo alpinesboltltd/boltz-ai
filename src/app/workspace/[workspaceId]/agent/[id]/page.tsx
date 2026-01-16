@@ -2,7 +2,6 @@
 
 import { useState, useRef, useEffect } from "react";
 import { use } from "react";
-import { Sources } from "@/components/dashboard/Sources";
 import { Activity } from "@/components/dashboard/Activity";
 import { ConversationLogs } from "@/components/dashboard/ConversationLogs";
 import { useDashboardStore, DetailsTab } from "@/store/dashboardStore";
@@ -17,7 +16,6 @@ import { cn } from "@/lib/utils";
 import {
   LayoutDashboard,
   MessageSquare,
-  Database,
   Palette,
   Activity as ActivityIcon,
   CheckCircle2,
@@ -80,7 +78,6 @@ export default function AgentDetailPage({
       label: "Conversations",
       icon: MessageSquare,
     },
-    { id: DetailsTab.SOURCES, label: "Knowledge Base", icon: Database },
     { id: DetailsTab.AGENT_BEHAVIOR, label: "Behavior", icon: Brain },
     { id: DetailsTab.INTEGRATIONS, label: "Integrations", icon: Puzzle },
     { id: DetailsTab.APPEARANCE, label: "Appearance", icon: Palette },
@@ -188,7 +185,6 @@ export default function AgentDetailPage({
             {activeTab === DetailsTab.PLAYGROUND && <AgentPlayground />}
             {activeTab === DetailsTab.ACTIVITY && <Activity />}
             {activeTab === DetailsTab.CONVERSATIONS && <ConversationLogs />}
-            {activeTab === DetailsTab.SOURCES && <Sources agentId={agentId} />}
             {activeTab === DetailsTab.AGENT_BEHAVIOR && <AgentBehavior />}
             {activeTab === DetailsTab.APPEARANCE && (
               <BotCustomizer onSave={handleSaveConfig} />

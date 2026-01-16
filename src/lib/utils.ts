@@ -102,7 +102,6 @@ export async function socialSignIn(
     user: Profile;
     token: string;
   };
-  console.log(token);
 
   return { user: profileUser, token };
 }
@@ -221,12 +220,6 @@ export function getAccessibleTextColor(
   // Fallback: return the color with better contrast even if it doesn't meet target
   console.warn(
     `No color meets WCAG ${targetRatio}:1 ratio for background ${bgHex}`
-  );
-  console.log(
-    "Contrast ratios - BLACK:",
-    contrastBlack.toFixed(2),
-    "WHITE:",
-    contrastWhite.toFixed(2)
   );
 
   return contrastWhite >= contrastBlack ? white : black;

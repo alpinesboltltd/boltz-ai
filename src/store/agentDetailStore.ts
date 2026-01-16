@@ -53,14 +53,6 @@ export const useAgentDetailStore = create<AgentDetailState>((set, get) => ({
     set({ loading: true, error: null });
     try {
       const response = await agentsAPI.getById(agentId, token);
-      console.log("[AgentDetailStore] API response:", response);
-      console.log("[AgentDetailStore] agent:", response.agent);
-      console.log(
-        "[AgentDetailStore] agent.ai_model_id:",
-        response.agent?.ai_model_id
-      );
-      console.log("[AgentDetailStore] behavior:", response.agent_behavior);
-      console.log("[AgentDetailStore] appearance:", response.agent_appearance);
       set({
         data: response,
         currentAgentId: response.agent.id,

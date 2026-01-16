@@ -16,6 +16,7 @@ import {
   ChevronRight,
   LayoutDashboard,
   ListTodo,
+  Puzzle,
 } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
@@ -70,6 +71,11 @@ export function WorkspaceSidebar({
       name: "Knowledge",
       href: `/workspace/${workspaceId}/knowledge`,
       icon: BookOpen,
+    },
+    {
+      name: "Integrations",
+      href: `/workspace/${workspaceId}/integrations`,
+      icon: Puzzle,
     },
     {
       name: "Marketplace",

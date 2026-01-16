@@ -37,10 +37,10 @@ enum ActiveTab {
 }
 
 interface SourcesProps {
-  agentId: string;
+  workspaceId: string;
 }
 
-export function Sources({ agentId }: SourcesProps) {
+export function Sources({ workspaceId }: SourcesProps) {
   const [sources, setSources] = useState<TrainingSource[]>([]);
   const [activeTab, setActiveTab] = useState<ActiveTab>(ActiveTab.document);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -65,10 +65,10 @@ export function Sources({ agentId }: SourcesProps) {
 
   // Load existing documents on mount
   useEffect(() => {
-    if (agentId) {
+    if (workspaceId) {
       loadDocuments();
     }
-  }, [agentId]);
+  }, [workspaceId]);
 
   const mapDocumentType = (
     type: TrainingDocument["document_type"]
@@ -89,7 +89,7 @@ export function Sources({ agentId }: SourcesProps) {
 
   const loadDocuments = async () => {
     try {
-      const response = await trainingAPI.getDocuments(agentId);
+      const response = await trainingAPI.getDocuments(workspaceId);
 
       const mappedDocs: TrainingSource[] = response.documents.map((d) => ({
         id: d.id,
@@ -144,7 +144,7 @@ export function Sources({ agentId }: SourcesProps) {
         setSources((prev) => [...prev, source]);
 
         try {
-          await trainingAPI.trainWithFile(agentId, file);
+          await trainingAPI.trainWithFile(workspaceId, file);
           successCount++;
         } catch (error) {
           console.error(`Failed to upload ${file.name}:`, error);
@@ -184,11 +184,22 @@ export function Sources({ agentId }: SourcesProps) {
     setSources((prev) => [...prev, source]);
 
     try {
+      let finalUrl = websiteUrl.trim();
+      if (!/^https?:\/\//i.test(finalUrl)) {
+        finalUrl = `https://${finalUrl}`;
+      }
+
       const patterns = excludePatterns
         .split(",")
         .map((s) => s.trim())
         .filter(Boolean);
-      await trainingAPI.trainWithURL(agentId, websiteUrl, maxPages, patterns);
+      await trainingAPI.trainWithURL(
+        workspaceId,
+        finalUrl,
+        maxPages,
+        patterns,
+        trace
+      );
       setWebsiteUrl("");
       toast.success("Website training started");
       // Reload to get server ID and status
@@ -221,7 +232,12 @@ export function Sources({ agentId }: SourcesProps) {
     setSources((prev) => [...prev, source]);
 
     try {
-      await trainingAPI.trainWithText(agentId, textTitle, textContent, "text");
+      await trainingAPI.trainWithText(
+        workspaceId,
+        textTitle,
+        textContent,
+        "text"
+      );
       setTextContent("");
       setTextTitle("");
       toast.success("Text content added");
@@ -260,7 +276,7 @@ export function Sources({ agentId }: SourcesProps) {
 
     try {
       // Training Q&A with explicit type "faq"
-      await trainingAPI.trainWithText(agentId, title, content, "faq");
+      await trainingAPI.trainWithText(workspaceId, title, content, "faq");
       setQaQuestion("");
       setQaAnswer("");
       toast.success("Q&A pair added");
@@ -280,7 +296,7 @@ export function Sources({ agentId }: SourcesProps) {
     // Optimistic delete
     setSources((prev) => prev.filter((s) => s.id !== id));
     try {
-      await trainingAPI.deleteTrainingData(agentId, id);
+      await trainingAPI.deleteTrainingData(workspaceId, id);
       toast.success("Source deleted");
     } catch (error) {
       console.error("Failed to delete source:", error);
@@ -506,7 +522,7 @@ export function Sources({ agentId }: SourcesProps) {
               className="w-full flex items-center justify-center px-4 py-3 border border-transparent text-sm font-medium rounded-xl shadow-sm text-white bg-primary-600 hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
             >
               <GlobeAltIcon className="h-4 w-4 mr-2" />
-              {isProcessing ? "Processing..." : "Start Crawling"}
+              {isProcessing ? "Processing..." : "Start Deep Search"}
             </button>
           </div>
         )}

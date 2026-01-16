@@ -391,7 +391,7 @@ export const agentsAPI = {
 
   getById: async (
     id: string,
-    token: string
+    token?: string
   ): Promise<{
     agent: Agent;
     agent_appearance: AgentAppearance | null;
@@ -695,36 +695,45 @@ export const agentsAPI = {
 };
 
 // Integrations API
+// Integrations API
 export const integrationsAPI = {
   connect: async (
-    chatagentId: string,
+    workspaceId: string,
     platform: string,
     data: Record<string, unknown> = {}
   ): Promise<{ data: unknown }> => {
-    return await apiRequest(`/agent/${chatagentId}/integrations/${platform}`, {
-      method: "POST",
-      body: JSON.stringify(data),
-    });
+    return await apiRequest(
+      `/workspaces/${workspaceId}/integrations/${platform}`,
+      {
+        method: "POST",
+        body: JSON.stringify(data),
+      }
+    );
   },
 
-  disconnect: async (chatagentId: string, platform: string) => {
-    return await apiRequest(`/agent/${chatagentId}/integrations/${platform}`, {
-      method: "DELETE",
-    });
+  disconnect: async (workspaceId: string, platform: string) => {
+    return await apiRequest(
+      `/workspaces/${workspaceId}/integrations/${platform}`,
+      {
+        method: "DELETE",
+      }
+    );
   },
 
-  getStatus: async (chatagentId: string, platform: string) => {
-    return await apiRequest(`/agent/${chatagentId}/integrations/${platform}`);
+  getStatus: async (workspaceId: string, platform: string) => {
+    return await apiRequest(
+      `/workspaces/${workspaceId}/integrations/${platform}`
+    );
   },
 
   configureTwilio: async (
-    chatagentId: string,
+    workspaceId: string,
     phoneNumber: string,
     accountSid: string,
     authToken: string
   ) => {
     return await apiRequest(
-      `/agent/${chatagentId}/integrations/twilio/configure`,
+      `/workspaces/${workspaceId}/integrations/twilio/configure`,
       {
         method: "POST",
         body: JSON.stringify({ phoneNumber, accountSid, authToken }),
@@ -733,12 +742,12 @@ export const integrationsAPI = {
   },
 
   configureWhatsApp: async (
-    chatagentId: string,
+    workspaceId: string,
     phoneNumberId: string,
     accessToken: string
   ) => {
     return await apiRequest(
-      `/agent/${chatagentId}/integrations/whatsapp/configure`,
+      `/workspaces/${workspaceId}/integrations/whatsapp/configure`,
       {
         method: "POST",
         body: JSON.stringify({ phoneNumberId, accessToken }),
@@ -746,50 +755,62 @@ export const integrationsAPI = {
     );
   },
 
-  getSlackOAuthUrl: (chatagentId: string) => {
-    return `${process.env.NEXT_PUBLIC_API_URL || "/api"}/agent/${chatagentId}/integrations/slack/oauth-url`;
+  getSlackOAuthUrl: (workspaceId: string) => {
+    return `${process.env.NEXT_PUBLIC_API_URL || "/api"}/workspaces/${workspaceId}/integrations/slack/oauth-url`;
+  },
+
+  getWorkspaceIntegrations: async (workspaceId: string, token?: string) => {
+    return await apiRequest<{ integrations: any[] }>(
+      `/workspaces/integrations/${workspaceId}`,
+      {},
+      token
+    );
   },
 };
 
 // Knowledge Base API
+// Knowledge Base API
 export const knowledgeAPI = {
-  getSources: async (chatagentId: string) => {
-    return await apiRequest(`/agent/${chatagentId}/training/documents`);
+  getSources: async (workspaceId: string) => {
+    return await apiRequest(`/workspaces/training/${workspaceId}/documents`);
   },
 
-  uploadDocument: async (chatagentId: string, file: File) => {
+  uploadDocument: async (workspaceId: string, file: File) => {
     const formData = new FormData();
     formData.append("file", file);
 
-    return await apiRequest(`/agent/${chatagentId}/train/file`, {
+    return await apiRequest(`/workspaces/${workspaceId}/train/file`, {
       method: "POST",
       body: formData,
       headers: {},
     });
   },
 
-  addWebsite: async (chatagentId: string, url: string) => {
-    return await apiRequest(`/agent/${chatagentId}/train/url`, {
+  addWebsite: async (workspaceId: string, url: string) => {
+    return await apiRequest(`/workspaces/${workspaceId}/train/url`, {
       method: "POST",
       body: JSON.stringify({ url }),
     });
   },
 
-  getFaqs: async (chatagentId: string) => {
-    return await apiRequest(`/agent/${chatagentId}/knowledge/faqs`);
+  getFaqs: async (workspaceId: string) => {
+    return await apiRequest(`/workspaces/${workspaceId}/knowledge/faqs`);
   },
 
-  addFaq: async (chatagentId: string, question: string, answer: string) => {
-    return await apiRequest(`/agent/${chatagentId}/knowledge/faqs`, {
+  addFaq: async (workspaceId: string, question: string, answer: string) => {
+    return await apiRequest(`/workspaces/${workspaceId}/knowledge/faqs`, {
       method: "POST",
       body: JSON.stringify({ question, answer }),
     });
   },
 
-  deleteFaq: async (chatagentId: string, faqId: string) => {
-    return await apiRequest(`/agent/${chatagentId}/knowledge/faqs/${faqId}`, {
-      method: "DELETE",
-    });
+  deleteFaq: async (workspaceId: string, faqId: string) => {
+    return await apiRequest(
+      `/workspaces/${workspaceId}/knowledge/faqs/${faqId}`,
+      {
+        method: "DELETE",
+      }
+    );
   },
 };
 
@@ -897,14 +918,14 @@ export const aiModelsAPI = {
 // Training API
 export const trainingAPI = {
   trainWithText: async (
-    agentId: string,
+    workspaceId: string,
     title: string,
     content: string,
     type: string = "text",
     token?: string
   ) => {
     return await apiRequest<{ message: string }>(
-      `/agent/${agentId}/train/text`,
+      `/workspaces/${workspaceId}/train/text`,
       {
         method: "POST",
         body: JSON.stringify({ title, content, type }),
@@ -914,33 +935,35 @@ export const trainingAPI = {
   },
 
   trainWithURL: async (
-    agentId: string,
+    workspaceId: string,
     url: string,
     maxPages: number = 10,
     excludePatterns: string[] = [],
+    trace: boolean = false,
     token?: string
   ) => {
     return await apiRequest<{ message: string }>(
-      `/agent/${agentId}/train/url`,
+      `/workspaces/${workspaceId}/train/url`,
       {
         method: "POST",
         body: JSON.stringify({
           url,
           max_pages: maxPages,
           exclude_patterns: excludePatterns,
+          trace,
         }),
       },
       token
     );
   },
 
-  trainWithFile: async (agentId: string, file: File, token?: string) => {
+  trainWithFile: async (workspaceId: string, file: File, token?: string) => {
     const formData = new FormData();
     formData.append("file", file);
 
     // apiRequest now handles FormData by not forcing Content-Type: application/json
     return await apiRequest<{ message: string }>(
-      `/agent/${agentId}/train/file`,
+      `/workspaces/${workspaceId}/train/file`,
       {
         method: "POST",
         body: formData,
@@ -949,29 +972,29 @@ export const trainingAPI = {
     );
   },
 
-  getDocuments: async (agentId: string, token?: string) => {
+  getDocuments: async (workspaceId: string, token?: string) => {
     return await apiRequest<{ documents: TrainingDocument[] }>(
-      `/agent/${agentId}/training/documents`,
+      `/workspaces/training/${workspaceId}/documents`,
       {},
       token
     );
   },
 
-  getStats: async (agentId: string, token?: string) => {
+  getStats: async (workspaceId: string, token?: string) => {
     return await apiRequest<Record<string, unknown>>(
-      `/agent/${agentId}/training/stats`,
+      `/workspaces/training/${workspaceId}/stats`,
       {},
       token
     );
   },
 
-  query: async (agentId: string, query: string, token?: string) => {
+  query: async (workspaceId: string, query: string, token?: string) => {
     return await apiRequest<{
       context: string;
       chunks: any[];
       query: string;
     }>(
-      `/agent/${agentId}/training/query`,
+      `/workspaces/training/${workspaceId}/query`,
       {
         method: "POST",
         body: JSON.stringify({ query }),
@@ -981,13 +1004,13 @@ export const trainingAPI = {
   },
 
   deleteTrainingData: async (
-    agentId: string,
+    workspaceId: string,
     documentId?: string, // Made optional to match backend flexibility, but practically usually provided
     token?: string
   ) => {
     const url = documentId
-      ? `/agent/${agentId}/training?documentId=${documentId}`
-      : `/agent/${agentId}/training`;
+      ? `/workspaces/training/${workspaceId}?documentId=${documentId}`
+      : `/workspaces/training/${workspaceId}`;
 
     return await apiRequest<{ message: string }>(
       url,
@@ -1040,12 +1063,13 @@ export const scraperAPI = {
 };
 
 // Google Integrations
+// Google Integrations
 export const connectGoogleService = async (
-  agentId: string,
+  workspaceId: string,
   service: string
 ) => {
   return apiRequest(
-    `/agent/${agentId}/integrations/google/${service}/connect`,
+    `/workspaces/${workspaceId}/integrations/google/${service}/connect`,
     {
       method: "POST",
     }
@@ -1053,19 +1077,19 @@ export const connectGoogleService = async (
 };
 
 export const disconnectGoogleService = async (
-  agentId: string,
+  workspaceId: string,
   service: string
 ) => {
   return apiRequest(
-    `/agent/${agentId}/integrations/google/${service}/disconnect`,
+    `/workspaces/${workspaceId}/integrations/google/${service}/disconnect`,
     {
       method: "DELETE",
     }
   );
 };
 
-export const getGoogleStatus = async (agentId: string) => {
-  return apiRequest(`/agent/${agentId}/integrations/google/status`);
+export const getGoogleStatus = async (workspaceId: string) => {
+  return apiRequest(`/workspaces/${workspaceId}/integrations/google/status`);
 };
 
 // Agent Templates & Hiring
@@ -1139,7 +1163,6 @@ export const waitlistAPI = {
     inquiry?: string;
     marketing_consent: boolean;
   }) => {
-    console.log("Hello world");
     return await apiRequest("/waitlist/join", {
       method: "POST",
       body: JSON.stringify(data),

@@ -15,7 +15,6 @@ export async function OPTIONS() {
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const agentId = searchParams.get("agentId");
-  console.log("AGENT ID", agentId);
 
   if (!agentId) {
     return NextResponse.json(
@@ -36,7 +35,6 @@ export async function GET(request: Request) {
         },
       }
     );
-    console.log("requests,requests");
 
     if (!response.ok) {
       const errorText = await response.text();
