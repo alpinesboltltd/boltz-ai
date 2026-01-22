@@ -1,24 +1,48 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams, useRouter } from "next/navigation";
 import { integrationsAPI } from "@/lib/api";
+import { googleIntegrationService } from "@/services/google-integration.service";
 import { Spinner } from "@/components/common/Spinner";
-import { Puzzle, Plus } from "lucide-react";
+import {
+  Puzzle,
+  Plus,
+  RefreshCw,
+  CheckCircle,
+  XCircle,
+  ExternalLink,
+} from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { toast } from "@/store/toastStore";
 
 export default function WorkspaceIntegrationsPage() {
   const params = useParams();
+  const searchParams = useSearchParams();
+  const router = useRouter();
   const workspaceId = params.workspaceId as string;
   const [loading, setLoading] = useState(true);
   const [integrations, setIntegrations] = useState<any[]>([]);
+  const [googleStatus, setGoogleStatus] = useState<
+    "connected" | "disconnected" | "loading"
+  >("loading");
 
   useEffect(() => {
     if (workspaceId) {
       fetchIntegrations();
+      checkGoogleStatus();
     }
   }, [workspaceId]);
+
+  useEffect(() => {
+    const status = searchParams.get("status");
+    if (status === "success") {
+      toast.success("Integration connected successfully!");
+      // Clean up URL
+      router.replace(`/workspace/${workspaceId}/integrations`);
+      checkGoogleStatus();
+    }
+  }, [searchParams, workspaceId, router]);
 
   const fetchIntegrations = async () => {
     try {
@@ -29,6 +53,44 @@ export default function WorkspaceIntegrationsPage() {
       toast.error("Failed to load integrations");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const checkGoogleStatus = async () => {
+    try {
+      const { status } = await googleIntegrationService.getStatus(workspaceId);
+      setGoogleStatus(status as "connected" | "disconnected");
+    } catch (error) {
+      console.error("Failed to check Google status:", error);
+      setGoogleStatus("disconnected");
+    }
+  };
+
+  const handleGoogleConnect = async () => {
+    try {
+      const url = await googleIntegrationService.getAuthUrl(workspaceId);
+      window.location.href = url;
+    } catch (error) {
+      console.error("Failed to init Google connect:", error);
+      toast.error("Failed to start Google connection");
+    }
+  };
+
+  const handleGoogleDisconnect = async () => {
+    if (
+      !confirm(
+        "Are you sure you want to disconnect Google Workspace? This will revoke access to Drive, Docs, and Calendar.",
+      )
+    )
+      return;
+
+    try {
+      await googleIntegrationService.disconnect(workspaceId);
+      toast.success("Google Workspace disconnected");
+      setGoogleStatus("disconnected");
+    } catch (error) {
+      console.error("Failed to disconnect Google:", error);
+      toast.error("Failed to disconnect Google Workspace");
     }
   };
 
@@ -74,10 +136,6 @@ export default function WorkspaceIntegrationsPage() {
             Manage external services connected to your workspace.
           </p>
         </div>
-        <Button onClick={() => toast.info("Integration setup coming soon!")}>
-          <Plus className="w-4 h-4 mr-2" />
-          Connect Integration
-        </Button>
       </div>
 
       <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 flex gap-3">
@@ -91,27 +149,70 @@ export default function WorkspaceIntegrationsPage() {
         </div>
       </div>
 
-      {integrations.length === 0 ? (
-        <div className="text-center py-16 bg-white rounded-2xl border border-dashed border-gray-200">
-          <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Puzzle className="w-8 h-8 text-gray-400" />
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Google Workspace Card */}
+        <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm flex flex-col justify-between">
+          <div className="flex items-start justify-between">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 bg-primary-50 rounded-lg text-primary-600">
+                {/* You might want a Google Icon here specifically */}
+                <Puzzle className="w-6 h-6" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-gray-900">
+                  Google Workspace
+                </h3>
+                <p className="text-sm text-gray-500">
+                  Access Drive, Docs, Calendar
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              {googleStatus === "loading" ? (
+                <RefreshCw className="w-4 h-4 animate-spin text-gray-400" />
+              ) : googleStatus === "connected" ? (
+                <>
+                  <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                  <span className="text-xs font-medium text-gray-600">
+                    Active
+                  </span>
+                </>
+                ) : (<>
+                <RefreshCw className="w-4 h-4 text-gray-400"  onClick={checkGoogleStatus}/>
+                <span className="text-xs font-medium text-gray-400">
+                  Inactive
+                </span>
+              </>
+              )}
+            </div>
           </div>
-          <h3 className="text-lg font-medium text-gray-900">
-            No Integrations Connected
-          </h3>
-          <p className="text-gray-500 mb-6 max-w-sm mx-auto">
-            Connect your favorite tools to supercharge your AI agents.
-          </p>
-          <Button
-            onClick={() => toast.info("Integration setup coming soon!")}
-            variant="outline"
-          >
-            Browse Integrations
-          </Button>
+
+          <div className="mt-6 pt-4 border-t border-gray-100 flex justify-end">
+            {googleStatus === "connected" ? (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleGoogleDisconnect}
+                className="h-8 px-2 text-red-600 hover:text-red-700 hover:bg-red-50"
+              >
+                Disconnect
+              </Button>
+            ) : (
+              <Button
+                size="sm"
+                onClick={handleGoogleConnect}
+                disabled={googleStatus === "loading"}
+              >
+                Connect
+              </Button>
+            )}
+          </div>
         </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {integrations.map((integration) => {
+
+        {/* Existing Integrations Rendering */}
+        {integrations
+          .filter((i) => i.integration_name !== "google")
+          .map((integration) => {
             const meta = getIntegrationMeta(integration.integration_name);
             return (
               <div
@@ -155,8 +256,12 @@ export default function WorkspaceIntegrationsPage() {
               </div>
             );
           })}
-        </div>
-      )}
+
+        {/* Placeholder for 'No integrations' if list empty AND google disconnected? 
+            Currently showing Google card always, so technically never empty. 
+            Removed the "No Integrations Connected" block for simplicity as we always show Google card now.
+        */}
+      </div>
     </div>
   );
 }
