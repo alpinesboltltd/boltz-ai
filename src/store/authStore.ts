@@ -33,9 +33,9 @@ export const useAuthStore = create<AuthState>()(
 
         // Also set in localStorage and cookie for middleware
         if (typeof window !== "undefined") {
-          localStorage.setItem("auth_token", token);
+          localStorage.setItem("boltz_by_alpinesbolt_auth_token", token);
           // Set cookie for middleware
-          document.cookie = `auth_token=${token}; path=/; secure; samesite=strict; max-age=${7 * 24 * 60 * 60}`; // 7 days
+          document.cookie = `boltz_by_alpinesbolt_auth_token=${token}; path=/; secure; samesite=strict; max-age=${7 * 24 * 60 * 60}`; // 7 days
         }
       },
       logout: () => {
@@ -48,16 +48,23 @@ export const useAuthStore = create<AuthState>()(
 
         // Clear all storage
         if (typeof window !== "undefined") {
-          localStorage.removeItem("auth_token");
+          localStorage.removeItem("boltz_by_alpinesbolt_auth_token");
           localStorage.removeItem("boltz-auth-storage");
+          localStorage.removeItem("boltz-agent-storage");
+          localStorage.removeItem("workspace-storage");
           sessionStorage.clear();
 
           // Clear cookie
           document.cookie =
-            "auth_token=; path=/; max-age=0; secure; samesite=strict";
+            "boltz_by_alpinesbolt_auth_token=; path=/; max-age=0; secure; samesite=strict";
         }
 
         toast.info("Signed Out", "You have been successfully signed out");
+
+        // Redirect to login
+        if (typeof window !== "undefined") {
+          window.location.href = "/login";
+        }
       },
 
       clearAuth: () => {
@@ -70,13 +77,15 @@ export const useAuthStore = create<AuthState>()(
 
         // Clear all storage
         if (typeof window !== "undefined") {
-          localStorage.removeItem("auth_token");
+          localStorage.removeItem("boltz_by_alpinesbolt_auth_token");
           localStorage.removeItem("boltz-auth-storage");
+          localStorage.removeItem("boltz-agent-storage");
+          localStorage.removeItem("workspace-storage");
           sessionStorage.clear();
 
           // Clear cookie
           document.cookie =
-            "auth_token=; path=/; max-age=0; secure; samesite=strict";
+            "boltz_by_alpinesbolt_auth_token=; path=/; max-age=0; secure; samesite=strict";
         }
       },
 
@@ -99,7 +108,7 @@ export const useAuthStore = create<AuthState>()(
       onRehydrateStorage: () => (state) => {
         // Sync token with cookie after hydration
         if (state?.token && typeof window !== "undefined") {
-          document.cookie = `auth_token=${state.token}; path=/; secure; samesite=strict; max-age=${7 * 24 * 60 * 60}`;
+          document.cookie = `boltz_by_alpinesbolt_auth_token=${state.token}; path=/; secure; samesite=strict; max-age=${7 * 24 * 60 * 60}`;
         }
       },
     }
@@ -134,4 +143,4 @@ export const useHasRole = (role: string | string[]) => {
 export const accessToken = () => {
   const token = useAuthStore.getState().token;
   return token || "";
-}; 
+};

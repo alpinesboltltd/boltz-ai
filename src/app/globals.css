@@ -1,27 +1,24 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@config "../../tailwind.config.js";
 
 @layer base {
   :root {
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --muted: 210 40% 98%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --background: #ffffff;
+    --foreground: #020617;
   }
-  
-  .dark {
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --background: #050505;
+      --foreground: #ededed;
+    }
   }
-  
+
   html {
     @apply overflow-x-hidden;
   }
   body {
-    @apply text-gray-900 antialiased overflow-x-hidden;
+    @apply text-gray-900 antialiased overflow-x-hidden bg-gray-50;
   }
   h1,
   h2,
@@ -29,28 +26,31 @@
   h4,
   h5,
   h6 {
-    @apply font-display font-semibold;
+    @apply font-display font-semibold tracking-tight;
   }
 }
 
 @layer components {
   .btn {
-    @apply inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2;
+    @apply inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
   }
   .btn-primary {
-    @apply bg-primary-600 text-white hover:bg-primary-700 focus:ring-primary-500;
+    @apply bg-primary-600 text-white hover:bg-primary-700 hover:shadow-lg hover:shadow-primary-500/30 focus:ring-primary-500 active:scale-95;
   }
   .btn-secondary {
-    @apply bg-secondary-600 text-white hover:bg-secondary-700 focus:ring-secondary-500;
+    @apply bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 hover:border-gray-300 focus:ring-gray-200 active:scale-95;
   }
-  .btn-outline {
-    @apply border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:ring-primary-500;
+  .btn-ghost {
+    @apply text-gray-600 hover:bg-gray-100 hover:text-gray-900 focus:ring-gray-200;
   }
   .card {
-    @apply rounded-lg bg-white p-6 shadow-soft;
+    @apply rounded-xl bg-white p-6 shadow-soft border border-gray-100 transition-all duration-200 hover:shadow-lg;
   }
   .input {
-    @apply block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm;
+    @apply block w-full rounded-lg border-gray-200 bg-gray-50 px-4 py-2.5 text-sm transition-colors focus:border-primary-500 focus:bg-white focus:ring-2 focus:ring-primary-500/20 outline-none;
+  }
+  .glass-panel {
+    @apply bg-white/80 backdrop-blur-md border border-white/20 shadow-xl;
   }
 }
 
@@ -64,5 +64,25 @@
   }
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
+  }
+  .text-gradient {
+    background: linear-gradient(to right, #fff, #94a3b8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.4s ease-out forwards;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 }

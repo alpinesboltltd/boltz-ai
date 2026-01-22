@@ -7,7 +7,9 @@ export enum DetailsTab {
   CONVERSATIONS = "conversations",
   SOURCES = "sources",
   // ACTION = "action",
+  AGENT_BEHAVIOR = "behavior",
   APPEARANCE = "appearance",
+  INTEGRATIONS = "integrations",
 }
 
 interface DashboardState {

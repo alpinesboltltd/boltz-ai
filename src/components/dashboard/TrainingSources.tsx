@@ -1,8 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useState } from "react";
 import { Upload, FileText, Globe, MessageSquare, X } from "lucide-react";
+import { trainingAPI } from "@/lib/api";
 
 interface TrainingSourcesProps {
   agentId?: string | null;
@@ -14,7 +14,6 @@ export function TrainingSources({
   onDataAdded,
 }: TrainingSourcesProps) {
   const [activeTab, setActiveTab] = useState("files");
-  const [isUploading, setIsUploading] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [textData, setTextData] = useState({ title: "", content: "" });
   const [urlData, setUrlData] = useState("");
@@ -24,116 +23,71 @@ export function TrainingSources({
   });
   const [qaData, setQaData] = useState({ question: "", answer: "" });
 
-  const saveTrainingData = async (data: any) => {
-    if (!agentId) return;
-
+  const handleFileUpload = async (files: FileList) => {
     try {
-      const response = await fetch("http://localhost:3001/training_data", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          id: Math.random().toString(36).substr(2, 9),
-          agent_id: agentId,
-          ...data,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-        }),
-      });
-
-      if (response.ok) {
-        onDataAdded?.(data);
+      for (const file of Array.from(files)) {
+        await trainingAPI.trainWithFile(agentId!, file);
+        onDataAdded?.({ type: "file", name: file.name });
       }
     } catch (error) {
-      console.error("Error saving training data:", error);
+      console.error("Error uploading file:", error);
     }
-  };
-
-  const handleFileUpload = async (files: FileList) => {
-    setIsUploading(true);
-    // FIXME: loading state for is uploading
-    console.log(isUploading);
-
-    for (const file of Array.from(files)) {
-      const reader = new FileReader();
-      reader.onload = async (e) => {
-        const content = e.target?.result as string;
-        await saveTrainingData({
-          content_type: "knowledge_base",
-          category: "File Upload",
-          title: file.name,
-          content: content.substring(0, 10000), // Limit content
-          intent: "file_knowledge",
-          keywords: file.name.split(".")[0],
-          confidence_score: 0.9,
-          is_active: true,
-        });
-      };
-      reader.readAsText(file);
-      setUploadedFiles((prev) => [...prev, file]);
-    }
-    setIsUploading(false);
   };
 
   const handleTextSubmit = async () => {
-    if (!textData.title || !textData.content) return;
+    if (!textData.title || !textData.content || !agentId) return;
 
-    await saveTrainingData({
-      content_type: "faq",
-      category: "Manual Entry",
-      title: textData.title,
-      content: textData.content,
-      intent: "manual_knowledge",
-      keywords: textData.title.toLowerCase().replace(/\s+/g, ","),
-      confidence_score: 0.95,
-      is_active: true,
-    });
-
-    setTextData({ title: "", content: "" });
+    try {
+      await trainingAPI.trainWithText(
+        agentId,
+        textData.title,
+        textData.content
+      );
+      onDataAdded?.({ type: "text", title: textData.title });
+      setTextData({ title: "", content: "" });
+    } catch (error) {
+      console.error("Error submitting text:", error);
+    }
   };
 
   const handleUrlSubmit = async () => {
-    if (!urlData) return;
+    if (!urlData || !agentId) return;
 
     const excludeList = urlOptions.excludePatterns
       .split("\n")
       .map((p) => p.trim())
       .filter((p) => p.length > 0);
 
-    await saveTrainingData({
-      content_type: "website_content",
-      category: "Website",
-      title: `Website: ${urlData}`,
-      content: JSON.stringify({
-        url: urlData,
-        maxPages: urlOptions.maxPages,
-        excludePatterns: excludeList,
-      }),
-      intent: "website_knowledge",
-      keywords: new URL(urlData).hostname,
-      confidence_score: 0.8,
-      source_url: urlData,
-      is_active: true,
-    });
-
-    setUrlData("");
-    setUrlOptions({ maxPages: 10, excludePatterns: "" });
+    try {
+      await trainingAPI.trainWithURL(
+        agentId,
+        urlData,
+        urlOptions.maxPages,
+        excludeList
+      );
+      onDataAdded?.({ type: "url", url: urlData });
+      setUrlData("");
+      setUrlOptions({ maxPages: 10, excludePatterns: "" });
+    } catch (error) {
+      console.error("Error submitting URL:", error);
+    }
   };
 
   const handleQASubmit = async () => {
-    if (!qaData.question || !qaData.answer) return;
+    if (!qaData.question || !qaData.answer || !agentId) return;
 
-    await saveTrainingData({
-      content_type: "faq",
-      category: "Q&A",
-      title: qaData.question,
-      content: qaData.answer,
-      intent: "qa_knowledge",
-      keywords: qaData.question.toLowerCase().replace(/\s+/g, ","),
-      confidence_score: 1.0,
-      is_active: true,
-    });
-
-    setQaData({ question: "", answer: "" });
+    try {
+      const content = `Question: ${qaData.question}\nAnswer: ${qaData.answer}`;
+      await trainingAPI.trainWithText(
+        agentId,
+        `Q&A: ${qaData.question}`,
+        content
+      );
+      onDataAdded?.({ type: "qa", question: qaData.question });
+      setQaData({ question: "", answer: "" });
+    } catch (error) {
+      console.error("Error submitting Q&A:", error);
+    }
   };
 
   const tabs = [
@@ -332,7 +286,8 @@ export function TrainingSources({
                 placeholder="/admin&#10;/login&#10;/cart&#10;*.pdf"
               />
               <p className="mt-1 text-xs text-gray-500">
-                Enter URL patterns to exclude (one per line). Supports wildcards (*)
+                Enter URL patterns to exclude (one per line). Supports wildcards
+                (*)
               </p>
             </div>
 

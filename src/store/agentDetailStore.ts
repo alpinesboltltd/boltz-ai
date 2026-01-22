@@ -5,20 +5,20 @@ import {
   AgentBehavior,
   AgentIntegration,
   AgentStats,
+  AgentChannel,
   TrainingData,
-  SystemPromptTemplate
 } from "@/types/agent";
 import { agentsAPI } from "@/lib/api";
 import { accessToken } from "./authStore";
 
 interface AgentDetailData {
   agent: Agent;
-  agent_appearance: AgentAppearance;
-  agent_behavior: AgentBehavior;
-  agent_integration: AgentIntegration;
-  agent_stats: AgentStats;
-  training_data: TrainingData;
-  system_prompt_template: SystemPromptTemplate;
+  agent_appearance: AgentAppearance | null;
+  agent_behavior: AgentBehavior | null;
+  agent_integration: AgentIntegration | null;
+  agent_channel: AgentChannel | null;
+  agent_stats: AgentStats | null;
+  training_data: TrainingData[];
 }
 
 interface AgentDetailState {
@@ -30,11 +30,11 @@ interface AgentDetailState {
   fetchAgentDetails: (agentId: string) => Promise<void>;
   updateAppearance: (appearance: AgentAppearance) => void;
   updateBehavior: (behavior: AgentBehavior) => void;
+  saveAppearance: (appearance: Partial<AgentAppearance>) => Promise<void>;
   clearAgent: () => void;
 }
 
-const token = accessToken()
-
+const token = accessToken();
 
 export const useAgentDetailStore = create<AgentDetailState>((set, get) => ({
   currentAgentId: null,
@@ -63,7 +63,10 @@ export const useAgentDetailStore = create<AgentDetailState>((set, get) => ({
       console.error("Failed to fetch agent details:", error);
       set({
         loading: false,
-        error: error instanceof Error ? error.message : "Failed to fetch agent details"
+        error:
+          error instanceof Error
+            ? error.message
+            : "Failed to fetch agent details",
       });
     }
   },
@@ -74,8 +77,8 @@ export const useAgentDetailStore = create<AgentDetailState>((set, get) => ({
       set({
         data: {
           ...data,
-          agent_appearance: appearance
-        }
+          agent_appearance: appearance,
+        },
       });
     }
   },
@@ -86,9 +89,32 @@ export const useAgentDetailStore = create<AgentDetailState>((set, get) => ({
       set({
         data: {
           ...data,
-          agent_behavior: behavior
-        }
+          agent_behavior: behavior,
+        },
       });
+    }
+  },
+
+  saveAppearance: async (appearance: Partial<AgentAppearance>) => {
+    const { currentAgentId, data } = get();
+    if (!currentAgentId || !data || !data.agent_appearance) return;
+
+    try {
+      await agentsAPI.updateAppearance(currentAgentId, appearance);
+      // Update local state deeply merging
+      const newAppearance: AgentAppearance = {
+        ...data.agent_appearance,
+        ...appearance,
+      } as AgentAppearance;
+      set({
+        data: {
+          ...data,
+          agent_appearance: newAppearance,
+        },
+      });
+    } catch (error) {
+      console.error("Failed to save appearance:", error);
+      throw error;
     }
   },
 
@@ -104,26 +130,26 @@ export const useAgentDetailStore = create<AgentDetailState>((set, get) => ({
 
 // Convenience selectors
 export const useAgentData = () => {
-  const data = useAgentDetailStore(state => state.data);
+  const data = useAgentDetailStore((state) => state.data);
   return data?.agent;
 };
 
 export const useAgentAppearance = () => {
-  const data = useAgentDetailStore(state => state.data);
+  const data = useAgentDetailStore((state) => state.data);
   return data?.agent_appearance;
 };
 
 export const useAgentBehavior = () => {
-  const data = useAgentDetailStore(state => state.data);
+  const data = useAgentDetailStore((state) => state.data);
   return data?.agent_behavior;
 };
 
 export const useAgentStats = () => {
-  const data = useAgentDetailStore(state => state.data);
+  const data = useAgentDetailStore((state) => state.data);
   return data?.agent_stats;
 };
 
 export const useTrainingData = () => {
-  const data = useAgentDetailStore(state => state.data);
+  const data = useAgentDetailStore((state) => state.data);
   return data?.training_data;
 };

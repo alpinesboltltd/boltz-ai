@@ -150,3 +150,23 @@ export enum FirebaseErrorMessage {
 export * from "./sources";
 export * from "./actions";
 export * from "./aiModels";
+
+export interface Workspace {
+  id: string;
+  name: string;
+  description?: string;
+  owner_id: string;
+  created_at: string;
+  updated_at: string;
+  members?: WorkspaceMember[];
+}
+
+export interface WorkspaceMember {
+  id: string;
+  workspace_id: string;
+  user_id: string;
+  role: "owner" | "admin" | "member";
+  created_at: string;
+  updated_at: string;
+  user?: Profile;
+}

@@ -114,7 +114,6 @@ test-results/
 # Generated API / SDK stubs (add specific paths if you later auto-generate clients)
 
 # Misc project-specific
-BOLTZ_AI_MVP_ROADMAP.md
 
 # Ignore any local playground scratch files (convention: *.local.*)
 *.local.*

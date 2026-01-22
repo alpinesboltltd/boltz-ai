@@ -1,4 +1,5 @@
 import { SparklesIcon } from "@heroicons/react/24/outline";
+import Image from "next/image";
 import {
   Card,
   CardHeader,
@@ -24,19 +25,34 @@ export function Features() {
         <div className="grid md:grid-cols-2 gap-8 mb-12">
           <Card>
             <CardHeader>
-              <img src="/img/logo.webp" alt="Feature Icon" className="w-12 h-12 mb-4" />
+              <Image
+                src="/img/logo.webp"
+                alt="Feature Icon"
+                width={48}
+                height={48}
+                className="w-12 h-12 mb-4"
+              />
               <CardTitle>Sync with Real-time Data</CardTitle>
               <CardDescription>
-                Connect your agent to order management, CRMs, and databases for instant access to customer information and order details.
+                Connect your agent to order management, CRMs, and databases for
+                instant access to customer information and order details.
               </CardDescription>
             </CardHeader>
           </Card>
           <Card>
             <CardHeader>
-              <img src="/img/logo.webp" alt="Feature Icon" className="w-12 h-12 mb-4" />
+              <Image
+                src="/img/logo.webp"
+                alt="Feature Icon"
+                width={48}
+                height={48}
+                className="w-12 h-12 mb-4"
+              />
               <CardTitle>Take Actions on Your Systems</CardTitle>
               <CardDescription>
-                Enable your agent to update subscriptions, process refunds, schedule appointments, and perform actions across your business systems.
+                Enable your agent to update subscriptions, process refunds,
+                schedule appointments, and perform actions across your business
+                systems.
               </CardDescription>
             </CardHeader>
           </Card>
@@ -45,28 +61,49 @@ export function Features() {
         <div className="grid lg:grid-cols-3 gap-8 mb-16">
           <Card>
             <CardHeader>
-              <img src="/img/logo.webp" alt="Feature Icon" className="w-12 h-12 mb-4" />
+              <Image
+                src="/img/logo.webp"
+                alt="Feature Icon"
+                width={48}
+                height={48}
+                className="w-12 h-12 mb-4"
+              />
               <CardTitle>Compare AI Models</CardTitle>
               <CardDescription>
-                Test different AI models side-by-side to find the perfect fit for your specific use case and performance requirements.
+                Test different AI models side-by-side to find the perfect fit
+                for your specific use case and performance requirements.
               </CardDescription>
             </CardHeader>
           </Card>
           <Card>
             <CardHeader>
-              <img src="/img/logo.webp" alt="Feature Icon" className="w-12 h-12 mb-4" />
+              <Image
+                src="/img/logo.webp"
+                alt="Feature Icon"
+                width={48}
+                height={48}
+                className="w-12 h-12 mb-4"
+              />
               <CardTitle>Smart Escalation</CardTitle>
               <CardDescription>
-                Set natural language rules for when to escalate complex queries to human agents automatically.
+                Set natural language rules for when to escalate complex queries
+                to human agents automatically.
               </CardDescription>
             </CardHeader>
           </Card>
           <Card>
             <CardHeader>
-              <img src="/img/logo.webp" alt="Feature Icon" className="w-12 h-12 mb-4" />
+              <Image
+                src="/img/logo.webp"
+                alt="Feature Icon"
+                width={48}
+                height={48}
+                className="w-12 h-12 mb-4"
+              />
               <CardTitle>Advanced Analytics</CardTitle>
               <CardDescription>
-                Track performance metrics, conversation quality, and customer satisfaction with detailed reporting dashboards.
+                Track performance metrics, conversation quality, and customer
+                satisfaction with detailed reporting dashboards.
               </CardDescription>
             </CardHeader>
           </Card>
@@ -80,7 +117,9 @@ export function Features() {
                 Works with Your Favorite Tools
               </CardTitle>
               <CardDescription className="text-lg">
-                Seamlessly integrate with payment processors, communication platforms, and business tools to create a unified customer experience.
+                Seamlessly integrate with payment processors, communication
+                platforms, and business tools to create a unified customer
+                experience.
               </CardDescription>
             </div>
             <div className="lg:w-2/3 grid grid-cols-2 md:grid-cols-3 gap-4">
@@ -99,24 +138,26 @@ export function Features() {
 
         <div className="grid md:grid-cols-2 gap-8 mt-12">
           <div className="flex items-start gap-4">
-            <div className="flex-shrink-0">
+            <div className="shrink-0">
               <SparklesIcon className="w-6 h-6 text-primary-600" />
             </div>
             <div>
               <CardTitle>White Label Solution</CardTitle>
               <CardDescription>
-                Remove all Boltz branding and customize the interface to match your brand perfectly.
+                Remove all Level-x branding and customize the interface to match
+                your brand perfectly.
               </CardDescription>
             </div>
           </div>
           <div className="flex items-start gap-4">
-            <div className="flex-shrink-0">
+            <div className="shrink-0">
               <SparklesIcon className="w-6 h-6 text-primary-600" />
             </div>
             <div>
               <CardTitle>Continuously Learning</CardTitle>
               <CardDescription>
-                Your agent improves over time by learning from interactions and syncing with your business systems.
+                Your agent improves over time by learning from interactions and
+                syncing with your business systems.
               </CardDescription>
             </div>
           </div>

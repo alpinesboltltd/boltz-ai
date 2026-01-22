@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useState } from "react";
@@ -51,11 +50,6 @@ export default function FacebookIntegrationModal({
 
     try {
       // In production, this would call the real API
-      // await fetch(`/api/chatagents/${chatagentId}/integrations/facebook/configure`, {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ pageId, accessToken }),
-      // });
 
       // For development, simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1500));
@@ -82,7 +76,7 @@ export default function FacebookIntegrationModal({
         {error && (
           <div className="mb-4 rounded-md bg-red-50 p-4">
             <div className="flex">
-              <div className="flex-shrink-0">
+              <div className="shrink-0">
                 <svg
                   className="h-5 w-5 text-red-400"
                   xmlns="http://www.w3.org/2000/svg"

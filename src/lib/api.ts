@@ -4,13 +4,36 @@ import {
   Agent,
   AgentAppearance,
   AgentBehavior,
+  AgentChannel,
   AgentIntegration,
   AgentStats,
+  AgentTemplate,
   CreateAgentAPIRequest,
-  SystemPromptTemplate,
   TrainingData,
   UpdateAgentRequest,
+  TestQuery,
 } from "@/types/agent";
+
+export interface DocumentChunk {
+  id: string;
+  content: string;
+  metadata: Record<string, any>;
+  created_at: string;
+}
+
+export interface TrainingDocument {
+  id: string;
+  agent_id: string;
+  title: string;
+  document_type: "text" | "pdf" | "audio" | "video" | "faq" | "image";
+  source_url?: string;
+  is_active: boolean;
+  processed_at?: string;
+  created_at: string;
+  updated_at: string;
+  chunks?: DocumentChunk[];
+}
+
 import { ChatMessage, Conversation } from "@/types/conversations";
 
 import {
@@ -26,6 +49,8 @@ import {
   CreateAIModelRequest,
   UpdateAIModelRequest,
 } from "@/types/aiModels";
+import { getCookie } from "./utils/cookies";
+import { useAuthStore } from "@/store/authStore";
 
 // Payload Types
 export interface UpdateAppearancePayload {
@@ -63,26 +88,73 @@ export interface CreateWorkflowPayload {
 
 export type UpdatePlaygroundConfigPayload = Partial<PlaygroundConfig>;
 
+export interface ScraperPayload {
+  url: string;
+  trace?: boolean;
+  exclude?: string[];
+  max_pages?: number;
+}
+
 // API helper function
-export const apiRequest = async (
+export const apiRequest = async <T = any>(
   endpoint: string,
   options: RequestInit = {},
   token?: string
-) => {
-  // Use provided token or get from localStorage as fallback
-  const authToken = token;
+): Promise<T> => {
+  // Use provided token or get from localStorage/cookies as fallback
+  let authToken = token;
+
+  if (!authToken) {
+    if (typeof window !== "undefined") {
+      // Client-side: Try localStorage then cookie
+      authToken =
+        localStorage.getItem("boltz_by_alpinesbolt_auth_token") ||
+        getCookie("boltz_by_alpinesbolt_auth_token");
+    } else {
+      // Server-side: Try to get from cookies
+      try {
+        const { cookies } = await import("next/headers");
+        const cookieStore = await cookies();
+        authToken = cookieStore.get("boltz_by_alpinesbolt_auth_token")?.value;
+      } catch (error) {
+        // Ignore error if next/headers is not available or fails
+        console.warn("Failed to retrieve auth token on server:", error);
+      }
+    }
+  }
+
+  // Get Workspace ID from localStorage (client-side only for now)
+  let workspaceId: string | undefined;
+  if (typeof window !== "undefined") {
+    try {
+      const workspaceStorage = localStorage.getItem("workspace-storage");
+      if (workspaceStorage) {
+        const parsed = JSON.parse(workspaceStorage);
+        workspaceId = parsed.state?.currentWorkspace?.id;
+      }
+    } catch (e) {
+      // Silent fail or log
+    }
+  }
 
   const response = await fetch(`/v1${endpoint}`, {
     ...options,
     headers: {
-      "Content-Type": "application/json",
+      ...(!(options.body instanceof FormData) && {
+        "Content-Type": "application/json",
+      }),
       ...(authToken && { Authorization: `Bearer ${authToken}` }),
+      ...(workspaceId && { "X-Workspace-ID": workspaceId }),
       ...options.headers,
     },
     credentials: "include",
   });
 
   if (!response.ok) {
+    if (response.status === 401) {
+      useAuthStore.getState().logout();
+    }
+
     let errorMessage = `Request failed with status ${response.status}`;
 
     try {
@@ -106,26 +178,194 @@ export const authAPI = {
       method: "POST",
       body: JSON.stringify({ email, password }),
     });
-    localStorage.setItem("auth_token", data.token);
+    localStorage.setItem("boltz_by_alpinesbolt_auth_token", data.token);
     return data;
   },
 
   register: async (name: string, email: string, password: string) => {
-    const data = await apiRequest("/auth/register", {
+    const data = await apiRequest("/auth/signup", {
       method: "POST",
       body: JSON.stringify({ name, email, password }),
     });
-    localStorage.setItem("auth_token", data.token);
+    localStorage.setItem("boltz_by_alpinesbolt_auth_token", data.token);
     return data;
   },
 
   logout: () => {
-    localStorage.removeItem("auth_token");
+    localStorage.removeItem("boltz_by_alpinesbolt_auth_token");
     return Promise.resolve();
   },
 
   getCurrentUser: async () => {
     return await apiRequest("/auth/me");
+  },
+
+  enableOTP: async (email: string) => {
+    return await apiRequest("/otp/enable", {
+      method: "POST",
+      body: JSON.stringify({ email }),
+    });
+  },
+
+  disableOTP: async (email: string) => {
+    return await apiRequest("/otp/disable", {
+      method: "POST",
+      body: JSON.stringify({ email }),
+    });
+  },
+
+  changePassword: async (password: string) => {
+    return await apiRequest("/otp/password", {
+      method: "POST",
+      body: JSON.stringify({ password }),
+    });
+  },
+
+  resendVerificationEmail: async (email: string) => {
+    return await apiRequest("/auth/resend-verification", {
+      method: "POST",
+      body: JSON.stringify({ email }),
+    });
+  },
+
+  verifyToken: async (id_token: string) => {
+    return await apiRequest("/auth/verify", {
+      method: "POST",
+      body: JSON.stringify({ id_token }),
+    });
+  },
+};
+
+export const otpAPI = {
+  request: async (email: string, purpose: string = "password_reset") => {
+    return await apiRequest("/otp/request", {
+      method: "POST",
+      body: JSON.stringify({ email, purpose }),
+    });
+  },
+
+  verify: async (
+    email: string,
+    code: string,
+    purpose: string = "password_reset"
+  ) => {
+    return await apiRequest("/otp/verify", {
+      method: "POST",
+      body: JSON.stringify({ email, code, purpose }),
+    });
+  },
+
+  completePasswordReset: async (
+    email: string,
+    code: string,
+    new_password: string
+  ) => {
+    return await apiRequest("/otp/password-reset/complete", {
+      method: "POST",
+      body: JSON.stringify({ email, code, new_password }),
+    });
+  },
+
+  enable2FA: async () => {
+    return await apiRequest("/otp/2fa/enable", { method: "POST" });
+  },
+
+  disable2FA: async () => {
+    return await apiRequest("/otp/2fa/disable", { method: "POST" });
+  },
+};
+// Test Queries API
+export const testQueriesAPI = {
+  get: async (agentId: string) => {
+    return await apiRequest<{ queries: TestQuery[] }>(
+      `/agent/${agentId}/queries`
+    );
+  },
+  create: async (agentId: string, query: string) => {
+    return await apiRequest<{ query: TestQuery }>(`/agent/${agentId}/queries`, {
+      method: "POST",
+      body: JSON.stringify({ query }),
+    });
+  },
+  bulkReplace: async (agentId: string, queries: string[]) => {
+    return await apiRequest<{ queries: TestQuery[] }>(
+      `/agent/${agentId}/queries`,
+      {
+        method: "PUT",
+        body: JSON.stringify({ queries }),
+      }
+    );
+  },
+};
+
+// System API
+export const systemAPI = {
+  // System Instructions
+  createInstruction: async (
+    title: string,
+    content: string,
+    templateId?: string
+  ) => {
+    return await apiRequest("/system/instructions", {
+      method: "POST",
+      body: JSON.stringify({ title, content, template_id: templateId }),
+    });
+  },
+
+  getInstruction: async (id: string) => {
+    return await apiRequest(`/system/instructions/${id}`);
+  },
+
+  updateInstruction: async (id: string, title?: string, content?: string) => {
+    return await apiRequest(`/system/instructions/${id}`, {
+      method: "PUT",
+      body: JSON.stringify({ title, content }),
+    });
+  },
+
+  deleteInstruction: async (id: string) => {
+    return await apiRequest(`/system/instructions/${id}`, {
+      method: "DELETE",
+    });
+  },
+
+  listInstructions: async () => {
+    return await apiRequest("/system/instructions");
+  },
+
+  // Prompt Templates
+  createTemplate: async (title: string, content: string, role?: string) => {
+    return await apiRequest("/system/templates", {
+      method: "POST",
+      body: JSON.stringify({ title, content, role }),
+    });
+  },
+
+  getTemplate: async (id: string) => {
+    return await apiRequest(`/system/templates/${id}`);
+  },
+
+  listTemplates: async (role?: string) => {
+    const url = role ? `/system/templates?role=${role}` : "/system/templates";
+    return await apiRequest(url);
+  },
+
+  updateTemplate: async (
+    id: string,
+    title?: string,
+    content?: string,
+    role?: string
+  ) => {
+    return await apiRequest(`/system/templates/${id}`, {
+      method: "PATCH",
+      body: JSON.stringify({ title, content, role }),
+    });
+  },
+
+  deleteTemplate: async (id: string) => {
+    return await apiRequest(`/system/templates/${id}`, {
+      method: "DELETE",
+    });
   },
 };
 
@@ -138,18 +378,28 @@ export const agentsAPI = {
     return await apiRequest(`/agent/agents/${userId}`, {}, token);
   },
 
+  getByWorkspaceId: async (
+    workspaceId: string,
+    token?: string
+  ): Promise<{ agents: Agent[] }> => {
+    return await apiRequest(
+      `/agent/agents/workspace/${workspaceId}`,
+      {},
+      token
+    );
+  },
+
   getById: async (
     id: string,
-    token: string
+    token?: string
   ): Promise<{
     agent: Agent;
-    agent_integration: AgentIntegration;
-    agent_appearance: AgentAppearance;
-    agent_behavior: AgentBehavior;
-    agent_integrations: AgentIntegration;
-    agent_stats: AgentStats;
-    training_data: TrainingData;
-    system_prompt_template: SystemPromptTemplate;
+    agent_appearance: AgentAppearance | null;
+    agent_behavior: AgentBehavior | null;
+    agent_integration: AgentIntegration | null;
+    agent_channel: AgentChannel | null;
+    agent_stats: AgentStats | null;
+    training_data: TrainingData[];
   }> => {
     return await apiRequest(`/agent/${id}`, {}, token);
   },
@@ -167,6 +417,29 @@ export const agentsAPI = {
       token
     );
     return { data: res.agent };
+  },
+
+  createTemplate: async (templateData: Partial<AgentTemplate>) => {
+    const res = await apiRequest("/system/templates/agents/create", {
+      method: "POST",
+      body: JSON.stringify(templateData),
+    });
+    return res;
+  },
+
+  listTemplates: async (): Promise<AgentTemplate[]> => {
+    const response = await apiRequest("/system/templates/agents");
+    return response.templates;
+  },
+
+  hire: async (templateId: string) => {
+    // We need workspaceId. `apiRequest` handles it via localStorage or context if enabled.
+    // The endpoint is /agent/hire. Body: { system_agent_id: templateId } (legacy name or update it?)
+    // Handler `HireAgent` uses `req.SystemAgentID`. I'll pass that key to match handler struct `HireAgentRequest`.
+    return await apiRequest("/agent/hire", {
+      method: "POST",
+      body: JSON.stringify({ system_agent_id: templateId }),
+    });
   },
 
   update: async (
@@ -195,6 +468,16 @@ export const agentsAPI = {
     });
   },
 
+  // Agent Appearance
+  createAppearance: async (
+    data: Partial<AgentAppearance>
+  ): Promise<{ appearance: AgentAppearance }> => {
+    return await apiRequest(`/agent/create/appearance`, {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  },
+
   getAppearance: async (id: string) => {
     return await apiRequest(`/agent/${id}/appearance`, { method: "GET" });
   },
@@ -202,10 +485,117 @@ export const agentsAPI = {
   updateAppearance: async (
     id: string,
     data: UpdateAppearancePayload
-  ): Promise<{ data: AgentAppearance }> => {
+  ): Promise<{ appearance: AgentAppearance }> => {
     return await apiRequest(`/agent/${id}/appearance`, {
       method: "PATCH",
       body: JSON.stringify(data),
+    });
+  },
+
+  deleteAppearance: async (id: string) => {
+    return await apiRequest(`/agent/${id}/appearance`, {
+      method: "DELETE",
+    });
+  },
+
+  // Agent Behavior
+  createBehavior: async (
+    data: Partial<AgentBehavior>
+  ): Promise<{ behavior: AgentBehavior }> => {
+    return await apiRequest(`/agent/create/behavior`, {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  },
+
+  getBehavior: async (id: string) => {
+    return await apiRequest(`/agent/${id}/behavior`);
+  },
+
+  updateBehavior: async (
+    id: string,
+    data: Partial<AgentBehavior>
+  ): Promise<{ behavior: AgentBehavior }> => {
+    return await apiRequest(`/agent/${id}/behavior`, {
+      method: "PATCH",
+      body: JSON.stringify(data),
+    });
+  },
+
+  deleteBehavior: async (id: string) => {
+    return await apiRequest(`/agent/${id}/behavior`, {
+      method: "DELETE",
+    });
+  },
+
+  // Agent Channel
+  createChannel: async (
+    data: Partial<AgentChannel>
+  ): Promise<{ channel: AgentChannel }> => {
+    return await apiRequest(`/agent/create/channel`, {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  },
+
+  getChannel: async (id: string) => {
+    return await apiRequest(`/agent/${id}/channel`);
+  },
+
+  updateChannel: async (
+    id: string,
+    data: Partial<AgentChannel>
+  ): Promise<{ channel: AgentChannel }> => {
+    return await apiRequest(`/agent/${id}/channel`, {
+      method: "PATCH",
+      body: JSON.stringify(data),
+    });
+  },
+
+  deleteChannel: async (id: string) => {
+    return await apiRequest(`/agent/${id}/channel`, {
+      method: "DELETE",
+    });
+  },
+
+  // Agent Integration
+  createIntegration: async (
+    data: Partial<AgentIntegration>
+  ): Promise<{ integration: AgentIntegration }> => {
+    return await apiRequest(`/agent/create/integration`, {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  },
+
+  getIntegration: async (id: string) => {
+    return await apiRequest(`/agent/${id}/integration`);
+  },
+
+  updateIntegration: async (
+    id: string,
+    data: Partial<AgentIntegration>
+  ): Promise<{ integration: AgentIntegration }> => {
+    return await apiRequest(`/agent/${id}/integration`, {
+      method: "PATCH",
+      body: JSON.stringify(data),
+    });
+  },
+
+  deleteIntegration: async (id: string) => {
+    return await apiRequest(`/agent/${id}/integration`, {
+      method: "DELETE",
+    });
+  },
+
+  // Agent Stats
+  getStats: async (id: string) => {
+    return await apiRequest(`/agent/${id}/stats`);
+  },
+
+  deleteStats: async (id: string) => {
+    return await apiRequest(`/agent/${id}/stats`, {
+      method: "DELETE",
     });
   },
 
@@ -305,36 +695,45 @@ export const agentsAPI = {
 };
 
 // Integrations API
+// Integrations API
 export const integrationsAPI = {
   connect: async (
-    chatagentId: string,
+    workspaceId: string,
     platform: string,
     data: Record<string, unknown> = {}
   ): Promise<{ data: unknown }> => {
-    return await apiRequest(`/agent/${chatagentId}/integrations/${platform}`, {
-      method: "POST",
-      body: JSON.stringify(data),
-    });
+    return await apiRequest(
+      `/workspaces/${workspaceId}/integrations/${platform}`,
+      {
+        method: "POST",
+        body: JSON.stringify(data),
+      }
+    );
   },
 
-  disconnect: async (chatagentId: string, platform: string) => {
-    return await apiRequest(`/agent/${chatagentId}/integrations/${platform}`, {
-      method: "DELETE",
-    });
+  disconnect: async (workspaceId: string, platform: string) => {
+    return await apiRequest(
+      `/workspaces/${workspaceId}/integrations/${platform}`,
+      {
+        method: "DELETE",
+      }
+    );
   },
 
-  getStatus: async (chatagentId: string, platform: string) => {
-    return await apiRequest(`/agent/${chatagentId}/integrations/${platform}`);
+  getStatus: async (workspaceId: string, platform: string) => {
+    return await apiRequest(
+      `/workspaces/${workspaceId}/integrations/${platform}`
+    );
   },
 
   configureTwilio: async (
-    chatagentId: string,
+    workspaceId: string,
     phoneNumber: string,
     accountSid: string,
     authToken: string
   ) => {
     return await apiRequest(
-      `/agent/${chatagentId}/integrations/twilio/configure`,
+      `/workspaces/${workspaceId}/integrations/twilio/configure`,
       {
         method: "POST",
         body: JSON.stringify({ phoneNumber, accountSid, authToken }),
@@ -343,12 +742,12 @@ export const integrationsAPI = {
   },
 
   configureWhatsApp: async (
-    chatagentId: string,
+    workspaceId: string,
     phoneNumberId: string,
     accessToken: string
   ) => {
     return await apiRequest(
-      `/agent/${chatagentId}/integrations/whatsapp/configure`,
+      `/workspaces/${workspaceId}/integrations/whatsapp/configure`,
       {
         method: "POST",
         body: JSON.stringify({ phoneNumberId, accessToken }),
@@ -356,50 +755,62 @@ export const integrationsAPI = {
     );
   },
 
-  getSlackOAuthUrl: (chatagentId: string) => {
-    return `${process.env.NEXT_PUBLIC_API_URL || "/api"}/agent/${chatagentId}/integrations/slack/oauth-url`;
+  getSlackOAuthUrl: (workspaceId: string) => {
+    return `${process.env.NEXT_PUBLIC_API_URL || "/api"}/workspaces/${workspaceId}/integrations/slack/oauth-url`;
+  },
+
+  getWorkspaceIntegrations: async (workspaceId: string, token?: string) => {
+    return await apiRequest<{ integrations: any[] }>(
+      `/workspaces/integrations/${workspaceId}`,
+      {},
+      token
+    );
   },
 };
 
 // Knowledge Base API
+// Knowledge Base API
 export const knowledgeAPI = {
-  getSources: async (chatagentId: string) => {
-    return await apiRequest(`/agent/${chatagentId}/knowledge/sources`);
+  getSources: async (workspaceId: string) => {
+    return await apiRequest(`/workspaces/training/${workspaceId}/documents`);
   },
 
-  uploadDocument: async (chatagentId: string, file: File) => {
+  uploadDocument: async (workspaceId: string, file: File) => {
     const formData = new FormData();
     formData.append("file", file);
 
-    return await apiRequest(`/agent/${chatagentId}/knowledge/documents`, {
+    return await apiRequest(`/workspaces/${workspaceId}/train/file`, {
       method: "POST",
       body: formData,
       headers: {},
     });
   },
 
-  addWebsite: async (chatagentId: string, url: string) => {
-    return await apiRequest(`/agent/${chatagentId}/knowledge/websites`, {
+  addWebsite: async (workspaceId: string, url: string) => {
+    return await apiRequest(`/workspaces/${workspaceId}/train/url`, {
       method: "POST",
       body: JSON.stringify({ url }),
     });
   },
 
-  getFaqs: async (chatagentId: string) => {
-    return await apiRequest(`/agent/${chatagentId}/knowledge/faqs`);
+  getFaqs: async (workspaceId: string) => {
+    return await apiRequest(`/workspaces/${workspaceId}/knowledge/faqs`);
   },
 
-  addFaq: async (chatagentId: string, question: string, answer: string) => {
-    return await apiRequest(`/agent/${chatagentId}/knowledge/faqs`, {
+  addFaq: async (workspaceId: string, question: string, answer: string) => {
+    return await apiRequest(`/workspaces/${workspaceId}/knowledge/faqs`, {
       method: "POST",
       body: JSON.stringify({ question, answer }),
     });
   },
 
-  deleteFaq: async (chatagentId: string, faqId: string) => {
-    return await apiRequest(`/agent/${chatagentId}/knowledge/faqs/${faqId}`, {
-      method: "DELETE",
-    });
+  deleteFaq: async (workspaceId: string, faqId: string) => {
+    return await apiRequest(
+      `/workspaces/${workspaceId}/knowledge/faqs/${faqId}`,
+      {
+        method: "DELETE",
+      }
+    );
   },
 };
 
@@ -504,110 +915,127 @@ export const aiModelsAPI = {
   },
 };
 // Training API
+// Training API
 export const trainingAPI = {
-  uploadFile: async (
-    file: File,
-    agentId: string,
-    token: string
-  ): Promise<{ message: string; file_id: string }> => {
-    // Validate file
-    const maxSize = 10 * 1024 * 1024; // 10MB
-    const allowedTypes = [
-      "application/pdf",
-      "text/plain",
-      "application/msword",
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-    ];
+  trainWithText: async (
+    workspaceId: string,
+    title: string,
+    content: string,
+    type: string = "text",
+    token?: string
+  ) => {
+    return await apiRequest<{ message: string }>(
+      `/workspaces/${workspaceId}/train/text`,
+      {
+        method: "POST",
+        body: JSON.stringify({ title, content, type }),
+      },
+      token
+    );
+  },
 
-    if (file.size > maxSize) {
-      throw new Error("File size exceeds 10MB limit");
-    }
+  trainWithURL: async (
+    workspaceId: string,
+    url: string,
+    maxPages: number = 10,
+    excludePatterns: string[] = [],
+    trace: boolean = false,
+    token?: string
+  ) => {
+    return await apiRequest<{ message: string }>(
+      `/workspaces/${workspaceId}/train/url`,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          url,
+          max_pages: maxPages,
+          exclude_patterns: excludePatterns,
+          trace,
+        }),
+      },
+      token
+    );
+  },
 
-    if (!allowedTypes.includes(file.type)) {
-      throw new Error(
-        "Invalid file type. Only PDF, TXT, DOC, and DOCX files are allowed"
-      );
-    }
-
+  trainWithFile: async (workspaceId: string, file: File, token?: string) => {
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("agent_id", agentId);
-    formData.append("data_type", "document");
 
-    const response = await fetch("/training/upload", {
+    // apiRequest now handles FormData by not forcing Content-Type: application/json
+    return await apiRequest<{ message: string }>(
+      `/workspaces/${workspaceId}/train/file`,
+      {
+        method: "POST",
+        body: formData,
+      },
+      token
+    );
+  },
+
+  getDocuments: async (workspaceId: string, token?: string) => {
+    return await apiRequest<{ documents: TrainingDocument[] }>(
+      `/workspaces/training/${workspaceId}/documents`,
+      {},
+      token
+    );
+  },
+
+  getStats: async (workspaceId: string, token?: string) => {
+    return await apiRequest<Record<string, unknown>>(
+      `/workspaces/training/${workspaceId}/stats`,
+      {},
+      token
+    );
+  },
+
+  query: async (workspaceId: string, query: string, token?: string) => {
+    return await apiRequest<{
+      context: string;
+      chunks: any[];
+      query: string;
+    }>(
+      `/workspaces/training/${workspaceId}/query`,
+      {
+        method: "POST",
+        body: JSON.stringify({ query }),
+      },
+      token
+    );
+  },
+
+  deleteTrainingData: async (
+    workspaceId: string,
+    documentId?: string, // Made optional to match backend flexibility, but practically usually provided
+    token?: string
+  ) => {
+    const url = documentId
+      ? `/workspaces/training/${workspaceId}?documentId=${documentId}`
+      : `/workspaces/training/${workspaceId}`;
+
+    return await apiRequest<{ message: string }>(
+      url,
+      {
+        method: "DELETE",
+      },
+      token
+    );
+  },
+};
+
+export const workspacesAPI = {
+  create: async (name: string, description?: string) => {
+    return await apiRequest("/workspaces", {
       method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      body: formData,
+      body: JSON.stringify({ name, description }),
     });
-
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.message || "Upload failed");
-    }
-
-    return response.json();
   },
 
-  processTraining: async (
-    agentId: string,
-    dataSource: string,
-    processingType: string,
-    token: string
-  ): Promise<{ message: string; job_id: string }> => {
-    return await apiRequest(
-      "/training/process",
-      {
-        method: "POST",
-        body: JSON.stringify({
-          agent_id: agentId,
-          data_source: dataSource,
-          processing_type: processingType,
-        }),
-      },
-      token
-    );
+  getAll: async () => {
+    return await apiRequest("/workspaces");
   },
 
-  getStatus: async (
-    agentId: string,
-    token: string
-  ): Promise<{
-    status: string;
-    progress: number;
-    total_documents: number;
-    processed_documents: number;
-  }> => {
-    return await apiRequest(`/training/status/${agentId}`, {}, token);
-  },
-
-  searchKnowledge: async (
-    agentId: string,
-    query: string,
-    limit: number,
-    token: string
-  ): Promise<{ results: Array<{ content: string; score: number }> }> => {
-    if (!query || query.trim().length === 0) {
-      throw new Error("Query cannot be empty");
-    }
-
-    if (limit < 1 || limit > 20) {
-      throw new Error("Limit must be between 1 and 20");
-    }
-
-    return await apiRequest(
-      "/training/search",
-      {
-        method: "POST",
-        body: JSON.stringify({
-          agent_id: agentId,
-          query,
-          limit,
-        }),
-      },
-      token
-    );
+  getById: async (id: string) => {
+    return await apiRequest(`/workspaces/${id}`);
   },
 };
 
@@ -624,4 +1052,212 @@ export const Chat = {
   },
 };
 
+// Scraper API
+export const scraperAPI = {
+  scrape: async (payload: ScraperPayload) => {
+    return await apiRequest("/scrape", {
+      method: "POST",
+      body: JSON.stringify(payload),
+    });
+  },
+};
+
+// Google Integrations
+// Google Integrations
+export const connectGoogleService = async (
+  workspaceId: string,
+  service: string
+) => {
+  return apiRequest(
+    `/workspaces/${workspaceId}/integrations/google/${service}/connect`,
+    {
+      method: "POST",
+    }
+  );
+};
+
+export const disconnectGoogleService = async (
+  workspaceId: string,
+  service: string
+) => {
+  return apiRequest(
+    `/workspaces/${workspaceId}/integrations/google/${service}/disconnect`,
+    {
+      method: "DELETE",
+    }
+  );
+};
+
+export const getGoogleStatus = async (workspaceId: string) => {
+  return apiRequest(`/workspaces/${workspaceId}/integrations/google/status`);
+};
+
+// Agent Templates & Hiring
+export const getAgentTemplates = async () => {
+  return apiRequest("/agent/templates");
+};
+
+export const hireAgent = async (systemAgentId: string) => {
+  return apiRequest("/agent/hire", {
+    method: "POST",
+    body: JSON.stringify({ system_agent_id: systemAgentId }),
+  });
+};
+
+export const createAgentTemplate = async (data: any) => {
+  // Uses createAgent but with is_template=true
+  return apiRequest("/agent/create", {
+    method: "POST",
+    body: JSON.stringify({ ...data, is_template: true }),
+  });
+};
+
+// ICP API
+import { ICP } from "@/schemas/icp";
+
+export const icpAPI = {
+  create: (workspaceId: string, icp: Partial<ICP>) =>
+    apiRequest<ICP>(`/workspaces/${workspaceId}/icps`, {
+      method: "POST",
+      body: JSON.stringify(icp),
+    }),
+
+  list: (workspaceId: string) =>
+    apiRequest<ICP[]>(`/workspaces/icps/${workspaceId}`, {
+      method: "GET",
+    }),
+
+  get: (workspaceId: string, icpId: string) =>
+    apiRequest<ICP>(`/workspaces/icps/${workspaceId}/${icpId}`, {
+      method: "GET",
+    }),
+
+  update: (workspaceId: string, icpId: string, icp: Partial<ICP>) =>
+    apiRequest<ICP>(`/workspaces/icps/${workspaceId}/${icpId}`, {
+      method: "PUT",
+      body: JSON.stringify(icp),
+    }),
+
+  delete: (workspaceId: string, icpId: string) =>
+    apiRequest(`/workspaces/icps/${workspaceId}/${icpId}`, {
+      method: "DELETE",
+    }),
+
+  resolve: (workspaceId: string, agentRole: string) =>
+    apiRequest<{ icp_context: string; count: number }>("/agent/icp/resolve", {
+      method: "POST",
+      body: JSON.stringify({
+        workspace_id: workspaceId,
+        agent_role: agentRole,
+      }),
+    }),
+};
+
+// Waitlist API
+export const waitlistAPI = {
+  join: async (data: {
+    name: string;
+    email: string;
+    organization?: string;
+    role?: string;
+    inquiry?: string;
+    marketing_consent: boolean;
+  }) => {
+    return await apiRequest("/waitlist/join", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  },
+};
+
 export default apiRequest;
+
+// Supported Providers API (Admin only)
+export const supportedProviderAPI = {
+  create: async (name: string) => {
+    return await apiRequest("/supported-providers", {
+      method: "POST",
+      body: JSON.stringify({ name }),
+    });
+  },
+
+  getAll: async () => {
+    return await apiRequest<{
+      providers: {
+        id: string;
+        name: string;
+        is_active: boolean;
+        created_at: string;
+        updated_at: string;
+      }[];
+    }>("/supported-providers");
+  },
+
+  getById: async (id: string) => {
+    return await apiRequest(`/supported-providers/${id}`);
+  },
+
+  update: async (id: string, is_active: boolean) => {
+    return await apiRequest(`/supported-providers/${id}`, {
+      method: "PATCH",
+      body: JSON.stringify({ is_active }),
+    });
+  },
+
+  delete: async (id: string) => {
+    return await apiRequest(`/supported-providers/${id}`, {
+      method: "DELETE",
+    });
+  },
+};
+
+// Objectives API
+export const objectivesAPI = {
+  create: async (
+    workspaceId: string,
+    description: string,
+    agentId?: string
+  ) => {
+    return await apiRequest<{ objective: any }>(
+      `/workspaces/objectives/${workspaceId}`,
+      {
+        method: "POST",
+        body: JSON.stringify({ description, agent_id: agentId }),
+      }
+    );
+  },
+  getByWorkspace: async (workspaceId: string) => {
+    return await apiRequest<{ objectives: any[] }>(
+      `/workspaces/objectives/${workspaceId}`
+    );
+  },
+  get: async (objectiveId: string) => {
+    return await apiRequest<{ objective: any }>(`/objectives/${objectiveId}`);
+  },
+  execute: async (objectiveId: string) => {
+    return await apiRequest<{ objective: any }>(
+      `/objectives/${objectiveId}/execute`,
+      { method: "POST" }
+    );
+  },
+};
+
+// Activity API
+export const activityAPI = {
+  getByWorkspace: async (workspaceId: string, limit?: number) => {
+    const url = `/workspaces/activities/${workspaceId}${limit ? `?limit=${limit}` : ""}`;
+    return await apiRequest<{ activities: any[] }>(url);
+  },
+};
+
+// Analysis API
+export const analysisAPI = {
+  getByWorkspace: async (workspaceId: string) => {
+    return await apiRequest<{ analysis: any }>(
+      `/workspaces/analysis/${workspaceId}`
+    );
+  },
+  getByAgent: async (agentId: string) => {
+    return await apiRequest<{ analysis: any }>(`/agent/${agentId}/analysis`);
+  },
+};

@@ -22,7 +22,7 @@ export function Tabs({
       <div className={className}>
         {React.Children.map(children, (child) => {
           if (React.isValidElement(child)) {
-            return React.cloneElement(child as React.ReactElement, {
+            return React.cloneElement(child as React.ReactElement<any>, {
               onValueChange,
             });
           }
@@ -48,7 +48,7 @@ export function TabsList({
     <div className={`flex space-x-1 rounded-lg bg-gray-100 p-1 ${className}`}>
       {React.Children.map(children, (child) => {
         if (React.isValidElement(child)) {
-          return React.cloneElement(child as React.ReactElement, {
+          return React.cloneElement(child as React.ReactElement<any>, {
             onValueChange,
           });
         }
@@ -76,11 +76,10 @@ export function TabsTrigger({
 
   return (
     <button
-      className={`px-3 py-1.5 text-sm font-medium transition-all ${
-        isActive
+      className={`px-3 py-1.5 text-sm font-medium transition-all ${isActive
           ? "bg-white text-primary-700 shadow-sm rounded-md"
           : "text-gray-600 hover:text-gray-900"
-      } ${className}`}
+        } ${className}`}
       onClick={() => onValueChange?.(value)}
       type="button"
     >

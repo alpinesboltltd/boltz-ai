@@ -56,7 +56,7 @@ export type ChatWidget =
 export interface ChatInterfaceMessage {
   id: number;
   text: string;
-  sender: "user" | "bot";
+  sender: "user" | "assistant";
   timestamp: Date;
   audioUrl?: string;
   hasVoice?: boolean;

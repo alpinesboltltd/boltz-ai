@@ -231,15 +231,9 @@ export default function PlatformIntegrations({
 
   const getWebsiteEmbedCode = () => {
     return `<script>
-  window.boltzConfig = {
-    chatagentId: "${chatagentId}",
-    position: "bottom-right",
-  }
+  window.LEVEL_X_CONFIG = { id: ${chatagentId} };
 </script>
-<script 
-  src="https://cdn.Boltz/widget.js" 
-  async>
-</script>`;
+<script src="https://level-x.alpinesbolt.com/widget.js" async></script>`;
   };
 
   return (
@@ -292,7 +286,10 @@ export default function PlatformIntegrations({
                               navigator.clipboard.writeText(
                                 getWebsiteEmbedCode()
                               );
-                              toast.success("Copied!", "Embed code copied to clipboard!");
+                              toast.success(
+                                "Copied!",
+                                "Embed code copied to clipboard!"
+                              );
                             }}
                             className="inline-flex items-center px-2.5 py-1.5 border border-gray-300 text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50"
                           >
@@ -411,7 +408,7 @@ export default function PlatformIntegrations({
       />
 
       <DiscordIntegrationModal
-        chatagentId={chatagentId}
+        agentId={chatagentId}
         isOpen={activeModal === "discord"}
         onClose={() => setActiveModal(null)}
         onSuccess={() => handleModalSuccess("discord")}

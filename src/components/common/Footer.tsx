@@ -6,8 +6,10 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
           <div className="space-y-4">
-            <Link href="/" className="flex-shrink-0">
-              <span className="text-2xl font-bold text-primary-600">Boltz</span>
+            <Link href="/" className="shrink-0">
+              <span className="text-2xl font-bold text-primary-600">
+                Level-x
+              </span>
             </Link>
             <p className="text-sm text-gray-500">
               Create custom AI chatagents with no-code builder, powered by
@@ -174,7 +176,7 @@ export function Footer() {
         </div>
         <div className="mt-8 border-t border-gray-200 pt-8">
           <p className="text-center text-sm text-gray-400">
-            &copy; {new Date().getFullYear()} Boltz. All rights reserved.
+            &copy; {new Date().getFullYear()} Level-x. All rights reserved.
           </p>
         </div>
       </div>

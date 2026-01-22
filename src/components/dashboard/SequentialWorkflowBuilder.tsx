@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Save, X } from "lucide-react";
@@ -166,7 +165,6 @@ export function SequentialWorkflowBuilder({
             <div className="w-64 bg-gray-50 border-r p-4">
               <h3 className="font-medium text-gray-900 mb-4">Workflow Nodes</h3>
               <div className="space-y-2">
-
                 <button
                   onClick={() => {
                     const newNode = {
@@ -275,8 +273,9 @@ export function SequentialWorkflowBuilder({
                 return (
                   <div
                     key={node.id}
-                    className={`absolute w-40 h-20 rounded-lg border-2 cursor-pointer select-none p-3 ${nodeColors[node.type as keyof typeof nodeColors]
-                      } ${isSelected ? "ring-2 ring-blue-500" : ""}`}
+                    className={`absolute w-40 h-20 rounded-lg border-2 cursor-pointer select-none p-3 ${
+                      nodeColors[node.type as keyof typeof nodeColors]
+                    } ${isSelected ? "ring-2 ring-blue-500" : ""}`}
                     style={{
                       left: node.position.x,
                       top: node.position.y,

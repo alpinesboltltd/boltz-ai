@@ -62,7 +62,7 @@ export function ToastComponent({ toast, onRemove }: ToastProps) {
       className={`min-w-80 w-full max-w-md border rounded-lg p-4 shadow-lg ${config.className}`}
     >
       <div className="flex">
-        <div className="flex-shrink-0">
+        <div className="shrink-0">
           <Icon className={`h-5 w-5 ${config.iconClassName}`} />
         </div>
         <div className="ml-3 w-0 flex-1">
@@ -71,7 +71,7 @@ export function ToastComponent({ toast, onRemove }: ToastProps) {
             <p className="mt-1 text-sm opacity-90">{toast.message}</p>
           )}
         </div>
-        <div className="ml-4 flex-shrink-0 flex">
+        <div className="ml-4 shrink-0 flex">
           <button
             className="inline-flex text-gray-400 hover:text-gray-600 focus:outline-none"
             onClick={() => onRemove(toast.id)}

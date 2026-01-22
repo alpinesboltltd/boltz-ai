@@ -39,7 +39,6 @@ interface AnalyticsInsightsProps {
 
 export default function AnalyticsInsights({
   analytics,
-  timeRange,
 }: AnalyticsInsightsProps) {
   const [selectedInsight, setSelectedInsight] = useState<string | null>(null);
 
@@ -174,7 +173,7 @@ export default function AnalyticsInsights({
     }
 
     return insights;
-  }, [analytics, timeRange]);
+  }, [analytics]);
 
   const getInsightIcon = (type: string) => {
     switch (type) {
@@ -228,7 +227,7 @@ export default function AnalyticsInsights({
             }
           >
             <div className="flex items-start">
-              <div className="flex-shrink-0">
+              <div className="shrink-0">
                 {getInsightIcon(insight.type)}
               </div>
               <div className="ml-4 flex-1">

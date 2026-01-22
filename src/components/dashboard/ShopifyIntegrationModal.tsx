@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useState } from "react";
@@ -72,7 +71,7 @@ export default function ShopifyIntegrationModal({
         {error && (
           <div className="mb-4 rounded-md bg-red-50 p-4">
             <div className="flex">
-              <div className="flex-shrink-0">
+              <div className="shrink-0">
                 <svg
                   className="h-5 w-5 text-red-400"
                   xmlns="http://www.w3.org/2000/svg"
